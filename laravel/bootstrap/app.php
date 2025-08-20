@@ -24,7 +24,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->statefulApi();
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        $exceptions->render(function ($e, $request) {
+        $exceptions->render(function (\Throwable $e, Request $request) {
             return ApiExceptionHandler::handle($e, $request);
         });
     })->create();

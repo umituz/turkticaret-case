@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
@@ -53,6 +54,11 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    protected function setPasswordAttribute($value): void
+    {
+        $this->attributes['password'] = Hash::make($value);
     }
 
     public function cart(): HasOne

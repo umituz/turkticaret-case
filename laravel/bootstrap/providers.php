@@ -2,6 +2,7 @@
 
 return [
     App\Providers\AppServiceProvider::class,
-    App\Providers\ResponseServiceProvider::class,
     App\Providers\RateLimitServiceProvider::class,
+    App\Providers\RepositoryServiceProvider::class,
+    App\Providers\ResponseServiceProvider::class,
 ];
