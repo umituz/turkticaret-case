@@ -2,6 +2,7 @@
 
 namespace App\Services\Auth;
 
+use App\DTOs\Auth\RegisterDTO;
 use App\Repositories\User\UserRepositoryInterface;
 
 class RegisterService
@@ -10,13 +11,8 @@ class RegisterService
 
     public function register(array $data): array
     {
-        $userData = [
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => $data['password'],
-        ];
-
-        $user = $this->userRepository->create($userData);
+        $userData = RegisterDTO::fromArray($data);
+        $user = $this->userRepository->create($userData->toArray());
         $token = $user->createToken('auth-token')->plainTextToken;
 
         return [
