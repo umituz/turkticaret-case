@@ -1,0 +1,133 @@
+# compose.yaml
+services:
+  turkticaret-base:
+    container_name: 'turkticaret_base'
+    build:
+      context: .
+      dockerfile: docker/base.Dockerfile
+    image: turkticaret-base:latest
+
+  redis:
+    image: redis:6.2-alpine
+    container_name: 'turkticaret_redis'
+    volumes:
+      - redis-data:/data
+    command: redis-server --appendonly yes
+    networks:
+      - turkticaret_network
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  mailhog:
+    image: mailhog/mailhog:latest
+    container_name: 'turkticaret_mailhog'
+    ports:
+      - "1025:1025"  # SMTP server
+      - "8025:8025"  # Web UI
+    networks:
+      - turkticaret_network
+
+  postgres:
+    container_name: 'turkticaret_postgres'
+    build:
+      context: .
+      dockerfile: docker/postgres.Dockerfile
+    environment:
+      POSTGRES_USER: ${DB_USERNAME:-user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-userpassword}
+      POSTGRES_DB: ${POSTGRES_DB:-turkticaret}
+      PGDATA: /var/lib/postgresql/data/pgdata
+      # PostgreSQL performance tuning
+      POSTGRES_MAX_CONNECTIONS: 200
+      POSTGRES_SHARED_BUFFERS: 512MB
+      POSTGRES_WORK_MEM: 16MB
+      POSTGRES_MAINTENANCE_WORK_MEM: 128MB
+      POSTGRES_EFFECTIVE_CACHE_SIZE: 2GB
+    ports:
+      - "5433:5432"  # Different port to avoid conflicts
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - turkticaret_network
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 2G
+        reservations:
+          cpus: '1'
+          memory: 1G
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${DB_USERNAME:-user}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    shm_size: '2gb'
+
+  turkticaret-laravel:
+    container_name: 'turkticaret_laravel'
+    build:
+      context: .
+      dockerfile: docker/backend/local.Dockerfile
+      args:
+        PROJECT_NAME: turkticaret
+        HOST_UID: ${HOST_UID:-501}
+        HOST_GID: ${HOST_GID:-20}
+    volumes:
+      - ./laravel:/var/www/html/turkticaret-api
+    user: "${HOST_UID:-501}:${HOST_GID:-20}"
+    environment:
+      - COMPOSER_MEMORY_LIMIT=-1
+      - PHP_IDE_CONFIG=serverName=turkticaret
+      - HOST_UID=${HOST_UID:-501}
+      - HOST_GID=${HOST_GID:-20}
+
+      # PHP Performance settings
+      - PHP_OPCACHE_ENABLE=1
+      - PHP_OPCACHE_MEMORY_CONSUMPTION=128
+      - PHP_OPCACHE_MAX_ACCELERATED_FILES=10000
+      - PHP_OPCACHE_REVALIDATE_FREQ=0
+      - PHP_OPCACHE_VALIDATE_TIMESTAMPS=0
+      # Xdebug settings
+      - XDEBUG_MODE=coverage,debug,develop
+      - XDEBUG_SESSION=1
+      - XDEBUG_CONFIG=client_host=host.docker.internal client_port=9003 idekey=PHPSTORM
+    env_file:
+      - ./laravel/.env
+    depends_on:
+      turkticaret-base:
+        condition: service_completed_successfully
+      redis:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+    networks:
+      - turkticaret_network
+    ports:
+      - "8080:80"  # Direct port mapping instead of Traefik
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 2G
+        reservations:
+          cpus: '1'
+          memory: 1G
+    healthcheck:
+      test: [ "CMD", "php", "artisan", "--version" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+volumes:
+  redis-data:
+    driver: local
+  postgres_data:
+    driver: local
+
+networks:
+  turkticaret_network:
+    driver: bridge
