@@ -11,6 +11,10 @@ trait ApiResponse
     {
         $message = $message ?? __('Your execution has been completed successfully');
 
+        if ($data instanceof \Illuminate\Http\Resources\Json\ResourceCollection) {
+            return response()->success($data->toArray(request()), __($message), Response::HTTP_OK);
+        }
+
         return response()->success($data, __($message), Response::HTTP_OK);
     }
 

@@ -4,15 +4,15 @@ namespace App\Services\Category;
 
 use App\Models\Category\Category;
 use App\Repositories\Category\CategoryRepositoryInterface;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class CategoryService
 {
     public function __construct(protected CategoryRepositoryInterface $categoryRepository) {}
 
-    public function all(): Collection
+    public function paginate(): LengthAwarePaginator
     {
-        return $this->categoryRepository->all();
+        return $this->categoryRepository->paginate();
     }
 
     public function create(array $data): Category

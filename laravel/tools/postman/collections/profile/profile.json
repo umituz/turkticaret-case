@@ -1,0 +1,40 @@
+{
+  "info": {
+    "name": "Profile",
+    "description": "User profile management endpoints",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Get Profile",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{base_url}}/profile",
+          "host": ["{{base_url}}"],
+          "path": ["profile"]
+        },
+        "description": "Get the authenticated user's profile information"
+      },
+      "response": []
+    },
+    {
+      "name": "Update Profile",
+      "request": {
+        "method": "PUT",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Updated User Name\",\n  \"email\": \"updated@turkticaret.test\"\n}",
+          "options": {"raw": {"language": "json"}}
+        },
+        "url": {
+          "raw": "{{base_url}}/profile",
+          "host": ["{{base_url}}"],
+          "path": ["profile"]
+        },
+        "description": "Update the authenticated user's profile information"
+      },
+      "response": []
+    }
+  ]
+}

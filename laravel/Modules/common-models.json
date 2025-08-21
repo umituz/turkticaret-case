@@ -1,0 +1,10 @@
+{
+  "variables": [
+    {
+      "key": "user_uuid",
+      "value": "00000000-0000-0000-0000-000000000001",
+      "type": "string",
+      "description": "UUID for a User entity"
+    }
+  ]
+}

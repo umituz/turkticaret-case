@@ -68,13 +68,13 @@ class BaseRepository implements BaseRepositoryInterface
         return $this->model->where($key, $value)->exists();
     }
 
-    public function paginate(array $relations = [], int $count = ApiEnums::DEFAULT_PAGINATION)
+    public function paginate(array $relations = [], int $count = null)
     {
         $query = $this->model->newQuery();
         if (!empty($relations)) {
             $query = $query->with($relations);
         }
-        return $query->paginate($count);
+        return $query->paginate($count ?? ApiEnums::DEFAULT_PAGINATION->value);
     }
 
     public function total()

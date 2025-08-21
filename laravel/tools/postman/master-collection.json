@@ -1,0 +1,59 @@
+{
+  "info": {
+    "_postman_id": "turkticaret-api-collection",
+    "name": "TurkTicaret API Collection",
+    "description": "Collection for TurkTicaret API endpoints",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "description": "Authentication endpoints for login and registration",
+      "item": [
+        { "$ref": "collections/authentication/authentication.json#/item/0" },
+        { "$ref": "collections/authentication/authentication.json#/item/1" }
+      ]
+    },
+    {
+      "name": "Profile",
+      "description": "User profile management endpoints",
+      "item": [
+        { "$ref": "collections/profile/profile.json#/item/0" },
+        { "$ref": "collections/profile/profile.json#/item/1" }
+      ]
+    },
+    {
+      "name": "Categories",
+      "description": "Category management endpoints with full CRUD operations",
+      "item": [
+        { "$ref": "collections/categories/categories.json#/item/0" },
+        { "$ref": "collections/categories/categories.json#/item/1" },
+        { "$ref": "collections/categories/categories.json#/item/2" },
+        { "$ref": "collections/categories/categories.json#/item/3" },
+        { "$ref": "collections/categories/categories.json#/item/4" },
+        { "$ref": "collections/categories/categories.json#/item/5" },
+        { "$ref": "collections/categories/categories.json#/item/6" },
+        { "$ref": "collections/categories/categories.json#/item/7" }
+      ]
+    },
+    {
+      "name": "Health Check",
+      "description": "Health check and system status endpoints", 
+      "item": [
+        { "$ref": "collections/health/health.json#/item/0" }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8080/api",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}

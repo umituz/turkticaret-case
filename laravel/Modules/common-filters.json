@@ -1,0 +1,68 @@
+{
+  "standard_filters": {
+    "pagination": [
+      {
+        "key": "per_page",
+        "value": "{{per_page}}",
+        "description": "Number of items per page (default: 15)",
+        "example": "15",
+        "required": false
+      },
+      {
+        "key": "page",
+        "value": "{{page}}",
+        "description": "Page number",
+        "example": "1",
+        "required": false
+      }
+    ],
+    "sorting": [
+      {
+        "key": "orderBy",
+        "value": "{{orderBy}}",
+        "description": "Field to sort by",
+        "example": "created_at",
+        "required": false
+      },
+      {
+        "key": "order",
+        "value": "{{order}}",
+        "description": "Sort direction (asc or desc)",
+        "example": "desc",
+        "required": false
+      }
+    ],
+    "searching": [
+      {
+        "key": "search",
+        "value": "{{search}}",
+        "description": "Search term",
+        "example": "",
+        "required": false
+      },
+      {
+        "key": "searchBy",
+        "value": "{{searchBy}}",
+        "description": "Field to search in",
+        "example": "name",
+        "required": false
+      }
+    ],
+    "date_range": [
+      {
+        "key": "start_date",
+        "value": "{{start_date}}",
+        "description": "Start date for filtering (format: YYYY-MM-DD)",
+        "example": "2023-01-01",
+        "required": false
+      },
+      {
+        "key": "end_date",
+        "value": "{{end_date}}",
+        "description": "End date for filtering (format: YYYY-MM-DD)",
+        "example": "2023-12-31",
+        "required": false
+      }
+    ]
+  }
+}

@@ -17,7 +17,7 @@ class CategoryController extends BaseController
 
     public function index(): JsonResponse
     {
-        return $this->ok(new CategoryCollection($this->categoryService->all()));
+        return $this->ok(new CategoryCollection($this->categoryService->paginate()));
     }
 
     public function store(CategoryCreateRequest $request): JsonResponse

@@ -1,0 +1,1049 @@
+{
+  "info": {
+    "_postman_id": "turkticaret-api-collection",
+    "name": "TurkTicaret API Collection",
+    "description": "TurkTicaret API Collection for interacting with the TurkTicaret backend services",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "description": "Authentication endpoints for login and registration",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Test User\",\n  \"email\": \"test@turkticaret.test\",\n  \"password\": \"password123\",\n  \"password_confirmation\": \"password123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/register",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "register"
+              ]
+            },
+            "description": "Register a new user account",
+            "name": "Register",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ]
+          },
+          "response": []
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@turkticaret.test\",\n  \"password\": \"password123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "login"
+              ]
+            },
+            "description": "Login with email and password to get authentication token",
+            "name": "Login",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ]
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Profile",
+      "description": "User profile management endpoints",
+      "item": [
+        {
+          "name": "Get Profile",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/profile",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "profile"
+              ]
+            },
+            "description": "Get the authenticated user's profile information",
+            "name": "Get Profile",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ]
+          },
+          "response": []
+        },
+        {
+          "name": "Update Profile",
+          "request": {
+            "method": "PUT",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated User Name\",\n  \"email\": \"updated@turkticaret.test\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/profile",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "profile"
+              ]
+            },
+            "description": "Update the authenticated user's profile information",
+            "name": "Update Profile",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ]
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Categories",
+      "description": "Category management endpoints with full CRUD operations",
+      "item": [
+        {
+          "name": "List Categories",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/categories?per_page=25&page=1&sort_by=created_at&sort_direction=desc",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "categories"
+              ],
+              "query": [
+                {
+                  "key": "per_page",
+                  "value": "25",
+                  "description": "Number of items per page"
+                },
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number"
+                },
+                {
+                  "key": "search",
+                  "value": "",
+                  "description": "Search in name and description",
+                  "disabled": true
+                },
+                {
+                  "key": "status",
+                  "value": "active",
+                  "description": "Filter by status",
+                  "disabled": true
+                },
+                {
+                  "key": "sort_by",
+                  "value": "created_at",
+                  "description": "Sort by field"
+                },
+                {
+                  "key": "sort_direction",
+                  "value": "desc",
+                  "description": "Sort direction (asc, desc)"
+                }
+              ]
+            },
+            "description": "Retrieve paginated list of categories with filtering options",
+            "name": "List Categories",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ]
+          },
+          "response": []
+        },
+        {
+          "name": "Create Category",
+          "request": {
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Electronics\",\n  \"description\": \"Electronic devices and gadgets\",\n  \"status\": \"active\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/categories",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "categories"
+              ]
+            },
+            "description": "Create a new category",
+            "name": "Create Category",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ]
+          },
+          "response": []
+        },
+        {
+          "name": "Get Category",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/categories/{{category_uuid}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "categories",
+                "{{category_uuid}}"
+              ]
+            },
+            "description": "Get a specific category by ID",
+            "name": "Get Category",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ]
+          },
+          "response": []
+        },
+        {
+          "name": "Update Category",
+          "request": {
+            "method": "PUT",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Electronics\",\n  \"description\": \"Updated description for electronic devices and gadgets\",\n  \"status\": \"active\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/categories/{{category_uuid}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "categories",
+                "{{category_uuid}}"
+              ]
+            },
+            "description": "Update a specific category",
+            "name": "Update Category",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ]
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Category (Soft Delete)",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{base_url}}/categories/{{category_uuid}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "categories",
+                "{{category_uuid}}"
+              ]
+            },
+            "description": "Soft delete a specific category",
+            "name": "Delete Category (Soft Delete)",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ]
+          },
+          "response": []
+        },
+        {
+          "name": "Restore Category",
+          "request": {
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/categories/{{category_uuid}}/restore",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "categories",
+                "{{category_uuid}}",
+                "restore"
+              ]
+            },
+            "description": "Restore a soft deleted category",
+            "name": "Restore Category",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ]
+          },
+          "response": []
+        },
+        {
+          "name": "Force Delete Category",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{base_url}}/categories/{{category_uuid}}/force-delete",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "categories",
+                "{{category_uuid}}",
+                "force-delete"
+              ]
+            },
+            "description": "Permanently delete a category",
+            "name": "Force Delete Category",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ]
+          },
+          "response": []
+        },
+        {
+          "name": "Filters",
+          "description": "Category filtering and search operations",
+          "item": [
+            {
+              "name": "Filter by Status - Active",
+              "request": {
+                "method": "GET",
+                "url": {
+                  "raw": "{{base_url}}/categories?status=active&per_page={{per_page}}&page={{page}}",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "categories"
+                  ],
+                  "query": [
+                    {
+                      "key": "status",
+                      "value": "active",
+                      "description": "Filter active categories"
+                    },
+                    {
+                      "key": "per_page",
+                      "value": "{{per_page}}",
+                      "description": "Items per page"
+                    },
+                    {
+                      "key": "page",
+                      "value": "{{page}}",
+                      "description": "Page number"
+                    }
+                  ]
+                },
+                "description": "Get all active categories",
+                "name": "Filter by Status - Active",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}",
+                    "type": "text"
+                  }
+                ]
+              },
+              "response": []
+            },
+            {
+              "name": "Filter by Status - Inactive",
+              "request": {
+                "method": "GET",
+                "url": {
+                  "raw": "{{base_url}}/categories?status=inactive&per_page={{per_page}}&page={{page}}",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "categories"
+                  ],
+                  "query": [
+                    {
+                      "key": "status",
+                      "value": "inactive",
+                      "description": "Filter inactive categories"
+                    },
+                    {
+                      "key": "per_page",
+                      "value": "{{per_page}}",
+                      "description": "Items per page"
+                    },
+                    {
+                      "key": "page",
+                      "value": "{{page}}",
+                      "description": "Page number"
+                    }
+                  ]
+                },
+                "description": "Get all inactive categories",
+                "name": "Filter by Status - Inactive",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}",
+                    "type": "text"
+                  }
+                ]
+              },
+              "response": []
+            },
+            {
+              "name": "Search Categories",
+              "request": {
+                "method": "GET",
+                "url": {
+                  "raw": "{{base_url}}/categories?search={{search}}&per_page={{per_page}}&page={{page}}",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "categories"
+                  ],
+                  "query": [
+                    {
+                      "key": "search",
+                      "value": "{{search}}",
+                      "description": "Search in name and description"
+                    },
+                    {
+                      "key": "per_page",
+                      "value": "{{per_page}}",
+                      "description": "Items per page"
+                    },
+                    {
+                      "key": "page",
+                      "value": "{{page}}",
+                      "description": "Page number"
+                    }
+                  ]
+                },
+                "description": "Search categories by name or description",
+                "name": "Search Categories",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}",
+                    "type": "text"
+                  }
+                ]
+              },
+              "response": []
+            },
+            {
+              "name": "Sort by Name ASC",
+              "request": {
+                "method": "GET",
+                "url": {
+                  "raw": "{{base_url}}/categories?sort_by=name&sort_direction=asc&per_page={{per_page}}&page={{page}}",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "categories"
+                  ],
+                  "query": [
+                    {
+                      "key": "sort_by",
+                      "value": "name",
+                      "description": "Sort by name field"
+                    },
+                    {
+                      "key": "sort_direction",
+                      "value": "asc",
+                      "description": "Sort direction ascending"
+                    },
+                    {
+                      "key": "per_page",
+                      "value": "{{per_page}}",
+                      "description": "Items per page"
+                    },
+                    {
+                      "key": "page",
+                      "value": "{{page}}",
+                      "description": "Page number"
+                    }
+                  ]
+                },
+                "description": "Get categories sorted by name (A-Z)",
+                "name": "Sort by Name ASC",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}",
+                    "type": "text"
+                  }
+                ]
+              },
+              "response": []
+            },
+            {
+              "name": "Sort by Created Date DESC",
+              "request": {
+                "method": "GET",
+                "url": {
+                  "raw": "{{base_url}}/categories?sort_by=created_at&sort_direction=desc&per_page={{per_page}}&page={{page}}",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "categories"
+                  ],
+                  "query": [
+                    {
+                      "key": "sort_by",
+                      "value": "created_at",
+                      "description": "Sort by creation date"
+                    },
+                    {
+                      "key": "sort_direction",
+                      "value": "desc",
+                      "description": "Sort direction descending"
+                    },
+                    {
+                      "key": "per_page",
+                      "value": "{{per_page}}",
+                      "description": "Items per page"
+                    },
+                    {
+                      "key": "page",
+                      "value": "{{page}}",
+                      "description": "Page number"
+                    }
+                  ]
+                },
+                "description": "Get categories sorted by creation date (newest first)",
+                "name": "Sort by Created Date DESC",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}",
+                    "type": "text"
+                  }
+                ]
+              },
+              "response": []
+            },
+            {
+              "name": "Combined Filters",
+              "request": {
+                "method": "GET",
+                "url": {
+                  "raw": "{{base_url}}/categories?status=active&search=electronics&sort_by=name&sort_direction=asc&per_page={{per_page}}&page={{page}}",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "categories"
+                  ],
+                  "query": [
+                    {
+                      "key": "status",
+                      "value": "active",
+                      "description": "Active categories only"
+                    },
+                    {
+                      "key": "search",
+                      "value": "electronics",
+                      "description": "Search for 'electronics'"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "name",
+                      "description": "Sort by name"
+                    },
+                    {
+                      "key": "sort_direction",
+                      "value": "asc",
+                      "description": "Ascending order"
+                    },
+                    {
+                      "key": "per_page",
+                      "value": "{{per_page}}",
+                      "description": "Items per page"
+                    },
+                    {
+                      "key": "page",
+                      "value": "{{page}}",
+                      "description": "Page number"
+                    }
+                  ]
+                },
+                "description": "Multiple filters combined: active, search, sorted",
+                "name": "Combined Filters",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}",
+                    "type": "text"
+                  }
+                ]
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Health Check",
+      "description": "Health check and system status endpoints",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/health",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "health"
+              ]
+            },
+            "description": "Check the health status of the API",
+            "name": "Health Check",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ]
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8080/api",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "user_uuid",
+      "value": "00000000-0000-0000-0000-000000000001",
+      "type": "string",
+      "description": "UUID for a User entity"
+    },
+    {
+      "key": "category_uuid",
+      "value": "1",
+      "type": "string",
+      "description": "UUID of a category for testing"
+    },
+    {
+      "key": "per_page",
+      "value": "25",
+      "type": "string",
+      "description": "Number of items per page for pagination"
+    },
+    {
+      "key": "page",
+      "value": "1",
+      "type": "string",
+      "description": "Page number for pagination"
+    },
+    {
+      "key": "search",
+      "value": "test",
+      "type": "string",
+      "description": "Search term for filtering"
+    },
+    {
+      "key": "orderBy",
+      "value": "created_at",
+      "type": "string"
+    },
+    {
+      "key": "order",
+      "value": "desc",
+      "type": "string"
+    },
+    {
+      "key": "searchBy",
+      "value": "name",
+      "type": "string"
+    },
+    {
+      "key": "start_date",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "end_date",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}
