@@ -64,6 +64,17 @@
       ]
     },
     {
+      "name": "Orders",
+      "description": "Order management endpoints for creating and viewing orders",
+      "item": [
+        { "$ref": "collections/orders/orders.json#/item/0" },
+        { "$ref": "collections/orders/orders.json#/item/1" },
+        { "$ref": "collections/orders/orders.json#/item/2" },
+        { "$ref": "collections/orders/orders.json#/item/3" },
+        { "$ref": "collections/orders/orders.json#/item/4" }
+      ]
+    },
+    {
       "name": "Health Check",
       "description": "Health check and system status endpoints", 
       "item": [
@@ -104,6 +115,11 @@
     },
     {
       "key": "search",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "order_uuid",
       "value": "",
       "type": "string"
     }
