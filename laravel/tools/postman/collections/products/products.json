@@ -10,19 +10,25 @@
       "request": {
         "method": "GET",
         "url": {
-          "raw": "{{base_url}}/products?per_page=25&page=1&sort_by=created_at&sort_direction=desc",
+          "raw": "{{base_url}}/products?per_page=25&page=1&orderBy=created_at&order=desc",
           "host": ["{{base_url}}"],
           "path": ["products"],
           "query": [
             {"key": "per_page", "value": "25", "description": "Number of items per page"},
             {"key": "page", "value": "1", "description": "Page number"},
-            {"key": "search", "value": "", "description": "Search in name and description", "disabled": true},
+            {"key": "search", "value": "", "description": "Search in name, description, and SKU", "disabled": true},
+            {"key": "searchBy", "value": "", "description": "Specific field to search in", "disabled": true},
             {"key": "category_uuid", "value": "", "description": "Filter by category UUID", "disabled": true},
             {"key": "is_active", "value": "true", "description": "Filter by active status", "disabled": true},
-            {"key": "min_price", "value": "", "description": "Minimum price filter", "disabled": true},
-            {"key": "max_price", "value": "", "description": "Maximum price filter", "disabled": true},
-            {"key": "sort_by", "value": "created_at", "description": "Sort by field"},
-            {"key": "sort_direction", "value": "desc", "description": "Sort direction (asc, desc)"}
+            {"key": "price_min", "value": "", "description": "Minimum price filter", "disabled": true},
+            {"key": "price_max", "value": "", "description": "Maximum price filter", "disabled": true},
+            {"key": "stock_min", "value": "", "description": "Minimum stock filter", "disabled": true},
+            {"key": "stock_max", "value": "", "description": "Maximum stock filter", "disabled": true},
+            {"key": "in_stock", "value": "true", "description": "Filter products in stock", "disabled": true},
+            {"key": "orderBy", "value": "created_at", "description": "Sort by field"},
+            {"key": "order", "value": "desc", "description": "Sort direction (asc, desc)"},
+            {"key": "start_date", "value": "", "description": "Start date filter (Y-m-d)", "disabled": true},
+            {"key": "end_date", "value": "", "description": "End date filter (Y-m-d)", "disabled": true}
           ]
         },
         "description": "Retrieve paginated list of products with filtering options"

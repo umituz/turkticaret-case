@@ -2,6 +2,7 @@
 
 namespace App\Services\Product;
 
+use App\Filters\Product\ProductFilterHandler;
 use App\Models\Product\Product;
 use App\Repositories\Product\ProductRepositoryInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -10,9 +11,16 @@ class ProductService
 {
     public function __construct(protected ProductRepositoryInterface $productRepository) {}
 
-    public function paginate(): LengthAwarePaginator
+    public function paginate(array $filters = []): LengthAwarePaginator
     {
-        return $this->productRepository->paginate();
+        if (empty($filters)) {
+            return $this->productRepository->paginate();
+        }
+        
+        return ProductFilterHandler::apply(
+            $this->productRepository->getQuery(),
+            $filters
+        );
     }
 
     public function create(array $data): Product

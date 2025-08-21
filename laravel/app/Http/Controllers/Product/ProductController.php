@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Product;
 
 use App\Http\Controllers\BaseController;
 use App\Http\Requests\Product\ProductCreateRequest;
+use App\Http\Requests\Product\ProductListRequest;
 use App\Http\Requests\Product\ProductUpdateRequest;
 use App\Http\Resources\Product\ProductCollection;
 use App\Http\Resources\Product\ProductResource;
@@ -15,9 +16,11 @@ class ProductController extends BaseController
 {
     public function __construct(protected ProductService $productService) {}
 
-    public function index(): JsonResponse
+    public function index(ProductListRequest $request): JsonResponse
     {
-        return $this->ok(new ProductCollection($this->productService->paginate()));
+        $products = $this->productService->paginate($request->filters());
+
+        return $this->ok(new ProductCollection($products));
     }
 
     public function store(ProductCreateRequest $request): JsonResponse

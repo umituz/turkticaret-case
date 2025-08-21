@@ -6,11 +6,14 @@ use App\Models\Base\BaseUuidModel;
 use App\Models\Cart\CartItem;
 use App\Models\Category\Category;
 use App\Models\Order\OrderItem;
+use App\Traits\Filterable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Product extends BaseUuidModel
 {
+    use Filterable;
+
     protected $fillable = [
         'name',
         'description',
@@ -21,6 +24,9 @@ class Product extends BaseUuidModel
         'is_active',
         'category_uuid',
     ];
+
+    public array $searchableFields = ['name', 'description', 'sku'];
+    public array $sortableFields = ['name', 'price', 'stock_quantity', 'created_at', 'updated_at'];
 
     protected $casts = [
         'price' => 'integer',
