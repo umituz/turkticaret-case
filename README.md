@@ -65,39 +65,45 @@ The project follows a modular, service-oriented architecture:
 Base URL: `http://localhost:8080`
 
 ### Authentication
-- `POST /auth/register` - User registration
-- `POST /auth/login` - User login
+- `POST /api/register` - User registration
+- `POST /api/login` - User login
 
 ### Categories
-- `GET /categories` - List categories
-- `POST /categories` - Create category
-- `GET /categories/{id}` - Get category
-- `PUT /categories/{id}` - Update category
-- `DELETE /categories/{id}` - Delete category
+- `GET /api/categories` - List categories
+- `POST /api/categories` - Create category
+- `GET /api/categories/{category}` - Get category
+- `PUT /api/categories/{category}` - Update category
+- `DELETE /api/categories/{category}` - Delete category
+- `DELETE /api/categories/{category}/force-delete` - Force delete category
+- `POST /api/categories/{category}/restore` - Restore category
 
 ### Products
-- `GET /products` - List products with filtering
-- `POST /products` - Create product
-- `GET /products/{id}` - Get product
-- `PUT /products/{id}` - Update product
-- `DELETE /products/{id}` - Delete product
+- `GET /api/products` - List products with filtering
+- `POST /api/products` - Create product
+- `GET /api/products/{product}` - Get product
+- `PUT /api/products/{product}` - Update product
+- `DELETE /api/products/{product}` - Delete product
+- `DELETE /api/products/{product}/force-delete` - Force delete product
+- `POST /api/products/{product}/restore` - Restore product
 
 ### Cart Management
-- `GET /cart` - Get user cart
-- `POST /cart/add` - Add item to cart
-- `PUT /cart/update` - Update cart item
-- `DELETE /cart/remove/{product_id}` - Remove item from cart
-- `DELETE /cart/clear` - Clear cart
+- `GET /api/cart` - Get user cart
+- `POST /api/cart/add` - Add item to cart
+- `PUT /api/cart/update` - Update cart item
+- `DELETE /api/cart/remove/{product_uuid}` - Remove item from cart
+- `DELETE /api/cart/clear` - Clear cart
 
 ### Orders
-- `GET /orders` - List user orders
-- `POST /orders` - Create order from cart
-- `GET /orders/{id}` - Get order details
-- `PUT /orders/{id}/cancel` - Cancel order
+- `GET /api/orders` - List user orders
+- `POST /api/orders` - Create order from cart
+- `GET /api/orders/{order}` - Get order details
 
 ### User Profile
-- `GET /profile` - Get user profile
-- `PUT /profile` - Update profile
+- `GET /api/profile` - Get user profile
+- `PUT /api/profile` - Update profile
+
+### Health Check
+- `GET /api/health` - Application health status
 
 ## 🐳 Docker Environment
 
@@ -183,13 +189,6 @@ docker exec -it turkticaret_laravel php artisan test tests/Unit/Models/Product/P
 - **English-only** code and comments
 - **Modular architecture** with clear separation of concerns
 
-### Documentation Files
-- `laravel/CLAUDE.md` - Global development standards
-- `laravel/CLAUDE_DOCKERIZATION.md` - Docker environment standards
-- `laravel/CLAUDE_PHPUNIT.md` - Testing standards and patterns
-- `laravel/CLAUDE_FILTERS.md` - Filtering and query optimization
-- `laravel/CLAUDE_PATTERN.md` - Architectural patterns
-- `laravel/CLAUDE_DATABASE.md` - Database design standards
 
 ## 🔧 API Testing
 
@@ -216,28 +215,8 @@ Authorization: Bearer {your-api-token}
 - **Query optimization** with proper relationship loading
 - **API resource transformation** for efficient data serialization
 
-## 🚀 Deployment
-
-### Production Considerations
-- Multi-stage Docker builds for optimized images
-- Environment-specific configuration files
-- Health checks for all services
-- Secrets management for sensitive data
-- Resource limits and monitoring
-- Database migration strategies
-
-## 🤝 Contributing
-
-1. Follow the coding standards defined in CLAUDE.md files
-2. Ensure 100% test coverage for new features
-3. Use Docker environment for all development
-4. Write comprehensive documentation
-5. Follow the established architectural patterns
-
 ## 📝 License
 
 This project is developed as a case study for TurkTicaret technical assessment.
 
 ---
-
-**Note**: This project demonstrates modern Laravel development practices with Docker containerization, comprehensive testing, and enterprise-grade architecture patterns.
