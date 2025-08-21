@@ -29,6 +29,11 @@ class BaseRepository implements BaseRepositoryInterface
         return $this->model->get();
     }
 
+    public function all()
+    {
+        return $this->model->orderBy('created_at', 'desc')->get();
+    }
+
     protected function executeInTransaction(callable $callback)
     {
         try {

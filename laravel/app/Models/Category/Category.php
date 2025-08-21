@@ -1,7 +1,9 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Category;
 
+use App\Models\BaseUuidModel;
+use App\Models\Product\Product;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Category extends BaseUuidModel

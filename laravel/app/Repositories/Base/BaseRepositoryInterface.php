@@ -9,6 +9,8 @@ interface BaseRepositoryInterface
 {
     public function get();
 
+    public function all();
+
     public function create(array $data): mixed;
 
     public function firstOrCreate(string $key, array $data);
