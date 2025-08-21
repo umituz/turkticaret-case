@@ -6,6 +6,7 @@ use database\seeders\Auth\UserSeeder;
 use Database\Seeders\Authority\PermissionSeeder;
 use Database\Seeders\Authority\RolePermissionSeeder;
 use Database\Seeders\Authority\RoleSeeder;
+use Database\Seeders\Category\CategorySeeder;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
