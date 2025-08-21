@@ -3,7 +3,7 @@
 namespace App\Services\Profile;
 
 use App\DTOs\Profile\ProfileUpdateDTO;
-use App\Models\User;
+use App\Models\Auth\User;
 use App\Repositories\User\UserRepositoryInterface;
 
 class ProfileService

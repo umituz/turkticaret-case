@@ -1,9 +1,9 @@
 <?php
 
-namespace Database\Seeders;
+namespace Database\Seeders\Product;
 
 use App\Models\Category\Category;
-use App\Models\Product;
+use App\Models\Product\Product;
 use Illuminate\Database\Seeder;
 
 class ProductSeeder extends Seeder
@@ -14,7 +14,7 @@ class ProductSeeder extends Seeder
     public function run(): void
     {
         Category::all()->each(function ($category) {
-            Product::factory(10)->create([
+            Product::factory(5)->create([
                 'category_uuid' => $category->uuid,
             ]);
         });

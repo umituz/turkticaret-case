@@ -1,9 +1,11 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Auth;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Database\Factories\UserFactory;
+use App\Models\Cart\Cart;
+use App\Models\Order\Order;
+use Database\Factories\Auth\UserFactory;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;

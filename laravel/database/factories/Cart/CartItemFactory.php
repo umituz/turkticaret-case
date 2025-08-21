@@ -1,10 +1,10 @@
 <?php
 
-namespace Database\Factories;
+namespace Database\Factories\Cart;
 
-use App\Models\Cart;
-use App\Models\CartItem;
-use App\Models\Product;
+use App\Models\Cart\Cart;
+use App\Models\Cart\CartItem;
+use App\Models\Product\Product;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**

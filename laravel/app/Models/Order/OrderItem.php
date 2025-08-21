@@ -1,36 +1,36 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Order;
 
+use App\Models\Base\BaseUuidModel;
+use App\Models\Product\Product;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class CartItem extends BaseUuidModel
+class OrderItem extends BaseUuidModel
 {
 
     protected $fillable = [
-        'cart_uuid',
+        'order_uuid',
         'product_uuid',
+        'product_name',
         'quantity',
         'unit_price',
+        'total_price',
     ];
 
     protected $casts = [
         'quantity' => 'integer',
         'unit_price' => 'integer',
+        'total_price' => 'integer',
     ];
 
-    public function cart(): BelongsTo
+    public function order(): BelongsTo
     {
-        return $this->belongsTo(Cart::class, 'cart_uuid', 'uuid');
+        return $this->belongsTo(Order::class, 'order_uuid', 'uuid');
     }
 
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class, 'product_uuid', 'uuid');
-    }
-
-    public function getTotalPriceAttribute(): int
-    {
-        return $this->quantity * $this->unit_price;
     }
 }

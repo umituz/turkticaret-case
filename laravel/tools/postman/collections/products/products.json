@@ -1,0 +1,287 @@
+{
+  "info": {
+    "name": "Products",
+    "description": "Product management endpoints with full CRUD operations and soft deletes",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "List Products",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{base_url}}/products?per_page=25&page=1&sort_by=created_at&sort_direction=desc",
+          "host": ["{{base_url}}"],
+          "path": ["products"],
+          "query": [
+            {"key": "per_page", "value": "25", "description": "Number of items per page"},
+            {"key": "page", "value": "1", "description": "Page number"},
+            {"key": "search", "value": "", "description": "Search in name and description", "disabled": true},
+            {"key": "category_uuid", "value": "", "description": "Filter by category UUID", "disabled": true},
+            {"key": "is_active", "value": "true", "description": "Filter by active status", "disabled": true},
+            {"key": "min_price", "value": "", "description": "Minimum price filter", "disabled": true},
+            {"key": "max_price", "value": "", "description": "Maximum price filter", "disabled": true},
+            {"key": "sort_by", "value": "created_at", "description": "Sort by field"},
+            {"key": "sort_direction", "value": "desc", "description": "Sort direction (asc, desc)"}
+          ]
+        },
+        "description": "Retrieve paginated list of products with filtering options"
+      },
+      "response": []
+    },
+    {
+      "name": "Create Product",
+      "request": {
+        "method": "POST",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"iPhone 15 Pro\",\n  \"description\": \"Latest iPhone model with advanced features\",\n  \"sku\": \"IPH-15-PRO-001\",\n  \"price\": 129900,\n  \"stock_quantity\": 50,\n  \"image_path\": \"/images/products/iphone-15-pro.jpg\",\n  \"is_active\": true,\n  \"category_uuid\": \"{{category_uuid}}\"\n}",
+          "options": {"raw": {"language": "json"}}
+        },
+        "url": {
+          "raw": "{{base_url}}/products",
+          "host": ["{{base_url}}"],
+          "path": ["products"]
+        },
+        "description": "Create a new product"
+      },
+      "response": []
+    },
+    {
+      "name": "Get Product",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{base_url}}/products/{{product_uuid}}",
+          "host": ["{{base_url}}"],
+          "path": ["products", "{{product_uuid}}"]
+        },
+        "description": "Get a specific product by UUID"
+      },
+      "response": []
+    },
+    {
+      "name": "Update Product",
+      "request": {
+        "method": "PUT",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"iPhone 15 Pro Updated\",\n  \"description\": \"Updated description for iPhone 15 Pro\",\n  \"price\": 119900,\n  \"stock_quantity\": 75,\n  \"is_active\": true\n}",
+          "options": {"raw": {"language": "json"}}
+        },
+        "url": {
+          "raw": "{{base_url}}/products/{{product_uuid}}",
+          "host": ["{{base_url}}"],
+          "path": ["products", "{{product_uuid}}"]
+        },
+        "description": "Update a specific product"
+      },
+      "response": []
+    },
+    {
+      "name": "Delete Product (Soft Delete)",
+      "request": {
+        "method": "DELETE",
+        "url": {
+          "raw": "{{base_url}}/products/{{product_uuid}}",
+          "host": ["{{base_url}}"],
+          "path": ["products", "{{product_uuid}}"]
+        },
+        "description": "Soft delete a specific product"
+      },
+      "response": []
+    },
+    {
+      "name": "Restore Product",
+      "request": {
+        "method": "POST",
+        "body": {
+          "mode": "raw",
+          "raw": "{}",
+          "options": {"raw": {"language": "json"}}
+        },
+        "url": {
+          "raw": "{{base_url}}/products/{{product_uuid}}/restore",
+          "host": ["{{base_url}}"],
+          "path": ["products", "{{product_uuid}}", "restore"]
+        },
+        "description": "Restore a soft deleted product"
+      },
+      "response": []
+    },
+    {
+      "name": "Force Delete Product",
+      "request": {
+        "method": "DELETE",
+        "url": {
+          "raw": "{{base_url}}/products/{{product_uuid}}/force-delete",
+          "host": ["{{base_url}}"],
+          "path": ["products", "{{product_uuid}}", "force-delete"]
+        },
+        "description": "Permanently delete a product"
+      },
+      "response": []
+    },
+    {
+      "name": "Filters",
+      "description": "Product filtering and search operations",
+      "item": [
+        {
+          "name": "Filter by Category",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/products?category_uuid={{category_uuid}}&per_page={{per_page}}&page={{page}}",
+              "host": ["{{base_url}}"],
+              "path": ["products"],
+              "query": [
+                {"key": "category_uuid", "value": "{{category_uuid}}", "description": "Filter by category UUID"},
+                {"key": "per_page", "value": "{{per_page}}", "description": "Items per page"},
+                {"key": "page", "value": "{{page}}", "description": "Page number"}
+              ]
+            },
+            "description": "Get products from a specific category"
+          },
+          "response": []
+        },
+        {
+          "name": "Filter by Active Status",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/products?is_active=true&per_page={{per_page}}&page={{page}}",
+              "host": ["{{base_url}}"],
+              "path": ["products"],
+              "query": [
+                {"key": "is_active", "value": "true", "description": "Filter active products"},
+                {"key": "per_page", "value": "{{per_page}}", "description": "Items per page"},
+                {"key": "page", "value": "{{page}}", "description": "Page number"}
+              ]
+            },
+            "description": "Get all active products"
+          },
+          "response": []
+        },
+        {
+          "name": "Filter by Price Range",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/products?min_price=10000&max_price=50000&per_page={{per_page}}&page={{page}}",
+              "host": ["{{base_url}}"],
+              "path": ["products"],
+              "query": [
+                {"key": "min_price", "value": "10000", "description": "Minimum price in cents"},
+                {"key": "max_price", "value": "50000", "description": "Maximum price in cents"},
+                {"key": "per_page", "value": "{{per_page}}", "description": "Items per page"},
+                {"key": "page", "value": "{{page}}", "description": "Page number"}
+              ]
+            },
+            "description": "Get products within price range"
+          },
+          "response": []
+        },
+        {
+          "name": "Search Products",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/products?search={{search}}&per_page={{per_page}}&page={{page}}",
+              "host": ["{{base_url}}"],
+              "path": ["products"],
+              "query": [
+                {"key": "search", "value": "{{search}}", "description": "Search in name, description, and SKU"},
+                {"key": "per_page", "value": "{{per_page}}", "description": "Items per page"},
+                {"key": "page", "value": "{{page}}", "description": "Page number"}
+              ]
+            },
+            "description": "Search products by name, description, or SKU"
+          },
+          "response": []
+        },
+        {
+          "name": "Sort by Price ASC",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/products?sort_by=price&sort_direction=asc&per_page={{per_page}}&page={{page}}",
+              "host": ["{{base_url}}"],
+              "path": ["products"],
+              "query": [
+                {"key": "sort_by", "value": "price", "description": "Sort by price field"},
+                {"key": "sort_direction", "value": "asc", "description": "Sort direction ascending"},
+                {"key": "per_page", "value": "{{per_page}}", "description": "Items per page"},
+                {"key": "page", "value": "{{page}}", "description": "Page number"}
+              ]
+            },
+            "description": "Get products sorted by price (low to high)"
+          },
+          "response": []
+        },
+        {
+          "name": "Sort by Name DESC",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/products?sort_by=name&sort_direction=desc&per_page={{per_page}}&page={{page}}",
+              "host": ["{{base_url}}"],
+              "path": ["products"],
+              "query": [
+                {"key": "sort_by", "value": "name", "description": "Sort by name field"},
+                {"key": "sort_direction", "value": "desc", "description": "Sort direction descending"},
+                {"key": "per_page", "value": "{{per_page}}", "description": "Items per page"},
+                {"key": "page", "value": "{{page}}", "description": "Page number"}
+              ]
+            },
+            "description": "Get products sorted by name (Z-A)"
+          },
+          "response": []
+        },
+        {
+          "name": "Low Stock Products",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/products?max_stock=10&sort_by=stock_quantity&sort_direction=asc&per_page={{per_page}}&page={{page}}",
+              "host": ["{{base_url}}"],
+              "path": ["products"],
+              "query": [
+                {"key": "max_stock", "value": "10", "description": "Maximum stock quantity"},
+                {"key": "sort_by", "value": "stock_quantity", "description": "Sort by stock quantity"},
+                {"key": "sort_direction", "value": "asc", "description": "Ascending order"},
+                {"key": "per_page", "value": "{{per_page}}", "description": "Items per page"},
+                {"key": "page", "value": "{{page}}", "description": "Page number"}
+              ]
+            },
+            "description": "Get products with low stock (≤10 items)"
+          },
+          "response": []
+        },
+        {
+          "name": "Combined Filters",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/products?category_uuid={{category_uuid}}&is_active=true&min_price=5000&max_price=100000&search=phone&sort_by=price&sort_direction=asc&per_page={{per_page}}&page={{page}}",
+              "host": ["{{base_url}}"],
+              "path": ["products"],
+              "query": [
+                {"key": "category_uuid", "value": "{{category_uuid}}", "description": "Filter by category"},
+                {"key": "is_active", "value": "true", "description": "Active products only"},
+                {"key": "min_price", "value": "5000", "description": "Minimum price"},
+                {"key": "max_price", "value": "100000", "description": "Maximum price"},
+                {"key": "search", "value": "phone", "description": "Search for 'phone'"},
+                {"key": "sort_by", "value": "price", "description": "Sort by price"},
+                {"key": "sort_direction", "value": "asc", "description": "Ascending order"},
+                {"key": "per_page", "value": "{{per_page}}", "description": "Items per page"},
+                {"key": "page", "value": "{{page}}", "description": "Page number"}
+              ]
+            },
+            "description": "Multiple filters combined: category, active, price range, search, sorted"
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

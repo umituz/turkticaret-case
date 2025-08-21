@@ -2,7 +2,7 @@
 
 namespace App\Services\Auth;
 
-use App\Models\User;
+use App\Models\Auth\User;
 use App\Repositories\User\UserRepositoryInterface;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;

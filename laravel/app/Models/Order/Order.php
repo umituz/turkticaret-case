@@ -1,7 +1,9 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Order;
 
+use App\Models\Auth\User;
+use App\Models\Base\BaseUuidModel;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 

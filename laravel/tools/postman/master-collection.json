@@ -37,6 +37,20 @@
       ]
     },
     {
+      "name": "Products",
+      "description": "Product management endpoints with full CRUD operations and soft deletes",
+      "item": [
+        { "$ref": "collections/products/products.json#/item/0" },
+        { "$ref": "collections/products/products.json#/item/1" },
+        { "$ref": "collections/products/products.json#/item/2" },
+        { "$ref": "collections/products/products.json#/item/3" },
+        { "$ref": "collections/products/products.json#/item/4" },
+        { "$ref": "collections/products/products.json#/item/5" },
+        { "$ref": "collections/products/products.json#/item/6" },
+        { "$ref": "collections/products/products.json#/item/7" }
+      ]
+    },
+    {
       "name": "Health Check",
       "description": "Health check and system status endpoints", 
       "item": [
@@ -52,6 +66,31 @@
     },
     {
       "key": "token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "product_uuid",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "category_uuid", 
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "per_page",
+      "value": "25",
+      "type": "string"
+    },
+    {
+      "key": "page",
+      "value": "1", 
+      "type": "string"
+    },
+    {
+      "key": "search",
       "value": "",
       "type": "string"
     }

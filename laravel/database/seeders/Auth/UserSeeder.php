@@ -1,8 +1,8 @@
 <?php
 
-namespace database\seeders\Auth;
+namespace Database\Seeders\Auth;
 
-use App\Models\User;
+use App\Models\Auth\User;
 use Illuminate\Database\Seeder;
 
 class UserSeeder extends Seeder

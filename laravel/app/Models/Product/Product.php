@@ -1,13 +1,14 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Product;
 
+use App\Models\Base\BaseUuidModel;
+use App\Models\Category\Category;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Product extends BaseUuidModel
 {
-
     protected $fillable = [
         'name',
         'description',

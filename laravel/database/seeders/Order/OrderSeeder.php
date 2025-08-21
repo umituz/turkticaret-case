@@ -1,9 +1,10 @@
 <?php
 
-namespace Database\Seeders;
+namespace Database\Seeders\Order;
 
-use App\Models\Order;
-use App\Models\OrderItem;
+use App\Models\Order\Order;
+use App\Models\Order\OrderItem;
+use App\Models\Product\Product;
 use Illuminate\Database\Seeder;
 
 class OrderSeeder extends Seeder
@@ -20,7 +21,7 @@ class OrderSeeder extends Seeder
             $totalAmount = 0;
 
             for ($i = 0; $i < $itemCount; $i++) {
-                $product = \App\Models\Product::inRandomOrder()->first();
+                $product = Product::inRandomOrder()->first();
                 $quantity = rand(1, 3);
                 $unitPrice = $product->price;
                 $totalPrice = $quantity * $unitPrice;

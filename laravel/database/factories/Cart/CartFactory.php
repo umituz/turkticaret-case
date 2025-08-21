@@ -1,9 +1,9 @@
 <?php
 
-namespace Database\Factories;
+namespace Database\Factories\Cart;
 
-use App\Models\Cart;
-use App\Models\User;
+use App\Models\Auth\User;
+use App\Models\Cart\Cart;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
