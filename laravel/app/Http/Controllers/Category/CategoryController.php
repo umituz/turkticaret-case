@@ -22,7 +22,7 @@ class CategoryController extends BaseController
 
     public function store(CategoryCreateRequest $request): JsonResponse
     {
-        return $this->ok(new CategoryResource($this->categoryService->create($request->validated())));
+        return $this->created(new CategoryResource($this->categoryService->create($request->validated())));
     }
 
     public function show(Category $category): JsonResponse

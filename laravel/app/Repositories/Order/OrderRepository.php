@@ -20,7 +20,7 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
             ->where('user_uuid', $userUuid)
             ->with(['orderItems.product'])
             ->orderBy('created_at', 'desc')
-            ->paginate(ApiEnums::DEFAULT_PAGINATION);
+            ->paginate(ApiEnums::DEFAULT_PAGINATION->value);
     }
 
     public function findByOrderNumber(string $orderNumber): ?Order

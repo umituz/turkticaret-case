@@ -16,7 +16,7 @@ class RegisterController extends BaseController
     {
         $result = $this->registerService->register($request->validated());
 
-        return $this->ok([
+        return $this->created([
             'user' => new RegisterResource($result['user']),
             'token' => $result['token'],
             'token_type' => 'Bearer',

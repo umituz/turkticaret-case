@@ -22,7 +22,7 @@ class ProductController extends BaseController
 
     public function store(ProductCreateRequest $request): JsonResponse
     {
-        return $this->ok(new ProductResource($this->productService->create($request->validated())));
+        return $this->created(new ProductResource($this->productService->create($request->validated())));
     }
 
     public function show(Product $product): JsonResponse

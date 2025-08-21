@@ -20,7 +20,7 @@ class OrderResource extends BaseResource
             'shipped_at' => $this->shipped_at?->toIso8601String(),
             'delivered_at' => $this->delivered_at?->toIso8601String(),
             'items' => OrderItemResource::collection($this->whenLoaded('orderItems')),
-            'items_count' => $this->orderItems->count() ?? 0,
+            'items_count' => $this->orderItems?->count() ?? 0,
             'created_at' => $this->created_at?->toIso8601String(),
             'updated_at' => $this->updated_at?->toIso8601String(),
         ];

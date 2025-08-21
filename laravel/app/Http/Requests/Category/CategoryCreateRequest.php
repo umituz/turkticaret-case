@@ -17,6 +17,7 @@ class CategoryCreateRequest extends FormRequest
         return [
             'name' => 'required|string|min:3|max:255|unique:categories,name',
             'description' => 'nullable|string|max:1000',
+            'slug' => 'required|string|unique:categories,slug',
             'is_active' => 'boolean',
         ];
     }

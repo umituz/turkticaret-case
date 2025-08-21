@@ -33,7 +33,7 @@ class OrderController extends BaseController
                 $orderData
             );
 
-            return $this->ok(new OrderResource($order));
+            return $this->created(new OrderResource($order));
         } catch (\Exception $e) {
             return $this->error([$e->getMessage()], 'Failed to create order');
         }

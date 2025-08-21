@@ -64,6 +64,11 @@ class User extends Authenticatable
         $this->attributes['password'] = Hash::make($value);
     }
 
+    protected function setEmailAttribute($value): void
+    {
+        $this->attributes['email'] = strtolower(trim($value));
+    }
+
     public function cart(): HasOne
     {
         return $this->hasOne(Cart::class, 'user_uuid', 'uuid');

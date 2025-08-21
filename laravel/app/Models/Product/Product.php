@@ -3,7 +3,9 @@
 namespace App\Models\Product;
 
 use App\Models\Base\BaseUuidModel;
+use App\Models\Cart\CartItem;
 use App\Models\Category\Category;
+use App\Models\Order\OrderItem;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
