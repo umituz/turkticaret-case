@@ -16,10 +16,10 @@ class UserSeeder extends Seeder
     private function createAdminUser(): void
     {
         $admin = User::firstOrCreate(
-            ['email' => 'admin@turkticaret.com'],
+            ['email' => 'admin@test.com'],
             [
                 'name' => 'Admin User',
-                'password' => bcrypt('password123'),
+                'password' => bcrypt('admin123'),
             ]
         );
 
@@ -29,10 +29,10 @@ class UserSeeder extends Seeder
     private function createRegularUser(): void
     {
         $regular = User::firstOrCreate(
-            ['email' => 'user@turkticaret.com'],
+            ['email' => 'user@test.com'],
             [
                 'name' => 'Regular User',
-                'password' => bcrypt('password123'),
+                'password' => bcrypt('user123'),
             ]
         );
 

@@ -1,0 +1,230 @@
+{
+  "info": {
+    "name": "Cart",
+    "description": "Shopping cart management endpoints for authenticated users",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "View Cart",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{base_url}}/cart",
+          "host": ["{{base_url}}"],
+          "path": ["cart"]
+        },
+        "description": "View current user's shopping cart with all items and totals"
+      },
+      "response": []
+    },
+    {
+      "name": "Add to Cart",
+      "request": {
+        "method": "POST",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"product_uuid\": \"{{product_uuid}}\",\n  \"quantity\": 2\n}",
+          "options": {"raw": {"language": "json"}}
+        },
+        "url": {
+          "raw": "{{base_url}}/cart/add",
+          "host": ["{{base_url}}"],
+          "path": ["cart", "add"]
+        },
+        "description": "Add a product to the shopping cart or increase quantity if already exists"
+      },
+      "response": []
+    },
+    {
+      "name": "Update Cart Item",
+      "request": {
+        "method": "PUT",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"product_uuid\": \"{{product_uuid}}\",\n  \"quantity\": 5\n}",
+          "options": {"raw": {"language": "json"}}
+        },
+        "url": {
+          "raw": "{{base_url}}/cart/update",
+          "host": ["{{base_url}}"],
+          "path": ["cart", "update"]
+        },
+        "description": "Update the quantity of a specific product in the cart"
+      },
+      "response": []
+    },
+    {
+      "name": "Remove from Cart",
+      "request": {
+        "method": "DELETE",
+        "url": {
+          "raw": "{{base_url}}/cart/remove/{{product_uuid}}",
+          "host": ["{{base_url}}"],
+          "path": ["cart", "remove", "{{product_uuid}}"]
+        },
+        "description": "Remove a specific product from the shopping cart"
+      },
+      "response": []
+    },
+    {
+      "name": "Clear Cart",
+      "request": {
+        "method": "DELETE",
+        "url": {
+          "raw": "{{base_url}}/cart/clear",
+          "host": ["{{base_url}}"],
+          "path": ["cart", "clear"]
+        },
+        "description": "Remove all items from the shopping cart"
+      },
+      "response": []
+    },
+    {
+      "name": "Cart Workflows",
+      "description": "Common cart management workflows",
+      "item": [
+        {
+          "name": "Add Multiple Items",
+          "request": {
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"product_uuid\": \"{{product_uuid}}\",\n  \"quantity\": 1\n}",
+              "options": {"raw": {"language": "json"}}
+            },
+            "url": {
+              "raw": "{{base_url}}/cart/add",
+              "host": ["{{base_url}}"],
+              "path": ["cart", "add"]
+            },
+            "description": "Add first product to cart"
+          },
+          "response": []
+        },
+        {
+          "name": "Add Same Product Again",
+          "request": {
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"product_uuid\": \"{{product_uuid}}\",\n  \"quantity\": 3\n}",
+              "options": {"raw": {"language": "json"}}
+            },
+            "url": {
+              "raw": "{{base_url}}/cart/add",
+              "host": ["{{base_url}}"],
+              "path": ["cart", "add"]
+            },
+            "description": "Add same product again - should increase quantity to 4 total"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Quantity to Specific Amount",
+          "request": {
+            "method": "PUT",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"product_uuid\": \"{{product_uuid}}\",\n  \"quantity\": 10\n}",
+              "options": {"raw": {"language": "json"}}
+            },
+            "url": {
+              "raw": "{{base_url}}/cart/update",
+              "host": ["{{base_url}}"],
+              "path": ["cart", "update"]
+            },
+            "description": "Set quantity to exactly 10 items"
+          },
+          "response": []
+        },
+        {
+          "name": "Check Cart Total",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/cart",
+              "host": ["{{base_url}}"],
+              "path": ["cart"]
+            },
+            "description": "Verify cart contents and total amount"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Error Scenarios",
+      "description": "Test error handling and validation",
+      "item": [
+        {
+          "name": "Add Invalid Product",
+          "request": {
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"product_uuid\": \"invalid-uuid\",\n  \"quantity\": 1\n}",
+              "options": {"raw": {"language": "json"}}
+            },
+            "url": {
+              "raw": "{{base_url}}/cart/add",
+              "host": ["{{base_url}}"],
+              "path": ["cart", "add"]
+            },
+            "description": "Try to add product with invalid UUID - should fail"
+          },
+          "response": []
+        },
+        {
+          "name": "Add Zero Quantity",
+          "request": {
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"product_uuid\": \"{{product_uuid}}\",\n  \"quantity\": 0\n}",
+              "options": {"raw": {"language": "json"}}
+            },
+            "url": {
+              "raw": "{{base_url}}/cart/add",
+              "host": ["{{base_url}}"],
+              "path": ["cart", "add"]
+            },
+            "description": "Try to add 0 quantity - should fail validation"
+          },
+          "response": []
+        },
+        {
+          "name": "Add Excessive Quantity",
+          "request": {
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"product_uuid\": \"{{product_uuid}}\",\n  \"quantity\": 150\n}",
+              "options": {"raw": {"language": "json"}}
+            },
+            "url": {
+              "raw": "{{base_url}}/cart/add",
+              "host": ["{{base_url}}"],
+              "path": ["cart", "add"]
+            },
+            "description": "Try to add more than 100 items - should fail validation"
+          },
+          "response": []
+        },
+        {
+          "name": "Remove Non-existent Product",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{base_url}}/cart/remove/non-existent-uuid",
+              "host": ["{{base_url}}"],
+              "path": ["cart", "remove", "non-existent-uuid"]
+            },
+            "description": "Try to remove product that's not in cart"
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

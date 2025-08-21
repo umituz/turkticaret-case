@@ -51,6 +51,19 @@
       ]
     },
     {
+      "name": "Cart",
+      "description": "Shopping cart management endpoints for authenticated users",
+      "item": [
+        { "$ref": "collections/cart/cart.json#/item/0" },
+        { "$ref": "collections/cart/cart.json#/item/1" },
+        { "$ref": "collections/cart/cart.json#/item/2" },
+        { "$ref": "collections/cart/cart.json#/item/3" },
+        { "$ref": "collections/cart/cart.json#/item/4" },
+        { "$ref": "collections/cart/cart.json#/item/5" },
+        { "$ref": "collections/cart/cart.json#/item/6" }
+      ]
+    },
+    {
       "name": "Health Check",
       "description": "Health check and system status endpoints", 
       "item": [
