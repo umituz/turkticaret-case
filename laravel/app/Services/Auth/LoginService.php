@@ -25,6 +25,11 @@ class LoginService
         ];
     }
 
+    public function logout(User $user): bool
+    {
+        return $user->currentAccessToken()->delete();
+    }
+
     /**
      * @throws ValidationException
      */
