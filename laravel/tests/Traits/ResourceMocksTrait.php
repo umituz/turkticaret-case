@@ -44,15 +44,35 @@ trait ResourceMocksTrait
             return isset($attributes[$key]);
         });
         
-        // Mock relationLoaded for whenLoaded functionality
+        // Mock relationLoaded for whenLoaded functionality  
+        // Only return true if the relation is explicitly set and not null
         $model->shouldReceive('relationLoaded')->andReturnUsing(function ($relation) use ($attributes) {
-            return isset($attributes[$relation]) && $attributes[$relation] !== null;
+            return array_key_exists($relation, $attributes) && $attributes[$relation] !== null;
         });
+        
+        // Mock common relation checks that might not be explicitly set
+        $commonRelations = ['currency', 'users', 'category', 'country', 'product', 'items', 'orders'];
+        foreach ($commonRelations as $relation) {
+            if (!array_key_exists($relation, $attributes)) {
+                $model->shouldReceive('relationLoaded')->with($relation)->andReturn(false);
+            }
+        }
         
         // Mock getRelation for loaded relations
         $model->shouldReceive('getRelation')->andReturnUsing(function ($relation) use ($attributes) {
             return $attributes[$relation] ?? null;
         });
+        
+        
+        // Mock Spatie Media Library methods
+        $defaultImageUrl = $attributes['image_path'] ?? null;
+        $model->shouldReceive('getFirstMediaUrl')->andReturn($defaultImageUrl);
+        $model->shouldReceive('getFirstMediaUrl')->with('images')->andReturn($defaultImageUrl);
+        $model->shouldReceive('hasMedia')->andReturn(!empty($defaultImageUrl));
+        $model->shouldReceive('getMedia')->andReturn(collect());
+        
+        // Mock additional common model methods
+        $model->shouldReceive('isRTL')->andReturn(false);
         
         return $model;
     }
@@ -229,6 +249,7 @@ trait ResourceMocksTrait
             case 'product':
                 return array_merge($baseData, [
                     'name' => 'Test Product',
+                    'slug' => 'test-product',
                     'description' => 'Test Description',
                     'sku' => 'TEST-SKU',
                     'price' => 1000,

@@ -48,6 +48,8 @@ abstract class BaseResourceUnitTest extends UnitTestCase
         $request = \Mockery::mock(Request::class);
         $request->shouldReceive('expectsJson')->andReturn(true);
         $request->shouldReceive('wantsJson')->andReturn(true);
+        $request->shouldReceive('path')->andReturn('/test');
+        $request->shouldReceive('url')->andReturn('http://test.local/test');
         
         return $request;
     }

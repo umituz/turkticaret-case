@@ -4,6 +4,8 @@ namespace Tests\Base;
 
 use App\Models\Auth\User;
 use App\Models\Language\Language;
+use App\Models\Currency\Currency;
+use App\Models\Country\Country;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use PHPUnit\Framework\Attributes\Group;
@@ -43,12 +45,35 @@ abstract class BaseFeatureTest extends TestCase
             $language = Language::factory()->english()->active()->create();
         }
 
+        // Create default currency or use existing one
+        $currency = Currency::where('code', 'USD')->first();
+        if (!$currency) {
+            $currency = Currency::factory()->create([
+                'code' => 'USD',
+                'name' => 'US Dollar',
+                'symbol' => '$',
+                'decimals' => 2,
+            ]);
+        }
+
+        // Create default country or use existing one
+        $country = Country::where('code', 'US')->first();
+        if (!$country) {
+            $country = Country::factory()
+                ->withCurrency($currency)
+                ->create([
+                    'code' => 'US',
+                    'name' => 'United States',
+                ]);
+        }
+
         // Create test user for authentication tests
         $this->testUser = User::factory()->create([
             'email' => 'test@turkticaret.test',
             'password' => bcrypt('password123'),
             'email_verified_at' => now(),
             'language_uuid' => $language->uuid,
+            'country_uuid' => $country->uuid,
         ]);
 
         // Setup default auth headers
