@@ -19,12 +19,12 @@ class ProductFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->words(3, true),
-            'description' => $this->faker->paragraph(),
-            'sku' => $this->faker->unique()->regexify('[A-Z]{3}[0-9]{6}'),
-            'price' => $this->faker->numberBetween(1000, 50000),
-            'stock_quantity' => $this->faker->numberBetween(0, 100),
-            'is_active' => $this->faker->boolean(85),
+            'name' => 'Test Product ' . rand(1000, 9999),
+            'description' => 'Test product description ' . rand(1000, 9999),
+            'sku' => 'SKU' . rand(100000, 999999),
+            'price' => rand(1000, 50000),
+            'stock_quantity' => rand(0, 100),
+            'is_active' => true,
             'category_uuid' => Category::factory(),
         ];
     }

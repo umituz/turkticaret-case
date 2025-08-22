@@ -18,13 +18,13 @@ class CategoryFactory extends Factory
      */
     public function definition(): array
     {
-        $name = $this->faker->unique()->words(2, true);
+        $name = 'Test Category ' . rand(1000, 9999);
 
         return [
             'name' => $name,
-            'description' => $this->faker->paragraph(),
+            'description' => 'Test category description ' . rand(1000, 9999),
             'slug' => Str::slug($name),
-            'is_active' => $this->faker->boolean(90),
+            'is_active' => true,
         ];
     }
 }
