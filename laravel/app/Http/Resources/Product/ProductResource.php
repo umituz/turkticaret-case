@@ -13,11 +13,12 @@ class ProductResource extends BaseResource
         return [
             'uuid' => $this->uuid,
             'name' => $this->name,
+            'slug' => $this->slug,
             'description' => $this->description,
             'sku' => $this->sku,
             'price' => $this->price,
             'stock_quantity' => $this->stock_quantity,
-            'image_path' => $this->image_path,
+            'image_path' => $this->getFirstMediaUrl('images'),
             'is_active' => $this->is_active,
             'category_uuid' => $this->category_uuid,
             'category' => new CategoryResource($this->whenLoaded('category')),

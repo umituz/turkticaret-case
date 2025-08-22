@@ -3,11 +3,15 @@
 namespace App\Services\Order;
 
 use App\DTOs\Order\OrderCreateDTO;
+use App\Jobs\Order\SendOrderConfirmationJob;
 use App\Models\Order\Order;
 use App\Models\Cart\Cart;
 use App\Repositories\Order\OrderRepositoryInterface;
+use App\Repositories\Product\ProductRepositoryInterface;
 use App\Services\Cart\CartService;
+use App\Services\Product\ProductService;
 use App\Exceptions\Order\EmptyCartException;
+use App\Exceptions\Product\InsufficientStockException;
 use App\Enums\Order\OrderStatus;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
@@ -16,7 +20,9 @@ class OrderService
 {
     public function __construct(
         protected OrderRepositoryInterface $orderRepository,
-        protected CartService $cartService
+        protected CartService $cartService,
+        protected ProductRepositoryInterface $productRepository,
+        protected ProductService $productService
     ) {}
 
     public function getUserOrders(string $userUuid): LengthAwarePaginator
@@ -31,9 +37,12 @@ class OrderService
     {
         return DB::transaction(function () use ($userUuid, $orderData) {
             $cart = $this->validateCartForOrder($userUuid);
+            $this->validateCartStockAvailability($cart);
             $order = $this->createOrderFromCartData($userUuid, $cart, $orderData);
-            $this->transferCartItemsToOrder($order, $cart);
+            $this->transferCartItemsToOrderAndReduceStock($order, $cart);
             $this->cartService->clearCart($userUuid);
+
+            SendOrderConfirmationJob::dispatch($order);
 
             return $order->load(['orderItems.product']);
         });
@@ -66,9 +75,30 @@ class OrderService
         ]);
     }
 
-    private function transferCartItemsToOrder(Order $order, Cart $cart): void
+    private function validateCartStockAvailability(Cart $cart): void
     {
         foreach ($cart->cartItems as $cartItem) {
+            $product = $this->productRepository->findByUuid($cartItem->product_uuid);
+            $this->productService->validateStock($product, $cartItem->quantity);
+        }
+    }
+
+    /**
+     * @throws InsufficientStockException
+     */
+    private function transferCartItemsToOrderAndReduceStock(Order $order, Cart $cart): void
+    {
+        foreach ($cart->cartItems as $cartItem) {
+            $product = $this->productRepository->findByUuid($cartItem->product_uuid);
+
+            if (!$product->decreaseStock($cartItem->quantity)) {
+                throw new InsufficientStockException(
+                    $product->name,
+                    $cartItem->quantity,
+                    $product->stock_quantity
+                );
+            }
+
             $order->orderItems()->create([
                 'product_uuid' => $cartItem->product_uuid,
                 'product_name' => $cartItem->product->name,

@@ -15,32 +15,20 @@ class CategorySeeder extends Seeder
         $categories = [
             [
                 'name' => 'Electronics',
-                'description' => 'Electronic devices and gadgets',
+                'description' => 'Electronic devices, gadgets, and accessories',
                 'slug' => 'electronics',
                 'is_active' => true,
             ],
             [
                 'name' => 'Clothing',
-                'description' => 'Fashion and apparel items',
+                'description' => 'Fashion and apparel for all ages',
                 'slug' => 'clothing',
                 'is_active' => true,
             ],
             [
-                'name' => 'Home & Garden',
-                'description' => 'Home decor and garden supplies',
-                'slug' => 'home-garden',
-                'is_active' => true,
-            ],
-            [
                 'name' => 'Books',
-                'description' => 'Books and educational materials',
+                'description' => 'Books, eBooks, and reading materials',
                 'slug' => 'books',
-                'is_active' => true,
-            ],
-            [
-                'name' => 'Sports',
-                'description' => 'Sports equipment and accessories',
-                'slug' => 'sports',
                 'is_active' => true,
             ],
         ];

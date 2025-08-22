@@ -24,7 +24,6 @@ class ProductFactory extends Factory
             'sku' => $this->faker->unique()->regexify('[A-Z]{3}[0-9]{6}'),
             'price' => $this->faker->numberBetween(1000, 50000),
             'stock_quantity' => $this->faker->numberBetween(0, 100),
-            'image_path' => null,
             'is_active' => $this->faker->boolean(85),
             'category_uuid' => Category::factory(),
         ];
