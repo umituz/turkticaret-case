@@ -8,6 +8,7 @@ readonly class RegisterDTO
         public string $name,
         public string $email,
         public string $password,
+        public ?string $countryCode = null,
     ) {}
 
     public static function fromArray(array $data): self
@@ -16,6 +17,7 @@ readonly class RegisterDTO
             name: $data['name'],
             email: $data['email'],
             password: $data['password'],
+            countryCode: $data['country_code'] ?? null,
         );
     }
 
@@ -25,6 +27,7 @@ readonly class RegisterDTO
             'name' => $this->name,
             'email' => $this->email,
             'password' => $this->password,
+            'country_code' => $this->countryCode,
         ];
     }
 }

@@ -30,4 +30,15 @@ class CountryService
         return $this->countryRepository->deleteByUuid($uuid);
     }
 
+    public function findByCode(string $code): Country
+    {
+        $country = $this->countryRepository->findByCode($code);
+
+        if (!$country) {
+            throw new \InvalidArgumentException('Invalid country code provided');
+        }
+
+        return $country;
+    }
+
 }

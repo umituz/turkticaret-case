@@ -24,6 +24,7 @@ class CountrySeeder extends Seeder
                 [
                     'code' => $countryEnum->value,
                     'name' => $countryEnum->getDisplayName(),
+                    'locale' => $countryEnum->getLocale(),
                     'currency_uuid' => $currency?->uuid
                 ]
             );

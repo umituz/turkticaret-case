@@ -4,10 +4,13 @@ namespace App\Models\Auth;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\Cart\Cart;
+use App\Models\Country\Country;
+use App\Models\Language\Language;
 use App\Models\Order\Order;
 use Database\Factories\Auth\UserFactory;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -34,6 +37,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'language_uuid',
+        'country_uuid',
     ];
 
     /**
@@ -77,5 +82,15 @@ class User extends Authenticatable
     public function orders(): HasMany
     {
         return $this->hasMany(Order::class, 'user_uuid', 'uuid');
+    }
+
+    public function language(): BelongsTo
+    {
+        return $this->belongsTo(Language::class, 'language_uuid', 'uuid');
+    }
+
+    public function country(): BelongsTo
+    {
+        return $this->belongsTo(Country::class, 'country_uuid', 'uuid');
     }
 }

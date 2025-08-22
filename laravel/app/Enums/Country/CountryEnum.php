@@ -15,6 +15,14 @@ enum CountryEnum: string
         };
     }
 
+    public function getCurrencyCode(): string
+    {
+        return match($this) {
+            self::TURKEY => 'TRY',
+            self::UNITED_STATES => 'USD',
+        };
+    }
+
     public function getLocale(): string
     {
         return match($this) {

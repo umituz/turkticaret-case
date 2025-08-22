@@ -14,4 +14,9 @@ abstract class BaseUuidModel extends Model
     protected $primaryKey = 'uuid';
     public $incrementing = false;
     protected $keyType = 'string';
+
+    public function getRouteKeyName(): string
+    {
+        return 'uuid';
+    }
 }

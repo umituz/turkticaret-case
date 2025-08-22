@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignUuid('currency_uuid')->constrained('currencies','uuid');
             $table->string('code', 2)->unique();
             $table->string('name');
+            $table->string('locale', 10);
             $table->boolean('is_active')->default(true);
             $table->timestamps();
             $table->softDeletes();

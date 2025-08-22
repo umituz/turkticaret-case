@@ -2,6 +2,7 @@
 
 namespace Database\Factories\Country;
 
+use App\Enums\Country\CountryEnum;
 use App\Models\Country\Country;
 use App\Models\Currency\Currency;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -12,9 +13,12 @@ class CountryFactory extends Factory
 
     public function definition(): array
     {
+        $country = $this->faker->randomElement(CountryEnum::cases());
+
         return [
-            'code' => strtoupper($this->faker->unique()->countryCode),
-            'name' => $this->faker->unique()->country,
+            'code' => $country->value,
+            'name' => $country->getDisplayName(),
+            'locale' => $country->getLocale(),
             'currency_uuid' => Currency::factory(),
         ];
     }

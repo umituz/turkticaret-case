@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests\Auth;
 
+use App\Enums\Country\CountryEnum;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class RegisterRequest extends FormRequest
 {
@@ -17,6 +19,7 @@ class RegisterRequest extends FormRequest
             'name' => 'required|string|min:2|max:255',
             'email' => 'required|string|email|max:255|unique:users,email',
             'password' => 'required|string|min:8|confirmed',
+            'country_code' => ['required', 'string', Rule::in(CountryEnum::values())],
         ];
     }
 
@@ -32,6 +35,8 @@ class RegisterRequest extends FormRequest
             'password.required' => 'Password is required.',
             'password.min' => 'Password must be at least 8 characters long.',
             'password.confirmed' => 'Password confirmation does not match.',
+            'country_code.required' => 'Country selection is required.',
+            'country_code.in' => 'Please select a valid country.',
         ];
     }
 }
