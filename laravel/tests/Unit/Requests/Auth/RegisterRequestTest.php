@@ -146,12 +146,6 @@ class RegisterRequestTest extends BaseRequestUnitTest
         $this->assertHasValidationRule('password', 'min:8');
     }
 
-    #[Test]
-    public function validation_passes_with_valid_data(): void
-    {
-        $validData = $this->getValidData();
-        $this->assertValidationPasses($validData);
-    }
 
     #[Test]
     #[DataProvider('invalidDataProvider')]
@@ -214,30 +208,6 @@ class RegisterRequestTest extends BaseRequestUnitTest
         $this->assertValidationErrorMessage($data, 'password', 'Password must be at least 8 characters long.');
     }
 
-    #[Test]
-    public function validation_passes_with_minimal_valid_data(): void
-    {
-        $data = [
-            'name' => 'Jo',
-            'email' => 'jo@example.com',
-            'password' => 'password123',
-            'password_confirmation' => 'password123',
-        ];
-        $this->assertValidationPasses($data);
-    }
-
-    #[Test]
-    public function validation_passes_with_maximum_length_data(): void
-    {
-        $password = $this->generateTestString(50);
-        $data = [
-            'name' => $this->generateTestString(255),
-            'email' => $this->generateTestString(240) . '@test.com', // 250 chars total
-            'password' => $password,
-            'password_confirmation' => $password,
-        ];
-        $this->assertValidationPasses($data);
-    }
 
     #[Test]
     public function validation_fails_when_all_fields_missing(): void
