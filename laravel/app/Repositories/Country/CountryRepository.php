@@ -11,4 +11,9 @@ class CountryRepository extends BaseRepository implements CountryRepositoryInter
     {
         parent::__construct($model);
     }
+
+    public function findByCode(string $code): ?Country
+    {
+        return $this->model->where('code', $code)->first();
+    }
 }

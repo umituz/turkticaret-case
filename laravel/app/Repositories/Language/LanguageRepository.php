@@ -11,4 +11,9 @@ class LanguageRepository extends BaseRepository implements LanguageRepositoryInt
     {
         parent::__construct($model);
     }
+
+    public function findByCode(string $code): ?Language
+    {
+        return $this->model->where('code', $code)->first();
+    }
 }
