@@ -27,14 +27,14 @@ print_error() {
     echo -e "${RED}[ERROR]${NC} $1"
 }
 
-# Check if .env file exists
-if [ ! -f .env ]; then
-    print_error ".env file not found!"
+# Check if .env file exists in laravel directory
+if [ ! -f laravel/.env ]; then
+    print_error "laravel/.env file not found!"
     exit 1
 fi
 
-# Load environment variables
-source .env
+# Load environment variables from laravel directory
+source laravel/.env
 
 # Basic environment check
 if [ -z "$HOST_UID" ]; then
