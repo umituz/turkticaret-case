@@ -1,0 +1,243 @@
+{
+  "info": {
+    "name": "Countries",
+    "description": "Country management endpoints with full CRUD operations and soft deletes",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "List Countries",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{base_url}}/countries?per_page=25&page=1&sort_by=created_at&sort_direction=desc",
+          "host": ["{{base_url}}"],
+          "path": ["countries"],
+          "query": [
+            {"key": "per_page", "value": "25", "description": "Number of items per page"},
+            {"key": "page", "value": "1", "description": "Page number"},
+            {"key": "search", "value": "", "description": "Search in name and code", "disabled": true},
+            {"key": "active_only", "value": "true", "description": "Filter active countries only", "disabled": true},
+            {"key": "sort_by", "value": "created_at", "description": "Sort by field"},
+            {"key": "sort_direction", "value": "desc", "description": "Sort direction (asc, desc)"}
+          ]
+        },
+        "description": "Retrieve paginated list of countries with filtering options"
+      },
+      "response": []
+    },
+    {
+      "name": "Create Country",
+      "request": {
+        "method": "POST",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"code\": \"TR\",\n  \"name\": \"Turkey\",\n  \"currency_uuid\": \"{{currency_uuid}}\",\n  \"is_active\": true\n}",
+          "options": {"raw": {"language": "json"}}
+        },
+        "url": {
+          "raw": "{{base_url}}/countries",
+          "host": ["{{base_url}}"],
+          "path": ["countries"]
+        },
+        "description": "Create a new country"
+      },
+      "response": []
+    },
+    {
+      "name": "Get Country",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{base_url}}/countries/{{country_uuid}}",
+          "host": ["{{base_url}}"],
+          "path": ["countries", "{{country_uuid}}"]
+        },
+        "description": "Get a specific country by ID"
+      },
+      "response": []
+    },
+    {
+      "name": "Update Country",
+      "request": {
+        "method": "PUT",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"code\": \"TR\",\n  \"name\": \"Republic of Turkey\",\n  \"currency_uuid\": \"{{currency_uuid}}\",\n  \"is_active\": true\n}",
+          "options": {"raw": {"language": "json"}}
+        },
+        "url": {
+          "raw": "{{base_url}}/countries/{{country_uuid}}",
+          "host": ["{{base_url}}"],
+          "path": ["countries", "{{country_uuid}}"]
+        },
+        "description": "Update a specific country"
+      },
+      "response": []
+    },
+    {
+      "name": "Delete Country (Soft Delete)",
+      "request": {
+        "method": "DELETE",
+        "url": {
+          "raw": "{{base_url}}/countries/{{country_uuid}}",
+          "host": ["{{base_url}}"],
+          "path": ["countries", "{{country_uuid}}"]
+        },
+        "description": "Soft delete a specific country"
+      },
+      "response": []
+    },
+    {
+      "name": "Restore Country",
+      "request": {
+        "method": "POST",
+        "body": {
+          "mode": "raw",
+          "raw": "{}",
+          "options": {"raw": {"language": "json"}}
+        },
+        "url": {
+          "raw": "{{base_url}}/countries/{{country_uuid}}/restore",
+          "host": ["{{base_url}}"],
+          "path": ["countries", "{{country_uuid}}", "restore"]
+        },
+        "description": "Restore a soft deleted country"
+      },
+      "response": []
+    },
+    {
+      "name": "Force Delete Country",
+      "request": {
+        "method": "DELETE",
+        "url": {
+          "raw": "{{base_url}}/countries/{{country_uuid}}/force-delete",
+          "host": ["{{base_url}}"],
+          "path": ["countries", "{{country_uuid}}", "force-delete"]
+        },
+        "description": "Permanently delete a country"
+      },
+      "response": []
+    },
+    {
+      "name": "Filters",
+      "description": "Country filtering and search operations",
+      "item": [
+        {
+          "name": "Filter by Active Only",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/countries?active_only=true&per_page={{per_page}}&page={{page}}",
+              "host": ["{{base_url}}"],
+              "path": ["countries"],
+              "query": [
+                {"key": "active_only", "value": "true", "description": "Filter active countries only"},
+                {"key": "per_page", "value": "{{per_page}}", "description": "Items per page"},
+                {"key": "page", "value": "{{page}}", "description": "Page number"}
+              ]
+            },
+            "description": "Get all active countries"
+          },
+          "response": []
+        },
+        {
+          "name": "Search Countries",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/countries?search={{search}}&per_page={{per_page}}&page={{page}}",
+              "host": ["{{base_url}}"],
+              "path": ["countries"],
+              "query": [
+                {"key": "search", "value": "{{search}}", "description": "Search in name and code"},
+                {"key": "per_page", "value": "{{per_page}}", "description": "Items per page"},
+                {"key": "page", "value": "{{page}}", "description": "Page number"}
+              ]
+            },
+            "description": "Search countries by name or code"
+          },
+          "response": []
+        },
+        {
+          "name": "Sort by Name ASC",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/countries?sort_by=name&sort_direction=asc&per_page={{per_page}}&page={{page}}",
+              "host": ["{{base_url}}"],
+              "path": ["countries"],
+              "query": [
+                {"key": "sort_by", "value": "name", "description": "Sort by name field"},
+                {"key": "sort_direction", "value": "asc", "description": "Sort direction ascending"},
+                {"key": "per_page", "value": "{{per_page}}", "description": "Items per page"},
+                {"key": "page", "value": "{{page}}", "description": "Page number"}
+              ]
+            },
+            "description": "Get countries sorted by name (A-Z)"
+          },
+          "response": []
+        },
+        {
+          "name": "Sort by Code ASC",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/countries?sort_by=code&sort_direction=asc&per_page={{per_page}}&page={{page}}",
+              "host": ["{{base_url}}"],
+              "path": ["countries"],
+              "query": [
+                {"key": "sort_by", "value": "code", "description": "Sort by country code"},
+                {"key": "sort_direction", "value": "asc", "description": "Sort direction ascending"},
+                {"key": "per_page", "value": "{{per_page}}", "description": "Items per page"},
+                {"key": "page", "value": "{{page}}", "description": "Page number"}
+              ]
+            },
+            "description": "Get countries sorted by code (A-Z)"
+          },
+          "response": []
+        },
+        {
+          "name": "Sort by Created Date DESC",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/countries?sort_by=created_at&sort_direction=desc&per_page={{per_page}}&page={{page}}",
+              "host": ["{{base_url}}"],
+              "path": ["countries"],
+              "query": [
+                {"key": "sort_by", "value": "created_at", "description": "Sort by creation date"},
+                {"key": "sort_direction", "value": "desc", "description": "Sort direction descending"},
+                {"key": "per_page", "value": "{{per_page}}", "description": "Items per page"},
+                {"key": "page", "value": "{{page}}", "description": "Page number"}
+              ]
+            },
+            "description": "Get countries sorted by creation date (newest first)"
+          },
+          "response": []
+        },
+        {
+          "name": "Combined Filters",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/countries?active_only=true&search=turkey&sort_by=name&sort_direction=asc&per_page={{per_page}}&page={{page}}",
+              "host": ["{{base_url}}"],
+              "path": ["countries"],
+              "query": [
+                {"key": "active_only", "value": "true", "description": "Active countries only"},
+                {"key": "search", "value": "turkey", "description": "Search for 'turkey'"},
+                {"key": "sort_by", "value": "name", "description": "Sort by name"},
+                {"key": "sort_direction", "value": "asc", "description": "Ascending order"},
+                {"key": "per_page", "value": "{{per_page}}", "description": "Items per page"},
+                {"key": "page", "value": "{{page}}", "description": "Page number"}
+              ]
+            },
+            "description": "Multiple filters combined: active, search, sorted"
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

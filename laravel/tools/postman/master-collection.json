@@ -75,6 +75,48 @@
       ]
     },
     {
+      "name": "Countries",
+      "description": "Country management endpoints with full CRUD operations and soft deletes",
+      "item": [
+        { "$ref": "collections/countries/countries.json#/item/0" },
+        { "$ref": "collections/countries/countries.json#/item/1" },
+        { "$ref": "collections/countries/countries.json#/item/2" },
+        { "$ref": "collections/countries/countries.json#/item/3" },
+        { "$ref": "collections/countries/countries.json#/item/4" },
+        { "$ref": "collections/countries/countries.json#/item/5" },
+        { "$ref": "collections/countries/countries.json#/item/6" },
+        { "$ref": "collections/countries/countries.json#/item/7" }
+      ]
+    },
+    {
+      "name": "Currencies",
+      "description": "Currency management endpoints with full CRUD operations and soft deletes",
+      "item": [
+        { "$ref": "collections/currencies/currencies.json#/item/0" },
+        { "$ref": "collections/currencies/currencies.json#/item/1" },
+        { "$ref": "collections/currencies/currencies.json#/item/2" },
+        { "$ref": "collections/currencies/currencies.json#/item/3" },
+        { "$ref": "collections/currencies/currencies.json#/item/4" },
+        { "$ref": "collections/currencies/currencies.json#/item/5" },
+        { "$ref": "collections/currencies/currencies.json#/item/6" },
+        { "$ref": "collections/currencies/currencies.json#/item/7" }
+      ]
+    },
+    {
+      "name": "Languages",
+      "description": "Language management endpoints with full CRUD operations and soft deletes",
+      "item": [
+        { "$ref": "collections/languages/languages.json#/item/0" },
+        { "$ref": "collections/languages/languages.json#/item/1" },
+        { "$ref": "collections/languages/languages.json#/item/2" },
+        { "$ref": "collections/languages/languages.json#/item/3" },
+        { "$ref": "collections/languages/languages.json#/item/4" },
+        { "$ref": "collections/languages/languages.json#/item/5" },
+        { "$ref": "collections/languages/languages.json#/item/6" },
+        { "$ref": "collections/languages/languages.json#/item/7" }
+      ]
+    },
+    {
       "name": "Health Check",
       "description": "Health check and system status endpoints", 
       "item": [
@@ -120,6 +162,21 @@
     },
     {
       "key": "order_uuid",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "country_uuid",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "currency_uuid",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "language_uuid",
       "value": "",
       "type": "string"
     }

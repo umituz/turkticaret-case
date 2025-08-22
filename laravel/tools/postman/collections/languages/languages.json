@@ -1,0 +1,300 @@
+{
+  "info": {
+    "name": "Languages",
+    "description": "Language management endpoints with full CRUD operations and soft deletes",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "List Languages",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{base_url}}/languages?per_page=25&page=1&sort_by=created_at&sort_direction=desc",
+          "host": ["{{base_url}}"],
+          "path": ["languages"],
+          "query": [
+            {"key": "per_page", "value": "25", "description": "Number of items per page"},
+            {"key": "page", "value": "1", "description": "Page number"},
+            {"key": "search", "value": "", "description": "Search in name, native_name and code", "disabled": true},
+            {"key": "active_only", "value": "true", "description": "Filter active languages only", "disabled": true},
+            {"key": "direction", "value": "ltr", "description": "Filter by text direction (ltr, rtl)", "disabled": true},
+            {"key": "sort_by", "value": "created_at", "description": "Sort by field"},
+            {"key": "sort_direction", "value": "desc", "description": "Sort direction (asc, desc)"}
+          ]
+        },
+        "description": "Retrieve paginated list of languages with filtering options"
+      },
+      "response": []
+    },
+    {
+      "name": "Create Language",
+      "request": {
+        "method": "POST",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"code\": \"tr\",\n  \"name\": \"Turkish\",\n  \"native_name\": \"Türkçe\",\n  \"locale\": \"tr_TR\",\n  \"direction\": \"ltr\",\n  \"is_active\": true\n}",
+          "options": {"raw": {"language": "json"}}
+        },
+        "url": {
+          "raw": "{{base_url}}/languages",
+          "host": ["{{base_url}}"],
+          "path": ["languages"]
+        },
+        "description": "Create a new language"
+      },
+      "response": []
+    },
+    {
+      "name": "Get Language",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{base_url}}/languages/{{language_uuid}}",
+          "host": ["{{base_url}}"],
+          "path": ["languages", "{{language_uuid}}"]
+        },
+        "description": "Get a specific language by ID"
+      },
+      "response": []
+    },
+    {
+      "name": "Update Language",
+      "request": {
+        "method": "PUT",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"code\": \"tr\",\n  \"name\": \"Turkish\",\n  \"native_name\": \"Türkçe\",\n  \"locale\": \"tr_TR\",\n  \"direction\": \"ltr\",\n  \"is_active\": true\n}",
+          "options": {"raw": {"language": "json"}}
+        },
+        "url": {
+          "raw": "{{base_url}}/languages/{{language_uuid}}",
+          "host": ["{{base_url}}"],
+          "path": ["languages", "{{language_uuid}}"]
+        },
+        "description": "Update a specific language"
+      },
+      "response": []
+    },
+    {
+      "name": "Delete Language (Soft Delete)",
+      "request": {
+        "method": "DELETE",
+        "url": {
+          "raw": "{{base_url}}/languages/{{language_uuid}}",
+          "host": ["{{base_url}}"],
+          "path": ["languages", "{{language_uuid}}"]
+        },
+        "description": "Soft delete a specific language"
+      },
+      "response": []
+    },
+    {
+      "name": "Restore Language",
+      "request": {
+        "method": "POST",
+        "body": {
+          "mode": "raw",
+          "raw": "{}",
+          "options": {"raw": {"language": "json"}}
+        },
+        "url": {
+          "raw": "{{base_url}}/languages/{{language_uuid}}/restore",
+          "host": ["{{base_url}}"],
+          "path": ["languages", "{{language_uuid}}", "restore"]
+        },
+        "description": "Restore a soft deleted language"
+      },
+      "response": []
+    },
+    {
+      "name": "Force Delete Language",
+      "request": {
+        "method": "DELETE",
+        "url": {
+          "raw": "{{base_url}}/languages/{{language_uuid}}/force-delete",
+          "host": ["{{base_url}}"],
+          "path": ["languages", "{{language_uuid}}", "force-delete"]
+        },
+        "description": "Permanently delete a language"
+      },
+      "response": []
+    },
+    {
+      "name": "Filters",
+      "description": "Language filtering and search operations",
+      "item": [
+        {
+          "name": "Filter by Active Only",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/languages?active_only=true&per_page={{per_page}}&page={{page}}",
+              "host": ["{{base_url}}"],
+              "path": ["languages"],
+              "query": [
+                {"key": "active_only", "value": "true", "description": "Filter active languages only"},
+                {"key": "per_page", "value": "{{per_page}}", "description": "Items per page"},
+                {"key": "page", "value": "{{page}}", "description": "Page number"}
+              ]
+            },
+            "description": "Get all active languages"
+          },
+          "response": []
+        },
+        {
+          "name": "Filter by Direction - LTR",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/languages?direction=ltr&per_page={{per_page}}&page={{page}}",
+              "host": ["{{base_url}}"],
+              "path": ["languages"],
+              "query": [
+                {"key": "direction", "value": "ltr", "description": "Filter left-to-right languages"},
+                {"key": "per_page", "value": "{{per_page}}", "description": "Items per page"},
+                {"key": "page", "value": "{{page}}", "description": "Page number"}
+              ]
+            },
+            "description": "Get all left-to-right languages"
+          },
+          "response": []
+        },
+        {
+          "name": "Filter by Direction - RTL",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/languages?direction=rtl&per_page={{per_page}}&page={{page}}",
+              "host": ["{{base_url}}"],
+              "path": ["languages"],
+              "query": [
+                {"key": "direction", "value": "rtl", "description": "Filter right-to-left languages"},
+                {"key": "per_page", "value": "{{per_page}}", "description": "Items per page"},
+                {"key": "page", "value": "{{page}}", "description": "Page number"}
+              ]
+            },
+            "description": "Get all right-to-left languages"
+          },
+          "response": []
+        },
+        {
+          "name": "Search Languages",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/languages?search={{search}}&per_page={{per_page}}&page={{page}}",
+              "host": ["{{base_url}}"],
+              "path": ["languages"],
+              "query": [
+                {"key": "search", "value": "{{search}}", "description": "Search in name, native_name and code"},
+                {"key": "per_page", "value": "{{per_page}}", "description": "Items per page"},
+                {"key": "page", "value": "{{page}}", "description": "Page number"}
+              ]
+            },
+            "description": "Search languages by name, native name or code"
+          },
+          "response": []
+        },
+        {
+          "name": "Sort by Name ASC",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/languages?sort_by=name&sort_direction=asc&per_page={{per_page}}&page={{page}}",
+              "host": ["{{base_url}}"],
+              "path": ["languages"],
+              "query": [
+                {"key": "sort_by", "value": "name", "description": "Sort by name field"},
+                {"key": "sort_direction", "value": "asc", "description": "Sort direction ascending"},
+                {"key": "per_page", "value": "{{per_page}}", "description": "Items per page"},
+                {"key": "page", "value": "{{page}}", "description": "Page number"}
+              ]
+            },
+            "description": "Get languages sorted by name (A-Z)"
+          },
+          "response": []
+        },
+        {
+          "name": "Sort by Code ASC",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/languages?sort_by=code&sort_direction=asc&per_page={{per_page}}&page={{page}}",
+              "host": ["{{base_url}}"],
+              "path": ["languages"],
+              "query": [
+                {"key": "sort_by", "value": "code", "description": "Sort by language code"},
+                {"key": "sort_direction", "value": "asc", "description": "Sort direction ascending"},
+                {"key": "per_page", "value": "{{per_page}}", "description": "Items per page"},
+                {"key": "page", "value": "{{page}}", "description": "Page number"}
+              ]
+            },
+            "description": "Get languages sorted by code (A-Z)"
+          },
+          "response": []
+        },
+        {
+          "name": "Sort by Native Name ASC",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/languages?sort_by=native_name&sort_direction=asc&per_page={{per_page}}&page={{page}}",
+              "host": ["{{base_url}}"],
+              "path": ["languages"],
+              "query": [
+                {"key": "sort_by", "value": "native_name", "description": "Sort by native name"},
+                {"key": "sort_direction", "value": "asc", "description": "Sort direction ascending"},
+                {"key": "per_page", "value": "{{per_page}}", "description": "Items per page"},
+                {"key": "page", "value": "{{page}}", "description": "Page number"}
+              ]
+            },
+            "description": "Get languages sorted by native name"
+          },
+          "response": []
+        },
+        {
+          "name": "Sort by Created Date DESC",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/languages?sort_by=created_at&sort_direction=desc&per_page={{per_page}}&page={{page}}",
+              "host": ["{{base_url}}"],
+              "path": ["languages"],
+              "query": [
+                {"key": "sort_by", "value": "created_at", "description": "Sort by creation date"},
+                {"key": "sort_direction", "value": "desc", "description": "Sort direction descending"},
+                {"key": "per_page", "value": "{{per_page}}", "description": "Items per page"},
+                {"key": "page", "value": "{{page}}", "description": "Page number"}
+              ]
+            },
+            "description": "Get languages sorted by creation date (newest first)"
+          },
+          "response": []
+        },
+        {
+          "name": "Combined Filters",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/languages?active_only=true&direction=ltr&search=english&sort_by=name&sort_direction=asc&per_page={{per_page}}&page={{page}}",
+              "host": ["{{base_url}}"],
+              "path": ["languages"],
+              "query": [
+                {"key": "active_only", "value": "true", "description": "Active languages only"},
+                {"key": "direction", "value": "ltr", "description": "Left-to-right languages"},
+                {"key": "search", "value": "english", "description": "Search for 'english'"},
+                {"key": "sort_by", "value": "name", "description": "Sort by name"},
+                {"key": "sort_direction", "value": "asc", "description": "Ascending order"},
+                {"key": "per_page", "value": "{{per_page}}", "description": "Items per page"},
+                {"key": "page", "value": "{{page}}", "description": "Page number"}
+              ]
+            },
+            "description": "Multiple filters combined: active, LTR, search, sorted"
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

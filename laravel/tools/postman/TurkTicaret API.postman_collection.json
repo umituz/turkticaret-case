@@ -3049,6 +3049,2451 @@
       ]
     },
     {
+      "name": "Countries",
+      "description": "Country management endpoints with full CRUD operations and soft deletes",
+      "item": [
+        {
+          "name": "List Countries",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/countries?per_page=25&page=1&sort_by=created_at&sort_direction=desc",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "countries"
+              ],
+              "query": [
+                {
+                  "key": "per_page",
+                  "value": "25",
+                  "description": "Number of items per page"
+                },
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number"
+                },
+                {
+                  "key": "search",
+                  "value": "",
+                  "description": "Search in name and code",
+                  "disabled": true
+                },
+                {
+                  "key": "active_only",
+                  "value": "true",
+                  "description": "Filter active countries only",
+                  "disabled": true
+                },
+                {
+                  "key": "sort_by",
+                  "value": "created_at",
+                  "description": "Sort by field"
+                },
+                {
+                  "key": "sort_direction",
+                  "value": "desc",
+                  "description": "Sort direction (asc, desc)"
+                }
+              ]
+            },
+            "description": "Retrieve paginated list of countries with filtering options",
+            "name": "List Countries",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ]
+          },
+          "response": []
+        },
+        {
+          "name": "Create Country",
+          "request": {
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"code\": \"TR\",\n  \"name\": \"Turkey\",\n  \"currency_uuid\": \"{{currency_uuid}}\",\n  \"is_active\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/countries",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "countries"
+              ]
+            },
+            "description": "Create a new country",
+            "name": "Create Country",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ]
+          },
+          "response": []
+        },
+        {
+          "name": "Get Country",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/countries/{{country_uuid}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "countries",
+                "{{country_uuid}}"
+              ]
+            },
+            "description": "Get a specific country by ID",
+            "name": "Get Country",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ]
+          },
+          "response": []
+        },
+        {
+          "name": "Update Country",
+          "request": {
+            "method": "PUT",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"code\": \"TR\",\n  \"name\": \"Republic of Turkey\",\n  \"currency_uuid\": \"{{currency_uuid}}\",\n  \"is_active\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/countries/{{country_uuid}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "countries",
+                "{{country_uuid}}"
+              ]
+            },
+            "description": "Update a specific country",
+            "name": "Update Country",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ]
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Country (Soft Delete)",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{base_url}}/countries/{{country_uuid}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "countries",
+                "{{country_uuid}}"
+              ]
+            },
+            "description": "Soft delete a specific country",
+            "name": "Delete Country (Soft Delete)",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ]
+          },
+          "response": []
+        },
+        {
+          "name": "Restore Country",
+          "request": {
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/countries/{{country_uuid}}/restore",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "countries",
+                "{{country_uuid}}",
+                "restore"
+              ]
+            },
+            "description": "Restore a soft deleted country",
+            "name": "Restore Country",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ]
+          },
+          "response": []
+        },
+        {
+          "name": "Force Delete Country",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{base_url}}/countries/{{country_uuid}}/force-delete",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "countries",
+                "{{country_uuid}}",
+                "force-delete"
+              ]
+            },
+            "description": "Permanently delete a country",
+            "name": "Force Delete Country",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ]
+          },
+          "response": []
+        },
+        {
+          "name": "Filters",
+          "description": "Country filtering and search operations",
+          "item": [
+            {
+              "name": "Filter by Active Only",
+              "request": {
+                "method": "GET",
+                "url": {
+                  "raw": "{{base_url}}/countries?active_only=true&per_page={{per_page}}&page={{page}}",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "countries"
+                  ],
+                  "query": [
+                    {
+                      "key": "active_only",
+                      "value": "true",
+                      "description": "Filter active countries only"
+                    },
+                    {
+                      "key": "per_page",
+                      "value": "{{per_page}}",
+                      "description": "Items per page"
+                    },
+                    {
+                      "key": "page",
+                      "value": "{{page}}",
+                      "description": "Page number"
+                    }
+                  ]
+                },
+                "description": "Get all active countries",
+                "name": "Filter by Active Only",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}",
+                    "type": "text"
+                  }
+                ]
+              },
+              "response": []
+            },
+            {
+              "name": "Search Countries",
+              "request": {
+                "method": "GET",
+                "url": {
+                  "raw": "{{base_url}}/countries?search={{search}}&per_page={{per_page}}&page={{page}}",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "countries"
+                  ],
+                  "query": [
+                    {
+                      "key": "search",
+                      "value": "{{search}}",
+                      "description": "Search in name and code"
+                    },
+                    {
+                      "key": "per_page",
+                      "value": "{{per_page}}",
+                      "description": "Items per page"
+                    },
+                    {
+                      "key": "page",
+                      "value": "{{page}}",
+                      "description": "Page number"
+                    }
+                  ]
+                },
+                "description": "Search countries by name or code",
+                "name": "Search Countries",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}",
+                    "type": "text"
+                  }
+                ]
+              },
+              "response": []
+            },
+            {
+              "name": "Sort by Name ASC",
+              "request": {
+                "method": "GET",
+                "url": {
+                  "raw": "{{base_url}}/countries?sort_by=name&sort_direction=asc&per_page={{per_page}}&page={{page}}",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "countries"
+                  ],
+                  "query": [
+                    {
+                      "key": "sort_by",
+                      "value": "name",
+                      "description": "Sort by name field"
+                    },
+                    {
+                      "key": "sort_direction",
+                      "value": "asc",
+                      "description": "Sort direction ascending"
+                    },
+                    {
+                      "key": "per_page",
+                      "value": "{{per_page}}",
+                      "description": "Items per page"
+                    },
+                    {
+                      "key": "page",
+                      "value": "{{page}}",
+                      "description": "Page number"
+                    }
+                  ]
+                },
+                "description": "Get countries sorted by name (A-Z)",
+                "name": "Sort by Name ASC",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}",
+                    "type": "text"
+                  }
+                ]
+              },
+              "response": []
+            },
+            {
+              "name": "Sort by Code ASC",
+              "request": {
+                "method": "GET",
+                "url": {
+                  "raw": "{{base_url}}/countries?sort_by=code&sort_direction=asc&per_page={{per_page}}&page={{page}}",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "countries"
+                  ],
+                  "query": [
+                    {
+                      "key": "sort_by",
+                      "value": "code",
+                      "description": "Sort by country code"
+                    },
+                    {
+                      "key": "sort_direction",
+                      "value": "asc",
+                      "description": "Sort direction ascending"
+                    },
+                    {
+                      "key": "per_page",
+                      "value": "{{per_page}}",
+                      "description": "Items per page"
+                    },
+                    {
+                      "key": "page",
+                      "value": "{{page}}",
+                      "description": "Page number"
+                    }
+                  ]
+                },
+                "description": "Get countries sorted by code (A-Z)",
+                "name": "Sort by Code ASC",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}",
+                    "type": "text"
+                  }
+                ]
+              },
+              "response": []
+            },
+            {
+              "name": "Sort by Created Date DESC",
+              "request": {
+                "method": "GET",
+                "url": {
+                  "raw": "{{base_url}}/countries?sort_by=created_at&sort_direction=desc&per_page={{per_page}}&page={{page}}",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "countries"
+                  ],
+                  "query": [
+                    {
+                      "key": "sort_by",
+                      "value": "created_at",
+                      "description": "Sort by creation date"
+                    },
+                    {
+                      "key": "sort_direction",
+                      "value": "desc",
+                      "description": "Sort direction descending"
+                    },
+                    {
+                      "key": "per_page",
+                      "value": "{{per_page}}",
+                      "description": "Items per page"
+                    },
+                    {
+                      "key": "page",
+                      "value": "{{page}}",
+                      "description": "Page number"
+                    }
+                  ]
+                },
+                "description": "Get countries sorted by creation date (newest first)",
+                "name": "Sort by Created Date DESC",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}",
+                    "type": "text"
+                  }
+                ]
+              },
+              "response": []
+            },
+            {
+              "name": "Combined Filters",
+              "request": {
+                "method": "GET",
+                "url": {
+                  "raw": "{{base_url}}/countries?active_only=true&search=turkey&sort_by=name&sort_direction=asc&per_page={{per_page}}&page={{page}}",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "countries"
+                  ],
+                  "query": [
+                    {
+                      "key": "active_only",
+                      "value": "true",
+                      "description": "Active countries only"
+                    },
+                    {
+                      "key": "search",
+                      "value": "turkey",
+                      "description": "Search for 'turkey'"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "name",
+                      "description": "Sort by name"
+                    },
+                    {
+                      "key": "sort_direction",
+                      "value": "asc",
+                      "description": "Ascending order"
+                    },
+                    {
+                      "key": "per_page",
+                      "value": "{{per_page}}",
+                      "description": "Items per page"
+                    },
+                    {
+                      "key": "page",
+                      "value": "{{page}}",
+                      "description": "Page number"
+                    }
+                  ]
+                },
+                "description": "Multiple filters combined: active, search, sorted",
+                "name": "Combined Filters",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}",
+                    "type": "text"
+                  }
+                ]
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Currencies",
+      "description": "Currency management endpoints with full CRUD operations and soft deletes",
+      "item": [
+        {
+          "name": "List Currencies",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/currencies?per_page=25&page=1&sort_by=created_at&sort_direction=desc",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "currencies"
+              ],
+              "query": [
+                {
+                  "key": "per_page",
+                  "value": "25",
+                  "description": "Number of items per page"
+                },
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number"
+                },
+                {
+                  "key": "search",
+                  "value": "",
+                  "description": "Search in name and code",
+                  "disabled": true
+                },
+                {
+                  "key": "active_only",
+                  "value": "true",
+                  "description": "Filter active currencies only",
+                  "disabled": true
+                },
+                {
+                  "key": "sort_by",
+                  "value": "created_at",
+                  "description": "Sort by field"
+                },
+                {
+                  "key": "sort_direction",
+                  "value": "desc",
+                  "description": "Sort direction (asc, desc)"
+                }
+              ]
+            },
+            "description": "Retrieve paginated list of currencies with filtering options",
+            "name": "List Currencies",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ]
+          },
+          "response": []
+        },
+        {
+          "name": "Create Currency",
+          "request": {
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"code\": \"TRY\",\n  \"name\": \"Turkish Lira\",\n  \"symbol\": \"₺\",\n  \"decimals\": 2,\n  \"is_active\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/currencies",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "currencies"
+              ]
+            },
+            "description": "Create a new currency",
+            "name": "Create Currency",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ]
+          },
+          "response": []
+        },
+        {
+          "name": "Get Currency",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/currencies/{{currency_uuid}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "currencies",
+                "{{currency_uuid}}"
+              ]
+            },
+            "description": "Get a specific currency by ID",
+            "name": "Get Currency",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ]
+          },
+          "response": []
+        },
+        {
+          "name": "Update Currency",
+          "request": {
+            "method": "PUT",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"code\": \"TRY\",\n  \"name\": \"New Turkish Lira\",\n  \"symbol\": \"₺\",\n  \"decimals\": 2,\n  \"is_active\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/currencies/{{currency_uuid}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "currencies",
+                "{{currency_uuid}}"
+              ]
+            },
+            "description": "Update a specific currency",
+            "name": "Update Currency",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ]
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Currency (Soft Delete)",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{base_url}}/currencies/{{currency_uuid}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "currencies",
+                "{{currency_uuid}}"
+              ]
+            },
+            "description": "Soft delete a specific currency",
+            "name": "Delete Currency (Soft Delete)",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ]
+          },
+          "response": []
+        },
+        {
+          "name": "Restore Currency",
+          "request": {
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/currencies/{{currency_uuid}}/restore",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "currencies",
+                "{{currency_uuid}}",
+                "restore"
+              ]
+            },
+            "description": "Restore a soft deleted currency",
+            "name": "Restore Currency",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ]
+          },
+          "response": []
+        },
+        {
+          "name": "Force Delete Currency",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{base_url}}/currencies/{{currency_uuid}}/force-delete",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "currencies",
+                "{{currency_uuid}}",
+                "force-delete"
+              ]
+            },
+            "description": "Permanently delete a currency",
+            "name": "Force Delete Currency",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ]
+          },
+          "response": []
+        },
+        {
+          "name": "Filters",
+          "description": "Currency filtering and search operations",
+          "item": [
+            {
+              "name": "Filter by Active Only",
+              "request": {
+                "method": "GET",
+                "url": {
+                  "raw": "{{base_url}}/currencies?active_only=true&per_page={{per_page}}&page={{page}}",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "currencies"
+                  ],
+                  "query": [
+                    {
+                      "key": "active_only",
+                      "value": "true",
+                      "description": "Filter active currencies only"
+                    },
+                    {
+                      "key": "per_page",
+                      "value": "{{per_page}}",
+                      "description": "Items per page"
+                    },
+                    {
+                      "key": "page",
+                      "value": "{{page}}",
+                      "description": "Page number"
+                    }
+                  ]
+                },
+                "description": "Get all active currencies",
+                "name": "Filter by Active Only",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}",
+                    "type": "text"
+                  }
+                ]
+              },
+              "response": []
+            },
+            {
+              "name": "Search Currencies",
+              "request": {
+                "method": "GET",
+                "url": {
+                  "raw": "{{base_url}}/currencies?search={{search}}&per_page={{per_page}}&page={{page}}",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "currencies"
+                  ],
+                  "query": [
+                    {
+                      "key": "search",
+                      "value": "{{search}}",
+                      "description": "Search in name and code"
+                    },
+                    {
+                      "key": "per_page",
+                      "value": "{{per_page}}",
+                      "description": "Items per page"
+                    },
+                    {
+                      "key": "page",
+                      "value": "{{page}}",
+                      "description": "Page number"
+                    }
+                  ]
+                },
+                "description": "Search currencies by name or code",
+                "name": "Search Currencies",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}",
+                    "type": "text"
+                  }
+                ]
+              },
+              "response": []
+            },
+            {
+              "name": "Sort by Name ASC",
+              "request": {
+                "method": "GET",
+                "url": {
+                  "raw": "{{base_url}}/currencies?sort_by=name&sort_direction=asc&per_page={{per_page}}&page={{page}}",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "currencies"
+                  ],
+                  "query": [
+                    {
+                      "key": "sort_by",
+                      "value": "name",
+                      "description": "Sort by name field"
+                    },
+                    {
+                      "key": "sort_direction",
+                      "value": "asc",
+                      "description": "Sort direction ascending"
+                    },
+                    {
+                      "key": "per_page",
+                      "value": "{{per_page}}",
+                      "description": "Items per page"
+                    },
+                    {
+                      "key": "page",
+                      "value": "{{page}}",
+                      "description": "Page number"
+                    }
+                  ]
+                },
+                "description": "Get currencies sorted by name (A-Z)",
+                "name": "Sort by Name ASC",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}",
+                    "type": "text"
+                  }
+                ]
+              },
+              "response": []
+            },
+            {
+              "name": "Sort by Code ASC",
+              "request": {
+                "method": "GET",
+                "url": {
+                  "raw": "{{base_url}}/currencies?sort_by=code&sort_direction=asc&per_page={{per_page}}&page={{page}}",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "currencies"
+                  ],
+                  "query": [
+                    {
+                      "key": "sort_by",
+                      "value": "code",
+                      "description": "Sort by currency code"
+                    },
+                    {
+                      "key": "sort_direction",
+                      "value": "asc",
+                      "description": "Sort direction ascending"
+                    },
+                    {
+                      "key": "per_page",
+                      "value": "{{per_page}}",
+                      "description": "Items per page"
+                    },
+                    {
+                      "key": "page",
+                      "value": "{{page}}",
+                      "description": "Page number"
+                    }
+                  ]
+                },
+                "description": "Get currencies sorted by code (A-Z)",
+                "name": "Sort by Code ASC",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}",
+                    "type": "text"
+                  }
+                ]
+              },
+              "response": []
+            },
+            {
+              "name": "Sort by Symbol ASC",
+              "request": {
+                "method": "GET",
+                "url": {
+                  "raw": "{{base_url}}/currencies?sort_by=symbol&sort_direction=asc&per_page={{per_page}}&page={{page}}",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "currencies"
+                  ],
+                  "query": [
+                    {
+                      "key": "sort_by",
+                      "value": "symbol",
+                      "description": "Sort by currency symbol"
+                    },
+                    {
+                      "key": "sort_direction",
+                      "value": "asc",
+                      "description": "Sort direction ascending"
+                    },
+                    {
+                      "key": "per_page",
+                      "value": "{{per_page}}",
+                      "description": "Items per page"
+                    },
+                    {
+                      "key": "page",
+                      "value": "{{page}}",
+                      "description": "Page number"
+                    }
+                  ]
+                },
+                "description": "Get currencies sorted by symbol",
+                "name": "Sort by Symbol ASC",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}",
+                    "type": "text"
+                  }
+                ]
+              },
+              "response": []
+            },
+            {
+              "name": "Sort by Created Date DESC",
+              "request": {
+                "method": "GET",
+                "url": {
+                  "raw": "{{base_url}}/currencies?sort_by=created_at&sort_direction=desc&per_page={{per_page}}&page={{page}}",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "currencies"
+                  ],
+                  "query": [
+                    {
+                      "key": "sort_by",
+                      "value": "created_at",
+                      "description": "Sort by creation date"
+                    },
+                    {
+                      "key": "sort_direction",
+                      "value": "desc",
+                      "description": "Sort direction descending"
+                    },
+                    {
+                      "key": "per_page",
+                      "value": "{{per_page}}",
+                      "description": "Items per page"
+                    },
+                    {
+                      "key": "page",
+                      "value": "{{page}}",
+                      "description": "Page number"
+                    }
+                  ]
+                },
+                "description": "Get currencies sorted by creation date (newest first)",
+                "name": "Sort by Created Date DESC",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}",
+                    "type": "text"
+                  }
+                ]
+              },
+              "response": []
+            },
+            {
+              "name": "Combined Filters",
+              "request": {
+                "method": "GET",
+                "url": {
+                  "raw": "{{base_url}}/currencies?active_only=true&search=dollar&sort_by=name&sort_direction=asc&per_page={{per_page}}&page={{page}}",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "currencies"
+                  ],
+                  "query": [
+                    {
+                      "key": "active_only",
+                      "value": "true",
+                      "description": "Active currencies only"
+                    },
+                    {
+                      "key": "search",
+                      "value": "dollar",
+                      "description": "Search for 'dollar'"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "name",
+                      "description": "Sort by name"
+                    },
+                    {
+                      "key": "sort_direction",
+                      "value": "asc",
+                      "description": "Ascending order"
+                    },
+                    {
+                      "key": "per_page",
+                      "value": "{{per_page}}",
+                      "description": "Items per page"
+                    },
+                    {
+                      "key": "page",
+                      "value": "{{page}}",
+                      "description": "Page number"
+                    }
+                  ]
+                },
+                "description": "Multiple filters combined: active, search, sorted",
+                "name": "Combined Filters",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}",
+                    "type": "text"
+                  }
+                ]
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Languages",
+      "description": "Language management endpoints with full CRUD operations and soft deletes",
+      "item": [
+        {
+          "name": "List Languages",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/languages?per_page=25&page=1&sort_by=created_at&sort_direction=desc",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "languages"
+              ],
+              "query": [
+                {
+                  "key": "per_page",
+                  "value": "25",
+                  "description": "Number of items per page"
+                },
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number"
+                },
+                {
+                  "key": "search",
+                  "value": "",
+                  "description": "Search in name, native_name and code",
+                  "disabled": true
+                },
+                {
+                  "key": "active_only",
+                  "value": "true",
+                  "description": "Filter active languages only",
+                  "disabled": true
+                },
+                {
+                  "key": "direction",
+                  "value": "ltr",
+                  "description": "Filter by text direction (ltr, rtl)",
+                  "disabled": true
+                },
+                {
+                  "key": "sort_by",
+                  "value": "created_at",
+                  "description": "Sort by field"
+                },
+                {
+                  "key": "sort_direction",
+                  "value": "desc",
+                  "description": "Sort direction (asc, desc)"
+                }
+              ]
+            },
+            "description": "Retrieve paginated list of languages with filtering options",
+            "name": "List Languages",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ]
+          },
+          "response": []
+        },
+        {
+          "name": "Create Language",
+          "request": {
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"code\": \"tr\",\n  \"name\": \"Turkish\",\n  \"native_name\": \"Türkçe\",\n  \"locale\": \"tr_TR\",\n  \"direction\": \"ltr\",\n  \"is_active\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/languages",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "languages"
+              ]
+            },
+            "description": "Create a new language",
+            "name": "Create Language",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ]
+          },
+          "response": []
+        },
+        {
+          "name": "Get Language",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/languages/{{language_uuid}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "languages",
+                "{{language_uuid}}"
+              ]
+            },
+            "description": "Get a specific language by ID",
+            "name": "Get Language",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ]
+          },
+          "response": []
+        },
+        {
+          "name": "Update Language",
+          "request": {
+            "method": "PUT",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"code\": \"tr\",\n  \"name\": \"Turkish\",\n  \"native_name\": \"Türkçe\",\n  \"locale\": \"tr_TR\",\n  \"direction\": \"ltr\",\n  \"is_active\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/languages/{{language_uuid}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "languages",
+                "{{language_uuid}}"
+              ]
+            },
+            "description": "Update a specific language",
+            "name": "Update Language",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ]
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Language (Soft Delete)",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{base_url}}/languages/{{language_uuid}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "languages",
+                "{{language_uuid}}"
+              ]
+            },
+            "description": "Soft delete a specific language",
+            "name": "Delete Language (Soft Delete)",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ]
+          },
+          "response": []
+        },
+        {
+          "name": "Restore Language",
+          "request": {
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/languages/{{language_uuid}}/restore",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "languages",
+                "{{language_uuid}}",
+                "restore"
+              ]
+            },
+            "description": "Restore a soft deleted language",
+            "name": "Restore Language",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ]
+          },
+          "response": []
+        },
+        {
+          "name": "Force Delete Language",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{base_url}}/languages/{{language_uuid}}/force-delete",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "languages",
+                "{{language_uuid}}",
+                "force-delete"
+              ]
+            },
+            "description": "Permanently delete a language",
+            "name": "Force Delete Language",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ]
+          },
+          "response": []
+        },
+        {
+          "name": "Filters",
+          "description": "Language filtering and search operations",
+          "item": [
+            {
+              "name": "Filter by Active Only",
+              "request": {
+                "method": "GET",
+                "url": {
+                  "raw": "{{base_url}}/languages?active_only=true&per_page={{per_page}}&page={{page}}",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "languages"
+                  ],
+                  "query": [
+                    {
+                      "key": "active_only",
+                      "value": "true",
+                      "description": "Filter active languages only"
+                    },
+                    {
+                      "key": "per_page",
+                      "value": "{{per_page}}",
+                      "description": "Items per page"
+                    },
+                    {
+                      "key": "page",
+                      "value": "{{page}}",
+                      "description": "Page number"
+                    }
+                  ]
+                },
+                "description": "Get all active languages",
+                "name": "Filter by Active Only",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}",
+                    "type": "text"
+                  }
+                ]
+              },
+              "response": []
+            },
+            {
+              "name": "Filter by Direction - LTR",
+              "request": {
+                "method": "GET",
+                "url": {
+                  "raw": "{{base_url}}/languages?direction=ltr&per_page={{per_page}}&page={{page}}",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "languages"
+                  ],
+                  "query": [
+                    {
+                      "key": "direction",
+                      "value": "ltr",
+                      "description": "Filter left-to-right languages"
+                    },
+                    {
+                      "key": "per_page",
+                      "value": "{{per_page}}",
+                      "description": "Items per page"
+                    },
+                    {
+                      "key": "page",
+                      "value": "{{page}}",
+                      "description": "Page number"
+                    }
+                  ]
+                },
+                "description": "Get all left-to-right languages",
+                "name": "Filter by Direction - LTR",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}",
+                    "type": "text"
+                  }
+                ]
+              },
+              "response": []
+            },
+            {
+              "name": "Filter by Direction - RTL",
+              "request": {
+                "method": "GET",
+                "url": {
+                  "raw": "{{base_url}}/languages?direction=rtl&per_page={{per_page}}&page={{page}}",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "languages"
+                  ],
+                  "query": [
+                    {
+                      "key": "direction",
+                      "value": "rtl",
+                      "description": "Filter right-to-left languages"
+                    },
+                    {
+                      "key": "per_page",
+                      "value": "{{per_page}}",
+                      "description": "Items per page"
+                    },
+                    {
+                      "key": "page",
+                      "value": "{{page}}",
+                      "description": "Page number"
+                    }
+                  ]
+                },
+                "description": "Get all right-to-left languages",
+                "name": "Filter by Direction - RTL",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}",
+                    "type": "text"
+                  }
+                ]
+              },
+              "response": []
+            },
+            {
+              "name": "Search Languages",
+              "request": {
+                "method": "GET",
+                "url": {
+                  "raw": "{{base_url}}/languages?search={{search}}&per_page={{per_page}}&page={{page}}",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "languages"
+                  ],
+                  "query": [
+                    {
+                      "key": "search",
+                      "value": "{{search}}",
+                      "description": "Search in name, native_name and code"
+                    },
+                    {
+                      "key": "per_page",
+                      "value": "{{per_page}}",
+                      "description": "Items per page"
+                    },
+                    {
+                      "key": "page",
+                      "value": "{{page}}",
+                      "description": "Page number"
+                    }
+                  ]
+                },
+                "description": "Search languages by name, native name or code",
+                "name": "Search Languages",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}",
+                    "type": "text"
+                  }
+                ]
+              },
+              "response": []
+            },
+            {
+              "name": "Sort by Name ASC",
+              "request": {
+                "method": "GET",
+                "url": {
+                  "raw": "{{base_url}}/languages?sort_by=name&sort_direction=asc&per_page={{per_page}}&page={{page}}",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "languages"
+                  ],
+                  "query": [
+                    {
+                      "key": "sort_by",
+                      "value": "name",
+                      "description": "Sort by name field"
+                    },
+                    {
+                      "key": "sort_direction",
+                      "value": "asc",
+                      "description": "Sort direction ascending"
+                    },
+                    {
+                      "key": "per_page",
+                      "value": "{{per_page}}",
+                      "description": "Items per page"
+                    },
+                    {
+                      "key": "page",
+                      "value": "{{page}}",
+                      "description": "Page number"
+                    }
+                  ]
+                },
+                "description": "Get languages sorted by name (A-Z)",
+                "name": "Sort by Name ASC",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}",
+                    "type": "text"
+                  }
+                ]
+              },
+              "response": []
+            },
+            {
+              "name": "Sort by Code ASC",
+              "request": {
+                "method": "GET",
+                "url": {
+                  "raw": "{{base_url}}/languages?sort_by=code&sort_direction=asc&per_page={{per_page}}&page={{page}}",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "languages"
+                  ],
+                  "query": [
+                    {
+                      "key": "sort_by",
+                      "value": "code",
+                      "description": "Sort by language code"
+                    },
+                    {
+                      "key": "sort_direction",
+                      "value": "asc",
+                      "description": "Sort direction ascending"
+                    },
+                    {
+                      "key": "per_page",
+                      "value": "{{per_page}}",
+                      "description": "Items per page"
+                    },
+                    {
+                      "key": "page",
+                      "value": "{{page}}",
+                      "description": "Page number"
+                    }
+                  ]
+                },
+                "description": "Get languages sorted by code (A-Z)",
+                "name": "Sort by Code ASC",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}",
+                    "type": "text"
+                  }
+                ]
+              },
+              "response": []
+            },
+            {
+              "name": "Sort by Native Name ASC",
+              "request": {
+                "method": "GET",
+                "url": {
+                  "raw": "{{base_url}}/languages?sort_by=native_name&sort_direction=asc&per_page={{per_page}}&page={{page}}",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "languages"
+                  ],
+                  "query": [
+                    {
+                      "key": "sort_by",
+                      "value": "native_name",
+                      "description": "Sort by native name"
+                    },
+                    {
+                      "key": "sort_direction",
+                      "value": "asc",
+                      "description": "Sort direction ascending"
+                    },
+                    {
+                      "key": "per_page",
+                      "value": "{{per_page}}",
+                      "description": "Items per page"
+                    },
+                    {
+                      "key": "page",
+                      "value": "{{page}}",
+                      "description": "Page number"
+                    }
+                  ]
+                },
+                "description": "Get languages sorted by native name",
+                "name": "Sort by Native Name ASC",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}",
+                    "type": "text"
+                  }
+                ]
+              },
+              "response": []
+            },
+            {
+              "name": "Sort by Created Date DESC",
+              "request": {
+                "method": "GET",
+                "url": {
+                  "raw": "{{base_url}}/languages?sort_by=created_at&sort_direction=desc&per_page={{per_page}}&page={{page}}",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "languages"
+                  ],
+                  "query": [
+                    {
+                      "key": "sort_by",
+                      "value": "created_at",
+                      "description": "Sort by creation date"
+                    },
+                    {
+                      "key": "sort_direction",
+                      "value": "desc",
+                      "description": "Sort direction descending"
+                    },
+                    {
+                      "key": "per_page",
+                      "value": "{{per_page}}",
+                      "description": "Items per page"
+                    },
+                    {
+                      "key": "page",
+                      "value": "{{page}}",
+                      "description": "Page number"
+                    }
+                  ]
+                },
+                "description": "Get languages sorted by creation date (newest first)",
+                "name": "Sort by Created Date DESC",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}",
+                    "type": "text"
+                  }
+                ]
+              },
+              "response": []
+            },
+            {
+              "name": "Combined Filters",
+              "request": {
+                "method": "GET",
+                "url": {
+                  "raw": "{{base_url}}/languages?active_only=true&direction=ltr&search=english&sort_by=name&sort_direction=asc&per_page={{per_page}}&page={{page}}",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "languages"
+                  ],
+                  "query": [
+                    {
+                      "key": "active_only",
+                      "value": "true",
+                      "description": "Active languages only"
+                    },
+                    {
+                      "key": "direction",
+                      "value": "ltr",
+                      "description": "Left-to-right languages"
+                    },
+                    {
+                      "key": "search",
+                      "value": "english",
+                      "description": "Search for 'english'"
+                    },
+                    {
+                      "key": "sort_by",
+                      "value": "name",
+                      "description": "Sort by name"
+                    },
+                    {
+                      "key": "sort_direction",
+                      "value": "asc",
+                      "description": "Ascending order"
+                    },
+                    {
+                      "key": "per_page",
+                      "value": "{{per_page}}",
+                      "description": "Items per page"
+                    },
+                    {
+                      "key": "page",
+                      "value": "{{page}}",
+                      "description": "Page number"
+                    }
+                  ]
+                },
+                "description": "Multiple filters combined: active, LTR, search, sorted",
+                "name": "Combined Filters",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}",
+                    "type": "text"
+                  }
+                ]
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
       "name": "Health Check",
       "description": "Health check and system status endpoints",
       "item": [
@@ -3133,6 +5578,21 @@
     },
     {
       "key": "order_uuid",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "country_uuid",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "currency_uuid",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "language_uuid",
       "value": "",
       "type": "string"
     },

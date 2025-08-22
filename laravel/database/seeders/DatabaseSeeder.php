@@ -2,12 +2,15 @@
 
 namespace Database\Seeders;
 
-use database\seeders\Auth\UserSeeder;
+use Database\Seeders\Auth\UserSeeder;
 use Database\Seeders\Authority\PermissionSeeder;
 use Database\Seeders\Authority\RolePermissionSeeder;
 use Database\Seeders\Authority\RoleSeeder;
 use Database\Seeders\Cart\CartSeeder;
 use Database\Seeders\Category\CategorySeeder;
+use Database\Seeders\Country\CountrySeeder;
+use Database\Seeders\Currency\CurrencySeeder;
+use Database\Seeders\Language\LanguageSeeder;
 use Database\Seeders\Order\OrderSeeder;
 use Database\Seeders\Product\ProductSeeder;
 use Illuminate\Database\Seeder;
@@ -23,6 +26,9 @@ class DatabaseSeeder extends Seeder
             PermissionSeeder::class,
             RoleSeeder::class,
             RolePermissionSeeder::class,
+            LanguageSeeder::class,
+            CountrySeeder::class,
+            CurrencySeeder::class,
             UserSeeder::class,
             CategorySeeder::class,
             ProductSeeder::class,
