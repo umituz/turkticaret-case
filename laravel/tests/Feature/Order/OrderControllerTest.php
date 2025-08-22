@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\Order;
 
-use App\Models\Order\Order;
 use Tests\Base\BaseFeatureTest;
 use PHPUnit\Framework\Attributes\Test;
 
@@ -197,7 +196,7 @@ class OrderControllerTest extends BaseFeatureTest
     {
         $product1 = $this->createTestProduct(['price' => 10000]); // 100.00
         $product2 = $this->createTestProduct(['price' => 15000]); // 150.00
-        
+
         $cart = $this->createTestCart($this->testUser);
         $this->createTestCartItem($cart, $product1, ['quantity' => 2, 'unit_price' => 10000]);
         $this->createTestCartItem($cart, $product2, ['quantity' => 1, 'unit_price' => 15000]);
@@ -207,7 +206,7 @@ class OrderControllerTest extends BaseFeatureTest
         $response = $this->actingAs($this->testUser, 'sanctum')->postJson('/api/orders', $orderData);
 
         $this->assertSuccessfulCreation($response);
-        
+
         $expectedTotal = (2 * 10000) + (1 * 15000); // 35000
         $response->assertJsonPath('data.total_amount', $expectedTotal);
     }
@@ -217,7 +216,7 @@ class OrderControllerTest extends BaseFeatureTest
     {
         $product1 = $this->createTestProduct(['name' => 'Product 1', 'price' => 10000]);
         $product2 = $this->createTestProduct(['name' => 'Product 2', 'price' => 15000]);
-        
+
         $cart = $this->createTestCart($this->testUser);
         $this->createTestCartItem($cart, $product1, ['quantity' => 2, 'unit_price' => 10000]);
         $this->createTestCartItem($cart, $product2, ['quantity' => 1, 'unit_price' => 15000]);
@@ -227,7 +226,7 @@ class OrderControllerTest extends BaseFeatureTest
         $response = $this->actingAs($this->testUser, 'sanctum')->postJson('/api/orders', $orderData);
 
         $this->assertSuccessfulCreation($response);
-        
+
         $orderItems = $response->json('data.items');
         $this->assertCount(2, $orderItems);
 
@@ -286,7 +285,7 @@ class OrderControllerTest extends BaseFeatureTest
     }
 
     #[Test]
-    public function it_allows_order_creation_with_out_of_stock_products()
+    public function it_prevents_order_creation_with_out_of_stock_products()
     {
         $product = $this->createTestProduct(['stock_quantity' => 0]);
         $cart = $this->createTestCart($this->testUser);
@@ -296,13 +295,15 @@ class OrderControllerTest extends BaseFeatureTest
 
         $response = $this->actingAs($this->testUser, 'sanctum')->postJson('/api/orders', $orderData);
 
-        $this->assertSuccessfulCreation($response);
-        $response->assertJsonPath('data.status', 'pending');
-        $response->assertJsonCount(1, 'data.items');
+        $response->assertStatus(422);
+        $response->assertJson([
+            'success' => false,
+            'message' => "Product '{$product->name}' is out of stock"
+        ]);
     }
 
     #[Test]
-    public function it_does_not_update_product_stock_after_order_creation()
+    public function it_reduces_product_stock_after_successful_order_creation()
     {
         $product = $this->createTestProduct(['stock_quantity' => 10]);
         $cart = $this->createTestCart($this->testUser);
@@ -314,24 +315,152 @@ class OrderControllerTest extends BaseFeatureTest
 
         $this->assertSuccessfulCreation($response);
 
-        // Stock remains unchanged as system doesn't manage stock automatically
+        // Stock should be reduced after successful order
         $product->refresh();
-        $this->assertEquals(10, $product->stock_quantity); // Stock unchanged
+        $this->assertEquals(7, $product->stock_quantity); // 10 - 3 = 7
     }
 
     #[Test]
-    public function it_handles_multiple_order_creation()
+    public function it_prevents_order_creation_when_insufficient_stock_available()
     {
-        // Create two separate orders to verify system can handle multiple orders
-        $order1 = $this->createOrderWithItems($this->testUser, 2);
-        $order2 = $this->createOrderWithItems($this->testUser, 1);
+        $product = $this->createTestProduct(['stock_quantity' => 3]);
+        $cart = $this->createTestCart($this->testUser);
+        $this->createTestCartItem($cart, $product, ['quantity' => 5]); // More than available
 
-        $this->assertNotNull($order1);
-        $this->assertNotNull($order2);
-        $this->assertNotEquals($order1->uuid, $order2->uuid);
-        $this->assertEquals('pending', $order1->status);
-        $this->assertEquals('pending', $order2->status);
-        $this->assertEquals($this->testUser->uuid, $order1->user_uuid);
-        $this->assertEquals($this->testUser->uuid, $order2->user_uuid);
+        $orderData = $this->createValidOrderData();
+
+        $response = $this->actingAs($this->testUser, 'sanctum')->postJson('/api/orders', $orderData);
+
+        $response->assertStatus(422);
+        $response->assertJson([
+            'success' => false,
+            'message' => "Insufficient stock for product '{$product->name}'. Requested: 5, Available: 3"
+        ]);
+
+        // Stock should remain unchanged
+        $product->refresh();
+        $this->assertEquals(3, $product->stock_quantity);
+    }
+
+    #[Test]
+    public function it_handles_multiple_products_stock_validation_during_order_creation()
+    {
+        $product1 = $this->createTestProduct(['stock_quantity' => 5]);
+        $product2 = $this->createTestProduct(['stock_quantity' => 2]);
+
+        $cart = $this->createTestCart($this->testUser);
+        $this->createTestCartItem($cart, $product1, ['quantity' => 3]);
+        $this->createTestCartItem($cart, $product2, ['quantity' => 2]);
+
+        $orderData = $this->createValidOrderData();
+        $response = $this->actingAs($this->testUser, 'sanctum')->postJson('/api/orders', $orderData);
+
+        $this->assertSuccessfulCreation($response);
+
+        // Both products' stock should be reduced
+        $product1->refresh();
+        $product2->refresh();
+        $this->assertEquals(2, $product1->stock_quantity); // 5 - 3 = 2
+        $this->assertEquals(0, $product2->stock_quantity); // 2 - 2 = 0
+    }
+
+    #[Test]
+    public function it_prevents_order_if_any_product_has_insufficient_stock()
+    {
+        $product1 = $this->createTestProduct(['stock_quantity' => 5]);
+        $product2 = $this->createTestProduct(['stock_quantity' => 1]); // Insufficient
+
+        $cart = $this->createTestCart($this->testUser);
+        $this->createTestCartItem($cart, $product1, ['quantity' => 3]);
+        $this->createTestCartItem($cart, $product2, ['quantity' => 2]); // Exceeds stock
+
+        $orderData = $this->createValidOrderData();
+        $response = $this->actingAs($this->testUser, 'sanctum')->postJson('/api/orders', $orderData);
+
+        $response->assertStatus(422);
+
+        // No stock should be reduced for either product
+        $product1->refresh();
+        $product2->refresh();
+        $this->assertEquals(5, $product1->stock_quantity);
+        $this->assertEquals(1, $product2->stock_quantity);
+    }
+
+    #[Test]
+    public function it_allows_order_with_exactly_available_stock()
+    {
+        $product = $this->createTestProduct(['stock_quantity' => 7]);
+        $cart = $this->createTestCart($this->testUser);
+        $this->createTestCartItem($cart, $product, ['quantity' => 7]); // Exactly all stock
+
+        $orderData = $this->createValidOrderData();
+        $response = $this->actingAs($this->testUser, 'sanctum')->postJson('/api/orders', $orderData);
+
+        $this->assertSuccessfulCreation($response);
+
+        // Product should have 0 stock left
+        $product->refresh();
+        $this->assertEquals(0, $product->stock_quantity);
+    }
+
+    #[Test]
+    public function it_maintains_transaction_integrity_on_stock_validation_failure()
+    {
+        $product1 = $this->createTestProduct(['stock_quantity' => 10]);
+        $product2 = $this->createTestProduct(['stock_quantity' => 2]);
+
+        $cart = $this->createTestCart($this->testUser);
+        $this->createTestCartItem($cart, $product1, ['quantity' => 5]);
+        $this->createTestCartItem($cart, $product2, ['quantity' => 5]); // Will fail
+
+        $initialStock1 = $product1->stock_quantity;
+        $initialStock2 = $product2->stock_quantity;
+
+        $orderData = $this->createValidOrderData();
+        $response = $this->actingAs($this->testUser, 'sanctum')->postJson('/api/orders', $orderData);
+
+        $response->assertStatus(422);
+
+        // Both products' stock should remain unchanged (transaction rollback)
+        $product1->refresh();
+        $product2->refresh();
+        $this->assertEquals($initialStock1, $product1->stock_quantity);
+        $this->assertEquals($initialStock2, $product2->stock_quantity);
+
+        // No order should be created
+        $this->assertDatabaseMissing('orders', [
+            'user_uuid' => $this->testUser->uuid
+        ]);
+    }
+
+    #[Test]
+    public function it_handles_sequential_orders_reducing_stock_correctly()
+    {
+        $product = $this->createTestProduct(['stock_quantity' => 10]);
+
+        // First order
+        $cart1 = $this->createTestCart($this->testUser);
+        $this->createTestCartItem($cart1, $product, ['quantity' => 4]);
+
+        $orderData1 = $this->createValidOrderData();
+        $response1 = $this->actingAs($this->testUser, 'sanctum')->postJson('/api/orders', $orderData1);
+        $this->assertSuccessfulCreation($response1);
+
+        // Check stock after first order
+        $product->refresh();
+        $this->assertEquals(6, $product->stock_quantity); // 10 - 4 = 6
+
+        // Second order from different user
+        $user2 = $this->createTestUser();
+        $cart2 = $this->createTestCart($user2);
+        $this->createTestCartItem($cart2, $product, ['quantity' => 3]);
+
+        $orderData2 = $this->createValidOrderData();
+        $response2 = $this->actingAs($user2, 'sanctum')->postJson('/api/orders', $orderData2);
+        $this->assertSuccessfulCreation($response2);
+
+        // Check final stock
+        $product->refresh();
+        $this->assertEquals(3, $product->stock_quantity); // 6 - 3 = 3
     }
 }

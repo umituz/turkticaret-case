@@ -4,6 +4,9 @@ namespace Tests\Traits;
 
 use App\Models\Auth\User;
 use App\Models\Category\Category;
+use App\Models\Country\Country;
+use App\Models\Currency\Currency;
+use App\Models\Language\Language;
 use App\Models\Product\Product;
 use App\Models\Cart\Cart;
 use App\Models\Cart\CartItem;
@@ -21,6 +24,15 @@ trait FeatureMocksTrait
      */
     protected function createTestUser(array $attributes = []): User
     {
+        // Create or get default language if not provided
+        if (!isset($attributes['language_uuid'])) {
+            $language = Language::where('code', 'en')->first();
+            if (!$language) {
+                $language = Language::factory()->english()->active()->create();
+            }
+            $attributes['language_uuid'] = $language->uuid;
+        }
+
         $defaults = [
             'name' => 'Test User',
             'email' => 'user' . time() . rand(1000, 9999) . '@example.com',
@@ -291,6 +303,110 @@ trait FeatureMocksTrait
         $defaults = [
             'shipping_address' => '123 Test Street, Test City',
             'notes' => 'Test order notes',
+        ];
+
+        return array_merge($defaults, $overrides);
+    }
+
+    /**
+     * Create a test country
+     */
+    protected function createTestCountry(array $attributes = []): Country
+    {
+        static $testCounter = 0;
+        $testCounter++;
+        
+        $codeChar = chr(65 + ($testCounter % 26)); // A-Z
+        
+        // Create currency if not provided
+        if (!isset($attributes['currency_uuid'])) {
+            $currency = Currency::factory()->create();
+            $attributes['currency_uuid'] = $currency->uuid;
+        }
+        
+        $defaults = [
+            'code' => $codeChar . chr(65 + (intval($testCounter / 26) % 26)),
+            'name' => 'Test Country ' . $testCounter,
+            'is_active' => true,
+        ];
+
+        return Country::factory()->create(array_merge($defaults, $attributes));
+    }
+
+    /**
+     * Create multiple test countries
+     */
+    protected function createMultipleCountries(int $count = 3, array $attributes = []): \Illuminate\Database\Eloquent\Collection
+    {
+        return Country::factory()->count($count)->create($attributes);
+    }
+
+    /**
+     * Create valid request data for country
+     */
+    protected function createValidCountryData(array $overrides = []): array
+    {
+        static $dataCounter = 0;
+        $dataCounter++;
+        
+        $codeChar = chr(68 + ($dataCounter % 22)); // D-Z (avoiding conflicts)
+        
+        // Create currency if not provided
+        if (!isset($overrides['currency_uuid'])) {
+            $currency = Currency::factory()->create();
+            $overrides['currency_uuid'] = $currency->uuid;
+        }
+        
+        $defaults = [
+            'code' => $codeChar . chr(65 + (intval($dataCounter / 22) % 26)),
+            'name' => 'Data Country ' . $dataCounter,
+            'is_active' => true,
+        ];
+
+        return array_merge($defaults, $overrides);
+    }
+
+    /**
+     * Create a test currency
+     */
+    protected function createTestCurrency(array $attributes = []): Currency
+    {
+        static $testCounter = 0;
+        $testCounter++;
+        
+        $defaults = [
+            'code' => 'TC' . $testCounter,
+            'name' => 'Test Currency ' . $testCounter,
+            'symbol' => 'TC' . $testCounter,
+            'decimals' => 2,
+            'is_active' => true,
+        ];
+
+        return Currency::factory()->create(array_merge($defaults, $attributes));
+    }
+
+    /**
+     * Create multiple test currencies
+     */
+    protected function createMultipleCurrencies(int $count = 3, array $attributes = []): \Illuminate\Database\Eloquent\Collection
+    {
+        return Currency::factory()->count($count)->create($attributes);
+    }
+
+    /**
+     * Create valid request data for currency
+     */
+    protected function createValidCurrencyData(array $overrides = []): array
+    {
+        static $dataCounter = 0;
+        $dataCounter++;
+        
+        $defaults = [
+            'code' => 'TST' . $dataCounter,
+            'name' => 'Test Currency ' . $dataCounter,
+            'symbol' => '₸' . $dataCounter,
+            'decimals' => 2,
+            'is_active' => true,
         ];
 
         return array_merge($defaults, $overrides);

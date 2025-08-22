@@ -3,6 +3,7 @@
 namespace Tests\Base;
 
 use App\Models\Auth\User;
+use App\Models\Language\Language;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use PHPUnit\Framework\Attributes\Group;
@@ -36,11 +37,18 @@ abstract class BaseFeatureTest extends TestCase
      */
     protected function setupFeatureTestEnvironment(): void
     {
+        // Create default language for users or use existing one
+        $language = Language::where('code', 'en')->first();
+        if (!$language) {
+            $language = Language::factory()->english()->active()->create();
+        }
+
         // Create test user for authentication tests
         $this->testUser = User::factory()->create([
             'email' => 'test@turkticaret.test',
             'password' => bcrypt('password123'),
             'email_verified_at' => now(),
+            'language_uuid' => $language->uuid,
         ]);
 
         // Setup default auth headers

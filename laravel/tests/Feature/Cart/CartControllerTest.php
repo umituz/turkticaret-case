@@ -234,20 +234,22 @@ class CartControllerTest extends BaseFeatureTest
     }
 
     #[Test]
-    public function it_can_add_out_of_stock_products_to_cart()
+    public function it_prevents_adding_out_of_stock_products_to_cart()
     {
         $product = $this->createTestProduct(['stock_quantity' => 0]);
         $addData = $this->createValidCartItemData($product);
 
         $response = $this->actingAs($this->testUser, 'sanctum')->postJson('/api/cart/add', $addData);
 
-        // API currently allows adding out of stock products
-        $this->assertSuccessfulJsonResponse($response);
-        $response->assertJsonCount(1, 'data.items');
+        $response->assertStatus(422);
+        $response->assertJson([
+            'success' => false,
+            'message' => "Product '{$product->name}' is out of stock"
+        ]);
     }
 
     #[Test]
-    public function it_can_add_more_than_available_stock()
+    public function it_prevents_adding_more_than_available_stock()
     {
         $product = $this->createTestProduct(['stock_quantity' => 5]);
         $addData = $this->createValidCartItemData($product, [
@@ -256,7 +258,40 @@ class CartControllerTest extends BaseFeatureTest
 
         $response = $this->actingAs($this->testUser, 'sanctum')->postJson('/api/cart/add', $addData);
 
-        // API currently allows adding more than available stock
+        $response->assertStatus(422);
+        $response->assertJson([
+            'success' => false,
+            'message' => "Insufficient stock for product '{$product->name}'. Requested: 10, Available: 5"
+        ]);
+    }
+
+    #[Test]
+    public function it_validates_total_quantity_when_adding_to_existing_cart_item()
+    {
+        $product = $this->createTestProduct(['stock_quantity' => 10]);
+        $cart = $this->createTestCart($this->testUser);
+        $cartItem = $this->createTestCartItem($cart, $product, ['quantity' => 7]);
+
+        // Try to add 5 more (7 + 5 = 12, which exceeds stock of 10)
+        $addData = $this->createValidCartItemData($product, ['quantity' => 5]);
+        
+        $response = $this->actingAs($this->testUser, 'sanctum')->postJson('/api/cart/add', $addData);
+
+        $response->assertStatus(422);
+        $response->assertJson([
+            'success' => false,
+            'message' => "Insufficient stock for product '{$product->name}'. Requested: 12, Available: 10"
+        ]);
+    }
+
+    #[Test]
+    public function it_allows_adding_exactly_available_stock()
+    {
+        $product = $this->createTestProduct(['stock_quantity' => 10]);
+        $addData = $this->createValidCartItemData($product, ['quantity' => 10]);
+
+        $response = $this->actingAs($this->testUser, 'sanctum')->postJson('/api/cart/add', $addData);
+
         $this->assertSuccessfulJsonResponse($response);
         $response->assertJsonCount(1, 'data.items');
         
@@ -265,25 +300,70 @@ class CartControllerTest extends BaseFeatureTest
     }
 
     #[Test]
-    public function it_handles_concurrent_cart_operations()
+    public function it_prevents_updating_cart_item_to_exceed_available_stock()
+    {
+        $product = $this->createTestProduct(['stock_quantity' => 8]);
+        $cart = $this->createTestCart($this->testUser);
+        $cartItem = $this->createTestCartItem($cart, $product, ['quantity' => 3]);
+
+        $updateData = [
+            'product_uuid' => $product->uuid,
+            'quantity' => 15 // Exceeds available stock
+        ];
+
+        $response = $this->actingAs($this->testUser, 'sanctum')->putJson('/api/cart/update', $updateData);
+
+        $response->assertStatus(422);
+        $response->assertJson([
+            'success' => false,
+            'message' => "Insufficient stock for product '{$product->name}'. Requested: 15, Available: 8"
+        ]);
+    }
+
+    #[Test]
+    public function it_allows_updating_cart_item_to_valid_quantity()
     {
         $product = $this->createTestProduct(['stock_quantity' => 10]);
-        $addData = $this->createValidCartItemData($product, ['quantity' => 3]);
+        $cart = $this->createTestCart($this->testUser);
+        $cartItem = $this->createTestCartItem($cart, $product, ['quantity' => 3]);
 
-        // Simulate concurrent add operations
-        $responses = [];
-        for ($i = 0; $i < 3; $i++) {
-            $responses[] = $this->actingAs($this->testUser, 'sanctum')->postJson('/api/cart/add', $addData);
-        }
+        $updateData = [
+            'product_uuid' => $product->uuid,
+            'quantity' => 7 // Within available stock
+        ];
 
-        // All should succeed
-        foreach ($responses as $response) {
-            $this->assertSuccessfulJsonResponse($response);
-        }
+        $response = $this->actingAs($this->testUser, 'sanctum')->putJson('/api/cart/update', $updateData);
 
-        // Final cart should have correct total quantity
-        $finalResponse = $this->actingAs($this->testUser, 'sanctum')->getJson('/api/cart');
-        $item = $finalResponse->json('data.items.0');
-        $this->assertEquals(9, $item['quantity']); // 3 + 3 + 3
+        $this->assertSuccessfulJsonResponse($response);
+        
+        $item = $response->json('data.items.0');
+        $this->assertEquals(7, $item['quantity']);
+    }
+
+    #[Test]
+    public function it_handles_stock_validation_with_multiple_products()
+    {
+        $product1 = $this->createTestProduct(['stock_quantity' => 5]);
+        $product2 = $this->createTestProduct(['stock_quantity' => 3]);
+
+        // Add first product successfully
+        $addData1 = $this->createValidCartItemData($product1, ['quantity' => 3]);
+        $response1 = $this->actingAs($this->testUser, 'sanctum')->postJson('/api/cart/add', $addData1);
+        $this->assertSuccessfulJsonResponse($response1);
+
+        // Add second product successfully
+        $addData2 = $this->createValidCartItemData($product2, ['quantity' => 2]);
+        $response2 = $this->actingAs($this->testUser, 'sanctum')->postJson('/api/cart/add', $addData2);
+        $this->assertSuccessfulJsonResponse($response2);
+
+        // Try to add more of first product, should fail
+        $addData3 = $this->createValidCartItemData($product1, ['quantity' => 4]); // 3 + 4 = 7 > 5
+        $response3 = $this->actingAs($this->testUser, 'sanctum')->postJson('/api/cart/add', $addData3);
+        
+        $response3->assertStatus(422);
+        $response3->assertJson([
+            'success' => false,
+            'message' => "Insufficient stock for product '{$product1->name}'. Requested: 7, Available: 5"
+        ]);
     }
 }
