@@ -12,16 +12,12 @@ class SendOrderConfirmationJob implements ShouldQueue
 {
     use Queueable;
 
-    public function __construct(
-        public Order $order,
-    ) {
-        $this->onQueue('emails');
-    }
+    public function __construct(public Order $order,) {}
 
     public function handle(): void
     {
         $this->order->load(['user', 'orderItems.product']);
-        
+
         if ($this->order->user && $this->order->user->email) {
             Mail::to($this->order->user->email)->send(new OrderConfirmationMail($this->order));
         }

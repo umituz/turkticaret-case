@@ -4,10 +4,13 @@ namespace App\Models\Category;
 
 use App\Models\Base\BaseUuidModel;
 use App\Models\Product\Product;
+use App\Traits\HasSlug;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Category extends BaseUuidModel
 {
+    use HasSlug;
+
     protected $fillable = [
         'name',
         'description',

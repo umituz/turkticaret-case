@@ -34,6 +34,11 @@ class Country extends BaseUuidModel
         return $this->belongsTo(Currency::class, 'currency_uuid', 'uuid');
     }
 
+    public function currencies(): HasMany
+    {
+        return $this->hasMany(Currency::class, 'country_uuid', 'uuid');
+    }
+
     public function scopeActive($query)
     {
         return $query->where('is_active', true);
@@ -42,5 +47,10 @@ class Country extends BaseUuidModel
     public function scopeByCode($query, string $code)
     {
         return $query->where('code', $code);
+    }
+
+    public function getDefaultCurrency()
+    {
+        return $this->currency;
     }
 }

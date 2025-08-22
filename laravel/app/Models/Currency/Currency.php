@@ -21,6 +21,7 @@ class Currency extends BaseUuidModel
         return [
             'decimals' => 'integer',
             'is_active' => 'boolean',
+            'deleted_at' => 'datetime',
         ];
     }
 
@@ -39,8 +40,4 @@ class Currency extends BaseUuidModel
         return $query->where('code', $code);
     }
 
-    public function formatAmount(float $amount): string
-    {
-        return number_format($amount, $this->decimals) . ' ' . $this->symbol;
-    }
 }
