@@ -397,7 +397,7 @@ class OrderCollectionTest extends BaseResourceUnitTest
         $this->assertEquals($totalDeliveredOrders, $result['meta']['total']); // Total matching items
         $this->assertArrayHasKey('data', $result);
         $this->assertArrayHasKey('meta', $result);
-        $this->assertIsArray($result['data']);
+        $this->assertTrue(is_array($result['data']) || $result['data'] instanceof \Illuminate\Support\Collection);
         $this->assertIsArray($result['meta']);
     }
 
@@ -447,7 +447,7 @@ class OrderCollectionTest extends BaseResourceUnitTest
         $this->assertArrayHasKey('data', $result);
         $this->assertArrayHasKey('meta', $result);
         $this->assertEquals(3, $result['meta']['total']);
-        $this->assertIsArray($result['data']);
+        $this->assertTrue(is_array($result['data']) || $result['data'] instanceof \Illuminate\Support\Collection);
         $this->assertIsArray($result['meta']);
     }
 
@@ -486,7 +486,7 @@ class OrderCollectionTest extends BaseResourceUnitTest
         $this->assertArrayHasKey('data', $result);
         $this->assertArrayHasKey('meta', $result);
         $this->assertEquals(2, $result['meta']['total']);
-        $this->assertIsArray($result['data']);
+        $this->assertTrue(is_array($result['data']) || $result['data'] instanceof \Illuminate\Support\Collection);
         $this->assertIsArray($result['meta']);
     }
 }

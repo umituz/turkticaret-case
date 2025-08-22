@@ -32,6 +32,7 @@ class ProductResourceTest extends BaseResourceUnitTest
         return [
             'uuid' => $this->generateTestUuid(),
             'name' => 'Test Product',
+            'slug' => 'test-product',
             'description' => 'Test product description',
             'sku' => 'TEST-SKU-001',
             'price' => 1999, // in cents
@@ -104,6 +105,7 @@ class ProductResourceTest extends BaseResourceUnitTest
         $productData = [
             'uuid' => 'product-test-uuid',
             'name' => 'Premium Headphones',
+            'slug' => 'premium-headphones',
             'description' => 'High-quality wireless headphones with noise cancellation',
             'sku' => 'HEADPHONE-WL-001',
             'price' => 29999, // $299.99 in cents

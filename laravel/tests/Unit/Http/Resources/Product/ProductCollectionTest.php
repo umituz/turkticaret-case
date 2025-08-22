@@ -255,6 +255,7 @@ class ProductCollectionTest extends BaseResourceUnitTest
             $this->createMockModel([
                 'uuid' => 'prod-1', 
                 'name' => 'Product 1',
+                'slug' => 'product-1',
                 'description' => 'Test description',
                 'price' => 1000,
                 'stock_quantity' => 5,
