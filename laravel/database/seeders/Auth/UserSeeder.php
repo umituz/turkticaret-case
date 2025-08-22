@@ -19,12 +19,12 @@ class UserSeeder extends Seeder
     {
         $defaultLanguage = Language::where('code', 'tr')->first();
         $defaultCountry = Country::where('code', 'TR')->first();
-        
+
         $admin = User::firstOrCreate(
             ['email' => 'admin@test.com'],
             [
                 'name' => 'Admin',
-                'password' => bcrypt('admin123'),
+                'password' => 'admin123',
                 'language_uuid' => $defaultLanguage->uuid,
                 'country_uuid' => $defaultCountry->uuid,
             ]
@@ -37,12 +37,12 @@ class UserSeeder extends Seeder
     {
         $defaultLanguage = Language::where('code', 'tr')->first();
         $defaultCountry = Country::where('code', 'TR')->first();
-        
+
         $regular = User::firstOrCreate(
             ['email' => 'user@test.com'],
             [
                 'name' => 'User',
-                'password' => bcrypt('user123'),
+                'password' => 'user123',
                 'language_uuid' => $defaultLanguage->uuid,
                 'country_uuid' => $defaultCountry->uuid,
             ]

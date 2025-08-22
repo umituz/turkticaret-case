@@ -7,6 +7,7 @@ use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Resources\Auth\LoginResource;
 use App\Services\Auth\LoginService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class LoginController extends BaseController
 {
@@ -21,5 +22,12 @@ class LoginController extends BaseController
             'token' => $result['token'],
             'token_type' => 'Bearer',
         ], 'Login successful.');
+    }
+
+    public function logout(Request $request): JsonResponse
+    {
+        $this->loginService->logout($request->user());
+
+        return $this->ok([], 'Logout successful.');
     }
 }

@@ -47,6 +47,99 @@
         },
         "description": "Login with email and password to get authentication token"
       },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "console.log('Login test script started');",
+              "console.log('Response code:', pm.response.code);",
+              "",
+              "if (pm.response.code === 200) {",
+              "    try {",
+              "        const responseJson = pm.response.json();",
+              "        console.log('Response JSON:', responseJson);",
+              "        ",
+              "        if (responseJson.success && responseJson.data && responseJson.data.token) {",
+              "            console.log('Setting token:', responseJson.data.token);",
+              "            pm.collectionVariables.set('token', responseJson.data.token);",
+              "            pm.environment.set('token', responseJson.data.token);",
+              "            console.log('Token set successfully');",
+              "        } else {",
+              "            console.log('Token not found in response');",
+              "        }",
+              "    } catch (error) {",
+              "        console.log('Error parsing response:', error);",
+              "    }",
+              "} else {",
+              "    console.log('Login failed with code:', pm.response.code);",
+              "}"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "response": []
+    },
+    {
+      "name": "Logout",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/logout",
+          "host": ["{{base_url}}"],
+          "path": ["logout"]
+        },
+        "description": "Logout user and revoke authentication token"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "console.log('Logout test script started');",
+              "console.log('Response code:', pm.response.code);",
+              "",
+              "if (pm.response.code === 200) {",
+              "    try {",
+              "        const responseJson = pm.response.json();",
+              "        console.log('Logout response:', responseJson);",
+              "        ",
+              "        if (responseJson.success) {",
+              "            console.log('Clearing token...');",
+              "            pm.collectionVariables.set('token', '');",
+              "            pm.environment.set('token', '');",
+              "            console.log('Token cleared successfully');",
+              "        } else {",
+              "            console.log('Logout not successful');",
+              "        }",
+              "    } catch (error) {",
+              "        console.log('Error parsing response:', error);",
+              "    }",
+              "} else {",
+              "    console.log('Logout failed with code:', pm.response.code);",
+              "}"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
       "response": []
     }
   ]
