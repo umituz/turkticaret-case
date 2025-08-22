@@ -5,6 +5,8 @@ namespace Tests\Unit\Models\Product;
 use App\Models\Base\BaseUuidModel;
 use App\Models\Product\Product;
 use App\Models\Category\Category;
+use App\Exceptions\Product\InsufficientStockException;
+use App\Exceptions\Product\OutOfStockException;
 use Tests\Base\BaseModelUnitTest;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -29,10 +31,10 @@ class ProductTest extends BaseModelUnitTest
         $expectedFillable = [
             'name',
             'description',
+            'slug',
             'sku',
             'price',
             'stock_quantity',
-            'image_path',
             'is_active',
             'category_uuid',
         ];
@@ -124,4 +126,26 @@ class ProductTest extends BaseModelUnitTest
         $this->assertEquals('product_uuid', $orderItemsRelation->getForeignKeyName());
         $this->assertEquals('uuid', $orderItemsRelation->getLocalKeyName());
     }
+
+    #[Test]
+    public function it_can_check_if_product_has_sufficient_stock(): void
+    {
+        $product = new Product(['stock_quantity' => 10]);
+        
+        $this->assertTrue($product->hasStock(5));
+        $this->assertTrue($product->hasStock(10));
+        $this->assertFalse($product->hasStock(15));
+    }
+
+    #[Test]
+    public function it_can_check_if_product_has_any_stock(): void
+    {
+        $productWithStock = new Product(['stock_quantity' => 5]);
+        $productOutOfStock = new Product(['stock_quantity' => 0]);
+        
+        $this->assertTrue($productWithStock->isInStock());
+        $this->assertFalse($productOutOfStock->isInStock());
+    }
+
+
 }

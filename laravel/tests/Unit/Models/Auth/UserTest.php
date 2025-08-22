@@ -49,6 +49,8 @@ class UserTest extends BaseModelUnitTest
             'name',
             'email',
             'password',
+            'language_uuid',
+            'country_uuid',
         ];
 
         $this->assertHasFillable($expectedFillable);
@@ -104,30 +106,30 @@ class UserTest extends BaseModelUnitTest
     public function it_sets_password_attribute_with_hashing(): void
     {
         $originalPassword = 'plain-password';
-        
+
         // Mock Hash facade for Laravel's hashed cast
         $this->app['hash']->shouldReceive('isHashed')
             ->andReturn(false);
-        
+
         $this->app['hash']->shouldReceive('make')
             ->andReturnUsing(function ($password) {
                 return password_hash($password, PASSWORD_DEFAULT);
             });
-        
+
         // Laravel 11+ uses 'hashed' cast for automatic password hashing
         $this->model->password = $originalPassword;
-        
+
         // The password should be hashed (not equal to original)
         $actualPassword = $this->model->getAttributes()['password'];
         $this->assertNotEquals($originalPassword, $actualPassword);
-        
+
         // Verify the password was properly hashed
         $this->assertIsString($actualPassword);
         $this->assertNotEmpty($actualPassword);
-        
+
         // Verify it's a proper bcrypt hash
         $this->assertMatchesRegularExpression('/^\$2y\$/', $actualPassword);
-        
+
         // Verify the hash works with the original password
         $this->assertTrue(password_verify($originalPassword, $actualPassword));
     }
@@ -136,7 +138,7 @@ class UserTest extends BaseModelUnitTest
     public function it_can_access_cart_relationship(): void
     {
         $cartRelation = $this->model->cart();
-        
+
         $this->assertEquals('App\Models\Cart\Cart', $cartRelation->getRelated()::class);
         $this->assertEquals('user_uuid', $cartRelation->getForeignKeyName());
         $this->assertEquals('uuid', $cartRelation->getLocalKeyName());
@@ -146,7 +148,7 @@ class UserTest extends BaseModelUnitTest
     public function it_can_access_orders_relationship(): void
     {
         $ordersRelation = $this->model->orders();
-        
+
         $this->assertEquals('App\Models\Order\Order', $ordersRelation->getRelated()::class);
         $this->assertEquals('user_uuid', $ordersRelation->getForeignKeyName());
         $this->assertEquals('uuid', $ordersRelation->getLocalKeyName());
