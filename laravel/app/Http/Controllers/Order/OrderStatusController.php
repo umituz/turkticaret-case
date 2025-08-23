@@ -6,6 +6,7 @@ use App\Enums\Order\OrderStatusEnum;
 use App\Http\Controllers\BaseController;
 use App\Http\Requests\Order\OrderStatusUpdateRequest;
 use App\Http\Resources\Order\OrderResource;
+use App\Http\Resources\Order\OrderStatusHistoryCollection;
 use App\Models\Order\Order;
 use App\Services\Order\OrderStatusService;
 use Illuminate\Http\JsonResponse;
@@ -37,27 +38,12 @@ class OrderStatusController extends BaseController
     {
         Gate::authorize('view', $order);
 
-        $order->load(['statusHistories.changedBy:uuid,name,email']);
-
-        $history = $order->statusHistories->map(function ($historyItem) {
-            return [
-                'uuid' => $historyItem->uuid,
-                'old_status' => $historyItem->old_status?->value,
-                'new_status' => $historyItem->new_status->value,
-                'changed_by' => $historyItem->changedBy ? [
-                    'uuid' => $historyItem->changedBy->uuid,
-                    'name' => $historyItem->changedBy->name,
-                    'email' => $historyItem->changedBy->email,
-                ] : null,
-                'notes' => $historyItem->notes,
-                'changed_at' => $historyItem->created_at,
-            ];
-        });
+        $order->load(['statusHistories.changedBy']);
 
         return $this->ok([
             'order_uuid' => $order->uuid,
             'current_status' => $order->status->value,
-            'history' => $history
+            'history' => new OrderStatusHistoryCollection($order->statusHistories)
         ]);
     }
 }
