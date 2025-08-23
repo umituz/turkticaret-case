@@ -14,6 +14,7 @@ class CategoryResource extends BaseResource
             'name' => $this->name,
             'description' => $this->description,
             'slug' => $this->slug,
+            'is_active' => $this->is_active,
             'created_at' => $this->created_at?->toIso8601String(),
             'updated_at' => $this->updated_at?->toIso8601String(),
         ];

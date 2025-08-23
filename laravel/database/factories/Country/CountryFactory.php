@@ -13,12 +13,10 @@ class CountryFactory extends Factory
 
     public function definition(): array
     {
-        $country = $this->faker->randomElement(CountryEnum::cases());
-
         return [
-            'code' => $country->value,
-            'name' => $country->getDisplayName(),
-            'locale' => $country->getLocale(),
+            'code' => strtoupper($this->faker->unique()->lexify('??')),
+            'name' => $this->faker->unique()->country(),
+            'locale' => $this->faker->locale(),
             'currency_uuid' => Currency::factory(),
         ];
     }

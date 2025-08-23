@@ -19,8 +19,8 @@ class LanguageResource extends BaseResource
             'is_rtl' => $this->isRTL(),
             'is_active' => $this->is_active,
             'countries_count' => $this->whenLoaded('countries', fn() => $this->countries->count()),
-            'created_at' => $this->created_at?->toISOString(),
-            'updated_at' => $this->updated_at?->toISOString(),
+            'created_at' => $this->created_at?->toIso8601String(),
+            'updated_at' => $this->updated_at?->toIso8601String(),
         ];
     }
 }

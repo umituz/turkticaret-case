@@ -6,5 +6,5 @@ use App\Http\Resources\Base\BaseCollection;
 
 class CurrencyCollection extends BaseCollection
 {
-    public $collection = CurrencyResource::class;
+    public $collects = CurrencyResource::class;
 }

@@ -17,8 +17,8 @@ class CurrencyResource extends BaseResource
             'decimals' => $this->decimals,
             'is_active' => $this->is_active,
             'countries_count' => $this->whenLoaded('countries', fn() => $this->countries->count()),
-            'created_at' => $this->created_at?->toISOString(),
-            'updated_at' => $this->updated_at?->toISOString(),
+            'created_at' => $this->created_at?->toIso8601String(),
+            'updated_at' => $this->updated_at?->toIso8601String(),
         ];
     }
 }

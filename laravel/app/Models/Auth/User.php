@@ -39,6 +39,7 @@ class User extends Authenticatable
         'password',
         'language_uuid',
         'country_uuid',
+        'timezone',
     ];
 
     /**
@@ -92,5 +93,10 @@ class User extends Authenticatable
     public function country(): BelongsTo
     {
         return $this->belongsTo(Country::class, 'country_uuid', 'uuid');
+    }
+
+    public function scopeActive($query)
+    {
+        return $query->whereNull('deleted_at');
     }
 }

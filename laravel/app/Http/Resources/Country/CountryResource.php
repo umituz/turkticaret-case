@@ -14,11 +14,11 @@ class CountryResource extends BaseResource
             'code' => $this->code,
             'name' => $this->name,
             'currency_uuid' => $this->currency_uuid,
+            'locale' => $this->locale,
             'is_active' => $this->is_active,
             'currency' => $this->whenLoaded('currency'),
-            'users_count' => $this->whenLoaded('users', fn() => $this->users->count()),
-            'created_at' => $this->created_at?->toISOString(),
-            'updated_at' => $this->updated_at?->toISOString(),
+            'created_at' => $this->created_at?->toIso8601String(),
+            'updated_at' => $this->updated_at?->toIso8601String(),
         ];
     }
 }

@@ -13,6 +13,8 @@ class LoginResource extends JsonResource
             'uuid' => $this->uuid,
             'name' => $this->name,
             'email' => $this->email,
+            'role' => $this->hasRole('Admin') ? 'admin' : 'user',
+            'roles' => $this->roles->pluck('name'),
             'created_at' => $this->created_at?->toIso8601String(),
         ];
     }

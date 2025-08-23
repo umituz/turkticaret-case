@@ -2,6 +2,7 @@
 
 namespace Database\Seeders\Auth;
 
+use App\Enums\User\UserTypeEnum;
 use App\Models\Auth\User;
 use App\Models\Country\Country;
 use App\Models\Language\Language;
@@ -21,9 +22,9 @@ class UserSeeder extends Seeder
         $defaultCountry = Country::where('code', 'TR')->first();
 
         $admin = User::firstOrCreate(
-            ['email' => 'admin@test.com'],
+            ['email' => UserTypeEnum::ADMIN->getEmail()],
             [
-                'name' => 'Admin',
+                'name' => UserTypeEnum::ADMIN->getLabel(),
                 'password' => 'admin123',
                 'language_uuid' => $defaultLanguage->uuid,
                 'country_uuid' => $defaultCountry->uuid,
@@ -39,9 +40,9 @@ class UserSeeder extends Seeder
         $defaultCountry = Country::where('code', 'TR')->first();
 
         $regular = User::firstOrCreate(
-            ['email' => 'user@test.com'],
+            ['email' => UserTypeEnum::USER->getEmail()],
             [
-                'name' => 'User',
+                'name' => UserTypeEnum::USER->getLabel(),
                 'password' => 'user123',
                 'language_uuid' => $defaultLanguage->uuid,
                 'country_uuid' => $defaultCountry->uuid,

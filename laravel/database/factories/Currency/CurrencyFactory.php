@@ -12,13 +12,11 @@ class CurrencyFactory extends Factory
 
     public function definition(): array
     {
-        $currency = $this->faker->randomElement(CurrencyEnum::cases());
-
         return [
-            'code' => $currency->value,
-            'name' => $currency->getDisplayName(),
-            'symbol' => $currency->getSymbol(),
-            'decimals' => $currency->getDecimals(),
+            'code' => strtoupper($this->faker->unique()->lexify('???')),
+            'name' => $this->faker->unique()->words(2, true),
+            'symbol' => $this->faker->randomElement(['$', '€', '£', '¥', '₺']),
+            'decimals' => $this->faker->numberBetween(0, 4),
             'is_active' => true,
         ];
     }

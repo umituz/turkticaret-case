@@ -8,9 +8,19 @@ use Illuminate\Support\Facades\Hash;
 
 class OldPasswordRule implements ValidationRule
 {
+    public function __construct(private ?object $user = null)
+    {
+        $this->user = $this->user ?? auth()->user() ?? request()->user();
+    }
+
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        if (!Hash::check($value, auth()->user()->password)) {
+        if (!$this->user) {
+            $fail('Authentication required.');
+            return;
+        }
+
+        if (!Hash::check($value, $this->user->password)) {
             $fail('The old password is incorrect.');
         }
     }

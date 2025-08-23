@@ -6,5 +6,5 @@ use App\Http\Resources\Base\BaseCollection;
 
 class LanguageCollection extends BaseCollection
 {
-    public $collection = LanguageResource::class;
+    public $collects = LanguageResource::class;
 }
