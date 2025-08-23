@@ -2,7 +2,7 @@
 
 namespace App\Enums\Order;
 
-enum OrderStatus: string
+enum OrderStatusEnum: string
 {
     case PENDING = 'pending';
     case CONFIRMED = 'confirmed';
@@ -28,7 +28,7 @@ enum OrderStatus: string
         };
     }
 
-    public function canTransitionTo(OrderStatus $newStatus): bool
+    public function canTransitionTo(OrderStatusEnum $newStatus): bool
     {
         return match ($this) {
             self::PENDING => in_array($newStatus, [self::CONFIRMED, self::CANCELLED]),

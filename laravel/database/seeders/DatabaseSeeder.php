@@ -12,6 +12,7 @@ use Database\Seeders\Currency\CurrencySeeder;
 use Database\Seeders\Language\LanguageSeeder;
 use Database\Seeders\Order\OrderSeeder;
 use Database\Seeders\Product\ProductSeeder;
+use Database\Seeders\Setting\SettingsSeeder;
 use Database\Seeders\User\UserSeeder;
 use Database\Seeders\User\UserSettingsSeeder;
 use Illuminate\Database\Seeder;
@@ -30,6 +31,7 @@ class DatabaseSeeder extends Seeder
             LanguageSeeder::class,
             CurrencySeeder::class,
             CountrySeeder::class,
+            SettingsSeeder::class,
             UserSeeder::class,
             UserSettingsSeeder::class,
             CategorySeeder::class,

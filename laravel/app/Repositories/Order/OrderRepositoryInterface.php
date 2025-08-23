@@ -11,4 +11,8 @@ interface OrderRepositoryInterface extends BaseRepositoryInterface
     public function findByUserUuid(string $userUuid): LengthAwarePaginator;
     
     public function findByOrderNumber(string $orderNumber): ?Order;
+    
+    public function findAllWithFilters(array $filters = []): LengthAwarePaginator;
+    
+    public function getOrderStatistics(): array;
 }

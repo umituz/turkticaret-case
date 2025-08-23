@@ -1,0 +1,326 @@
+{
+  "info": {
+    "name": "Order Statuses",
+    "description": "Order status management endpoints for updating order statuses and viewing available transitions",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Update Order Status",
+      "request": {
+        "method": "PATCH",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"status\": \"confirmed\"\n}",
+          "options": {"raw": {"language": "json"}}
+        },
+        "url": {
+          "raw": "{{base_url}}/orders/{{order_uuid}}/status",
+          "host": ["{{base_url}}"],
+          "path": ["orders", "{{order_uuid}}", "status"]
+        },
+        "description": "Update order status with proper validation and transition rules"
+      },
+      "response": []
+    },
+    {
+      "name": "Get Available Status Transitions",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{base_url}}/orders/{{order_uuid}}/status/available",
+          "host": ["{{base_url}}"],
+          "path": ["orders", "{{order_uuid}}", "status", "available"]
+        },
+        "description": "Get available status transitions for current order status"
+      },
+      "response": []
+    },
+    {
+      "name": "Get Order Status History",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{base_url}}/orders/{{order_uuid}}/status/history",
+          "host": ["{{base_url}}"],
+          "path": ["orders", "{{order_uuid}}", "status", "history"]
+        },
+        "description": "Get complete status change history for an order with user details and timestamps"
+      },
+      "response": []
+    },
+    {
+      "name": "Status Workflow - Complete Order Lifecycle",
+      "description": "Complete order status workflow from pending to delivered",
+      "item": [
+        {
+          "name": "1. Check Initial Status",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/orders/{{order_uuid}}",
+              "host": ["{{base_url}}"],
+              "path": ["orders", "{{order_uuid}}"]
+            },
+            "description": "Step 1: Check initial order status (should be pending)"
+          },
+          "response": []
+        },
+        {
+          "name": "2. Confirm Order",
+          "request": {
+            "method": "PATCH",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"confirmed\"\n}",
+              "options": {"raw": {"language": "json"}}
+            },
+            "url": {
+              "raw": "{{base_url}}/orders/{{order_uuid}}/status",
+              "host": ["{{base_url}}"],
+              "path": ["orders", "{{order_uuid}}", "status"]
+            },
+            "description": "Step 2: Confirm the order (pending → confirmed)"
+          },
+          "response": []
+        },
+        {
+          "name": "3. Start Processing",
+          "request": {
+            "method": "PATCH",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"processing\"\n}",
+              "options": {"raw": {"language": "json"}}
+            },
+            "url": {
+              "raw": "{{base_url}}/orders/{{order_uuid}}/status",
+              "host": ["{{base_url}}"],
+              "path": ["orders", "{{order_uuid}}", "status"]
+            },
+            "description": "Step 3: Start processing the order (confirmed → processing)"
+          },
+          "response": []
+        },
+        {
+          "name": "4. Ship Order",
+          "request": {
+            "method": "PATCH",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"shipped\"\n}",
+              "options": {"raw": {"language": "json"}}
+            },
+            "url": {
+              "raw": "{{base_url}}/orders/{{order_uuid}}/status",
+              "host": ["{{base_url}}"],
+              "path": ["orders", "{{order_uuid}}", "status"]
+            },
+            "description": "Step 4: Ship the order (processing → shipped). Automatically sets shipped_at timestamp"
+          },
+          "response": []
+        },
+        {
+          "name": "5. Deliver Order",
+          "request": {
+            "method": "PATCH",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"delivered\"\n}",
+              "options": {"raw": {"language": "json"}}
+            },
+            "url": {
+              "raw": "{{base_url}}/orders/{{order_uuid}}/status",
+              "host": ["{{base_url}}"],
+              "path": ["orders", "{{order_uuid}}", "status"]
+            },
+            "description": "Step 5: Mark order as delivered (shipped → delivered). Automatically sets delivered_at timestamp"
+          },
+          "response": []
+        },
+        {
+          "name": "6. Verify Final Status",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/orders/{{order_uuid}}",
+              "host": ["{{base_url}}"],
+              "path": ["orders", "{{order_uuid}}"]
+            },
+            "description": "Step 6: Verify final order status and timestamps"
+          },
+          "response": []
+        },
+        {
+          "name": "7. View Complete Status History",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/orders/{{order_uuid}}/status/history",
+              "host": ["{{base_url}}"],
+              "path": ["orders", "{{order_uuid}}", "status", "history"]
+            },
+            "description": "Step 7: View complete status change history with all transitions"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Status Validation Tests",
+      "description": "Test status transition validation and error handling",
+      "item": [
+        {
+          "name": "Invalid Status Transition",
+          "request": {
+            "method": "PATCH",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"delivered\"\n}",
+              "options": {"raw": {"language": "json"}}
+            },
+            "url": {
+              "raw": "{{base_url}}/orders/{{order_uuid}}/status",
+              "host": ["{{base_url}}"],
+              "path": ["orders", "{{order_uuid}}", "status"]
+            },
+            "description": "Try invalid status transition (e.g., pending → delivered) - should fail"
+          },
+          "response": []
+        },
+        {
+          "name": "Invalid Status Value",
+          "request": {
+            "method": "PATCH",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"invalid_status\"\n}",
+              "options": {"raw": {"language": "json"}}
+            },
+            "url": {
+              "raw": "{{base_url}}/orders/{{order_uuid}}/status",
+              "host": ["{{base_url}}"],
+              "path": ["orders", "{{order_uuid}}", "status"]
+            },
+            "description": "Try invalid status value - should fail validation"
+          },
+          "response": []
+        },
+        {
+          "name": "Missing Status Field",
+          "request": {
+            "method": "PATCH",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"note\": \"Missing status field\"\n}",
+              "options": {"raw": {"language": "json"}}
+            },
+            "url": {
+              "raw": "{{base_url}}/orders/{{order_uuid}}/status",
+              "host": ["{{base_url}}"],
+              "path": ["orders", "{{order_uuid}}", "status"]
+            },
+            "description": "Try update without status field - should fail validation"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Delivered Order Status",
+          "request": {
+            "method": "PATCH",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"processing\"\n}",
+              "options": {"raw": {"language": "json"}}
+            },
+            "url": {
+              "raw": "{{base_url}}/orders/{{order_uuid}}/status",
+              "host": ["{{base_url}}"],
+              "path": ["orders", "{{order_uuid}}", "status"]
+            },
+            "description": "Try to change delivered order status - should fail (delivered is final)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Cancel Order Scenarios",
+      "description": "Test order cancellation at different stages",
+      "item": [
+        {
+          "name": "Cancel Pending Order",
+          "request": {
+            "method": "PATCH",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"cancelled\"\n}",
+              "options": {"raw": {"language": "json"}}
+            },
+            "url": {
+              "raw": "{{base_url}}/orders/{{order_uuid}}/status",
+              "host": ["{{base_url}}"],
+              "path": ["orders", "{{order_uuid}}", "status"]
+            },
+            "description": "Cancel order while pending (pending → cancelled)"
+          },
+          "response": []
+        },
+        {
+          "name": "Cancel Confirmed Order",
+          "request": {
+            "method": "PATCH",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"cancelled\"\n}",
+              "options": {"raw": {"language": "json"}}
+            },
+            "url": {
+              "raw": "{{base_url}}/orders/{{order_uuid}}/status",
+              "host": ["{{base_url}}"],
+              "path": ["orders", "{{order_uuid}}", "status"]
+            },
+            "description": "Cancel order while confirmed (confirmed → cancelled)"
+          },
+          "response": []
+        },
+        {
+          "name": "Cancel Processing Order",
+          "request": {
+            "method": "PATCH",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"cancelled\"\n}",
+              "options": {"raw": {"language": "json"}}
+            },
+            "url": {
+              "raw": "{{base_url}}/orders/{{order_uuid}}/status",
+              "host": ["{{base_url}}"],
+              "path": ["orders", "{{order_uuid}}", "status"]
+            },
+            "description": "Cancel order while processing (processing → cancelled)"
+          },
+          "response": []
+        },
+        {
+          "name": "Try Cancel Shipped Order",
+          "request": {
+            "method": "PATCH",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"cancelled\"\n}",
+              "options": {"raw": {"language": "json"}}
+            },
+            "url": {
+              "raw": "{{base_url}}/orders/{{order_uuid}}/status",
+              "host": ["{{base_url}}"],
+              "path": ["orders", "{{order_uuid}}", "status"]
+            },
+            "description": "Try to cancel shipped order - should fail (shipped cannot be cancelled)"
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

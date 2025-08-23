@@ -12,7 +12,7 @@ use App\Services\Cart\CartService;
 use App\Services\Product\ProductService;
 use App\Exceptions\Order\EmptyCartException;
 use App\Exceptions\Product\InsufficientStockException;
-use App\Enums\Order\OrderStatus;
+use App\Enums\Order\OrderStatusEnum;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 
@@ -68,7 +68,7 @@ class OrderService
 
         return $this->orderRepository->create([
             'user_uuid' => $userUuid,
-            'status' => OrderStatus::PENDING->value,
+            'status' => OrderStatusEnum::PENDING->value,
             'total_amount' => $totalAmount,
             'shipping_address' => $orderData->shipping_address,
             'notes' => $orderData->notes,

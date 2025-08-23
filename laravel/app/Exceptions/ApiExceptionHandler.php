@@ -2,6 +2,8 @@
 
 namespace App\Exceptions;
 
+use App\Exceptions\Product\InsufficientStockException;
+use App\Exceptions\Product\OutOfStockException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
@@ -44,6 +46,11 @@ class ApiExceptionHandler
                     errors: [],
                     message: 'This action is unauthorized.',
                     statusCode: 403
+                ),
+                $e instanceof OutOfStockException, $e instanceof InsufficientStockException => response()->error(
+                    errors: [],
+                    message: $e->getMessage(),
+                    statusCode: 422
                 ),
                 default => response()->error(
                     errors: [],

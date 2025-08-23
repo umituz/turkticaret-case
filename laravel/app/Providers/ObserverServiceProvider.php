@@ -2,7 +2,6 @@
 
 namespace App\Providers;
 
-use App\Models\Auth\User;
 use App\Models\Cart\Cart;
 use App\Models\Cart\CartItem;
 use App\Models\Category\Category;
@@ -12,15 +11,16 @@ use App\Models\Language\Language;
 use App\Models\Order\Order;
 use App\Models\Order\OrderItem;
 use App\Models\Product\Product;
+use App\Models\User\User;
 use App\Observers\Auth\UserObserver;
-use App\Observers\Cart\CartObserver;
 use App\Observers\Cart\CartItemObserver;
+use App\Observers\Cart\CartObserver;
 use App\Observers\Category\CategoryObserver;
 use App\Observers\Country\CountryObserver;
 use App\Observers\Currency\CurrencyObserver;
 use App\Observers\Language\LanguageObserver;
-use App\Observers\Order\OrderObserver;
 use App\Observers\Order\OrderItemObserver;
+use App\Observers\Order\OrderObserver;
 use App\Observers\Product\ProductObserver;
 use Illuminate\Support\ServiceProvider;
 
