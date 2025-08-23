@@ -3,7 +3,7 @@
 namespace App\Repositories\Setting;
 
 use App\Enums\Setting\SettingKeyEnum;
-use App\Repositories\BaseRepositoryInterface;
+use App\Repositories\Base\BaseRepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
 
 interface SettingsRepositoryInterface extends BaseRepositoryInterface

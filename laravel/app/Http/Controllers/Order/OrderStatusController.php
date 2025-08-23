@@ -25,6 +25,8 @@ class OrderStatusController extends BaseController
             $updatedOrder = $this->orderStatusService->updateStatus($order, $newStatus);
 
             return $this->ok(new OrderResource($updatedOrder));
+        } catch (\InvalidArgumentException $e) {
+            return $this->error([$e->getMessage()], 'Failed to update order status', 422);
         } catch (\Exception $e) {
             return $this->error([$e->getMessage()], 'Failed to update order status');
         }
@@ -42,11 +44,11 @@ class OrderStatusController extends BaseController
                 'uuid' => $historyItem->uuid,
                 'old_status' => $historyItem->old_status?->value,
                 'new_status' => $historyItem->new_status->value,
-                'changed_by' => [
+                'changed_by' => $historyItem->changedBy ? [
                     'uuid' => $historyItem->changedBy->uuid,
                     'name' => $historyItem->changedBy->name,
                     'email' => $historyItem->changedBy->email,
-                ],
+                ] : null,
                 'notes' => $historyItem->notes,
                 'changed_at' => $historyItem->created_at,
             ];

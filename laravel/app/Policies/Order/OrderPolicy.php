@@ -62,4 +62,12 @@ class OrderPolicy
     {
         return false;
     }
+
+    /**
+     * Determine whether the user can update the order status.
+     */
+    public function updateStatus(User $user, Order $order): bool
+    {
+        return $user->uuid === $order->user_uuid;
+    }
 }

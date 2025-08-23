@@ -18,8 +18,9 @@ return new class extends Migration
             $table->string('new_status')->comment('New order status');
             $table->foreignUuid('changed_by_uuid')->nullable()->constrained('users', 'uuid')->onDelete('set null')->comment('User who changed the status');
             $table->text('notes')->nullable()->comment('Optional notes about the status change');
+            $table->softDeletes();
             $table->timestamps();
-            
+
             $table->index(['order_uuid', 'created_at']);
         });
     }

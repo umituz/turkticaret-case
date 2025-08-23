@@ -2,11 +2,10 @@
 
 namespace App\Repositories\User\UserSettings;
 
-use App\Models\User\UserSetting;
-use App\Repositories\BaseRepositoryInterface;
+use App\Repositories\Base\BaseRepositoryInterface;
 
 interface UserSettingsRepositoryInterface extends BaseRepositoryInterface
 {
-    public function findByUserUuid(string $userUuid): ?UserSetting;
-    public function createDefaultSettings(string $userUuid): UserSetting;
+    public function findByUserUuid(string $userUuid);
+    public function createDefaultSettings(string $userUuid);
 }

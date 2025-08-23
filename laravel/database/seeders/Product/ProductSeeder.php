@@ -95,7 +95,7 @@ class ProductSeeder extends Seeder
             array_merge($productData, ['category_uuid' => $category->uuid])
         );
 
-        $product->addMediaFromUrl($imageUrl)->toMediaCollection('images');
+        #$product->addMediaFromUrl($imageUrl)->toMediaCollection('images');
     }
 
 }
