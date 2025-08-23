@@ -210,10 +210,11 @@ class OrderCollectionTest extends BaseResourceUnitTest
         $order->shouldReceive('getAttribute')->with('orderItems')->andReturn($orderItems);
         $order->orderItems = $orderItems;
         
-        // Use simple array for testing to avoid ArrayAccess issues
-        $simpleCollection = new OrderCollection([$order]);
+        // Use paginated collection to work with original BaseCollection code
+        $paginator = $this->createMockPaginatedCollection([$order], 1);
+        $collection = new OrderCollection($paginator);
         $request = new Request();
-        $result = $simpleCollection->toArray($request);
+        $result = $collection->toArray($request);
 
         // Assert - Basic structure verification without individual element access
         $this->assertIsArray($result);

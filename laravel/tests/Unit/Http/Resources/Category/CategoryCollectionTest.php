@@ -170,11 +170,11 @@ class CategoryCollectionTest extends BaseResourceUnitTest
         ];
         $category = $this->createMockModel($categoryData);
         
-        // Use simple array for testing instead of paginator to avoid ArrayAccess issues
-        $simpleData = [$category];
-        $simpleCollection = new CategoryCollection($simpleData);
+        // Use paginated collection to work with original BaseCollection code
+        $paginator = $this->createMockPaginatedCollection([$category], 1);
+        $collection = new CategoryCollection($paginator);
         $request = new Request();
-        $result = $simpleCollection->toArray($request);
+        $result = $collection->toArray($request);
 
         // Assert
         $this->assertIsArray($result);
@@ -212,10 +212,11 @@ class CategoryCollectionTest extends BaseResourceUnitTest
 
         $categories = array_map(fn($data) => $this->createMockModel($data), $categoriesData);
         
-        // Use simple array for testing instead of paginator to avoid ArrayAccess issues
-        $simpleCollection = new CategoryCollection($categories);
+        // Use paginated collection to work with original BaseCollection code  
+        $paginator = $this->createMockPaginatedCollection($categories, count($categories));
+        $collection = new CategoryCollection($paginator);
         $request = new Request();
-        $result = $simpleCollection->toArray($request);
+        $result = $collection->toArray($request);
 
         // Assert
         $this->assertIsArray($result);
@@ -234,8 +235,9 @@ class CategoryCollectionTest extends BaseResourceUnitTest
             $this->createMockModel(['uuid' => 'cat-1', 'name' => 'Category 1', 'is_active' => true]),
         ];
         
-        // Use simple array for testing
-        $collection = new CategoryCollection($categories);
+        // Use paginated collection to work with original BaseCollection code
+        $paginator = $this->createMockPaginatedCollection($categories, 1);
+        $collection = new CategoryCollection($paginator);
         $request = new Request();
 
         // Act & Assert - Just verify collection can be created and returns array
@@ -288,8 +290,9 @@ class CategoryCollectionTest extends BaseResourceUnitTest
             ]),
         ];
         
-        // Use simple array for testing
-        $collection = new CategoryCollection($filteredCategories);
+        // Use paginated collection to work with original BaseCollection code
+        $paginator = $this->createMockPaginatedCollection($filteredCategories, 1);
+        $collection = new CategoryCollection($paginator);
         $request = new Request();
 
         // Act

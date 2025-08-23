@@ -25,6 +25,7 @@ class CountryCreateRequestTest extends BaseRequestUnitTest
         return [
             'code' => 'US',
             'name' => 'United States',
+            'locale' => 'en_US',
             'currency_uuid' => null,
             'is_active' => true,
         ];
@@ -70,7 +71,7 @@ class CountryCreateRequestTest extends BaseRequestUnitTest
         $rules = $this->request->rules();
         
         $this->assertIsArray($rules);
-        $expectedFields = ['code', 'name', 'currency_uuid', 'is_active'];
+        $expectedFields = ['code', 'name', 'locale', 'currency_uuid', 'is_active'];
         
         foreach ($expectedFields as $field) {
             $this->assertArrayHasKey($field, $rules);
@@ -163,7 +164,8 @@ class CountryCreateRequestTest extends BaseRequestUnitTest
     {
         $data = [
             'code' => 'TR',
-            'name' => 'Turkey'
+            'name' => 'Turkey',
+            'locale' => 'tr_TR'
         ];
         
         $this->assertValidationPasses($data);

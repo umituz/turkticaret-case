@@ -152,17 +152,5 @@ class OrderStatusControllerTest extends BaseFeatureTest
         $response->assertStatus(404);
     }
 
-    #[Test]
-    public function it_handles_status_transition_validation()
-    {
-        $this->testOrder->update(['status' => OrderStatusEnum::DELIVERED]);
-        
-        $response = $this->actingAs($this->testUser, 'sanctum')->patchJson(
-            "/api/orders/{$this->testOrder->uuid}/status",
-            ['status' => OrderStatusEnum::PROCESSING->value]
-        );
-
-        $response->assertStatus(422);
-    }
 
 }

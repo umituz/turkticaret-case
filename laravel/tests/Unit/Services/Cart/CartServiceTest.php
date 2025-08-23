@@ -428,12 +428,14 @@ class CartServiceTest extends BaseServiceUnitTest
         $productUuid = $this->getTestEntityUuid();
         $newQuantity = 2;
 
+        // Use our mockTypedModel which should handle property access correctly
         $product = $this->mockTypedModel(Product::class, [
             'uuid' => $productUuid,
-            'name' => 'Test Product',
             'stock_quantity' => 0,
+            'name' => 'Test Product',
             'price' => 1000
         ]);
+        
 
         $cartItem = $this->mockTypedModel(CartItem::class, [
             'product_uuid' => $productUuid,
@@ -441,31 +443,43 @@ class CartServiceTest extends BaseServiceUnitTest
         ]);
 
         $cart = $this->mockTypedModel(Cart::class, ['user_uuid' => $userUuid]);
-        $cartItemsRelation = $this->mockHasManyRelation();
+        // Configure the relation to return our cartItem when first() is called
+        $cartItemsRelation = $this->mockHasManyRelation([
+            'first' => $cartItem
+        ]);
 
         $cart->shouldReceive('load')->andReturnSelf();
         $cart->shouldReceive('cartItems')->andReturn($cartItemsRelation);
         
-        $cartItemsRelation->shouldReceive('where')
-            ->with('product_uuid', $productUuid)
-            ->andReturn($cartItemsRelation);
-        $cartItemsRelation->shouldReceive('first')->andReturn($cartItem);
+        // Let's also mock the cartItem update method properly
+        $cartItem->shouldReceive('update')->with(['quantity' => $newQuantity])->andReturn(true);
 
         $this->cartRepository->shouldReceive('findByUserUuid')
             ->with($userUuid)
+            ->andReturn($cart);
+            
+        // Mock the create method in case getOrCreateCart needs to create a cart
+        $this->cartRepository->shouldReceive('create')
+            ->with(['user_uuid' => $userUuid])
             ->andReturn($cart);
 
         $this->productRepository->shouldReceive('findByUuid')
             ->with($productUuid)
             ->andReturn($product);
 
+        // Mock the fresh method that's called at the end
+        $cart->shouldReceive('fresh')->with(['cartItems.product'])->andReturnSelf();
+        
+        // Let's mock the jsonSerialize method to avoid serialization issues
+        $cart->shouldReceive('jsonSerialize')->andReturn(['test' => 'cart']);
+
         $data = [
             'product_uuid' => $productUuid,
             'quantity' => $newQuantity
         ];
-
+        
         $this->expectException(OutOfStockException::class);
-
+        
         $this->service->updateCartItem($userUuid, $data);
     }
 
@@ -483,6 +497,9 @@ class CartServiceTest extends BaseServiceUnitTest
             'stock_quantity' => $stockQuantity,
             'price' => 1000
         ]);
+        
+        // Ensure stock_quantity property is properly accessible and hasStock method works
+        $product->stock_quantity = $stockQuantity;
 
         $cartItem = $this->mockTypedModel(CartItem::class, [
             'product_uuid' => $productUuid,
@@ -490,15 +507,13 @@ class CartServiceTest extends BaseServiceUnitTest
         ]);
 
         $cart = $this->mockTypedModel(Cart::class, ['user_uuid' => $userUuid]);
-        $cartItemsRelation = $this->mockHasManyRelation();
+        // Configure the relation to return our cartItem when first() is called
+        $cartItemsRelation = $this->mockHasManyRelation([
+            'first' => $cartItem
+        ]);
 
         $cart->shouldReceive('load')->andReturnSelf();
         $cart->shouldReceive('cartItems')->andReturn($cartItemsRelation);
-        
-        $cartItemsRelation->shouldReceive('where')
-            ->with('product_uuid', $productUuid)
-            ->andReturn($cartItemsRelation);
-        $cartItemsRelation->shouldReceive('first')->andReturn($cartItem);
 
         $product->shouldReceive('hasStock')
             ->with($newQuantity)
@@ -511,6 +526,11 @@ class CartServiceTest extends BaseServiceUnitTest
         $this->productRepository->shouldReceive('findByUuid')
             ->with($productUuid)
             ->andReturn($product);
+            
+        // Mock the cartItem update method and cart fresh method
+        $cartItem->shouldReceive('update')->with(['quantity' => $newQuantity])->andReturn(true);
+        $cart->shouldReceive('fresh')->with(['cartItems.product'])->andReturnSelf();
+        $cart->shouldReceive('jsonSerialize')->andReturn(['test' => 'cart']);
 
         $data = [
             'product_uuid' => $productUuid,

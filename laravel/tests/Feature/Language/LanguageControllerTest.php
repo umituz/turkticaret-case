@@ -67,6 +67,7 @@ class LanguageControllerTest extends BaseFeatureTest
         $languageData = [
             'code' => 'de',
             'name' => 'German',
+            'native_name' => 'Deutsch',
             'locale' => 'de_DE',
             'is_active' => true,
         ];

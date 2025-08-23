@@ -10,7 +10,7 @@ class OldPasswordRule implements ValidationRule
 {
     public function __construct(private ?object $user = null)
     {
-        $this->user = $this->user ?? auth()->user() ?? request()->user();
+        $this->user = $this->user ?? auth()->user();
     }
 
     public function validate(string $attribute, mixed $value, Closure $fail): void

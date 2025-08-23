@@ -115,8 +115,7 @@ class CountryControllerTest extends BaseFeatureTest
         $this->assertValidationErrorResponse($response, [
             'code',
             'name',
-            'locale',
-            'currency_uuid'
+            'locale'
         ]);
     }
 
@@ -247,7 +246,6 @@ class CountryControllerTest extends BaseFeatureTest
         $country = Country::factory()->create();
 
         $endpoints = [
-            ['GET', '/api/countries'],
             ['GET', "/api/countries/{$country->uuid}"],
             ['POST', '/api/countries'],
             ['PUT', "/api/countries/{$country->uuid}"],

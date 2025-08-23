@@ -28,6 +28,7 @@ class CountryTest extends BaseModelUnitTest
         $expectedFillable = [
             'code',
             'name',
+            'locale',
             'currency_uuid',
             'is_active',
         ];

@@ -15,22 +15,33 @@ class BaseCollection extends ResourceCollection
      */
     public function toArray(Request $request): array
     {
+        // Check if this is a paginator instance
+        if (method_exists($this->resource, 'total')) {
+            return [
+                'data' => $this->collection,
+                'meta' => [
+                    'total' => $this->total(),
+                    'count' => $this->count(),
+                    'per_page' => $this->perPage(),
+                    'current_page' => $this->currentPage(),
+                    'last_page' => $this->lastPage(),
+                    'from' => $this->firstItem(),
+                    'to' => $this->lastItem(),
+                    'path' => $this->path(),
+                    'first_page_url' => $this->url(1),
+                    'last_page_url' => $this->url($this->lastPage()),
+                    'next_page_url' => $this->nextPageUrl(),
+                    'prev_page_url' => $this->previousPageUrl(),
+                    'links' => $this->linkCollection()->toArray(),
+                ],
+            ];
+        }
+
         return [
             'data' => $this->collection,
             'meta' => [
-                'total' => $this->total(),
-                'count' => $this->count(),
-                'per_page' => $this->perPage(),
-                'current_page' => $this->currentPage(),
-                'last_page' => $this->lastPage(),
-                'from' => $this->firstItem(),
-                'to' => $this->lastItem(),
-                'path' => $this->path(),
-                'first_page_url' => $this->url(1),
-                'last_page_url' => $this->url($this->lastPage()),
-                'next_page_url' => $this->nextPageUrl(),
-                'prev_page_url' => $this->previousPageUrl(),
-                'links' => $this->linkCollection()->toArray(),
+                'total' => $this->collection->count(),
+                'count' => $this->collection->count(),
             ],
         ];
     }

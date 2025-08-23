@@ -111,12 +111,29 @@ abstract class BaseFeatureTest extends TestCase
         // Create test user for authentication tests
         $this->testUser = User::factory()->create([
             'email' => 'test@turkticaret.test',
-            'password' => \Illuminate\Support\Facades\Hash::make('password123'),
+            'password' => 'password123',
             'email_verified_at' => now(),
             'language_uuid' => $language->uuid,
             'country_uuid' => $country->uuid,
         ]);
 
+
+    }
+
+    /**
+     * Create an admin user for testing admin endpoints
+     */
+    protected function createAdminUser(): User
+    {
+        $adminUser = User::factory()->create([
+            'email' => 'admin@turkticaret.test',
+            'password' => 'password123',
+            'email_verified_at' => now(),
+            'language_uuid' => Language::where('code', 'en')->first()->uuid,
+            'country_uuid' => Country::where('code', 'US')->first()->uuid,
+        ]);
+        
+        return $adminUser;
     }
 
 

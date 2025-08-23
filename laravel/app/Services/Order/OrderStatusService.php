@@ -5,14 +5,10 @@ namespace App\Services\Order;
 use App\Enums\Order\OrderStatusEnum;
 use App\Models\Order\Order;
 use App\Repositories\Order\OrderStatusRepositoryInterface;
-use App\Services\Slack\SlackNotificationService;
 
 class OrderStatusService
 {
-    public function __construct(
-        protected OrderStatusRepositoryInterface $orderStatusRepository,
-        protected SlackNotificationService $slackService
-    ) {}
+    public function __construct(protected OrderStatusRepositoryInterface $orderStatusRepository) {}
 
     public function updateStatus(Order $order, OrderStatusEnum $newStatus): Order
     {
@@ -23,11 +19,8 @@ class OrderStatusService
         }
 
         $this->orderStatusRepository->updateStatus($order, $newStatus);
-        $updatedOrder = $order->fresh();
-        
-        $this->slackService->sendOrderNotification($updatedOrder, 'status_changed');
 
-        return $updatedOrder;
+        return $order->fresh();
     }
 
 

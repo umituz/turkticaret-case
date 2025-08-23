@@ -2,9 +2,10 @@
 
 namespace App\Http\Resources\Order;
 
-use App\Http\Resources\Base\BaseResourceCollection;
 
-class OrderStatusHistoryCollection extends BaseResourceCollection
+use App\Http\Resources\Base\BaseCollection;
+
+class OrderStatusHistoryCollection extends BaseCollection
 {
-    public string $collects = OrderStatusHistoryResource::class;
+    public $collects = OrderStatusHistoryResource::class;
 }

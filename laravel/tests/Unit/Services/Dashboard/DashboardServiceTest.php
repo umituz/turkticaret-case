@@ -186,13 +186,13 @@ class DashboardServiceTest extends BaseServiceUnitTest
         $productUpdate = $this->createMockProduct();
 
         $this->dashboardRepository->shouldReceive('getRecentOrderActivities')
-            ->andReturn(collect([$orderHistory]));
+            ->andReturn(new \Illuminate\Database\Eloquent\Collection([$orderHistory]));
 
         $this->dashboardRepository->shouldReceive('getRecentUserRegistrations')
-            ->andReturn(collect([$userRegistration]));
+            ->andReturn(new \Illuminate\Database\Eloquent\Collection([$userRegistration]));
 
         $this->dashboardRepository->shouldReceive('getRecentProductUpdates')
-            ->andReturn(collect([$productUpdate]));
+            ->andReturn(new \Illuminate\Database\Eloquent\Collection([$productUpdate]));
 
         // Mock other required methods
         $this->mockStatsCalculation();
@@ -218,13 +218,13 @@ class DashboardServiceTest extends BaseServiceUnitTest
         $orderHistory = $this->createMockOrderHistory('pending', null);
 
         $this->dashboardRepository->shouldReceive('getRecentOrderActivities')
-            ->andReturn(collect([$orderHistory]));
+            ->andReturn(new \Illuminate\Database\Eloquent\Collection([$orderHistory]));
 
         $this->dashboardRepository->shouldReceive('getRecentUserRegistrations')
-            ->andReturn(collect([]));
+            ->andReturn(new \Illuminate\Database\Eloquent\Collection([]));
 
         $this->dashboardRepository->shouldReceive('getRecentProductUpdates')
-            ->andReturn(collect([]));
+            ->andReturn(new \Illuminate\Database\Eloquent\Collection([]));
 
         $this->mockStatsCalculation();
         $this->mockSystemStatusMethods();
@@ -244,13 +244,13 @@ class DashboardServiceTest extends BaseServiceUnitTest
         $orderHistory = $this->createMockOrderHistory('confirmed', 'pending');
 
         $this->dashboardRepository->shouldReceive('getRecentOrderActivities')
-            ->andReturn(collect([$orderHistory]));
+            ->andReturn(new \Illuminate\Database\Eloquent\Collection([$orderHistory]));
 
         $this->dashboardRepository->shouldReceive('getRecentUserRegistrations')
-            ->andReturn(collect([]));
+            ->andReturn(new \Illuminate\Database\Eloquent\Collection([]));
 
         $this->dashboardRepository->shouldReceive('getRecentProductUpdates')
-            ->andReturn(collect([]));
+            ->andReturn(new \Illuminate\Database\Eloquent\Collection([]));
 
         $this->mockStatsCalculation();
         $this->mockSystemStatusMethods();
@@ -270,13 +270,13 @@ class DashboardServiceTest extends BaseServiceUnitTest
         $orderHistory = $this->createMockOrderHistory('cancelled', 'pending');
 
         $this->dashboardRepository->shouldReceive('getRecentOrderActivities')
-            ->andReturn(collect([$orderHistory]));
+            ->andReturn(new \Illuminate\Database\Eloquent\Collection([$orderHistory]));
 
         $this->dashboardRepository->shouldReceive('getRecentUserRegistrations')
-            ->andReturn(collect([]));
+            ->andReturn(new \Illuminate\Database\Eloquent\Collection([]));
 
         $this->dashboardRepository->shouldReceive('getRecentProductUpdates')
-            ->andReturn(collect([]));
+            ->andReturn(new \Illuminate\Database\Eloquent\Collection([]));
 
         $this->mockStatsCalculation();
         $this->mockSystemStatusMethods();
@@ -396,9 +396,9 @@ class DashboardServiceTest extends BaseServiceUnitTest
     public function it_limits_recent_activity_to_ten_items(): void
     {
         // Create 15 mock activities (5 each type)
-        $orderHistories = collect(range(1, 5))->map(fn($i) => $this->createMockOrderHistory('pending', null, "ORD-{$i}"));
-        $userRegistrations = collect(range(1, 5))->map(fn($i) => $this->createMockUser("User {$i}"));
-        $productUpdates = collect(range(1, 5))->map(fn($i) => $this->createMockProduct("Product {$i}"));
+        $orderHistories = new \Illuminate\Database\Eloquent\Collection(collect(range(1, 5))->map(fn($i) => $this->createMockOrderHistory('pending', null, "ORD-{$i}"))->toArray());
+        $userRegistrations = new \Illuminate\Database\Eloquent\Collection(collect(range(1, 5))->map(fn($i) => $this->createMockUser("User {$i}"))->toArray());
+        $productUpdates = new \Illuminate\Database\Eloquent\Collection(collect(range(1, 5))->map(fn($i) => $this->createMockProduct("Product {$i}"))->toArray());
 
         $this->dashboardRepository->shouldReceive('getRecentOrderActivities')
             ->andReturn($orderHistories);
@@ -445,13 +445,13 @@ class DashboardServiceTest extends BaseServiceUnitTest
     private function mockRecentActivityMethods(): void
     {
         $this->dashboardRepository->shouldReceive('getRecentOrderActivities')
-            ->andReturn(collect([]));
+            ->andReturn(new \Illuminate\Database\Eloquent\Collection([]));
 
         $this->dashboardRepository->shouldReceive('getRecentUserRegistrations')
-            ->andReturn(collect([]));
+            ->andReturn(new \Illuminate\Database\Eloquent\Collection([]));
 
         $this->dashboardRepository->shouldReceive('getRecentProductUpdates')
-            ->andReturn(collect([]));
+            ->andReturn(new \Illuminate\Database\Eloquent\Collection([]));
     }
 
     private function mockSystemStatusMethods(): void
@@ -463,21 +463,27 @@ class DashboardServiceTest extends BaseServiceUnitTest
     private function createMockOrderHistory(string $newStatus = 'pending', ?string $oldStatus = null, string $orderNumber = 'ORD-123'): MockInterface
     {
         $orderHistory = Mockery::mock(OrderStatusHistory::class);
+        $orderHistory->shouldReceive('setAttribute')->andReturnSelf();
+        $orderHistory->shouldReceive('offsetExists')->andReturn(true);
+        $orderHistory->shouldReceive('toArray')->andReturn([]);
         $orderHistory->uuid = 'test-history-uuid';
         $orderHistory->created_at = Carbon::now()->subMinutes(10);
 
         // Mock the order relationship
         $order = Mockery::mock();
+        $order->shouldReceive('setAttribute')->andReturnSelf();
         $order->order_number = $orderNumber;
         $orderHistory->shouldReceive('getAttribute')->with('order')->andReturn($order);
 
         // Mock the user relationship through order
         $user = Mockery::mock();
+        $user->shouldReceive('setAttribute')->andReturnSelf();
         $user->name = 'Test User';
         $order->shouldReceive('getAttribute')->with('user')->andReturn($user);
 
         // Mock the changedBy relationship
         $changedBy = Mockery::mock();
+        $changedBy->shouldReceive('setAttribute')->andReturnSelf();
         $changedBy->name = 'Admin User';
         $orderHistory->shouldReceive('getAttribute')->with('changedBy')->andReturn($changedBy);
 
@@ -499,6 +505,9 @@ class DashboardServiceTest extends BaseServiceUnitTest
     private function createMockUser(string $name = 'Test User'): MockInterface
     {
         $user = Mockery::mock(User::class);
+        $user->shouldReceive('setAttribute')->andReturnSelf();
+        $user->shouldReceive('offsetExists')->andReturn(true);
+        $user->shouldReceive('toArray')->andReturn([]);
         $user->uuid = 'test-user-uuid';
         $user->name = $name;
         $user->created_at = Carbon::now()->subMinutes(5);
@@ -509,6 +518,9 @@ class DashboardServiceTest extends BaseServiceUnitTest
     private function createMockProduct(string $name = 'Test Product'): MockInterface
     {
         $product = Mockery::mock(Product::class);
+        $product->shouldReceive('setAttribute')->andReturnSelf();
+        $product->shouldReceive('offsetExists')->andReturn(true);
+        $product->shouldReceive('toArray')->andReturn([]);
         $product->uuid = 'test-product-uuid';
         $product->name = $name;
         $product->updated_at = Carbon::now()->subMinutes(15);

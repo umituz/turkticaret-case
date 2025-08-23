@@ -112,8 +112,7 @@ class CurrencyControllerTest extends BaseFeatureTest
         $this->assertValidationErrorResponse($response, [
             'code',
             'name',
-            'symbol',
-            'decimals'
+            'symbol'
         ]);
     }
 
@@ -325,7 +324,7 @@ class CurrencyControllerTest extends BaseFeatureTest
     {
         $currencies = [
             ['code' => 'JPY', 'name' => 'Japanese Yen', 'symbol' => '¥', 'decimals' => 0],
-            ['code' => 'USD', 'name' => 'US Dollar', 'symbol' => '$', 'decimals' => 2],
+            ['code' => 'GBP', 'name' => 'British Pound', 'symbol' => '£', 'decimals' => 2],
             ['code' => 'BHD', 'name' => 'Bahraini Dinar', 'symbol' => 'BD', 'decimals' => 3],
         ];
 

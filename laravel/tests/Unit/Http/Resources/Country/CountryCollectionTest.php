@@ -180,11 +180,11 @@ class CountryCollectionTest extends BaseResourceUnitTest
         ];
         $country = $this->createMockModel($countryData);
         
-        // Use simple array for testing instead of paginator to avoid ArrayAccess issues
-        $simpleData = [$country];
-        $simpleCollection = new CountryCollection($simpleData);
+        // Use paginated collection to work with original BaseCollection code
+        $paginator = $this->createMockPaginatedCollection([$country], 1);
+        $collection = new CountryCollection($paginator);
         $request = new Request();
-        $result = $simpleCollection->toArray($request);
+        $result = $collection->toArray($request);
 
         // Assert
         $this->assertIsArray($result);
@@ -226,10 +226,11 @@ class CountryCollectionTest extends BaseResourceUnitTest
 
         $countries = array_map(fn($data) => $this->createMockModel($data), $countriesData);
         
-        // Use simple array for testing instead of paginator to avoid ArrayAccess issues
-        $simpleCollection = new CountryCollection($countries);
+        // Use paginated collection to work with original BaseCollection code
+        $paginator = $this->createMockPaginatedCollection($countries, count($countries));
+        $collection = new CountryCollection($paginator);
         $request = new Request();
-        $result = $simpleCollection->toArray($request);
+        $result = $collection->toArray($request);
 
         // Assert
         $this->assertIsArray($result);
@@ -248,8 +249,9 @@ class CountryCollectionTest extends BaseResourceUnitTest
             $this->createMockModel(['uuid' => 'country-1', 'code' => 'US', 'name' => 'United States', 'is_active' => true]),
         ];
         
-        // Use simple array for testing
-        $collection = new CountryCollection($countries);
+        // Use paginated collection to work with original BaseCollection code
+        $paginator = $this->createMockPaginatedCollection($countries, 1);
+        $collection = new CountryCollection($paginator);
         $request = new Request();
 
         // Act & Assert - Just verify collection can be created and returns array
@@ -307,8 +309,9 @@ class CountryCollectionTest extends BaseResourceUnitTest
             ]),
         ];
         
-        // Use simple array for testing
-        $collection = new CountryCollection($filteredCountries);
+        // Use paginated collection to work with original BaseCollection code
+        $paginator = $this->createMockPaginatedCollection($filteredCountries, 1);
+        $collection = new CountryCollection($paginator);
         $request = new Request();
 
         // Act
@@ -340,10 +343,11 @@ class CountryCollectionTest extends BaseResourceUnitTest
 
         $countries = array_map(fn($data) => $this->createMockModel($data), $countriesData);
         
-        // Use simple array for testing
-        $simpleCollection = new CountryCollection($countries);
+        // Use paginated collection to work with original BaseCollection code
+        $paginator = $this->createMockPaginatedCollection($countries, 1);
+        $collection = new CountryCollection($paginator);
         $request = new Request();
-        $result = $simpleCollection->toArray($request);
+        $result = $collection->toArray($request);
 
         // Assert
         $this->assertIsArray($result);
@@ -376,10 +380,11 @@ class CountryCollectionTest extends BaseResourceUnitTest
 
         $countries = array_map(fn($data) => $this->createMockModel($data), $countriesData);
         
-        // Use simple array for testing
-        $simpleCollection = new CountryCollection($countries);
+        // Use paginated collection to work with original BaseCollection code
+        $paginator = $this->createMockPaginatedCollection($countries, 2);
+        $collection = new CountryCollection($paginator);
         $request = new Request();
-        $result = $simpleCollection->toArray($request);
+        $result = $collection->toArray($request);
 
         // Assert
         $this->assertIsArray($result);

@@ -211,24 +211,22 @@ trait ResourceMocksTrait
         $total = $total ?? count($items);
         $perPage = 15;
         $currentPage = 1;
+        $lastPage = (int) ceil($total / $perPage);
         
-        // Use real LengthAwarePaginator - this is the most reliable solution
-        // Create a real paginator with the items we want to test
+        // Create a real LengthAwarePaginator with proper path and options
         $paginator = new \Illuminate\Pagination\LengthAwarePaginator(
             collect($items), // items for current page
             $total,          // total items
-            $perPage,       // items per page
-            $currentPage,   // current page
+            $perPage,        // items per page
+            $currentPage,    // current page
             [
-                'path' => '/test',
+                'path' => \Illuminate\Pagination\Paginator::resolveCurrentPath(),
                 'pageName' => 'page',
             ]
         );
         
-        // Add missing methods that Resource Collections expect
-        if (method_exists($paginator, 'total')) {
-            // LengthAwarePaginator already has total() method
-        }
+        // Set proper URLs for pagination
+        $paginator->setPath('/test');
         
         return $paginator;
     }
