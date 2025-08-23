@@ -17,7 +17,7 @@ enum SettingKeyEnum: string
     case APP_NAME = 'app_name';
     case APP_URL = 'app_url';
     case REGISTRATION_ENABLED = 'registration_enabled';
-    
+
     // UI Settings
     case ITEMS_PER_PAGE = 'items_per_page';
     case THEME = 'theme';
@@ -68,18 +68,18 @@ enum SettingKeyEnum: string
     {
         return match ($this) {
             self::DEFAULT_CURRENCY, self::DEFAULT_LANGUAGE, self::DEFAULT_COUNTRY => 'string',
-            self::TAX_ENABLED, self::SHIPPING_ENABLED, self::MAINTENANCE_MODE, 
-            self::REGISTRATION_ENABLED, self::EMAIL_NOTIFICATIONS_ENABLED, 
+            self::TAX_ENABLED, self::SHIPPING_ENABLED, self::MAINTENANCE_MODE,
+            self::REGISTRATION_ENABLED, self::EMAIL_NOTIFICATIONS_ENABLED,
             self::SMS_NOTIFICATIONS_ENABLED => 'boolean',
             self::ITEMS_PER_PAGE => 'integer',
-            self::DEFAULT_TIMEZONE, self::APP_NAME, self::APP_URL, 
+            self::DEFAULT_TIMEZONE, self::APP_NAME, self::APP_URL,
             self::THEME, self::LOGO_URL => 'string',
         };
     }
 
     public function getDefaultValue(): mixed
     {
-        return match ($this) {
+        $rawValue = match ($this) {
             self::DEFAULT_CURRENCY => 'TRY',
             self::DEFAULT_LANGUAGE => 'tr',
             self::DEFAULT_COUNTRY => 'TR',
@@ -96,6 +96,8 @@ enum SettingKeyEnum: string
             self::EMAIL_NOTIFICATIONS_ENABLED => true,
             self::SMS_NOTIFICATIONS_ENABLED => false,
         };
+
+        return ['value' => $rawValue];
     }
 
     public function getDescription(): string

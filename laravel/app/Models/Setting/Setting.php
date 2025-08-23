@@ -17,6 +17,7 @@ class Setting extends BaseUuidModel
     ];
 
     protected $casts = [
+        'value' => 'array',
         'is_active' => 'boolean',
         'is_editable' => 'boolean',
     ];
