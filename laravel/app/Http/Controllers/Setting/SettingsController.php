@@ -25,4 +25,11 @@ class SettingsController extends BaseController
 
         return $this->ok(null, 'Setting updated successfully.');
     }
+
+    public function status(): JsonResponse
+    {
+        $status = $this->settingsService->getSystemStatus();
+
+        return $this->ok($status, 'System status retrieved successfully.');
+    }
 }

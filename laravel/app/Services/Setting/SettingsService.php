@@ -28,4 +28,16 @@ class SettingsService
 
         return $this->settingsRepository->updateByKey($settingKey, $updateDTO->value);
     }
+
+    public function getSystemStatus(): array
+    {
+        $settings = $this->getAllActiveSettings();
+        
+        return [
+            'maintenance_mode' => $settings['maintenance_mode'] ?? false,
+            'registration_enabled' => $settings['registration_enabled'] ?? true,
+            'email_notifications' => $settings['email_notifications_enabled'] ?? true,
+            'sms_notifications' => $settings['sms_notifications_enabled'] ?? false,
+        ];
+    }
 }

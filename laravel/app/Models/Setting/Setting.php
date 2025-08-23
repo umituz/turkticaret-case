@@ -17,7 +17,6 @@ class Setting extends BaseUuidModel
     ];
 
     protected $casts = [
-        'value' => 'array',
         'is_active' => 'boolean',
         'is_editable' => 'boolean',
     ];
@@ -48,12 +47,19 @@ class Setting extends BaseUuidModel
 
     public function getTypedValueAttribute()
     {
+        $value = is_array($this->value) ? ($this->value['value'] ?? $this->value) : $this->value;
+        
+        // Handle JSON-encoded strings stored in database
+        if (is_string($value) && $this->type === 'string' && str_starts_with($value, '"') && str_ends_with($value, '"')) {
+            $value = json_decode($value);
+        }
+        
         return match ($this->type) {
-            'boolean' => (bool) $this->value['value'],
-            'integer' => (int) $this->value['value'],
-            'string' => (string) $this->value['value'],
-            'json' => $this->value,
-            default => $this->value['value']
+            'boolean' => (bool) $value,
+            'integer' => (int) $value,
+            'string' => (string) $value,
+            'json' => is_array($this->value) ? $this->value : json_decode($value, true),
+            default => $value
         };
     }
 }

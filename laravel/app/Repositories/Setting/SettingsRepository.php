@@ -4,7 +4,7 @@ namespace App\Repositories\Setting;
 
 use App\Enums\Setting\SettingKeyEnum;
 use App\Models\Setting\Setting;
-use App\Repositories\BaseRepository;
+use App\Repositories\Base\BaseRepository;
 use Illuminate\Database\Eloquent\Collection;
 
 class SettingsRepository extends BaseRepository implements SettingsRepositoryInterface
