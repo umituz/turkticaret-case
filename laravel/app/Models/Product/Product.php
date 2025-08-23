@@ -25,6 +25,7 @@ class Product extends BaseUuidModel implements HasMedia
         'price',
         'stock_quantity',
         'is_active',
+        'is_featured',
         'category_uuid',
     ];
 
@@ -35,6 +36,7 @@ class Product extends BaseUuidModel implements HasMedia
         'price' => 'integer',
         'stock_quantity' => 'integer',
         'is_active' => 'boolean',
+        'is_featured' => 'boolean',
     ];
 
     public function category(): BelongsTo

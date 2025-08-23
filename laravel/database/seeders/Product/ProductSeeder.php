@@ -24,6 +24,7 @@ class ProductSeeder extends Seeder
                     'price' => 99900,
                     'stock_quantity' => 25,
                     'is_active' => true,
+                    'is_featured' => true,
                     'image_url' => 'https://picsum.photos/800/600?random=iphone15promax',
                 ],
                 [
@@ -33,6 +34,7 @@ class ProductSeeder extends Seeder
                     'price' => 89900,
                     'stock_quantity' => 12,
                     'is_active' => true,
+                    'is_featured' => true,
                     'image_url' => 'https://picsum.photos/800/600?random=macbookprom3',
                 ],
                 [
@@ -53,6 +55,7 @@ class ProductSeeder extends Seeder
                     'price' => 9900,
                     'stock_quantity' => 45,
                     'is_active' => true,
+                    'is_featured' => true,
                     'image_url' => 'https://picsum.photos/800/600?random=nikeairmax270',
                 ],
             ],

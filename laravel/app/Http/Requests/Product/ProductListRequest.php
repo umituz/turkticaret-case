@@ -15,7 +15,8 @@ class ProductListRequest extends FormRequest
     {
         return [
             'page' => 'nullable|integer|min:1',
-            'limit' => 'nullable|integer|min:1|max:100',
+            'per_page' => 'nullable|integer|min:1|max:100',
+            'limit' => 'nullable|integer|min:1|max:100', // Backward compatibility
             'category_uuid' => 'nullable|uuid|exists:categories,uuid',
             'min_price' => 'nullable|numeric|min:0',
             'max_price' => 'nullable|numeric|min:0|gte:min_price',

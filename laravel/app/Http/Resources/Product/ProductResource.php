@@ -20,6 +20,7 @@ class ProductResource extends BaseResource
             'stock_quantity' => $this->stock_quantity,
             'image_path' => $this->getFirstMediaUrl('images'),
             'is_active' => $this->is_active,
+            'is_featured' => $this->is_featured,
             'category_uuid' => $this->category_uuid,
             'category' => new CategoryResource($this->whenLoaded('category')),
             'created_at' => $this->created_at?->toIso8601String(),

@@ -25,6 +25,7 @@ class ProductFactory extends Factory
             'price' => rand(1000, 50000),
             'stock_quantity' => rand(0, 100),
             'is_active' => true,
+            'is_featured' => $this->faker->boolean(20), // 20% chance of being featured
             'category_uuid' => Category::factory(),
         ];
     }

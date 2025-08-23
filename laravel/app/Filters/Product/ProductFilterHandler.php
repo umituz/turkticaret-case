@@ -2,6 +2,7 @@
 
 namespace App\Filters\Product;
 
+use App\Enums\ApiEnums;
 use App\Filters\Base\FilterAction;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -17,8 +18,8 @@ class ProductFilterHandler
 
         // Handle pagination
         $page = (int) ($data['page'] ?? 1);
-        $limit = (int) ($data['limit'] ?? 20);
+        $perPage = (int) ($data['per_page'] ?? $data['limit'] ?? ApiEnums::DEFAULT_PAGINATION->value); // Support both per_page and limit for backward compatibility
         
-        return $result->paginate($limit, ['*'], 'page', $page);
+        return $result->paginate($perPage, ['*'], 'page', $page);
     }
 }
