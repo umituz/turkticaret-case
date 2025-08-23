@@ -19,6 +19,7 @@ class CountryUpdateRequest extends FormRequest
         return [
             'code' => ['sometimes', 'string', 'size:2', Rule::unique('countries', 'code')->ignore($country->uuid, 'uuid')],
             'name' => 'sometimes|string|max:255',
+            'locale' => 'sometimes|string|max:10',
             'currency_uuid' => 'sometimes|nullable|string|exists:currencies,uuid',
             'is_active' => 'sometimes|boolean',
         ];

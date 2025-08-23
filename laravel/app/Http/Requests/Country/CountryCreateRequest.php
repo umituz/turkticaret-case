@@ -16,6 +16,7 @@ class CountryCreateRequest extends FormRequest
         return [
             'code' => 'required|string|size:2|unique:countries,code',
             'name' => 'required|string|max:255',
+            'locale' => 'required|string|max:10',
             'currency_uuid' => 'nullable|string|exists:currencies,uuid',
             'is_active' => 'nullable|boolean',
         ];

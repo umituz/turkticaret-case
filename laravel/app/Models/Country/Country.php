@@ -13,6 +13,7 @@ class Country extends BaseUuidModel
     protected $fillable = [
         'code',
         'name',
+        'locale',
         'currency_uuid',
         'is_active',
     ];
