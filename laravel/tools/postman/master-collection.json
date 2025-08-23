@@ -11,7 +11,8 @@
       "description": "Authentication endpoints for login and registration",
       "item": [
         { "$ref": "collections/authentication/authentication.json#/item/0" },
-        { "$ref": "collections/authentication/authentication.json#/item/1" }
+        { "$ref": "collections/authentication/authentication.json#/item/1" },
+        { "$ref": "collections/authentication/authentication.json#/item/2" }
       ]
     },
     {
@@ -20,6 +21,17 @@
       "item": [
         { "$ref": "collections/profile/profile.json#/item/0" },
         { "$ref": "collections/profile/profile.json#/item/1" }
+      ]
+    },
+    {
+      "name": "User Settings",
+      "description": "User settings management endpoints",
+      "item": [
+        { "$ref": "collections/user-settings/user-settings.json#/item/0" },
+        { "$ref": "collections/user-settings/user-settings.json#/item/1" },
+        { "$ref": "collections/user-settings/user-settings.json#/item/2" },
+        { "$ref": "collections/user-settings/user-settings.json#/item/3" },
+        { "$ref": "collections/user-settings/user-settings.json#/item/4" }
       ]
     },
     {
@@ -64,14 +76,33 @@
       ]
     },
     {
-      "name": "Orders",
-      "description": "Order management endpoints for creating and viewing orders",
+      "name": "Order Management",
+      "description": "Complete order management system including order creation, viewing, and status management",
       "item": [
-        { "$ref": "collections/orders/orders.json#/item/0" },
-        { "$ref": "collections/orders/orders.json#/item/1" },
-        { "$ref": "collections/orders/orders.json#/item/2" },
-        { "$ref": "collections/orders/orders.json#/item/3" },
-        { "$ref": "collections/orders/orders.json#/item/4" }
+        {
+          "name": "Orders",
+          "description": "Order management endpoints for creating and viewing orders",
+          "item": [
+            { "$ref": "collections/orders/orders.json#/item/0" },
+            { "$ref": "collections/orders/orders.json#/item/1" },
+            { "$ref": "collections/orders/orders.json#/item/2" },
+            { "$ref": "collections/orders/orders.json#/item/3" },
+            { "$ref": "collections/orders/orders.json#/item/4" }
+          ]
+        },
+        {
+          "name": "Order Statuses",
+          "description": "Order status management endpoints for updating order statuses and viewing available transitions",
+          "item": [
+            { "$ref": "collections/orders/order-statuses.json#/item/0" },
+            { "$ref": "collections/orders/order-statuses.json#/item/1" },
+            { "$ref": "collections/orders/order-statuses.json#/item/2" },
+            { "$ref": "collections/orders/order-statuses.json#/item/3" },
+            { "$ref": "collections/orders/order-statuses.json#/item/4" },
+            { "$ref": "collections/orders/order-statuses.json#/item/5" },
+            { "$ref": "collections/orders/order-statuses.json#/item/6" }
+          ]
+        }
       ]
     },
     {
@@ -118,7 +149,7 @@
     },
     {
       "name": "Health Check",
-      "description": "Health check and system status endpoints", 
+      "description": "Health check and system status endpoints",
       "item": [
         { "$ref": "collections/health/health.json#/item/0" }
       ]
@@ -141,7 +172,7 @@
       "type": "string"
     },
     {
-      "key": "category_uuid", 
+      "key": "category_uuid",
       "value": "",
       "type": "string"
     },
@@ -152,7 +183,7 @@
     },
     {
       "key": "page",
-      "value": "1", 
+      "value": "1",
       "type": "string"
     },
     {

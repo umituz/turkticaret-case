@@ -10,7 +10,7 @@
       "request": {
         "method": "GET",
         "url": {
-          "raw": "{{base_url}}/countries?per_page=25&page=1&sort_by=created_at&sort_direction=desc",
+          "raw": "{{base_url}}/countries?per_page={{page}}{{per_page}}&page={{page}}&sort_by=created_at&sort_direction=desc",
           "host": ["{{base_url}}"],
           "path": ["countries"],
           "query": [
@@ -24,7 +24,18 @@
         },
         "description": "Retrieve paginated list of countries with filtering options"
       },
-      "response": []
+      "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/countries"
+          },
+          "status": "OK",
+          "code": 200,
+          "body": "{\n    \"success\": true,\n    \"message\": \"Countries retrieved successfully\",\n    \"data\": [\n        {\n            \"uuid\": \"0198d5bf-f001-72d1-8c56-b4824c7f7680\",\n            \"name\": \"Turkey\",\n            \"code\": \"TR\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        },\n        {\n            \"uuid\": \"0198d5bf-f002-72d1-8c56-b4824c7f7681\",\n            \"name\": \"United States\",\n            \"code\": \"US\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        }\n    ],\n    \"errors\": []\n}"
+        }
+      ]
     },
     {
       "name": "Create Country",
@@ -42,7 +53,18 @@
         },
         "description": "Create a new country"
       },
-      "response": []
+      "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/countries"
+          },
+          "status": "OK",
+          "code": 200,
+          "body": "{\n    \"success\": true,\n    \"message\": \"Countries retrieved successfully\",\n    \"data\": [\n        {\n            \"uuid\": \"0198d5bf-f001-72d1-8c56-b4824c7f7680\",\n            \"name\": \"Turkey\",\n            \"code\": \"TR\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        },\n        {\n            \"uuid\": \"0198d5bf-f002-72d1-8c56-b4824c7f7681\",\n            \"name\": \"United States\",\n            \"code\": \"US\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        }\n    ],\n    \"errors\": []\n}"
+        }
+      ]
     },
     {
       "name": "Get Country",
@@ -55,7 +77,18 @@
         },
         "description": "Get a specific country by ID"
       },
-      "response": []
+      "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/countries"
+          },
+          "status": "OK",
+          "code": 200,
+          "body": "{\n    \"success\": true,\n    \"message\": \"Countries retrieved successfully\",\n    \"data\": [\n        {\n            \"uuid\": \"0198d5bf-f001-72d1-8c56-b4824c7f7680\",\n            \"name\": \"Turkey\",\n            \"code\": \"TR\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        },\n        {\n            \"uuid\": \"0198d5bf-f002-72d1-8c56-b4824c7f7681\",\n            \"name\": \"United States\",\n            \"code\": \"US\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        }\n    ],\n    \"errors\": []\n}"
+        }
+      ]
     },
     {
       "name": "Update Country",
@@ -73,7 +106,18 @@
         },
         "description": "Update a specific country"
       },
-      "response": []
+      "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/countries"
+          },
+          "status": "OK",
+          "code": 200,
+          "body": "{\n    \"success\": true,\n    \"message\": \"Countries retrieved successfully\",\n    \"data\": [\n        {\n            \"uuid\": \"0198d5bf-f001-72d1-8c56-b4824c7f7680\",\n            \"name\": \"Turkey\",\n            \"code\": \"TR\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        },\n        {\n            \"uuid\": \"0198d5bf-f002-72d1-8c56-b4824c7f7681\",\n            \"name\": \"United States\",\n            \"code\": \"US\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        }\n    ],\n    \"errors\": []\n}"
+        }
+      ]
     },
     {
       "name": "Delete Country (Soft Delete)",
@@ -86,7 +130,18 @@
         },
         "description": "Soft delete a specific country"
       },
-      "response": []
+      "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/countries"
+          },
+          "status": "OK",
+          "code": 200,
+          "body": "{\n    \"success\": true,\n    \"message\": \"Countries retrieved successfully\",\n    \"data\": [\n        {\n            \"uuid\": \"0198d5bf-f001-72d1-8c56-b4824c7f7680\",\n            \"name\": \"Turkey\",\n            \"code\": \"TR\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        },\n        {\n            \"uuid\": \"0198d5bf-f002-72d1-8c56-b4824c7f7681\",\n            \"name\": \"United States\",\n            \"code\": \"US\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        }\n    ],\n    \"errors\": []\n}"
+        }
+      ]
     },
     {
       "name": "Restore Country",
@@ -104,7 +159,18 @@
         },
         "description": "Restore a soft deleted country"
       },
-      "response": []
+      "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/countries"
+          },
+          "status": "OK",
+          "code": 200,
+          "body": "{\n    \"success\": true,\n    \"message\": \"Countries retrieved successfully\",\n    \"data\": [\n        {\n            \"uuid\": \"0198d5bf-f001-72d1-8c56-b4824c7f7680\",\n            \"name\": \"Turkey\",\n            \"code\": \"TR\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        },\n        {\n            \"uuid\": \"0198d5bf-f002-72d1-8c56-b4824c7f7681\",\n            \"name\": \"United States\",\n            \"code\": \"US\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        }\n    ],\n    \"errors\": []\n}"
+        }
+      ]
     },
     {
       "name": "Force Delete Country",
@@ -117,7 +183,18 @@
         },
         "description": "Permanently delete a country"
       },
-      "response": []
+      "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/countries"
+          },
+          "status": "OK",
+          "code": 200,
+          "body": "{\n    \"success\": true,\n    \"message\": \"Countries retrieved successfully\",\n    \"data\": [\n        {\n            \"uuid\": \"0198d5bf-f001-72d1-8c56-b4824c7f7680\",\n            \"name\": \"Turkey\",\n            \"code\": \"TR\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        },\n        {\n            \"uuid\": \"0198d5bf-f002-72d1-8c56-b4824c7f7681\",\n            \"name\": \"United States\",\n            \"code\": \"US\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        }\n    ],\n    \"errors\": []\n}"
+        }
+      ]
     },
     {
       "name": "Filters",
@@ -128,7 +205,7 @@
           "request": {
             "method": "GET",
             "url": {
-              "raw": "{{base_url}}/countries?active_only=true&per_page={{per_page}}&page={{page}}",
+              "raw": "{{base_url}}/countries?active_only=true&per_page={{page}}{{per_page}}{{per_page}}&page={{page}}",
               "host": ["{{base_url}}"],
               "path": ["countries"],
               "query": [
@@ -139,14 +216,25 @@
             },
             "description": "Get all active countries"
           },
-          "response": []
+          "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/countries"
+          },
+          "status": "OK",
+          "code": 200,
+          "body": "{\n    \"success\": true,\n    \"message\": \"Countries retrieved successfully\",\n    \"data\": [\n        {\n            \"uuid\": \"0198d5bf-f001-72d1-8c56-b4824c7f7680\",\n            \"name\": \"Turkey\",\n            \"code\": \"TR\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        },\n        {\n            \"uuid\": \"0198d5bf-f002-72d1-8c56-b4824c7f7681\",\n            \"name\": \"United States\",\n            \"code\": \"US\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        }\n    ],\n    \"errors\": []\n}"
+        }
+      ]
         },
         {
           "name": "Search Countries",
           "request": {
             "method": "GET",
             "url": {
-              "raw": "{{base_url}}/countries?search={{search}}&per_page={{per_page}}&page={{page}}",
+              "raw": "{{base_url}}/countries?search={{search}}&per_page={{page}}{{per_page}}{{per_page}}&page={{page}}",
               "host": ["{{base_url}}"],
               "path": ["countries"],
               "query": [
@@ -157,14 +245,25 @@
             },
             "description": "Search countries by name or code"
           },
-          "response": []
+          "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/countries"
+          },
+          "status": "OK",
+          "code": 200,
+          "body": "{\n    \"success\": true,\n    \"message\": \"Countries retrieved successfully\",\n    \"data\": [\n        {\n            \"uuid\": \"0198d5bf-f001-72d1-8c56-b4824c7f7680\",\n            \"name\": \"Turkey\",\n            \"code\": \"TR\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        },\n        {\n            \"uuid\": \"0198d5bf-f002-72d1-8c56-b4824c7f7681\",\n            \"name\": \"United States\",\n            \"code\": \"US\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        }\n    ],\n    \"errors\": []\n}"
+        }
+      ]
         },
         {
           "name": "Sort by Name ASC",
           "request": {
             "method": "GET",
             "url": {
-              "raw": "{{base_url}}/countries?sort_by=name&sort_direction=asc&per_page={{per_page}}&page={{page}}",
+              "raw": "{{base_url}}/countries?sort_by=name&sort_direction=asc&per_page={{page}}{{per_page}}{{per_page}}&page={{page}}",
               "host": ["{{base_url}}"],
               "path": ["countries"],
               "query": [
@@ -176,14 +275,25 @@
             },
             "description": "Get countries sorted by name (A-Z)"
           },
-          "response": []
+          "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/countries"
+          },
+          "status": "OK",
+          "code": 200,
+          "body": "{\n    \"success\": true,\n    \"message\": \"Countries retrieved successfully\",\n    \"data\": [\n        {\n            \"uuid\": \"0198d5bf-f001-72d1-8c56-b4824c7f7680\",\n            \"name\": \"Turkey\",\n            \"code\": \"TR\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        },\n        {\n            \"uuid\": \"0198d5bf-f002-72d1-8c56-b4824c7f7681\",\n            \"name\": \"United States\",\n            \"code\": \"US\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        }\n    ],\n    \"errors\": []\n}"
+        }
+      ]
         },
         {
           "name": "Sort by Code ASC",
           "request": {
             "method": "GET",
             "url": {
-              "raw": "{{base_url}}/countries?sort_by=code&sort_direction=asc&per_page={{per_page}}&page={{page}}",
+              "raw": "{{base_url}}/countries?sort_by=code&sort_direction=asc&per_page={{page}}{{per_page}}{{per_page}}&page={{page}}",
               "host": ["{{base_url}}"],
               "path": ["countries"],
               "query": [
@@ -195,14 +305,25 @@
             },
             "description": "Get countries sorted by code (A-Z)"
           },
-          "response": []
+          "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/countries"
+          },
+          "status": "OK",
+          "code": 200,
+          "body": "{\n    \"success\": true,\n    \"message\": \"Countries retrieved successfully\",\n    \"data\": [\n        {\n            \"uuid\": \"0198d5bf-f001-72d1-8c56-b4824c7f7680\",\n            \"name\": \"Turkey\",\n            \"code\": \"TR\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        },\n        {\n            \"uuid\": \"0198d5bf-f002-72d1-8c56-b4824c7f7681\",\n            \"name\": \"United States\",\n            \"code\": \"US\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        }\n    ],\n    \"errors\": []\n}"
+        }
+      ]
         },
         {
           "name": "Sort by Created Date DESC",
           "request": {
             "method": "GET",
             "url": {
-              "raw": "{{base_url}}/countries?sort_by=created_at&sort_direction=desc&per_page={{per_page}}&page={{page}}",
+              "raw": "{{base_url}}/countries?sort_by=created_at&sort_direction=desc&per_page={{page}}{{per_page}}{{per_page}}&page={{page}}",
               "host": ["{{base_url}}"],
               "path": ["countries"],
               "query": [
@@ -214,14 +335,25 @@
             },
             "description": "Get countries sorted by creation date (newest first)"
           },
-          "response": []
+          "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/countries"
+          },
+          "status": "OK",
+          "code": 200,
+          "body": "{\n    \"success\": true,\n    \"message\": \"Countries retrieved successfully\",\n    \"data\": [\n        {\n            \"uuid\": \"0198d5bf-f001-72d1-8c56-b4824c7f7680\",\n            \"name\": \"Turkey\",\n            \"code\": \"TR\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        },\n        {\n            \"uuid\": \"0198d5bf-f002-72d1-8c56-b4824c7f7681\",\n            \"name\": \"United States\",\n            \"code\": \"US\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        }\n    ],\n    \"errors\": []\n}"
+        }
+      ]
         },
         {
           "name": "Combined Filters",
           "request": {
             "method": "GET",
             "url": {
-              "raw": "{{base_url}}/countries?active_only=true&search=turkey&sort_by=name&sort_direction=asc&per_page={{per_page}}&page={{page}}",
+              "raw": "{{base_url}}/countries?active_only=true&search=turkey&sort_by=name&sort_direction=asc&per_page={{page}}{{per_page}}{{per_page}}&page={{page}}",
               "host": ["{{base_url}}"],
               "path": ["countries"],
               "query": [
@@ -235,7 +367,18 @@
             },
             "description": "Multiple filters combined: active, search, sorted"
           },
-          "response": []
+          "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/countries"
+          },
+          "status": "OK",
+          "code": 200,
+          "body": "{\n    \"success\": true,\n    \"message\": \"Countries retrieved successfully\",\n    \"data\": [\n        {\n            \"uuid\": \"0198d5bf-f001-72d1-8c56-b4824c7f7680\",\n            \"name\": \"Turkey\",\n            \"code\": \"TR\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        },\n        {\n            \"uuid\": \"0198d5bf-f002-72d1-8c56-b4824c7f7681\",\n            \"name\": \"United States\",\n            \"code\": \"US\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        }\n    ],\n    \"errors\": []\n}"
+        }
+      ]
         }
       ]
     }

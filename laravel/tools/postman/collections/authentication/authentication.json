@@ -24,8 +24,7 @@
           "path": ["register"]
         },
         "description": "Register a new user account"
-      },
-      "response": []
+      }
     },
     {
       "name": "Login",
@@ -78,20 +77,12 @@
             "type": "text/javascript"
           }
         }
-      ],
-      "response": []
+      ]
     },
     {
       "name": "Logout",
       "request": {
         "method": "POST",
-        "header": [
-          {
-            "key": "Authorization",
-            "value": "Bearer {{token}}",
-            "type": "text"
-          }
-        ],
         "body": {
           "mode": "raw",
           "raw": "{}",
@@ -139,8 +130,7 @@
             "type": "text/javascript"
           }
         }
-      ],
-      "response": []
+      ]
     }
   ]
 }

@@ -14,9 +14,9 @@
     },
     {
       "key": "per_page",
-      "value": "25",
+      "value": "20",
       "type": "string",
-      "description": "Number of items per page for pagination"
+      "description": "Number of items per page for pagination (ApiEnums::DEFAULT_PAGINATION)"
     },
     {
       "key": "page",

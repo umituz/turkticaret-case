@@ -10,7 +10,7 @@
       "request": {
         "method": "GET",
         "url": {
-          "raw": "{{base_url}}/currencies?per_page=25&page=1&sort_by=created_at&sort_direction=desc",
+          "raw": "{{base_url}}/currencies?per_page={{per_page}}&page={{page}}&sort_by=created_at&sort_direction=desc",
           "host": ["{{base_url}}"],
           "path": ["currencies"],
           "query": [
@@ -24,7 +24,18 @@
         },
         "description": "Retrieve paginated list of currencies with filtering options"
       },
-      "response": []
+      "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/currencies"
+          },
+          "status": "OK",
+          "code": 200,
+          "body": "{\n    \"success\": true,\n    \"message\": \"Currencies retrieved successfully\",\n    \"data\": [\n        {\n            \"uuid\": \"0198d5bf-g001-72d1-8c56-b4824c7f7690\",\n            \"name\": \"Turkish Lira\",\n            \"code\": \"TRY\",\n            \"symbol\": \"₺\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        },\n        {\n            \"uuid\": \"0198d5bf-g002-72d1-8c56-b4824c7f7691\",\n            \"name\": \"US Dollar\",\n            \"code\": \"USD\",\n            \"symbol\": \"$\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        }\n    ],\n    \"errors\": []\n}"
+        }
+      ]
     },
     {
       "name": "Create Currency",
@@ -42,7 +53,18 @@
         },
         "description": "Create a new currency"
       },
-      "response": []
+      "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/currencies"
+          },
+          "status": "OK",
+          "code": 200,
+          "body": "{\n    \"success\": true,\n    \"message\": \"Currencies retrieved successfully\",\n    \"data\": [\n        {\n            \"uuid\": \"0198d5bf-g001-72d1-8c56-b4824c7f7690\",\n            \"name\": \"Turkish Lira\",\n            \"code\": \"TRY\",\n            \"symbol\": \"₺\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        },\n        {\n            \"uuid\": \"0198d5bf-g002-72d1-8c56-b4824c7f7691\",\n            \"name\": \"US Dollar\",\n            \"code\": \"USD\",\n            \"symbol\": \"$\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        }\n    ],\n    \"errors\": []\n}"
+        }
+      ]
     },
     {
       "name": "Get Currency",
@@ -55,7 +77,18 @@
         },
         "description": "Get a specific currency by ID"
       },
-      "response": []
+      "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/currencies"
+          },
+          "status": "OK",
+          "code": 200,
+          "body": "{\n    \"success\": true,\n    \"message\": \"Currencies retrieved successfully\",\n    \"data\": [\n        {\n            \"uuid\": \"0198d5bf-g001-72d1-8c56-b4824c7f7690\",\n            \"name\": \"Turkish Lira\",\n            \"code\": \"TRY\",\n            \"symbol\": \"₺\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        },\n        {\n            \"uuid\": \"0198d5bf-g002-72d1-8c56-b4824c7f7691\",\n            \"name\": \"US Dollar\",\n            \"code\": \"USD\",\n            \"symbol\": \"$\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        }\n    ],\n    \"errors\": []\n}"
+        }
+      ]
     },
     {
       "name": "Update Currency",
@@ -73,7 +106,18 @@
         },
         "description": "Update a specific currency"
       },
-      "response": []
+      "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/currencies"
+          },
+          "status": "OK",
+          "code": 200,
+          "body": "{\n    \"success\": true,\n    \"message\": \"Currencies retrieved successfully\",\n    \"data\": [\n        {\n            \"uuid\": \"0198d5bf-g001-72d1-8c56-b4824c7f7690\",\n            \"name\": \"Turkish Lira\",\n            \"code\": \"TRY\",\n            \"symbol\": \"₺\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        },\n        {\n            \"uuid\": \"0198d5bf-g002-72d1-8c56-b4824c7f7691\",\n            \"name\": \"US Dollar\",\n            \"code\": \"USD\",\n            \"symbol\": \"$\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        }\n    ],\n    \"errors\": []\n}"
+        }
+      ]
     },
     {
       "name": "Delete Currency (Soft Delete)",
@@ -86,7 +130,18 @@
         },
         "description": "Soft delete a specific currency"
       },
-      "response": []
+      "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/currencies"
+          },
+          "status": "OK",
+          "code": 200,
+          "body": "{\n    \"success\": true,\n    \"message\": \"Currencies retrieved successfully\",\n    \"data\": [\n        {\n            \"uuid\": \"0198d5bf-g001-72d1-8c56-b4824c7f7690\",\n            \"name\": \"Turkish Lira\",\n            \"code\": \"TRY\",\n            \"symbol\": \"₺\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        },\n        {\n            \"uuid\": \"0198d5bf-g002-72d1-8c56-b4824c7f7691\",\n            \"name\": \"US Dollar\",\n            \"code\": \"USD\",\n            \"symbol\": \"$\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        }\n    ],\n    \"errors\": []\n}"
+        }
+      ]
     },
     {
       "name": "Restore Currency",
@@ -104,7 +159,18 @@
         },
         "description": "Restore a soft deleted currency"
       },
-      "response": []
+      "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/currencies"
+          },
+          "status": "OK",
+          "code": 200,
+          "body": "{\n    \"success\": true,\n    \"message\": \"Currencies retrieved successfully\",\n    \"data\": [\n        {\n            \"uuid\": \"0198d5bf-g001-72d1-8c56-b4824c7f7690\",\n            \"name\": \"Turkish Lira\",\n            \"code\": \"TRY\",\n            \"symbol\": \"₺\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        },\n        {\n            \"uuid\": \"0198d5bf-g002-72d1-8c56-b4824c7f7691\",\n            \"name\": \"US Dollar\",\n            \"code\": \"USD\",\n            \"symbol\": \"$\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        }\n    ],\n    \"errors\": []\n}"
+        }
+      ]
     },
     {
       "name": "Force Delete Currency",
@@ -117,7 +183,18 @@
         },
         "description": "Permanently delete a currency"
       },
-      "response": []
+      "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/currencies"
+          },
+          "status": "OK",
+          "code": 200,
+          "body": "{\n    \"success\": true,\n    \"message\": \"Currencies retrieved successfully\",\n    \"data\": [\n        {\n            \"uuid\": \"0198d5bf-g001-72d1-8c56-b4824c7f7690\",\n            \"name\": \"Turkish Lira\",\n            \"code\": \"TRY\",\n            \"symbol\": \"₺\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        },\n        {\n            \"uuid\": \"0198d5bf-g002-72d1-8c56-b4824c7f7691\",\n            \"name\": \"US Dollar\",\n            \"code\": \"USD\",\n            \"symbol\": \"$\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        }\n    ],\n    \"errors\": []\n}"
+        }
+      ]
     },
     {
       "name": "Filters",
@@ -139,7 +216,18 @@
             },
             "description": "Get all active currencies"
           },
-          "response": []
+          "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/currencies"
+          },
+          "status": "OK",
+          "code": 200,
+          "body": "{\n    \"success\": true,\n    \"message\": \"Currencies retrieved successfully\",\n    \"data\": [\n        {\n            \"uuid\": \"0198d5bf-g001-72d1-8c56-b4824c7f7690\",\n            \"name\": \"Turkish Lira\",\n            \"code\": \"TRY\",\n            \"symbol\": \"₺\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        },\n        {\n            \"uuid\": \"0198d5bf-g002-72d1-8c56-b4824c7f7691\",\n            \"name\": \"US Dollar\",\n            \"code\": \"USD\",\n            \"symbol\": \"$\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        }\n    ],\n    \"errors\": []\n}"
+        }
+      ]
         },
         {
           "name": "Search Currencies",
@@ -157,7 +245,18 @@
             },
             "description": "Search currencies by name or code"
           },
-          "response": []
+          "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/currencies"
+          },
+          "status": "OK",
+          "code": 200,
+          "body": "{\n    \"success\": true,\n    \"message\": \"Currencies retrieved successfully\",\n    \"data\": [\n        {\n            \"uuid\": \"0198d5bf-g001-72d1-8c56-b4824c7f7690\",\n            \"name\": \"Turkish Lira\",\n            \"code\": \"TRY\",\n            \"symbol\": \"₺\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        },\n        {\n            \"uuid\": \"0198d5bf-g002-72d1-8c56-b4824c7f7691\",\n            \"name\": \"US Dollar\",\n            \"code\": \"USD\",\n            \"symbol\": \"$\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        }\n    ],\n    \"errors\": []\n}"
+        }
+      ]
         },
         {
           "name": "Sort by Name ASC",
@@ -176,7 +275,18 @@
             },
             "description": "Get currencies sorted by name (A-Z)"
           },
-          "response": []
+          "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/currencies"
+          },
+          "status": "OK",
+          "code": 200,
+          "body": "{\n    \"success\": true,\n    \"message\": \"Currencies retrieved successfully\",\n    \"data\": [\n        {\n            \"uuid\": \"0198d5bf-g001-72d1-8c56-b4824c7f7690\",\n            \"name\": \"Turkish Lira\",\n            \"code\": \"TRY\",\n            \"symbol\": \"₺\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        },\n        {\n            \"uuid\": \"0198d5bf-g002-72d1-8c56-b4824c7f7691\",\n            \"name\": \"US Dollar\",\n            \"code\": \"USD\",\n            \"symbol\": \"$\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        }\n    ],\n    \"errors\": []\n}"
+        }
+      ]
         },
         {
           "name": "Sort by Code ASC",
@@ -195,7 +305,18 @@
             },
             "description": "Get currencies sorted by code (A-Z)"
           },
-          "response": []
+          "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/currencies"
+          },
+          "status": "OK",
+          "code": 200,
+          "body": "{\n    \"success\": true,\n    \"message\": \"Currencies retrieved successfully\",\n    \"data\": [\n        {\n            \"uuid\": \"0198d5bf-g001-72d1-8c56-b4824c7f7690\",\n            \"name\": \"Turkish Lira\",\n            \"code\": \"TRY\",\n            \"symbol\": \"₺\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        },\n        {\n            \"uuid\": \"0198d5bf-g002-72d1-8c56-b4824c7f7691\",\n            \"name\": \"US Dollar\",\n            \"code\": \"USD\",\n            \"symbol\": \"$\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        }\n    ],\n    \"errors\": []\n}"
+        }
+      ]
         },
         {
           "name": "Sort by Symbol ASC",
@@ -214,7 +335,18 @@
             },
             "description": "Get currencies sorted by symbol"
           },
-          "response": []
+          "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/currencies"
+          },
+          "status": "OK",
+          "code": 200,
+          "body": "{\n    \"success\": true,\n    \"message\": \"Currencies retrieved successfully\",\n    \"data\": [\n        {\n            \"uuid\": \"0198d5bf-g001-72d1-8c56-b4824c7f7690\",\n            \"name\": \"Turkish Lira\",\n            \"code\": \"TRY\",\n            \"symbol\": \"₺\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        },\n        {\n            \"uuid\": \"0198d5bf-g002-72d1-8c56-b4824c7f7691\",\n            \"name\": \"US Dollar\",\n            \"code\": \"USD\",\n            \"symbol\": \"$\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        }\n    ],\n    \"errors\": []\n}"
+        }
+      ]
         },
         {
           "name": "Sort by Created Date DESC",
@@ -233,7 +365,18 @@
             },
             "description": "Get currencies sorted by creation date (newest first)"
           },
-          "response": []
+          "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/currencies"
+          },
+          "status": "OK",
+          "code": 200,
+          "body": "{\n    \"success\": true,\n    \"message\": \"Currencies retrieved successfully\",\n    \"data\": [\n        {\n            \"uuid\": \"0198d5bf-g001-72d1-8c56-b4824c7f7690\",\n            \"name\": \"Turkish Lira\",\n            \"code\": \"TRY\",\n            \"symbol\": \"₺\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        },\n        {\n            \"uuid\": \"0198d5bf-g002-72d1-8c56-b4824c7f7691\",\n            \"name\": \"US Dollar\",\n            \"code\": \"USD\",\n            \"symbol\": \"$\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        }\n    ],\n    \"errors\": []\n}"
+        }
+      ]
         },
         {
           "name": "Combined Filters",
@@ -254,7 +397,18 @@
             },
             "description": "Multiple filters combined: active, search, sorted"
           },
-          "response": []
+          "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/currencies"
+          },
+          "status": "OK",
+          "code": 200,
+          "body": "{\n    \"success\": true,\n    \"message\": \"Currencies retrieved successfully\",\n    \"data\": [\n        {\n            \"uuid\": \"0198d5bf-g001-72d1-8c56-b4824c7f7690\",\n            \"name\": \"Turkish Lira\",\n            \"code\": \"TRY\",\n            \"symbol\": \"₺\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        },\n        {\n            \"uuid\": \"0198d5bf-g002-72d1-8c56-b4824c7f7691\",\n            \"name\": \"US Dollar\",\n            \"code\": \"USD\",\n            \"symbol\": \"$\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        }\n    ],\n    \"errors\": []\n}"
+        }
+      ]
         }
       ]
     }

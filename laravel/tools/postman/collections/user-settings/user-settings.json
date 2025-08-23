@@ -1,0 +1,105 @@
+{
+  "info": {
+    "name": "User Settings",
+    "description": "User settings management endpoints",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Get User Settings",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{base_url}}/user/settings",
+          "host": ["{{base_url}}"],
+          "path": ["user", "settings"]
+        },
+        "description": "Get the authenticated user's settings"
+      }
+    },
+    {
+      "name": "Create/Update User Settings",
+      "request": {
+        "method": "POST",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"timezone\": \"Europe/Istanbul\",\n  \"language\": \"tr\",\n  \"notifications_enabled\": true\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/user/settings",
+          "host": ["{{base_url}}"],
+          "path": ["user", "settings"]
+        },
+        "description": "Create or update user settings"
+      }
+    },
+    {
+      "name": "Update Notification Settings",
+      "request": {
+        "method": "PUT",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"notifications_enabled\": false,\n  \"email_notifications\": true,\n  \"push_notifications\": false\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/user/settings/notifications",
+          "host": ["{{base_url}}"],
+          "path": ["user", "settings", "notifications"]
+        },
+        "description": "Update user notification preferences"
+      }
+    },
+    {
+      "name": "Update Password",
+      "request": {
+        "method": "PUT",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"current_password\": \"current123\",\n  \"password\": \"newpassword123\",\n  \"password_confirmation\": \"newpassword123\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/user/settings/password",
+          "host": ["{{base_url}}"],
+          "path": ["user", "settings", "password"]
+        },
+        "description": "Update user password"
+      }
+    },
+    {
+      "name": "Update User Preferences",
+      "request": {
+        "method": "PUT",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"theme\": \"dark\",\n  \"language\": \"en\",\n  \"timezone\": \"UTC\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/user/settings/preferences",
+          "host": ["{{base_url}}"],
+          "path": ["user", "settings", "preferences"]
+        },
+        "description": "Update user preferences"
+      }
+    }
+  ]
+}

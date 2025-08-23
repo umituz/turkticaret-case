@@ -10,7 +10,7 @@
       "request": {
         "method": "GET",
         "url": {
-          "raw": "{{base_url}}/languages?per_page=25&page=1&sort_by=created_at&sort_direction=desc",
+          "raw": "{{base_url}}/languages?per_page={{page}}{{per_page}}&page={{page}}&sort_by=created_at&sort_direction=desc",
           "host": ["{{base_url}}"],
           "path": ["languages"],
           "query": [
@@ -25,7 +25,18 @@
         },
         "description": "Retrieve paginated list of languages with filtering options"
       },
-      "response": []
+      "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/languages"
+          },
+          "status": "OK",
+          "code": 200,
+          "body": "{\n    \"success\": true,\n    \"message\": \"Languages retrieved successfully\",\n    \"data\": [\n        {\n            \"uuid\": \"0198d5bf-h001-72d1-8c56-b4824c7f7700\",\n            \"name\": \"Turkish\",\n            \"code\": \"tr\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        },\n        {\n            \"uuid\": \"0198d5bf-h002-72d1-8c56-b4824c7f7701\",\n            \"name\": \"English\",\n            \"code\": \"en\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        }\n    ],\n    \"errors\": []\n}"
+        }
+      ]
     },
     {
       "name": "Create Language",
@@ -43,7 +54,18 @@
         },
         "description": "Create a new language"
       },
-      "response": []
+      "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/languages"
+          },
+          "status": "OK",
+          "code": 200,
+          "body": "{\n    \"success\": true,\n    \"message\": \"Languages retrieved successfully\",\n    \"data\": [\n        {\n            \"uuid\": \"0198d5bf-h001-72d1-8c56-b4824c7f7700\",\n            \"name\": \"Turkish\",\n            \"code\": \"tr\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        },\n        {\n            \"uuid\": \"0198d5bf-h002-72d1-8c56-b4824c7f7701\",\n            \"name\": \"English\",\n            \"code\": \"en\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        }\n    ],\n    \"errors\": []\n}"
+        }
+      ]
     },
     {
       "name": "Get Language",
@@ -56,7 +78,18 @@
         },
         "description": "Get a specific language by ID"
       },
-      "response": []
+      "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/languages"
+          },
+          "status": "OK",
+          "code": 200,
+          "body": "{\n    \"success\": true,\n    \"message\": \"Languages retrieved successfully\",\n    \"data\": [\n        {\n            \"uuid\": \"0198d5bf-h001-72d1-8c56-b4824c7f7700\",\n            \"name\": \"Turkish\",\n            \"code\": \"tr\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        },\n        {\n            \"uuid\": \"0198d5bf-h002-72d1-8c56-b4824c7f7701\",\n            \"name\": \"English\",\n            \"code\": \"en\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        }\n    ],\n    \"errors\": []\n}"
+        }
+      ]
     },
     {
       "name": "Update Language",
@@ -74,7 +107,18 @@
         },
         "description": "Update a specific language"
       },
-      "response": []
+      "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/languages"
+          },
+          "status": "OK",
+          "code": 200,
+          "body": "{\n    \"success\": true,\n    \"message\": \"Languages retrieved successfully\",\n    \"data\": [\n        {\n            \"uuid\": \"0198d5bf-h001-72d1-8c56-b4824c7f7700\",\n            \"name\": \"Turkish\",\n            \"code\": \"tr\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        },\n        {\n            \"uuid\": \"0198d5bf-h002-72d1-8c56-b4824c7f7701\",\n            \"name\": \"English\",\n            \"code\": \"en\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        }\n    ],\n    \"errors\": []\n}"
+        }
+      ]
     },
     {
       "name": "Delete Language (Soft Delete)",
@@ -87,7 +131,18 @@
         },
         "description": "Soft delete a specific language"
       },
-      "response": []
+      "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/languages"
+          },
+          "status": "OK",
+          "code": 200,
+          "body": "{\n    \"success\": true,\n    \"message\": \"Languages retrieved successfully\",\n    \"data\": [\n        {\n            \"uuid\": \"0198d5bf-h001-72d1-8c56-b4824c7f7700\",\n            \"name\": \"Turkish\",\n            \"code\": \"tr\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        },\n        {\n            \"uuid\": \"0198d5bf-h002-72d1-8c56-b4824c7f7701\",\n            \"name\": \"English\",\n            \"code\": \"en\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        }\n    ],\n    \"errors\": []\n}"
+        }
+      ]
     },
     {
       "name": "Restore Language",
@@ -105,7 +160,18 @@
         },
         "description": "Restore a soft deleted language"
       },
-      "response": []
+      "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/languages"
+          },
+          "status": "OK",
+          "code": 200,
+          "body": "{\n    \"success\": true,\n    \"message\": \"Languages retrieved successfully\",\n    \"data\": [\n        {\n            \"uuid\": \"0198d5bf-h001-72d1-8c56-b4824c7f7700\",\n            \"name\": \"Turkish\",\n            \"code\": \"tr\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        },\n        {\n            \"uuid\": \"0198d5bf-h002-72d1-8c56-b4824c7f7701\",\n            \"name\": \"English\",\n            \"code\": \"en\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        }\n    ],\n    \"errors\": []\n}"
+        }
+      ]
     },
     {
       "name": "Force Delete Language",
@@ -118,7 +184,18 @@
         },
         "description": "Permanently delete a language"
       },
-      "response": []
+      "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/languages"
+          },
+          "status": "OK",
+          "code": 200,
+          "body": "{\n    \"success\": true,\n    \"message\": \"Languages retrieved successfully\",\n    \"data\": [\n        {\n            \"uuid\": \"0198d5bf-h001-72d1-8c56-b4824c7f7700\",\n            \"name\": \"Turkish\",\n            \"code\": \"tr\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        },\n        {\n            \"uuid\": \"0198d5bf-h002-72d1-8c56-b4824c7f7701\",\n            \"name\": \"English\",\n            \"code\": \"en\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        }\n    ],\n    \"errors\": []\n}"
+        }
+      ]
     },
     {
       "name": "Filters",
@@ -129,7 +206,7 @@
           "request": {
             "method": "GET",
             "url": {
-              "raw": "{{base_url}}/languages?active_only=true&per_page={{per_page}}&page={{page}}",
+              "raw": "{{base_url}}/languages?active_only=true&per_page={{page}}{{per_page}}{{per_page}}&page={{page}}",
               "host": ["{{base_url}}"],
               "path": ["languages"],
               "query": [
@@ -140,14 +217,25 @@
             },
             "description": "Get all active languages"
           },
-          "response": []
+          "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/languages"
+          },
+          "status": "OK",
+          "code": 200,
+          "body": "{\n    \"success\": true,\n    \"message\": \"Languages retrieved successfully\",\n    \"data\": [\n        {\n            \"uuid\": \"0198d5bf-h001-72d1-8c56-b4824c7f7700\",\n            \"name\": \"Turkish\",\n            \"code\": \"tr\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        },\n        {\n            \"uuid\": \"0198d5bf-h002-72d1-8c56-b4824c7f7701\",\n            \"name\": \"English\",\n            \"code\": \"en\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        }\n    ],\n    \"errors\": []\n}"
+        }
+      ]
         },
         {
           "name": "Filter by Direction - LTR",
           "request": {
             "method": "GET",
             "url": {
-              "raw": "{{base_url}}/languages?direction=ltr&per_page={{per_page}}&page={{page}}",
+              "raw": "{{base_url}}/languages?direction=ltr&per_page={{page}}{{per_page}}{{per_page}}&page={{page}}",
               "host": ["{{base_url}}"],
               "path": ["languages"],
               "query": [
@@ -158,14 +246,25 @@
             },
             "description": "Get all left-to-right languages"
           },
-          "response": []
+          "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/languages"
+          },
+          "status": "OK",
+          "code": 200,
+          "body": "{\n    \"success\": true,\n    \"message\": \"Languages retrieved successfully\",\n    \"data\": [\n        {\n            \"uuid\": \"0198d5bf-h001-72d1-8c56-b4824c7f7700\",\n            \"name\": \"Turkish\",\n            \"code\": \"tr\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        },\n        {\n            \"uuid\": \"0198d5bf-h002-72d1-8c56-b4824c7f7701\",\n            \"name\": \"English\",\n            \"code\": \"en\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        }\n    ],\n    \"errors\": []\n}"
+        }
+      ]
         },
         {
           "name": "Filter by Direction - RTL",
           "request": {
             "method": "GET",
             "url": {
-              "raw": "{{base_url}}/languages?direction=rtl&per_page={{per_page}}&page={{page}}",
+              "raw": "{{base_url}}/languages?direction=rtl&per_page={{page}}{{per_page}}{{per_page}}&page={{page}}",
               "host": ["{{base_url}}"],
               "path": ["languages"],
               "query": [
@@ -176,14 +275,25 @@
             },
             "description": "Get all right-to-left languages"
           },
-          "response": []
+          "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/languages"
+          },
+          "status": "OK",
+          "code": 200,
+          "body": "{\n    \"success\": true,\n    \"message\": \"Languages retrieved successfully\",\n    \"data\": [\n        {\n            \"uuid\": \"0198d5bf-h001-72d1-8c56-b4824c7f7700\",\n            \"name\": \"Turkish\",\n            \"code\": \"tr\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        },\n        {\n            \"uuid\": \"0198d5bf-h002-72d1-8c56-b4824c7f7701\",\n            \"name\": \"English\",\n            \"code\": \"en\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        }\n    ],\n    \"errors\": []\n}"
+        }
+      ]
         },
         {
           "name": "Search Languages",
           "request": {
             "method": "GET",
             "url": {
-              "raw": "{{base_url}}/languages?search={{search}}&per_page={{per_page}}&page={{page}}",
+              "raw": "{{base_url}}/languages?search={{search}}&per_page={{page}}{{per_page}}{{per_page}}&page={{page}}",
               "host": ["{{base_url}}"],
               "path": ["languages"],
               "query": [
@@ -194,14 +304,25 @@
             },
             "description": "Search languages by name, native name or code"
           },
-          "response": []
+          "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/languages"
+          },
+          "status": "OK",
+          "code": 200,
+          "body": "{\n    \"success\": true,\n    \"message\": \"Languages retrieved successfully\",\n    \"data\": [\n        {\n            \"uuid\": \"0198d5bf-h001-72d1-8c56-b4824c7f7700\",\n            \"name\": \"Turkish\",\n            \"code\": \"tr\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        },\n        {\n            \"uuid\": \"0198d5bf-h002-72d1-8c56-b4824c7f7701\",\n            \"name\": \"English\",\n            \"code\": \"en\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        }\n    ],\n    \"errors\": []\n}"
+        }
+      ]
         },
         {
           "name": "Sort by Name ASC",
           "request": {
             "method": "GET",
             "url": {
-              "raw": "{{base_url}}/languages?sort_by=name&sort_direction=asc&per_page={{per_page}}&page={{page}}",
+              "raw": "{{base_url}}/languages?sort_by=name&sort_direction=asc&per_page={{page}}{{per_page}}{{per_page}}&page={{page}}",
               "host": ["{{base_url}}"],
               "path": ["languages"],
               "query": [
@@ -213,14 +334,25 @@
             },
             "description": "Get languages sorted by name (A-Z)"
           },
-          "response": []
+          "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/languages"
+          },
+          "status": "OK",
+          "code": 200,
+          "body": "{\n    \"success\": true,\n    \"message\": \"Languages retrieved successfully\",\n    \"data\": [\n        {\n            \"uuid\": \"0198d5bf-h001-72d1-8c56-b4824c7f7700\",\n            \"name\": \"Turkish\",\n            \"code\": \"tr\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        },\n        {\n            \"uuid\": \"0198d5bf-h002-72d1-8c56-b4824c7f7701\",\n            \"name\": \"English\",\n            \"code\": \"en\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        }\n    ],\n    \"errors\": []\n}"
+        }
+      ]
         },
         {
           "name": "Sort by Code ASC",
           "request": {
             "method": "GET",
             "url": {
-              "raw": "{{base_url}}/languages?sort_by=code&sort_direction=asc&per_page={{per_page}}&page={{page}}",
+              "raw": "{{base_url}}/languages?sort_by=code&sort_direction=asc&per_page={{page}}{{per_page}}{{per_page}}&page={{page}}",
               "host": ["{{base_url}}"],
               "path": ["languages"],
               "query": [
@@ -232,14 +364,25 @@
             },
             "description": "Get languages sorted by code (A-Z)"
           },
-          "response": []
+          "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/languages"
+          },
+          "status": "OK",
+          "code": 200,
+          "body": "{\n    \"success\": true,\n    \"message\": \"Languages retrieved successfully\",\n    \"data\": [\n        {\n            \"uuid\": \"0198d5bf-h001-72d1-8c56-b4824c7f7700\",\n            \"name\": \"Turkish\",\n            \"code\": \"tr\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        },\n        {\n            \"uuid\": \"0198d5bf-h002-72d1-8c56-b4824c7f7701\",\n            \"name\": \"English\",\n            \"code\": \"en\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        }\n    ],\n    \"errors\": []\n}"
+        }
+      ]
         },
         {
           "name": "Sort by Native Name ASC",
           "request": {
             "method": "GET",
             "url": {
-              "raw": "{{base_url}}/languages?sort_by=native_name&sort_direction=asc&per_page={{per_page}}&page={{page}}",
+              "raw": "{{base_url}}/languages?sort_by=native_name&sort_direction=asc&per_page={{page}}{{per_page}}{{per_page}}&page={{page}}",
               "host": ["{{base_url}}"],
               "path": ["languages"],
               "query": [
@@ -251,14 +394,25 @@
             },
             "description": "Get languages sorted by native name"
           },
-          "response": []
+          "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/languages"
+          },
+          "status": "OK",
+          "code": 200,
+          "body": "{\n    \"success\": true,\n    \"message\": \"Languages retrieved successfully\",\n    \"data\": [\n        {\n            \"uuid\": \"0198d5bf-h001-72d1-8c56-b4824c7f7700\",\n            \"name\": \"Turkish\",\n            \"code\": \"tr\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        },\n        {\n            \"uuid\": \"0198d5bf-h002-72d1-8c56-b4824c7f7701\",\n            \"name\": \"English\",\n            \"code\": \"en\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        }\n    ],\n    \"errors\": []\n}"
+        }
+      ]
         },
         {
           "name": "Sort by Created Date DESC",
           "request": {
             "method": "GET",
             "url": {
-              "raw": "{{base_url}}/languages?sort_by=created_at&sort_direction=desc&per_page={{per_page}}&page={{page}}",
+              "raw": "{{base_url}}/languages?sort_by=created_at&sort_direction=desc&per_page={{page}}{{per_page}}{{per_page}}&page={{page}}",
               "host": ["{{base_url}}"],
               "path": ["languages"],
               "query": [
@@ -270,14 +424,25 @@
             },
             "description": "Get languages sorted by creation date (newest first)"
           },
-          "response": []
+          "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/languages"
+          },
+          "status": "OK",
+          "code": 200,
+          "body": "{\n    \"success\": true,\n    \"message\": \"Languages retrieved successfully\",\n    \"data\": [\n        {\n            \"uuid\": \"0198d5bf-h001-72d1-8c56-b4824c7f7700\",\n            \"name\": \"Turkish\",\n            \"code\": \"tr\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        },\n        {\n            \"uuid\": \"0198d5bf-h002-72d1-8c56-b4824c7f7701\",\n            \"name\": \"English\",\n            \"code\": \"en\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        }\n    ],\n    \"errors\": []\n}"
+        }
+      ]
         },
         {
           "name": "Combined Filters",
           "request": {
             "method": "GET",
             "url": {
-              "raw": "{{base_url}}/languages?active_only=true&direction=ltr&search=english&sort_by=name&sort_direction=asc&per_page={{per_page}}&page={{page}}",
+              "raw": "{{base_url}}/languages?active_only=true&direction=ltr&search=english&sort_by=name&sort_direction=asc&per_page={{page}}{{per_page}}{{per_page}}&page={{page}}",
               "host": ["{{base_url}}"],
               "path": ["languages"],
               "query": [
@@ -292,7 +457,18 @@
             },
             "description": "Multiple filters combined: active, LTR, search, sorted"
           },
-          "response": []
+          "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/languages"
+          },
+          "status": "OK",
+          "code": 200,
+          "body": "{\n    \"success\": true,\n    \"message\": \"Languages retrieved successfully\",\n    \"data\": [\n        {\n            \"uuid\": \"0198d5bf-h001-72d1-8c56-b4824c7f7700\",\n            \"name\": \"Turkish\",\n            \"code\": \"tr\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        },\n        {\n            \"uuid\": \"0198d5bf-h002-72d1-8c56-b4824c7f7701\",\n            \"name\": \"English\",\n            \"code\": \"en\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        }\n    ],\n    \"errors\": []\n}"
+        }
+      ]
         }
       ]
     }

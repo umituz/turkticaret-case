@@ -28,7 +28,7 @@
     },
     {
       "key": "per_page",
-      "value": "25",
+      "value": "20",
       "type": "default",
       "enabled": true
     },

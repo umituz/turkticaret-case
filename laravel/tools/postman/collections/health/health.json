@@ -15,8 +15,7 @@
           "path": ["health"]
         },
         "description": "Check the health status of the API"
-      },
-      "response": []
+      }
     }
   ]
 }

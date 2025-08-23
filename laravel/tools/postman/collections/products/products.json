@@ -10,18 +10,19 @@
       "request": {
         "method": "GET",
         "url": {
-          "raw": "{{base_url}}/products?per_page=25&page=1&orderBy=created_at&order=desc",
+          "raw": "{{base_url}}/products?per_page={{per_page}}&page={{page}}&orderBy=created_at&order=desc",
           "host": ["{{base_url}}"],
           "path": ["products"],
           "query": [
-            {"key": "per_page", "value": "25", "description": "Number of items per page"},
-            {"key": "page", "value": "1", "description": "Page number"},
-            {"key": "search", "value": "", "description": "Search in name, description, and SKU", "disabled": true},
+            {"key": "per_page", "value": "{{per_page}}", "description": "Number of items per page (centralized in project-models.json)"},
+            {"key": "page", "value": "{{page}}", "description": "Page number (centralized in project-models.json)"},
+            {"key": "search", "value": "", "description": "Search in name and description", "disabled": true},
             {"key": "searchBy", "value": "", "description": "Specific field to search in", "disabled": true},
             {"key": "category_uuid", "value": "", "description": "Filter by category UUID", "disabled": true},
             {"key": "is_active", "value": "true", "description": "Filter by active status", "disabled": true},
-            {"key": "price_min", "value": "", "description": "Minimum price filter", "disabled": true},
-            {"key": "price_max", "value": "", "description": "Maximum price filter", "disabled": true},
+            {"key": "isFeatured", "value": "true", "description": "Filter by featured products", "disabled": true},
+            {"key": "min_price", "value": "", "description": "Minimum price filter", "disabled": true},
+            {"key": "max_price", "value": "", "description": "Maximum price filter", "disabled": true},
             {"key": "stock_min", "value": "", "description": "Minimum stock filter", "disabled": true},
             {"key": "stock_max", "value": "", "description": "Maximum stock filter", "disabled": true},
             {"key": "in_stock", "value": "true", "description": "Filter products in stock", "disabled": true},
@@ -33,7 +34,18 @@
         },
         "description": "Retrieve paginated list of products with filtering options"
       },
-      "response": []
+      "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/products"
+          },
+          "status": "OK",
+          "code": 200,
+          "body": "{\n    \"success\": true,\n    \"message\": \"Products retrieved successfully\",\n    \"data\": {\n        \"current_page\": 1,\n        \"data\": [\n            {\n                \"uuid\": \"0198d5bf-d001-72d1-8c56-b4824c7f7660\",\n                \"name\": \"iPhone 15 Pro\",\n                \"description\": \"Latest iPhone model with advanced features\",\n                \"sku\": \"IPH-15-PRO-001\",\n                \"price\": 129900,\n                \"stock_quantity\": 50,\n                \"image_path\": \"/images/products/iphone-15-pro.jpg\",\n                \"is_active\": true,\n                \"category_uuid\": \"0198d5bf-c001-72d1-8c56-b4824c7f7650\",\n                \"category\": {\n                    \"uuid\": \"0198d5bf-c001-72d1-8c56-b4824c7f7650\",\n                    \"name\": \"Electronics\"\n                },\n                \"created_at\": \"2025-08-23T19:15:00.000000Z\",\n                \"updated_at\": \"2025-08-23T19:15:00.000000Z\"\n            }\n        ],\n        \"per_page\": 25,\n        \"total\": 156\n    },\n    \"errors\": []\n}"
+        }
+      ]
     },
     {
       "name": "Create Product",
@@ -51,7 +63,18 @@
         },
         "description": "Create a new product"
       },
-      "response": []
+      "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/products"
+          },
+          "status": "OK",
+          "code": 200,
+          "body": "{\n    \"success\": true,\n    \"message\": \"Products retrieved successfully\",\n    \"data\": {\n        \"current_page\": 1,\n        \"data\": [\n            {\n                \"uuid\": \"0198d5bf-d001-72d1-8c56-b4824c7f7660\",\n                \"name\": \"iPhone 15 Pro\",\n                \"description\": \"Latest iPhone model with advanced features\",\n                \"sku\": \"IPH-15-PRO-001\",\n                \"price\": 129900,\n                \"stock_quantity\": 50,\n                \"image_path\": \"/images/products/iphone-15-pro.jpg\",\n                \"is_active\": true,\n                \"category_uuid\": \"0198d5bf-c001-72d1-8c56-b4824c7f7650\",\n                \"category\": {\n                    \"uuid\": \"0198d5bf-c001-72d1-8c56-b4824c7f7650\",\n                    \"name\": \"Electronics\"\n                },\n                \"created_at\": \"2025-08-23T19:15:00.000000Z\",\n                \"updated_at\": \"2025-08-23T19:15:00.000000Z\"\n            }\n        ],\n        \"per_page\": 25,\n        \"total\": 156\n    },\n    \"errors\": []\n}"
+        }
+      ]
     },
     {
       "name": "Get Product",
@@ -64,7 +87,18 @@
         },
         "description": "Get a specific product by UUID"
       },
-      "response": []
+      "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/products"
+          },
+          "status": "OK",
+          "code": 200,
+          "body": "{\n    \"success\": true,\n    \"message\": \"Products retrieved successfully\",\n    \"data\": {\n        \"current_page\": 1,\n        \"data\": [\n            {\n                \"uuid\": \"0198d5bf-d001-72d1-8c56-b4824c7f7660\",\n                \"name\": \"iPhone 15 Pro\",\n                \"description\": \"Latest iPhone model with advanced features\",\n                \"sku\": \"IPH-15-PRO-001\",\n                \"price\": 129900,\n                \"stock_quantity\": 50,\n                \"image_path\": \"/images/products/iphone-15-pro.jpg\",\n                \"is_active\": true,\n                \"category_uuid\": \"0198d5bf-c001-72d1-8c56-b4824c7f7650\",\n                \"category\": {\n                    \"uuid\": \"0198d5bf-c001-72d1-8c56-b4824c7f7650\",\n                    \"name\": \"Electronics\"\n                },\n                \"created_at\": \"2025-08-23T19:15:00.000000Z\",\n                \"updated_at\": \"2025-08-23T19:15:00.000000Z\"\n            }\n        ],\n        \"per_page\": 25,\n        \"total\": 156\n    },\n    \"errors\": []\n}"
+        }
+      ]
     },
     {
       "name": "Update Product",
@@ -82,7 +116,18 @@
         },
         "description": "Update a specific product"
       },
-      "response": []
+      "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/products"
+          },
+          "status": "OK",
+          "code": 200,
+          "body": "{\n    \"success\": true,\n    \"message\": \"Products retrieved successfully\",\n    \"data\": {\n        \"current_page\": 1,\n        \"data\": [\n            {\n                \"uuid\": \"0198d5bf-d001-72d1-8c56-b4824c7f7660\",\n                \"name\": \"iPhone 15 Pro\",\n                \"description\": \"Latest iPhone model with advanced features\",\n                \"sku\": \"IPH-15-PRO-001\",\n                \"price\": 129900,\n                \"stock_quantity\": 50,\n                \"image_path\": \"/images/products/iphone-15-pro.jpg\",\n                \"is_active\": true,\n                \"category_uuid\": \"0198d5bf-c001-72d1-8c56-b4824c7f7650\",\n                \"category\": {\n                    \"uuid\": \"0198d5bf-c001-72d1-8c56-b4824c7f7650\",\n                    \"name\": \"Electronics\"\n                },\n                \"created_at\": \"2025-08-23T19:15:00.000000Z\",\n                \"updated_at\": \"2025-08-23T19:15:00.000000Z\"\n            }\n        ],\n        \"per_page\": 25,\n        \"total\": 156\n    },\n    \"errors\": []\n}"
+        }
+      ]
     },
     {
       "name": "Delete Product (Soft Delete)",
@@ -95,7 +140,18 @@
         },
         "description": "Soft delete a specific product"
       },
-      "response": []
+      "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/products"
+          },
+          "status": "OK",
+          "code": 200,
+          "body": "{\n    \"success\": true,\n    \"message\": \"Products retrieved successfully\",\n    \"data\": {\n        \"current_page\": 1,\n        \"data\": [\n            {\n                \"uuid\": \"0198d5bf-d001-72d1-8c56-b4824c7f7660\",\n                \"name\": \"iPhone 15 Pro\",\n                \"description\": \"Latest iPhone model with advanced features\",\n                \"sku\": \"IPH-15-PRO-001\",\n                \"price\": 129900,\n                \"stock_quantity\": 50,\n                \"image_path\": \"/images/products/iphone-15-pro.jpg\",\n                \"is_active\": true,\n                \"category_uuid\": \"0198d5bf-c001-72d1-8c56-b4824c7f7650\",\n                \"category\": {\n                    \"uuid\": \"0198d5bf-c001-72d1-8c56-b4824c7f7650\",\n                    \"name\": \"Electronics\"\n                },\n                \"created_at\": \"2025-08-23T19:15:00.000000Z\",\n                \"updated_at\": \"2025-08-23T19:15:00.000000Z\"\n            }\n        ],\n        \"per_page\": 25,\n        \"total\": 156\n    },\n    \"errors\": []\n}"
+        }
+      ]
     },
     {
       "name": "Restore Product",
@@ -113,7 +169,18 @@
         },
         "description": "Restore a soft deleted product"
       },
-      "response": []
+      "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/products"
+          },
+          "status": "OK",
+          "code": 200,
+          "body": "{\n    \"success\": true,\n    \"message\": \"Products retrieved successfully\",\n    \"data\": {\n        \"current_page\": 1,\n        \"data\": [\n            {\n                \"uuid\": \"0198d5bf-d001-72d1-8c56-b4824c7f7660\",\n                \"name\": \"iPhone 15 Pro\",\n                \"description\": \"Latest iPhone model with advanced features\",\n                \"sku\": \"IPH-15-PRO-001\",\n                \"price\": 129900,\n                \"stock_quantity\": 50,\n                \"image_path\": \"/images/products/iphone-15-pro.jpg\",\n                \"is_active\": true,\n                \"category_uuid\": \"0198d5bf-c001-72d1-8c56-b4824c7f7650\",\n                \"category\": {\n                    \"uuid\": \"0198d5bf-c001-72d1-8c56-b4824c7f7650\",\n                    \"name\": \"Electronics\"\n                },\n                \"created_at\": \"2025-08-23T19:15:00.000000Z\",\n                \"updated_at\": \"2025-08-23T19:15:00.000000Z\"\n            }\n        ],\n        \"per_page\": 25,\n        \"total\": 156\n    },\n    \"errors\": []\n}"
+        }
+      ]
     },
     {
       "name": "Force Delete Product",
@@ -126,7 +193,18 @@
         },
         "description": "Permanently delete a product"
       },
-      "response": []
+      "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/products"
+          },
+          "status": "OK",
+          "code": 200,
+          "body": "{\n    \"success\": true,\n    \"message\": \"Products retrieved successfully\",\n    \"data\": {\n        \"current_page\": 1,\n        \"data\": [\n            {\n                \"uuid\": \"0198d5bf-d001-72d1-8c56-b4824c7f7660\",\n                \"name\": \"iPhone 15 Pro\",\n                \"description\": \"Latest iPhone model with advanced features\",\n                \"sku\": \"IPH-15-PRO-001\",\n                \"price\": 129900,\n                \"stock_quantity\": 50,\n                \"image_path\": \"/images/products/iphone-15-pro.jpg\",\n                \"is_active\": true,\n                \"category_uuid\": \"0198d5bf-c001-72d1-8c56-b4824c7f7650\",\n                \"category\": {\n                    \"uuid\": \"0198d5bf-c001-72d1-8c56-b4824c7f7650\",\n                    \"name\": \"Electronics\"\n                },\n                \"created_at\": \"2025-08-23T19:15:00.000000Z\",\n                \"updated_at\": \"2025-08-23T19:15:00.000000Z\"\n            }\n        ],\n        \"per_page\": 25,\n        \"total\": 156\n    },\n    \"errors\": []\n}"
+        }
+      ]
     },
     {
       "name": "Filters",
@@ -148,7 +226,18 @@
             },
             "description": "Get products from a specific category"
           },
-          "response": []
+          "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/products"
+          },
+          "status": "OK",
+          "code": 200,
+          "body": "{\n    \"success\": true,\n    \"message\": \"Products retrieved successfully\",\n    \"data\": {\n        \"current_page\": 1,\n        \"data\": [\n            {\n                \"uuid\": \"0198d5bf-d001-72d1-8c56-b4824c7f7660\",\n                \"name\": \"iPhone 15 Pro\",\n                \"description\": \"Latest iPhone model with advanced features\",\n                \"sku\": \"IPH-15-PRO-001\",\n                \"price\": 129900,\n                \"stock_quantity\": 50,\n                \"image_path\": \"/images/products/iphone-15-pro.jpg\",\n                \"is_active\": true,\n                \"category_uuid\": \"0198d5bf-c001-72d1-8c56-b4824c7f7650\",\n                \"category\": {\n                    \"uuid\": \"0198d5bf-c001-72d1-8c56-b4824c7f7650\",\n                    \"name\": \"Electronics\"\n                },\n                \"created_at\": \"2025-08-23T19:15:00.000000Z\",\n                \"updated_at\": \"2025-08-23T19:15:00.000000Z\"\n            }\n        ],\n        \"per_page\": 25,\n        \"total\": 156\n    },\n    \"errors\": []\n}"
+        }
+      ]
         },
         {
           "name": "Filter by Active Status",
@@ -166,7 +255,18 @@
             },
             "description": "Get all active products"
           },
-          "response": []
+          "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/products"
+          },
+          "status": "OK",
+          "code": 200,
+          "body": "{\n    \"success\": true,\n    \"message\": \"Products retrieved successfully\",\n    \"data\": {\n        \"current_page\": 1,\n        \"data\": [\n            {\n                \"uuid\": \"0198d5bf-d001-72d1-8c56-b4824c7f7660\",\n                \"name\": \"iPhone 15 Pro\",\n                \"description\": \"Latest iPhone model with advanced features\",\n                \"sku\": \"IPH-15-PRO-001\",\n                \"price\": 129900,\n                \"stock_quantity\": 50,\n                \"image_path\": \"/images/products/iphone-15-pro.jpg\",\n                \"is_active\": true,\n                \"category_uuid\": \"0198d5bf-c001-72d1-8c56-b4824c7f7650\",\n                \"category\": {\n                    \"uuid\": \"0198d5bf-c001-72d1-8c56-b4824c7f7650\",\n                    \"name\": \"Electronics\"\n                },\n                \"created_at\": \"2025-08-23T19:15:00.000000Z\",\n                \"updated_at\": \"2025-08-23T19:15:00.000000Z\"\n            }\n        ],\n        \"per_page\": 25,\n        \"total\": 156\n    },\n    \"errors\": []\n}"
+        }
+      ]
         },
         {
           "name": "Filter by Price Range",
@@ -185,7 +285,18 @@
             },
             "description": "Get products within price range"
           },
-          "response": []
+          "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/products"
+          },
+          "status": "OK",
+          "code": 200,
+          "body": "{\n    \"success\": true,\n    \"message\": \"Products retrieved successfully\",\n    \"data\": {\n        \"current_page\": 1,\n        \"data\": [\n            {\n                \"uuid\": \"0198d5bf-d001-72d1-8c56-b4824c7f7660\",\n                \"name\": \"iPhone 15 Pro\",\n                \"description\": \"Latest iPhone model with advanced features\",\n                \"sku\": \"IPH-15-PRO-001\",\n                \"price\": 129900,\n                \"stock_quantity\": 50,\n                \"image_path\": \"/images/products/iphone-15-pro.jpg\",\n                \"is_active\": true,\n                \"category_uuid\": \"0198d5bf-c001-72d1-8c56-b4824c7f7650\",\n                \"category\": {\n                    \"uuid\": \"0198d5bf-c001-72d1-8c56-b4824c7f7650\",\n                    \"name\": \"Electronics\"\n                },\n                \"created_at\": \"2025-08-23T19:15:00.000000Z\",\n                \"updated_at\": \"2025-08-23T19:15:00.000000Z\"\n            }\n        ],\n        \"per_page\": 25,\n        \"total\": 156\n    },\n    \"errors\": []\n}"
+        }
+      ]
         },
         {
           "name": "Search Products",
@@ -203,7 +314,18 @@
             },
             "description": "Search products by name, description, or SKU"
           },
-          "response": []
+          "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/products"
+          },
+          "status": "OK",
+          "code": 200,
+          "body": "{\n    \"success\": true,\n    \"message\": \"Products retrieved successfully\",\n    \"data\": {\n        \"current_page\": 1,\n        \"data\": [\n            {\n                \"uuid\": \"0198d5bf-d001-72d1-8c56-b4824c7f7660\",\n                \"name\": \"iPhone 15 Pro\",\n                \"description\": \"Latest iPhone model with advanced features\",\n                \"sku\": \"IPH-15-PRO-001\",\n                \"price\": 129900,\n                \"stock_quantity\": 50,\n                \"image_path\": \"/images/products/iphone-15-pro.jpg\",\n                \"is_active\": true,\n                \"category_uuid\": \"0198d5bf-c001-72d1-8c56-b4824c7f7650\",\n                \"category\": {\n                    \"uuid\": \"0198d5bf-c001-72d1-8c56-b4824c7f7650\",\n                    \"name\": \"Electronics\"\n                },\n                \"created_at\": \"2025-08-23T19:15:00.000000Z\",\n                \"updated_at\": \"2025-08-23T19:15:00.000000Z\"\n            }\n        ],\n        \"per_page\": 25,\n        \"total\": 156\n    },\n    \"errors\": []\n}"
+        }
+      ]
         },
         {
           "name": "Sort by Price ASC",
@@ -222,7 +344,18 @@
             },
             "description": "Get products sorted by price (low to high)"
           },
-          "response": []
+          "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/products"
+          },
+          "status": "OK",
+          "code": 200,
+          "body": "{\n    \"success\": true,\n    \"message\": \"Products retrieved successfully\",\n    \"data\": {\n        \"current_page\": 1,\n        \"data\": [\n            {\n                \"uuid\": \"0198d5bf-d001-72d1-8c56-b4824c7f7660\",\n                \"name\": \"iPhone 15 Pro\",\n                \"description\": \"Latest iPhone model with advanced features\",\n                \"sku\": \"IPH-15-PRO-001\",\n                \"price\": 129900,\n                \"stock_quantity\": 50,\n                \"image_path\": \"/images/products/iphone-15-pro.jpg\",\n                \"is_active\": true,\n                \"category_uuid\": \"0198d5bf-c001-72d1-8c56-b4824c7f7650\",\n                \"category\": {\n                    \"uuid\": \"0198d5bf-c001-72d1-8c56-b4824c7f7650\",\n                    \"name\": \"Electronics\"\n                },\n                \"created_at\": \"2025-08-23T19:15:00.000000Z\",\n                \"updated_at\": \"2025-08-23T19:15:00.000000Z\"\n            }\n        ],\n        \"per_page\": 25,\n        \"total\": 156\n    },\n    \"errors\": []\n}"
+        }
+      ]
         },
         {
           "name": "Sort by Name DESC",
@@ -241,7 +374,18 @@
             },
             "description": "Get products sorted by name (Z-A)"
           },
-          "response": []
+          "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/products"
+          },
+          "status": "OK",
+          "code": 200,
+          "body": "{\n    \"success\": true,\n    \"message\": \"Products retrieved successfully\",\n    \"data\": {\n        \"current_page\": 1,\n        \"data\": [\n            {\n                \"uuid\": \"0198d5bf-d001-72d1-8c56-b4824c7f7660\",\n                \"name\": \"iPhone 15 Pro\",\n                \"description\": \"Latest iPhone model with advanced features\",\n                \"sku\": \"IPH-15-PRO-001\",\n                \"price\": 129900,\n                \"stock_quantity\": 50,\n                \"image_path\": \"/images/products/iphone-15-pro.jpg\",\n                \"is_active\": true,\n                \"category_uuid\": \"0198d5bf-c001-72d1-8c56-b4824c7f7650\",\n                \"category\": {\n                    \"uuid\": \"0198d5bf-c001-72d1-8c56-b4824c7f7650\",\n                    \"name\": \"Electronics\"\n                },\n                \"created_at\": \"2025-08-23T19:15:00.000000Z\",\n                \"updated_at\": \"2025-08-23T19:15:00.000000Z\"\n            }\n        ],\n        \"per_page\": 25,\n        \"total\": 156\n    },\n    \"errors\": []\n}"
+        }
+      ]
         },
         {
           "name": "Low Stock Products",
@@ -261,7 +405,18 @@
             },
             "description": "Get products with low stock (≤10 items)"
           },
-          "response": []
+          "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/products"
+          },
+          "status": "OK",
+          "code": 200,
+          "body": "{\n    \"success\": true,\n    \"message\": \"Products retrieved successfully\",\n    \"data\": {\n        \"current_page\": 1,\n        \"data\": [\n            {\n                \"uuid\": \"0198d5bf-d001-72d1-8c56-b4824c7f7660\",\n                \"name\": \"iPhone 15 Pro\",\n                \"description\": \"Latest iPhone model with advanced features\",\n                \"sku\": \"IPH-15-PRO-001\",\n                \"price\": 129900,\n                \"stock_quantity\": 50,\n                \"image_path\": \"/images/products/iphone-15-pro.jpg\",\n                \"is_active\": true,\n                \"category_uuid\": \"0198d5bf-c001-72d1-8c56-b4824c7f7650\",\n                \"category\": {\n                    \"uuid\": \"0198d5bf-c001-72d1-8c56-b4824c7f7650\",\n                    \"name\": \"Electronics\"\n                },\n                \"created_at\": \"2025-08-23T19:15:00.000000Z\",\n                \"updated_at\": \"2025-08-23T19:15:00.000000Z\"\n            }\n        ],\n        \"per_page\": 25,\n        \"total\": 156\n    },\n    \"errors\": []\n}"
+        }
+      ]
         },
         {
           "name": "Combined Filters",
@@ -285,7 +440,18 @@
             },
             "description": "Multiple filters combined: category, active, price range, search, sorted"
           },
-          "response": []
+          "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/products"
+          },
+          "status": "OK",
+          "code": 200,
+          "body": "{\n    \"success\": true,\n    \"message\": \"Products retrieved successfully\",\n    \"data\": {\n        \"current_page\": 1,\n        \"data\": [\n            {\n                \"uuid\": \"0198d5bf-d001-72d1-8c56-b4824c7f7660\",\n                \"name\": \"iPhone 15 Pro\",\n                \"description\": \"Latest iPhone model with advanced features\",\n                \"sku\": \"IPH-15-PRO-001\",\n                \"price\": 129900,\n                \"stock_quantity\": 50,\n                \"image_path\": \"/images/products/iphone-15-pro.jpg\",\n                \"is_active\": true,\n                \"category_uuid\": \"0198d5bf-c001-72d1-8c56-b4824c7f7650\",\n                \"category\": {\n                    \"uuid\": \"0198d5bf-c001-72d1-8c56-b4824c7f7650\",\n                    \"name\": \"Electronics\"\n                },\n                \"created_at\": \"2025-08-23T19:15:00.000000Z\",\n                \"updated_at\": \"2025-08-23T19:15:00.000000Z\"\n            }\n        ],\n        \"per_page\": 25,\n        \"total\": 156\n    },\n    \"errors\": []\n}"
+        }
+      ]
         }
       ]
     }

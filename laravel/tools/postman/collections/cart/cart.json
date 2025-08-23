@@ -16,7 +16,18 @@
         },
         "description": "View current user's shopping cart with all items and totals"
       },
-      "response": []
+      "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/cart"
+          },
+          "status": "OK",
+          "code": 200,
+          "body": "{\n    \"success\": true,\n    \"message\": \"Cart retrieved successfully\",\n    \"data\": {\n        \"uuid\": \"0198d5bf-e001-72d1-8c56-b4824c7f7670\",\n        \"user_uuid\": \"0198d5bf-a001-72b1-80fc-37402118ff2f\",\n        \"total_amount\": 15000,\n        \"total_items\": 2,\n        \"items\": [\n            {\n                \"uuid\": \"0198d5bf-e002-72d1-8c56-b4824c7f7671\",\n                \"product_uuid\": \"0198d5bf-d001-72d1-8c56-b4824c7f7660\",\n                \"quantity\": 1,\n                \"unit_price\": 10000,\n                \"total_price\": 10000,\n                \"product\": {\n                    \"name\": \"iPhone 15 Pro\",\n                    \"sku\": \"IPH-15-PRO-001\"\n                }\n            }\n        ],\n        \"created_at\": \"2025-08-23T19:30:00.000000Z\",\n        \"updated_at\": \"2025-08-23T19:45:00.000000Z\"\n    },\n    \"errors\": []\n}"
+        }
+      ]
     },
     {
       "name": "Add to Cart",
@@ -34,7 +45,18 @@
         },
         "description": "Add a product to the shopping cart or increase quantity if already exists"
       },
-      "response": []
+      "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/cart"
+          },
+          "status": "OK",
+          "code": 200,
+          "body": "{\n    \"success\": true,\n    \"message\": \"Cart retrieved successfully\",\n    \"data\": {\n        \"uuid\": \"0198d5bf-e001-72d1-8c56-b4824c7f7670\",\n        \"user_uuid\": \"0198d5bf-a001-72b1-80fc-37402118ff2f\",\n        \"total_amount\": 15000,\n        \"total_items\": 2,\n        \"items\": [\n            {\n                \"uuid\": \"0198d5bf-e002-72d1-8c56-b4824c7f7671\",\n                \"product_uuid\": \"0198d5bf-d001-72d1-8c56-b4824c7f7660\",\n                \"quantity\": 1,\n                \"unit_price\": 10000,\n                \"total_price\": 10000,\n                \"product\": {\n                    \"name\": \"iPhone 15 Pro\",\n                    \"sku\": \"IPH-15-PRO-001\"\n                }\n            }\n        ],\n        \"created_at\": \"2025-08-23T19:30:00.000000Z\",\n        \"updated_at\": \"2025-08-23T19:45:00.000000Z\"\n    },\n    \"errors\": []\n}"
+        }
+      ]
     },
     {
       "name": "Update Cart Item",
@@ -52,7 +74,18 @@
         },
         "description": "Update the quantity of a specific product in the cart"
       },
-      "response": []
+      "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/cart"
+          },
+          "status": "OK",
+          "code": 200,
+          "body": "{\n    \"success\": true,\n    \"message\": \"Cart retrieved successfully\",\n    \"data\": {\n        \"uuid\": \"0198d5bf-e001-72d1-8c56-b4824c7f7670\",\n        \"user_uuid\": \"0198d5bf-a001-72b1-80fc-37402118ff2f\",\n        \"total_amount\": 15000,\n        \"total_items\": 2,\n        \"items\": [\n            {\n                \"uuid\": \"0198d5bf-e002-72d1-8c56-b4824c7f7671\",\n                \"product_uuid\": \"0198d5bf-d001-72d1-8c56-b4824c7f7660\",\n                \"quantity\": 1,\n                \"unit_price\": 10000,\n                \"total_price\": 10000,\n                \"product\": {\n                    \"name\": \"iPhone 15 Pro\",\n                    \"sku\": \"IPH-15-PRO-001\"\n                }\n            }\n        ],\n        \"created_at\": \"2025-08-23T19:30:00.000000Z\",\n        \"updated_at\": \"2025-08-23T19:45:00.000000Z\"\n    },\n    \"errors\": []\n}"
+        }
+      ]
     },
     {
       "name": "Remove from Cart",
@@ -65,7 +98,18 @@
         },
         "description": "Remove a specific product from the shopping cart"
       },
-      "response": []
+      "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/cart"
+          },
+          "status": "OK",
+          "code": 200,
+          "body": "{\n    \"success\": true,\n    \"message\": \"Cart retrieved successfully\",\n    \"data\": {\n        \"uuid\": \"0198d5bf-e001-72d1-8c56-b4824c7f7670\",\n        \"user_uuid\": \"0198d5bf-a001-72b1-80fc-37402118ff2f\",\n        \"total_amount\": 15000,\n        \"total_items\": 2,\n        \"items\": [\n            {\n                \"uuid\": \"0198d5bf-e002-72d1-8c56-b4824c7f7671\",\n                \"product_uuid\": \"0198d5bf-d001-72d1-8c56-b4824c7f7660\",\n                \"quantity\": 1,\n                \"unit_price\": 10000,\n                \"total_price\": 10000,\n                \"product\": {\n                    \"name\": \"iPhone 15 Pro\",\n                    \"sku\": \"IPH-15-PRO-001\"\n                }\n            }\n        ],\n        \"created_at\": \"2025-08-23T19:30:00.000000Z\",\n        \"updated_at\": \"2025-08-23T19:45:00.000000Z\"\n    },\n    \"errors\": []\n}"
+        }
+      ]
     },
     {
       "name": "Clear Cart",
@@ -78,7 +122,18 @@
         },
         "description": "Remove all items from the shopping cart"
       },
-      "response": []
+      "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/cart"
+          },
+          "status": "OK",
+          "code": 200,
+          "body": "{\n    \"success\": true,\n    \"message\": \"Cart retrieved successfully\",\n    \"data\": {\n        \"uuid\": \"0198d5bf-e001-72d1-8c56-b4824c7f7670\",\n        \"user_uuid\": \"0198d5bf-a001-72b1-80fc-37402118ff2f\",\n        \"total_amount\": 15000,\n        \"total_items\": 2,\n        \"items\": [\n            {\n                \"uuid\": \"0198d5bf-e002-72d1-8c56-b4824c7f7671\",\n                \"product_uuid\": \"0198d5bf-d001-72d1-8c56-b4824c7f7660\",\n                \"quantity\": 1,\n                \"unit_price\": 10000,\n                \"total_price\": 10000,\n                \"product\": {\n                    \"name\": \"iPhone 15 Pro\",\n                    \"sku\": \"IPH-15-PRO-001\"\n                }\n            }\n        ],\n        \"created_at\": \"2025-08-23T19:30:00.000000Z\",\n        \"updated_at\": \"2025-08-23T19:45:00.000000Z\"\n    },\n    \"errors\": []\n}"
+        }
+      ]
     },
     {
       "name": "Cart Workflows",
@@ -100,7 +155,18 @@
             },
             "description": "Add first product to cart"
           },
-          "response": []
+          "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/cart"
+          },
+          "status": "OK",
+          "code": 200,
+          "body": "{\n    \"success\": true,\n    \"message\": \"Cart retrieved successfully\",\n    \"data\": {\n        \"uuid\": \"0198d5bf-e001-72d1-8c56-b4824c7f7670\",\n        \"user_uuid\": \"0198d5bf-a001-72b1-80fc-37402118ff2f\",\n        \"total_amount\": 15000,\n        \"total_items\": 2,\n        \"items\": [\n            {\n                \"uuid\": \"0198d5bf-e002-72d1-8c56-b4824c7f7671\",\n                \"product_uuid\": \"0198d5bf-d001-72d1-8c56-b4824c7f7660\",\n                \"quantity\": 1,\n                \"unit_price\": 10000,\n                \"total_price\": 10000,\n                \"product\": {\n                    \"name\": \"iPhone 15 Pro\",\n                    \"sku\": \"IPH-15-PRO-001\"\n                }\n            }\n        ],\n        \"created_at\": \"2025-08-23T19:30:00.000000Z\",\n        \"updated_at\": \"2025-08-23T19:45:00.000000Z\"\n    },\n    \"errors\": []\n}"
+        }
+      ]
         },
         {
           "name": "Add Same Product Again",
@@ -118,7 +184,18 @@
             },
             "description": "Add same product again - should increase quantity to 4 total"
           },
-          "response": []
+          "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/cart"
+          },
+          "status": "OK",
+          "code": 200,
+          "body": "{\n    \"success\": true,\n    \"message\": \"Cart retrieved successfully\",\n    \"data\": {\n        \"uuid\": \"0198d5bf-e001-72d1-8c56-b4824c7f7670\",\n        \"user_uuid\": \"0198d5bf-a001-72b1-80fc-37402118ff2f\",\n        \"total_amount\": 15000,\n        \"total_items\": 2,\n        \"items\": [\n            {\n                \"uuid\": \"0198d5bf-e002-72d1-8c56-b4824c7f7671\",\n                \"product_uuid\": \"0198d5bf-d001-72d1-8c56-b4824c7f7660\",\n                \"quantity\": 1,\n                \"unit_price\": 10000,\n                \"total_price\": 10000,\n                \"product\": {\n                    \"name\": \"iPhone 15 Pro\",\n                    \"sku\": \"IPH-15-PRO-001\"\n                }\n            }\n        ],\n        \"created_at\": \"2025-08-23T19:30:00.000000Z\",\n        \"updated_at\": \"2025-08-23T19:45:00.000000Z\"\n    },\n    \"errors\": []\n}"
+        }
+      ]
         },
         {
           "name": "Update Quantity to Specific Amount",
@@ -136,7 +213,18 @@
             },
             "description": "Set quantity to exactly 10 items"
           },
-          "response": []
+          "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/cart"
+          },
+          "status": "OK",
+          "code": 200,
+          "body": "{\n    \"success\": true,\n    \"message\": \"Cart retrieved successfully\",\n    \"data\": {\n        \"uuid\": \"0198d5bf-e001-72d1-8c56-b4824c7f7670\",\n        \"user_uuid\": \"0198d5bf-a001-72b1-80fc-37402118ff2f\",\n        \"total_amount\": 15000,\n        \"total_items\": 2,\n        \"items\": [\n            {\n                \"uuid\": \"0198d5bf-e002-72d1-8c56-b4824c7f7671\",\n                \"product_uuid\": \"0198d5bf-d001-72d1-8c56-b4824c7f7660\",\n                \"quantity\": 1,\n                \"unit_price\": 10000,\n                \"total_price\": 10000,\n                \"product\": {\n                    \"name\": \"iPhone 15 Pro\",\n                    \"sku\": \"IPH-15-PRO-001\"\n                }\n            }\n        ],\n        \"created_at\": \"2025-08-23T19:30:00.000000Z\",\n        \"updated_at\": \"2025-08-23T19:45:00.000000Z\"\n    },\n    \"errors\": []\n}"
+        }
+      ]
         },
         {
           "name": "Check Cart Total",
@@ -149,7 +237,18 @@
             },
             "description": "Verify cart contents and total amount"
           },
-          "response": []
+          "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/cart"
+          },
+          "status": "OK",
+          "code": 200,
+          "body": "{\n    \"success\": true,\n    \"message\": \"Cart retrieved successfully\",\n    \"data\": {\n        \"uuid\": \"0198d5bf-e001-72d1-8c56-b4824c7f7670\",\n        \"user_uuid\": \"0198d5bf-a001-72b1-80fc-37402118ff2f\",\n        \"total_amount\": 15000,\n        \"total_items\": 2,\n        \"items\": [\n            {\n                \"uuid\": \"0198d5bf-e002-72d1-8c56-b4824c7f7671\",\n                \"product_uuid\": \"0198d5bf-d001-72d1-8c56-b4824c7f7660\",\n                \"quantity\": 1,\n                \"unit_price\": 10000,\n                \"total_price\": 10000,\n                \"product\": {\n                    \"name\": \"iPhone 15 Pro\",\n                    \"sku\": \"IPH-15-PRO-001\"\n                }\n            }\n        ],\n        \"created_at\": \"2025-08-23T19:30:00.000000Z\",\n        \"updated_at\": \"2025-08-23T19:45:00.000000Z\"\n    },\n    \"errors\": []\n}"
+        }
+      ]
         }
       ]
     },
@@ -173,7 +272,18 @@
             },
             "description": "Try to add product with invalid UUID - should fail"
           },
-          "response": []
+          "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/cart"
+          },
+          "status": "OK",
+          "code": 200,
+          "body": "{\n    \"success\": true,\n    \"message\": \"Cart retrieved successfully\",\n    \"data\": {\n        \"uuid\": \"0198d5bf-e001-72d1-8c56-b4824c7f7670\",\n        \"user_uuid\": \"0198d5bf-a001-72b1-80fc-37402118ff2f\",\n        \"total_amount\": 15000,\n        \"total_items\": 2,\n        \"items\": [\n            {\n                \"uuid\": \"0198d5bf-e002-72d1-8c56-b4824c7f7671\",\n                \"product_uuid\": \"0198d5bf-d001-72d1-8c56-b4824c7f7660\",\n                \"quantity\": 1,\n                \"unit_price\": 10000,\n                \"total_price\": 10000,\n                \"product\": {\n                    \"name\": \"iPhone 15 Pro\",\n                    \"sku\": \"IPH-15-PRO-001\"\n                }\n            }\n        ],\n        \"created_at\": \"2025-08-23T19:30:00.000000Z\",\n        \"updated_at\": \"2025-08-23T19:45:00.000000Z\"\n    },\n    \"errors\": []\n}"
+        }
+      ]
         },
         {
           "name": "Add Zero Quantity",
@@ -191,7 +301,18 @@
             },
             "description": "Try to add 0 quantity - should fail validation"
           },
-          "response": []
+          "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/cart"
+          },
+          "status": "OK",
+          "code": 200,
+          "body": "{\n    \"success\": true,\n    \"message\": \"Cart retrieved successfully\",\n    \"data\": {\n        \"uuid\": \"0198d5bf-e001-72d1-8c56-b4824c7f7670\",\n        \"user_uuid\": \"0198d5bf-a001-72b1-80fc-37402118ff2f\",\n        \"total_amount\": 15000,\n        \"total_items\": 2,\n        \"items\": [\n            {\n                \"uuid\": \"0198d5bf-e002-72d1-8c56-b4824c7f7671\",\n                \"product_uuid\": \"0198d5bf-d001-72d1-8c56-b4824c7f7660\",\n                \"quantity\": 1,\n                \"unit_price\": 10000,\n                \"total_price\": 10000,\n                \"product\": {\n                    \"name\": \"iPhone 15 Pro\",\n                    \"sku\": \"IPH-15-PRO-001\"\n                }\n            }\n        ],\n        \"created_at\": \"2025-08-23T19:30:00.000000Z\",\n        \"updated_at\": \"2025-08-23T19:45:00.000000Z\"\n    },\n    \"errors\": []\n}"
+        }
+      ]
         },
         {
           "name": "Add Excessive Quantity",
@@ -209,7 +330,18 @@
             },
             "description": "Try to add more than 100 items - should fail validation"
           },
-          "response": []
+          "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/cart"
+          },
+          "status": "OK",
+          "code": 200,
+          "body": "{\n    \"success\": true,\n    \"message\": \"Cart retrieved successfully\",\n    \"data\": {\n        \"uuid\": \"0198d5bf-e001-72d1-8c56-b4824c7f7670\",\n        \"user_uuid\": \"0198d5bf-a001-72b1-80fc-37402118ff2f\",\n        \"total_amount\": 15000,\n        \"total_items\": 2,\n        \"items\": [\n            {\n                \"uuid\": \"0198d5bf-e002-72d1-8c56-b4824c7f7671\",\n                \"product_uuid\": \"0198d5bf-d001-72d1-8c56-b4824c7f7660\",\n                \"quantity\": 1,\n                \"unit_price\": 10000,\n                \"total_price\": 10000,\n                \"product\": {\n                    \"name\": \"iPhone 15 Pro\",\n                    \"sku\": \"IPH-15-PRO-001\"\n                }\n            }\n        ],\n        \"created_at\": \"2025-08-23T19:30:00.000000Z\",\n        \"updated_at\": \"2025-08-23T19:45:00.000000Z\"\n    },\n    \"errors\": []\n}"
+        }
+      ]
         },
         {
           "name": "Remove Non-existent Product",
@@ -222,7 +354,18 @@
             },
             "description": "Try to remove product that's not in cart"
           },
-          "response": []
+          "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/cart"
+          },
+          "status": "OK",
+          "code": 200,
+          "body": "{\n    \"success\": true,\n    \"message\": \"Cart retrieved successfully\",\n    \"data\": {\n        \"uuid\": \"0198d5bf-e001-72d1-8c56-b4824c7f7670\",\n        \"user_uuid\": \"0198d5bf-a001-72b1-80fc-37402118ff2f\",\n        \"total_amount\": 15000,\n        \"total_items\": 2,\n        \"items\": [\n            {\n                \"uuid\": \"0198d5bf-e002-72d1-8c56-b4824c7f7671\",\n                \"product_uuid\": \"0198d5bf-d001-72d1-8c56-b4824c7f7660\",\n                \"quantity\": 1,\n                \"unit_price\": 10000,\n                \"total_price\": 10000,\n                \"product\": {\n                    \"name\": \"iPhone 15 Pro\",\n                    \"sku\": \"IPH-15-PRO-001\"\n                }\n            }\n        ],\n        \"created_at\": \"2025-08-23T19:30:00.000000Z\",\n        \"updated_at\": \"2025-08-23T19:45:00.000000Z\"\n    },\n    \"errors\": []\n}"
+        }
+      ]
         }
       ]
     }

@@ -21,7 +21,64 @@
         },
         "description": "Update order status with proper validation and transition rules"
       },
-      "response": []
+      "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "PATCH",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"confirmed\"\n}"
+            },
+            "url": "{{base_url}}/orders/{{order_uuid}}/status"
+          },
+          "status": "OK",
+          "code": 200,
+          "body": "{\n    \"success\": true,\n    \"message\": \"Order status updated successfully\",\n    \"data\": {\n        \"uuid\": \"0198d5bf-a0b3-72d1-8c56-b4824c7f7630\",\n        \"order_number\": \"ORD-2025-001\",\n        \"status\": \"confirmed\",\n        \"old_status\": \"pending\",\n        \"total_amount\": 15000,\n        \"updated_at\": \"2025-08-23T14:30:00.000000Z\",\n        \"status_history\": {\n            \"uuid\": \"0198d5bf-h0i3-72d1-8c56-b4824c7f7641\",\n            \"old_status\": \"pending\",\n            \"new_status\": \"confirmed\",\n            \"notes\": \"Status updated via admin panel\",\n            \"changed_by_uuid\": \"0198d5bf-a001-72b1-80fc-37402118ff2f\",\n            \"created_at\": \"2025-08-23T14:30:00.000000Z\"\n        }\n    },\n    \"errors\": []\n}"
+        },
+        {
+          "name": "Validation Error - Invalid Status",
+          "originalRequest": {
+            "method": "PATCH",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"invalid_status\"\n}"
+            },
+            "url": "{{base_url}}/orders/{{order_uuid}}/status"
+          },
+          "status": "Unprocessable Entity",
+          "code": 422,
+          "body": "{\n    \"success\": false,\n    \"message\": \"Validation failed\",\n    \"data\": null,\n    \"errors\": [\n        \"The status field must be a valid order status (pending, confirmed, processing, shipped, delivered, cancelled)\"\n    ]\n}"
+        },
+        {
+          "name": "Business Logic Error - Invalid Transition",
+          "originalRequest": {
+            "method": "PATCH",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"delivered\"\n}"
+            },
+            "url": "{{base_url}}/orders/{{order_uuid}}/status"
+          },
+          "status": "Unprocessable Entity",
+          "code": 422,
+          "body": "{\n    \"success\": false,\n    \"message\": \"Invalid status transition\",\n    \"data\": null,\n    \"errors\": [\n        \"Cannot transition from 'pending' to 'delivered'. Valid next statuses are: confirmed, cancelled\"\n    ]\n}"
+        },
+        {
+          "name": "Order Not Found",
+          "originalRequest": {
+            "method": "PATCH",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"confirmed\"\n}"
+            },
+            "url": "{{base_url}}/orders/non-existent-uuid/status"
+          },
+          "status": "Not Found",
+          "code": 404,
+          "body": "{\n    \"success\": false,\n    \"message\": \"Order not found\",\n    \"data\": null,\n    \"errors\": [\n        \"No order found with the specified UUID\"\n    ]\n}"
+        }
+      ]
     },
     {
       "name": "Get Available Status Transitions",
@@ -34,8 +91,17 @@
         },
         "description": "Get available status transitions for current order status"
       },
-      "response": []
-    },
+      "response": [
+        {
+          "name": "Success Response - Pending Order",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/orders/{{order_uuid}}/status/available"
+          },
+          "status": "OK",
+          "code": 200,
+          "body": "{\n    \"success\": true,\n    \"message\": \"Available status transitions retrieved successfully\",\n    \"data\": {\n        \"current_status\": \"pending\",\n        \"available_transitions\": [\n            {\n                \"status\": \"confirmed\",\n                \"description\": \"Confirm the order for processing\"\n            },\n            {\n                \"status\": \"cancelled\",\n                \"description\": \"Cancel the order\"\n            }\n        ]\n    },\n    \"errors\": []\n}"
+        },\n        {\n          \"name\": \"Success Response - Processing Order\",\n          \"originalRequest\": {\n            \"method\": \"GET\",\n            \"url\": \"{{base_url}}/orders/{{order_uuid}}/status/available\"\n          },\n          \"status\": \"OK\",\n          \"code\": 200,\n          \"body\": \"{\n    \\\"success\\\": true,\n    \\\"message\\\": \\\"Available status transitions retrieved successfully\\\",\n    \\\"data\\\": {\n        \\\"current_status\\\": \\\"processing\\\",\n        \\\"available_transitions\\\": [\n            {\n                \\\"status\\\": \\\"shipped\\\",\n                \\\"description\\\": \\\"Mark order as shipped\\\"\n            },\n            {\n                \\\"status\\\": \\\"cancelled\\\",\n                \\\"description\\\": \\\"Cancel the order\\\"\n            }\n        ]\n    },\n    \\\"errors\\\": []\n}\"\n        },\n        {\n          \"name\": \"Success Response - Delivered Order\",\n          \"originalRequest\": {\n            \"method\": \"GET\",\n            \"url\": \"{{base_url}}/orders/{{order_uuid}}/status/available\"\n          },\n          \"status\": \"OK\",\n          \"code\": 200,\n          \"body\": \"{\n    \\\"success\\\": true,\n    \\\"message\\\": \\\"Available status transitions retrieved successfully\\\",\n    \\\"data\\\": {\n        \\\"current_status\\\": \\\"delivered\\\",\n        \\\"available_transitions\\\": [],\n        \\\"message\\\": \\\"Order is in final state. No further transitions available.\\\"\n    },\n    \\\"errors\\\": []\n}\"\n        },\n        {\n          \"name\": \"Order Not Found\",\n          \"originalRequest\": {\n            \"method\": \"GET\",\n            \"url\": \"{{base_url}}/orders/non-existent-uuid/status/available\"\n          },\n          \"status\": \"Not Found\",\n          \"code\": 404,\n          \"body\": \"{\n    \\\"success\\\": false,\n    \\\"message\\\": \\\"Order not found\\\",\n    \\\"data\\\": null,\n    \\\"errors\\\": [\n        \\\"No order found with the specified UUID\\\"\n    ]\n}\"\n        }\n      ]\n    },
     {
       "name": "Get Order Status History",
       "request": {
@@ -47,8 +113,17 @@
         },
         "description": "Get complete status change history for an order with user details and timestamps"
       },
-      "response": []
-    },
+      "response": [
+        {
+          "name": "Success Response - Complete History",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/orders/{{order_uuid}}/status/history"
+          },
+          "status": "OK",
+          "code": 200,
+          "body": "{\n    \"success\": true,\n    \"message\": \"Order status history retrieved successfully\",\n    \"data\": {\n        \"order_uuid\": \"0198d5bf-a0b3-72d1-8c56-b4824c7f7630\",\n        \"order_number\": \"ORD-2025-001\",\n        \"current_status\": \"delivered\",\n        \"history\": [\n            {\n                \"uuid\": \"0198d5bf-h0i3-72d1-8c56-b4824c7f7641\",\n                \"old_status\": null,\n                \"new_status\": \"pending\",\n                \"notes\": \"Order created\",\n                \"changed_by_uuid\": \"0198d5bf-a001-72b1-80fc-37402118ff2f\",\n                \"created_at\": \"2025-08-23T10:30:00.000000Z\",\n                \"changed_by\": {\n                    \"uuid\": \"0198d5bf-a001-72b1-80fc-37402118ff2f\",\n                    \"name\": \"John Doe\",\n                    \"email\": \"john@example.com\"\n                }\n            },\n            {\n                \"uuid\": \"0198d5bf-i0j3-72d1-8c56-b4824c7f7642\",\n                \"old_status\": \"pending\",\n                \"new_status\": \"confirmed\",\n                \"notes\": \"Status updated via admin panel\",\n                \"changed_by_uuid\": \"0198d5bf-b002-72b1-80fc-37402118ff3f\",\n                \"created_at\": \"2025-08-23T11:15:00.000000Z\",\n                \"changed_by\": {\n                    \"uuid\": \"0198d5bf-b002-72b1-80fc-37402118ff3f\",\n                    \"name\": \"Admin User\",\n                    \"email\": \"admin@turkticaret.test\"\n                }\n            },\n            {\n                \"uuid\": \"0198d5bf-j0k3-72d1-8c56-b4824c7f7643\",\n                \"old_status\": \"confirmed\",\n                \"new_status\": \"processing\",\n                \"notes\": \"Status updated via admin panel\",\n                \"changed_by_uuid\": \"0198d5bf-b002-72b1-80fc-37402118ff3f\",\n                \"created_at\": \"2025-08-23T12:00:00.000000Z\",\n                \"changed_by\": {\n                    \"uuid\": \"0198d5bf-b002-72b1-80fc-37402118ff3f\",\n                    \"name\": \"Admin User\",\n                    \"email\": \"admin@turkticaret.test\"\n                }\n            },\n            {\n                \"uuid\": \"0198d5bf-k0l3-72d1-8c56-b4824c7f7644\",\n                \"old_status\": \"processing\",\n                \"new_status\": \"shipped\",\n                \"notes\": \"Status updated via admin panel\",\n                \"changed_by_uuid\": \"0198d5bf-b002-72b1-80fc-37402118ff3f\",\n                \"created_at\": \"2025-08-23T14:30:00.000000Z\",\n                \"changed_by\": {\n                    \"uuid\": \"0198d5bf-b002-72b1-80fc-37402118ff3f\",\n                    \"name\": \"Admin User\",\n                    \"email\": \"admin@turkticaret.test\"\n                }\n            },\n            {\n                \"uuid\": \"0198d5bf-l0m3-72d1-8c56-b4824c7f7645\",\n                \"old_status\": \"shipped\",\n                \"new_status\": \"delivered\",\n                \"notes\": \"Status updated via admin panel\",\n                \"changed_by_uuid\": \"0198d5bf-b002-72b1-80fc-37402118ff3f\",\n                \"created_at\": \"2025-08-23T16:45:00.000000Z\",\n                \"changed_by\": {\n                    \"uuid\": \"0198d5bf-b002-72b1-80fc-37402118ff3f\",\n                    \"name\": \"Admin User\",\n                    \"email\": \"admin@turkticaret.test\"\n                }\n            }\n        ],\n        \"total_transitions\": 5\n    },\n    \"errors\": []\n}"
+        },\n        {\n          \"name\": \"Success Response - New Order\",\n          \"originalRequest\": {\n            \"method\": \"GET\",\n            \"url\": \"{{base_url}}/orders/{{order_uuid}}/status/history\"\n          },\n          \"status\": \"OK\",\n          \"code\": 200,\n          \"body\": \"{\n    \\\"success\\\": true,\n    \\\"message\\\": \\\"Order status history retrieved successfully\\\",\n    \\\"data\\\": {\n        \\\"order_uuid\\\": \\\"0198d5bf-n0o3-72d1-8c56-b4824c7f7646\\\",\n        \\\"order_number\\\": \\\"ORD-2025-002\\\",\n        \\\"current_status\\\": \\\"pending\\\",\n        \\\"history\\\": [\n            {\n                \\\"uuid\\\": \\\"0198d5bf-p0q3-72d1-8c56-b4824c7f7647\\\",\n                \\\"old_status\\\": null,\n                \\\"new_status\\\": \\\"pending\\\",\n                \\\"notes\\\": \\\"Order created\\\",\n                \\\"changed_by_uuid\\\": \\\"0198d5bf-a003-72b1-80fc-37402118ff4f\\\",\n                \\\"created_at\\\": \\\"2025-08-23T17:00:00.000000Z\\\",\n                \\\"changed_by\\\": {\n                    \\\"uuid\\\": \\\"0198d5bf-a003-72b1-80fc-37402118ff4f\\\",\n                    \\\"name\\\": \\\"Jane Smith\\\",\n                    \\\"email\\\": \\\"jane@example.com\\\"\n                }\n            }\n        ],\n        \\\"total_transitions\\\": 1\n    },\n    \\\"errors\\\": []\n}\"\n        },\n        {\n          \"name\": \"Order Not Found\",\n          \"originalRequest\": {\n            \"method\": \"GET\",\n            \"url\": \"{{base_url}}/orders/non-existent-uuid/status/history\"\n          },\n          \"status\": \"Not Found\",\n          \"code\": 404,\n          \"body\": \"{\n    \\\"success\\\": false,\n    \\\"message\\\": \\\"Order not found\\\",\n    \\\"data\\\": null,\n    \\\"errors\\\": [\n        \\\"No order found with the specified UUID\\\"\n    ]\n}\"\n        }\n      ]\n    },
     {
       "name": "Status Workflow - Complete Order Lifecycle",
       "description": "Complete order status workflow from pending to delivered",
@@ -64,7 +139,18 @@
             },
             "description": "Step 1: Check initial order status (should be pending)"
           },
-          "response": []
+          "response": [
+            {
+              "name": "Success Response - Pending Order",
+              "originalRequest": {
+                "method": "GET",
+                "url": "{{base_url}}/orders/{{order_uuid}}"
+              },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n    \"success\": true,\n    \"message\": \"Order retrieved successfully\",\n    \"data\": {\n        \"uuid\": \"0198d5bf-a0b3-72d1-8c56-b4824c7f7630\",\n        \"order_number\": \"ORD-2025-001\",\n        \"status\": \"pending\",\n        \"total_amount\": 15000,\n        \"shipping_address\": \"123 Main St, Istanbul, Turkey\",\n        \"notes\": \"Customer requested express delivery\",\n        \"shipped_at\": null,\n        \"delivered_at\": null,\n        \"created_at\": \"2025-08-23T10:30:00.000000Z\",\n        \"updated_at\": \"2025-08-23T10:30:00.000000Z\",\n        \"user\": {\n            \"uuid\": \"0198d5bf-a001-72b1-80fc-37402118ff2f\",\n            \"name\": \"John Doe\",\n            \"email\": \"john@example.com\"\n        }\n    },\n    \"errors\": []\n}"
+            }
+          ]
         },
         {
           "name": "2. Confirm Order",
@@ -82,7 +168,22 @@
             },
             "description": "Step 2: Confirm the order (pending → confirmed)"
           },
-          "response": []
+          "response": [
+            {
+              "name": "Success Response - Order Confirmed",
+              "originalRequest": {
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"confirmed\"\n}"
+                },
+                "url": "{{base_url}}/orders/{{order_uuid}}/status"
+              },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n    \"success\": true,\n    \"message\": \"Order status updated successfully\",\n    \"data\": {\n        \"uuid\": \"0198d5bf-a0b3-72d1-8c56-b4824c7f7630\",\n        \"order_number\": \"ORD-2025-001\",\n        \"status\": \"confirmed\",\n        \"old_status\": \"pending\",\n        \"total_amount\": 15000,\n        \"updated_at\": \"2025-08-23T11:15:00.000000Z\",\n        \"status_history\": {\n            \"uuid\": \"0198d5bf-i0j3-72d1-8c56-b4824c7f7642\",\n            \"old_status\": \"pending\",\n            \"new_status\": \"confirmed\",\n            \"notes\": \"Status updated via admin panel\",\n            \"changed_by_uuid\": \"0198d5bf-b002-72b1-80fc-37402118ff3f\",\n            \"created_at\": \"2025-08-23T11:15:00.000000Z\"\n        }\n    },\n    \"errors\": []\n}"
+            }
+          ]
         },
         {
           "name": "3. Start Processing",
@@ -100,7 +201,22 @@
             },
             "description": "Step 3: Start processing the order (confirmed → processing)"
           },
-          "response": []
+          "response": [
+            {
+              "name": "Success Response - Order Processing",
+              "originalRequest": {
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"processing\"\n}"
+                },
+                "url": "{{base_url}}/orders/{{order_uuid}}/status"
+              },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n    \"success\": true,\n    \"message\": \"Order status updated successfully\",\n    \"data\": {\n        \"uuid\": \"0198d5bf-a0b3-72d1-8c56-b4824c7f7630\",\n        \"order_number\": \"ORD-2025-001\",\n        \"status\": \"processing\",\n        \"old_status\": \"confirmed\",\n        \"total_amount\": 15000,\n        \"updated_at\": \"2025-08-23T12:00:00.000000Z\",\n        \"status_history\": {\n            \"uuid\": \"0198d5bf-j0k3-72d1-8c56-b4824c7f7643\",\n            \"old_status\": \"confirmed\",\n            \"new_status\": \"processing\",\n            \"notes\": \"Status updated via admin panel\",\n            \"changed_by_uuid\": \"0198d5bf-b002-72b1-80fc-37402118ff3f\",\n            \"created_at\": \"2025-08-23T12:00:00.000000Z\"\n        }\n    },\n    \"errors\": []\n}"
+            }
+          ]
         },
         {
           "name": "4. Ship Order",
@@ -118,7 +234,22 @@
             },
             "description": "Step 4: Ship the order (processing → shipped). Automatically sets shipped_at timestamp"
           },
-          "response": []
+          "response": [
+            {
+              "name": "Success Response - Order Shipped",
+              "originalRequest": {
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"shipped\"\n}"
+                },
+                "url": "{{base_url}}/orders/{{order_uuid}}/status"
+              },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n    \"success\": true,\n    \"message\": \"Order status updated successfully\",\n    \"data\": {\n        \"uuid\": \"0198d5bf-a0b3-72d1-8c56-b4824c7f7630\",\n        \"order_number\": \"ORD-2025-001\",\n        \"status\": \"shipped\",\n        \"old_status\": \"processing\",\n        \"total_amount\": 15000,\n        \"shipped_at\": \"2025-08-23T14:30:00.000000Z\",\n        \"delivered_at\": null,\n        \"updated_at\": \"2025-08-23T14:30:00.000000Z\",\n        \"status_history\": {\n            \"uuid\": \"0198d5bf-k0l3-72d1-8c56-b4824c7f7644\",\n            \"old_status\": \"processing\",\n            \"new_status\": \"shipped\",\n            \"notes\": \"Status updated via admin panel\",\n            \"changed_by_uuid\": \"0198d5bf-b002-72b1-80fc-37402118ff3f\",\n            \"created_at\": \"2025-08-23T14:30:00.000000Z\"\n        }\n    },\n    \"errors\": []\n}"
+            }
+          ]
         },
         {
           "name": "5. Deliver Order",
@@ -136,7 +267,22 @@
             },
             "description": "Step 5: Mark order as delivered (shipped → delivered). Automatically sets delivered_at timestamp"
           },
-          "response": []
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"delivered\"\n}"
+                },
+                "url": "{{base_url}}/orders/{{order_uuid}}/status"
+              },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n    \"success\": true,\n    \"message\": \"Order status updated successfully\",\n    \"data\": {\n        \"uuid\": \"0198d5bf-a0b3-72d1-8c56-b4824c7f7630\",\n        \"order_number\": \"ORD-2025-001\",\n        \"status\": \"delivered\",\n        \"old_status\": \"shipped\",\n        \"total_amount\": 15000,\n        \"shipped_at\": \"2025-08-23T14:30:00.000000Z\",\n        \"delivered_at\": \"2025-08-23T16:45:00.000000Z\",\n        \"updated_at\": \"2025-08-23T16:45:00.000000Z\",\n        \"status_history\": {\n            \"uuid\": \"0198d5bf-l0m3-72d1-8c56-b4824c7f7645\",\n            \"old_status\": \"shipped\",\n            \"new_status\": \"delivered\",\n            \"notes\": \"Status updated via admin panel\",\n            \"changed_by_uuid\": \"0198d5bf-b002-72b1-80fc-37402118ff3f\",\n            \"created_at\": \"2025-08-23T16:45:00.000000Z\"\n        }\n    },\n    \"errors\": []\n}"
+            }
+          ]
         },
         {
           "name": "6. Verify Final Status",
@@ -149,7 +295,22 @@
             },
             "description": "Step 6: Verify final order status and timestamps"
           },
-          "response": []
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"delivered\"\n}"
+                },
+                "url": "{{base_url}}/orders/{{order_uuid}}/status"
+              },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n    \"success\": true,\n    \"message\": \"Order status updated successfully\",\n    \"data\": {\n        \"uuid\": \"0198d5bf-a0b3-72d1-8c56-b4824c7f7630\",\n        \"order_number\": \"ORD-2025-001\",\n        \"status\": \"delivered\",\n        \"old_status\": \"shipped\",\n        \"total_amount\": 15000,\n        \"shipped_at\": \"2025-08-23T14:30:00.000000Z\",\n        \"delivered_at\": \"2025-08-23T16:45:00.000000Z\",\n        \"updated_at\": \"2025-08-23T16:45:00.000000Z\",\n        \"status_history\": {\n            \"uuid\": \"0198d5bf-l0m3-72d1-8c56-b4824c7f7645\",\n            \"old_status\": \"shipped\",\n            \"new_status\": \"delivered\",\n            \"notes\": \"Status updated via admin panel\",\n            \"changed_by_uuid\": \"0198d5bf-b002-72b1-80fc-37402118ff3f\",\n            \"created_at\": \"2025-08-23T16:45:00.000000Z\"\n        }\n    },\n    \"errors\": []\n}"
+            }
+          ]
         },
         {
           "name": "7. View Complete Status History",
@@ -162,7 +323,22 @@
             },
             "description": "Step 7: View complete status change history with all transitions"
           },
-          "response": []
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"delivered\"\n}"
+                },
+                "url": "{{base_url}}/orders/{{order_uuid}}/status"
+              },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n    \"success\": true,\n    \"message\": \"Order status updated successfully\",\n    \"data\": {\n        \"uuid\": \"0198d5bf-a0b3-72d1-8c56-b4824c7f7630\",\n        \"order_number\": \"ORD-2025-001\",\n        \"status\": \"delivered\",\n        \"old_status\": \"shipped\",\n        \"total_amount\": 15000,\n        \"shipped_at\": \"2025-08-23T14:30:00.000000Z\",\n        \"delivered_at\": \"2025-08-23T16:45:00.000000Z\",\n        \"updated_at\": \"2025-08-23T16:45:00.000000Z\",\n        \"status_history\": {\n            \"uuid\": \"0198d5bf-l0m3-72d1-8c56-b4824c7f7645\",\n            \"old_status\": \"shipped\",\n            \"new_status\": \"delivered\",\n            \"notes\": \"Status updated via admin panel\",\n            \"changed_by_uuid\": \"0198d5bf-b002-72b1-80fc-37402118ff3f\",\n            \"created_at\": \"2025-08-23T16:45:00.000000Z\"\n        }\n    },\n    \"errors\": []\n}"
+            }
+          ]
         }
       ]
     },
@@ -186,7 +362,22 @@
             },
             "description": "Try invalid status transition (e.g., pending → delivered) - should fail"
           },
-          "response": []
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"delivered\"\n}"
+                },
+                "url": "{{base_url}}/orders/{{order_uuid}}/status"
+              },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n    \"success\": true,\n    \"message\": \"Order status updated successfully\",\n    \"data\": {\n        \"uuid\": \"0198d5bf-a0b3-72d1-8c56-b4824c7f7630\",\n        \"order_number\": \"ORD-2025-001\",\n        \"status\": \"delivered\",\n        \"old_status\": \"shipped\",\n        \"total_amount\": 15000,\n        \"shipped_at\": \"2025-08-23T14:30:00.000000Z\",\n        \"delivered_at\": \"2025-08-23T16:45:00.000000Z\",\n        \"updated_at\": \"2025-08-23T16:45:00.000000Z\",\n        \"status_history\": {\n            \"uuid\": \"0198d5bf-l0m3-72d1-8c56-b4824c7f7645\",\n            \"old_status\": \"shipped\",\n            \"new_status\": \"delivered\",\n            \"notes\": \"Status updated via admin panel\",\n            \"changed_by_uuid\": \"0198d5bf-b002-72b1-80fc-37402118ff3f\",\n            \"created_at\": \"2025-08-23T16:45:00.000000Z\"\n        }\n    },\n    \"errors\": []\n}"
+            }
+          ]
         },
         {
           "name": "Invalid Status Value",
@@ -204,7 +395,22 @@
             },
             "description": "Try invalid status value - should fail validation"
           },
-          "response": []
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"delivered\"\n}"
+                },
+                "url": "{{base_url}}/orders/{{order_uuid}}/status"
+              },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n    \"success\": true,\n    \"message\": \"Order status updated successfully\",\n    \"data\": {\n        \"uuid\": \"0198d5bf-a0b3-72d1-8c56-b4824c7f7630\",\n        \"order_number\": \"ORD-2025-001\",\n        \"status\": \"delivered\",\n        \"old_status\": \"shipped\",\n        \"total_amount\": 15000,\n        \"shipped_at\": \"2025-08-23T14:30:00.000000Z\",\n        \"delivered_at\": \"2025-08-23T16:45:00.000000Z\",\n        \"updated_at\": \"2025-08-23T16:45:00.000000Z\",\n        \"status_history\": {\n            \"uuid\": \"0198d5bf-l0m3-72d1-8c56-b4824c7f7645\",\n            \"old_status\": \"shipped\",\n            \"new_status\": \"delivered\",\n            \"notes\": \"Status updated via admin panel\",\n            \"changed_by_uuid\": \"0198d5bf-b002-72b1-80fc-37402118ff3f\",\n            \"created_at\": \"2025-08-23T16:45:00.000000Z\"\n        }\n    },\n    \"errors\": []\n}"
+            }
+          ]
         },
         {
           "name": "Missing Status Field",
@@ -222,7 +428,22 @@
             },
             "description": "Try update without status field - should fail validation"
           },
-          "response": []
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"delivered\"\n}"
+                },
+                "url": "{{base_url}}/orders/{{order_uuid}}/status"
+              },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n    \"success\": true,\n    \"message\": \"Order status updated successfully\",\n    \"data\": {\n        \"uuid\": \"0198d5bf-a0b3-72d1-8c56-b4824c7f7630\",\n        \"order_number\": \"ORD-2025-001\",\n        \"status\": \"delivered\",\n        \"old_status\": \"shipped\",\n        \"total_amount\": 15000,\n        \"shipped_at\": \"2025-08-23T14:30:00.000000Z\",\n        \"delivered_at\": \"2025-08-23T16:45:00.000000Z\",\n        \"updated_at\": \"2025-08-23T16:45:00.000000Z\",\n        \"status_history\": {\n            \"uuid\": \"0198d5bf-l0m3-72d1-8c56-b4824c7f7645\",\n            \"old_status\": \"shipped\",\n            \"new_status\": \"delivered\",\n            \"notes\": \"Status updated via admin panel\",\n            \"changed_by_uuid\": \"0198d5bf-b002-72b1-80fc-37402118ff3f\",\n            \"created_at\": \"2025-08-23T16:45:00.000000Z\"\n        }\n    },\n    \"errors\": []\n}"
+            }
+          ]
         },
         {
           "name": "Update Delivered Order Status",
@@ -240,7 +461,22 @@
             },
             "description": "Try to change delivered order status - should fail (delivered is final)"
           },
-          "response": []
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"delivered\"\n}"
+                },
+                "url": "{{base_url}}/orders/{{order_uuid}}/status"
+              },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n    \"success\": true,\n    \"message\": \"Order status updated successfully\",\n    \"data\": {\n        \"uuid\": \"0198d5bf-a0b3-72d1-8c56-b4824c7f7630\",\n        \"order_number\": \"ORD-2025-001\",\n        \"status\": \"delivered\",\n        \"old_status\": \"shipped\",\n        \"total_amount\": 15000,\n        \"shipped_at\": \"2025-08-23T14:30:00.000000Z\",\n        \"delivered_at\": \"2025-08-23T16:45:00.000000Z\",\n        \"updated_at\": \"2025-08-23T16:45:00.000000Z\",\n        \"status_history\": {\n            \"uuid\": \"0198d5bf-l0m3-72d1-8c56-b4824c7f7645\",\n            \"old_status\": \"shipped\",\n            \"new_status\": \"delivered\",\n            \"notes\": \"Status updated via admin panel\",\n            \"changed_by_uuid\": \"0198d5bf-b002-72b1-80fc-37402118ff3f\",\n            \"created_at\": \"2025-08-23T16:45:00.000000Z\"\n        }\n    },\n    \"errors\": []\n}"
+            }
+          ]
         }
       ]
     },
@@ -264,7 +500,22 @@
             },
             "description": "Cancel order while pending (pending → cancelled)"
           },
-          "response": []
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"delivered\"\n}"
+                },
+                "url": "{{base_url}}/orders/{{order_uuid}}/status"
+              },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n    \"success\": true,\n    \"message\": \"Order status updated successfully\",\n    \"data\": {\n        \"uuid\": \"0198d5bf-a0b3-72d1-8c56-b4824c7f7630\",\n        \"order_number\": \"ORD-2025-001\",\n        \"status\": \"delivered\",\n        \"old_status\": \"shipped\",\n        \"total_amount\": 15000,\n        \"shipped_at\": \"2025-08-23T14:30:00.000000Z\",\n        \"delivered_at\": \"2025-08-23T16:45:00.000000Z\",\n        \"updated_at\": \"2025-08-23T16:45:00.000000Z\",\n        \"status_history\": {\n            \"uuid\": \"0198d5bf-l0m3-72d1-8c56-b4824c7f7645\",\n            \"old_status\": \"shipped\",\n            \"new_status\": \"delivered\",\n            \"notes\": \"Status updated via admin panel\",\n            \"changed_by_uuid\": \"0198d5bf-b002-72b1-80fc-37402118ff3f\",\n            \"created_at\": \"2025-08-23T16:45:00.000000Z\"\n        }\n    },\n    \"errors\": []\n}"
+            }
+          ]
         },
         {
           "name": "Cancel Confirmed Order",
@@ -282,7 +533,22 @@
             },
             "description": "Cancel order while confirmed (confirmed → cancelled)"
           },
-          "response": []
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"delivered\"\n}"
+                },
+                "url": "{{base_url}}/orders/{{order_uuid}}/status"
+              },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n    \"success\": true,\n    \"message\": \"Order status updated successfully\",\n    \"data\": {\n        \"uuid\": \"0198d5bf-a0b3-72d1-8c56-b4824c7f7630\",\n        \"order_number\": \"ORD-2025-001\",\n        \"status\": \"delivered\",\n        \"old_status\": \"shipped\",\n        \"total_amount\": 15000,\n        \"shipped_at\": \"2025-08-23T14:30:00.000000Z\",\n        \"delivered_at\": \"2025-08-23T16:45:00.000000Z\",\n        \"updated_at\": \"2025-08-23T16:45:00.000000Z\",\n        \"status_history\": {\n            \"uuid\": \"0198d5bf-l0m3-72d1-8c56-b4824c7f7645\",\n            \"old_status\": \"shipped\",\n            \"new_status\": \"delivered\",\n            \"notes\": \"Status updated via admin panel\",\n            \"changed_by_uuid\": \"0198d5bf-b002-72b1-80fc-37402118ff3f\",\n            \"created_at\": \"2025-08-23T16:45:00.000000Z\"\n        }\n    },\n    \"errors\": []\n}"
+            }
+          ]
         },
         {
           "name": "Cancel Processing Order",
@@ -300,7 +566,22 @@
             },
             "description": "Cancel order while processing (processing → cancelled)"
           },
-          "response": []
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"delivered\"\n}"
+                },
+                "url": "{{base_url}}/orders/{{order_uuid}}/status"
+              },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n    \"success\": true,\n    \"message\": \"Order status updated successfully\",\n    \"data\": {\n        \"uuid\": \"0198d5bf-a0b3-72d1-8c56-b4824c7f7630\",\n        \"order_number\": \"ORD-2025-001\",\n        \"status\": \"delivered\",\n        \"old_status\": \"shipped\",\n        \"total_amount\": 15000,\n        \"shipped_at\": \"2025-08-23T14:30:00.000000Z\",\n        \"delivered_at\": \"2025-08-23T16:45:00.000000Z\",\n        \"updated_at\": \"2025-08-23T16:45:00.000000Z\",\n        \"status_history\": {\n            \"uuid\": \"0198d5bf-l0m3-72d1-8c56-b4824c7f7645\",\n            \"old_status\": \"shipped\",\n            \"new_status\": \"delivered\",\n            \"notes\": \"Status updated via admin panel\",\n            \"changed_by_uuid\": \"0198d5bf-b002-72b1-80fc-37402118ff3f\",\n            \"created_at\": \"2025-08-23T16:45:00.000000Z\"\n        }\n    },\n    \"errors\": []\n}"
+            }
+          ]
         },
         {
           "name": "Try Cancel Shipped Order",
@@ -318,7 +599,22 @@
             },
             "description": "Try to cancel shipped order - should fail (shipped cannot be cancelled)"
           },
-          "response": []
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"delivered\"\n}"
+                },
+                "url": "{{base_url}}/orders/{{order_uuid}}/status"
+              },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n    \"success\": true,\n    \"message\": \"Order status updated successfully\",\n    \"data\": {\n        \"uuid\": \"0198d5bf-a0b3-72d1-8c56-b4824c7f7630\",\n        \"order_number\": \"ORD-2025-001\",\n        \"status\": \"delivered\",\n        \"old_status\": \"shipped\",\n        \"total_amount\": 15000,\n        \"shipped_at\": \"2025-08-23T14:30:00.000000Z\",\n        \"delivered_at\": \"2025-08-23T16:45:00.000000Z\",\n        \"updated_at\": \"2025-08-23T16:45:00.000000Z\",\n        \"status_history\": {\n            \"uuid\": \"0198d5bf-l0m3-72d1-8c56-b4824c7f7645\",\n            \"old_status\": \"shipped\",\n            \"new_status\": \"delivered\",\n            \"notes\": \"Status updated via admin panel\",\n            \"changed_by_uuid\": \"0198d5bf-b002-72b1-80fc-37402118ff3f\",\n            \"created_at\": \"2025-08-23T16:45:00.000000Z\"\n        }\n    },\n    \"errors\": []\n}"
+            }
+          ]
         }
       ]
     }

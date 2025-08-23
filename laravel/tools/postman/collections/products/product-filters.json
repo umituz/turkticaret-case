@@ -2,7 +2,7 @@
   "info": {
     "_postman_id": "products-filters-collection",
     "name": "Products - Filters",
-    "description": "Simple product filtering examples. Supports: page, limit, category_uuid, min_price, max_price, search",
+    "description": "Simple product filtering examples. Supports: page, limit, category_uuid, min_price, max_price, search (name+description)",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
@@ -49,7 +49,7 @@
             {"key": "search", "value": "phone"}
           ]
         },
-        "description": "Search products by name"
+        "description": "Search products by name and description"
       }
     },
     {
@@ -57,15 +57,15 @@
       "request": {
         "method": "GET",
         "url": {
-          "raw": "{{base_url}}/products?page=2&limit=10",
+          "raw": "{{base_url}}/products?page=2&per_page={{per_page}}",
           "host": ["{{base_url}}"],
           "path": ["products"],
           "query": [
             {"key": "page", "value": "2"},
-            {"key": "limit", "value": "10"}
+            {"key": "per_page", "value": "{{per_page}}"}
           ]
         },
-        "description": "Get second page with 10 items per page"
+        "description": "Get second page using centralized per_page parameter ({{per_page}} = 20)"
       }
     },
     {
@@ -73,19 +73,36 @@
       "request": {
         "method": "GET",
         "url": {
-          "raw": "{{base_url}}/products?category_uuid={{category_uuid}}&min_price=5000&max_price=100000&search=phone&page=1&limit=20",
+          "raw": "{{base_url}}/products?category_uuid={{category_uuid}}&min_price=5000&max_price=100000&search={{search}}&page={{page}}&per_page={{per_page}}",
           "host": ["{{base_url}}"],
           "path": ["products"],
           "query": [
             {"key": "category_uuid", "value": "{{category_uuid}}"},
             {"key": "min_price", "value": "5000"},
             {"key": "max_price", "value": "100000"},
-            {"key": "search", "value": "phone"},
-            {"key": "page", "value": "1"},
-            {"key": "limit", "value": "20"}
+            {"key": "search", "value": "{{search}}"},
+            {"key": "page", "value": "{{page}}"},
+            {"key": "per_page", "value": "{{per_page}}"}
           ]
         },
         "description": "Multiple filters combined: category, price range, search, and pagination"
+      }
+    },
+    {
+      "name": "Filter by Featured Products",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{base_url}}/products?isFeatured=true&per_page={{per_page}}&page={{page}}",
+          "host": ["{{base_url}}"],
+          "path": ["products"],
+          "query": [
+            {"key": "isFeatured", "value": "true", "description": "Filter featured products"},
+            {"key": "per_page", "value": "{{per_page}}", "description": "Items per page"},
+            {"key": "page", "value": "{{page}}", "description": "Page number"}
+          ]
+        },
+        "description": "Get all featured products"
       }
     }
   ]
