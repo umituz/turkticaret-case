@@ -21,7 +21,7 @@ class UserSettingsPreferencesUpdateRequest extends FormRequest
     {
         return [
             'language_uuid' => 'required|uuid|exists:languages,uuid',
-            'timezone' => 'required|string|max:255',
+            'timezone' => 'required|string|max:255|timezone',
         ];
     }
 
@@ -37,6 +37,7 @@ class UserSettingsPreferencesUpdateRequest extends FormRequest
             'timezone.required' => 'Timezone selection is required.',
             'timezone.string' => 'Timezone must be a valid string.',
             'timezone.max' => 'Timezone name is too long.',
+            'timezone.timezone' => 'Timezone must be a valid timezone identifier.',
         ];
     }
 }

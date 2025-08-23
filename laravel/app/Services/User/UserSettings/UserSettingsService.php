@@ -21,6 +21,11 @@ class UserSettingsService
 
     public function createDefaultSettings(User $user): UserSetting
     {
+        $existingSettings = UserSetting::where('user_uuid', $user->uuid)->first();
+        if ($existingSettings) {
+            return $existingSettings;
+        }
+
         $settings = $this->userSettingsRepository->createDefaultSettings($user->uuid);
         $user->load('userSettings');
         return $settings;
@@ -29,11 +34,11 @@ class UserSettingsService
     public function updateNotificationPreferences(User $user, NotificationPreferencesDTO $preferences): UserSetting
     {
         $settings = $this->getUserSettings($user);
-        
+
         if (!$settings) {
             $settings = $this->createDefaultSettings($user);
         }
-        
+
         $settings->update($preferences->toArray());
         return $settings->fresh();
     }

@@ -19,6 +19,11 @@ class UserSettingsRepository extends BaseRepository implements UserSettingsRepos
 
     public function createDefaultSettings(string $userUuid): UserSetting
     {
+        $existingSettings = $this->findByUserUuid($userUuid);
+        if ($existingSettings) {
+            return $existingSettings;
+        }
+
         return $this->model->create([
             'user_uuid' => $userUuid,
             'email_notifications' => true,
