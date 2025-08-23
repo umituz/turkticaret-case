@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Services\Profile;
+namespace App\Services\User\Profile;
 
 use App\DTOs\Profile\ProfileUpdateDTO;
-use App\Models\Auth\User;
+use App\Models\User\User;
 use App\Repositories\User\UserRepositoryInterface;
 
 class ProfileService

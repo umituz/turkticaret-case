@@ -2,8 +2,8 @@
 
 namespace Database\Factories\Cart;
 
-use App\Models\Auth\User;
 use App\Models\Cart\Cart;
+use App\Models\User\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**

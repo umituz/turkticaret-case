@@ -3,6 +3,7 @@
 namespace App\Services\Cart;
 
 use App\Exceptions\Product\InsufficientStockException;
+use App\Exceptions\Product\OutOfStockException;
 use App\Models\Cart\Cart;
 use App\Repositories\Cart\CartRepositoryInterface;
 use App\Repositories\Product\ProductRepositoryInterface;
@@ -28,7 +29,11 @@ class CartService
     }
 
     /**
+     * @param string $userUuid
+     * @param array $data
+     * @return Cart
      * @throws InsufficientStockException
+     * @throws OutOfStockException
      */
     public function addToCart(string $userUuid, array $data): Cart
     {
@@ -41,7 +46,9 @@ class CartService
         if ($existingItem) {
             $totalQuantity = $existingItem->quantity + $requestedQuantity;
 
-            if (!$product->hasStock($totalQuantity)) {
+            if ($product->stock_quantity == 0) {
+                throw new OutOfStockException($product->name);
+            } elseif (!$product->hasStock($totalQuantity)) {
                 throw new InsufficientStockException($product->name, $totalQuantity, $product->stock_quantity);
             }
 
@@ -49,7 +56,9 @@ class CartService
                 'quantity' => $totalQuantity,
             ]);
         } else {
-            if (!$product->hasStock($requestedQuantity)) {
+            if ($product->stock_quantity == 0) {
+                throw new OutOfStockException($product->name);
+            } elseif (!$product->hasStock($requestedQuantity)) {
                 throw new InsufficientStockException($product->name, $requestedQuantity, $product->stock_quantity);
             }
 
@@ -63,6 +72,10 @@ class CartService
         return $cart->fresh(['cartItems.product']);
     }
 
+    /**
+     * @throws InsufficientStockException
+     * @throws OutOfStockException
+     */
     public function updateCartItem(string $userUuid, array $data): Cart
     {
         $cart = $this->getOrCreateCart($userUuid);
@@ -72,7 +85,9 @@ class CartService
         if ($cartItem) {
             $product = $this->productRepository->findByUuid($data['product_uuid']);
 
-            if (!$product->hasStock($data['quantity'])) {
+            if ($product->stock_quantity == 0) {
+                throw new OutOfStockException($product->name);
+            } elseif (!$product->hasStock($data['quantity'])) {
                 throw new InsufficientStockException($product->name, $data['quantity'], $product->stock_quantity);
             }
 
