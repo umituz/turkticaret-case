@@ -10,14 +10,24 @@ use App\Repositories\Country\CountryRepository;
 use App\Repositories\Country\CountryRepositoryInterface;
 use App\Repositories\Currency\CurrencyRepository;
 use App\Repositories\Currency\CurrencyRepositoryInterface;
+use App\Repositories\Dashboard\DashboardRepository;
+use App\Repositories\Dashboard\DashboardRepositoryInterface;
 use App\Repositories\Language\LanguageRepository;
 use App\Repositories\Language\LanguageRepositoryInterface;
 use App\Repositories\Order\OrderRepository;
 use App\Repositories\Order\OrderRepositoryInterface;
+use App\Repositories\Order\OrderStatusRepository;
+use App\Repositories\Order\OrderStatusRepositoryInterface;
 use App\Repositories\Product\ProductRepository;
 use App\Repositories\Product\ProductRepositoryInterface;
+use App\Repositories\Reports\ReportsRepository;
+use App\Repositories\Reports\ReportsRepositoryInterface;
 use App\Repositories\User\UserRepository;
 use App\Repositories\User\UserRepositoryInterface;
+use App\Repositories\User\UserSettings\UserSettingsRepository;
+use App\Repositories\User\UserSettings\UserSettingsRepositoryInterface;
+use App\Repositories\Setting\SettingsRepository;
+use App\Repositories\Setting\SettingsRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -32,6 +42,14 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(CountryRepositoryInterface::class, CountryRepository::class);
         $this->app->bind(CurrencyRepositoryInterface::class, CurrencyRepository::class);
         $this->app->bind(LanguageRepositoryInterface::class,  LanguageRepository::class);
+
+        $this->app->bind(UserSettingsRepositoryInterface::class, UserSettingsRepository::class);
+        $this->app->bind(SettingsRepositoryInterface::class, SettingsRepository::class);
+
+        $this->app->bind(OrderStatusRepositoryInterface::class, OrderStatusRepository::class);
+        $this->app->bind(DashboardRepositoryInterface::class, DashboardRepository::class);
+        #$this->app->bind(ReportsRepositoryInterface::class, ReportsRepository::class);
+
     }
 
     public function boot(): void

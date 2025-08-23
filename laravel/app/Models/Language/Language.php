@@ -2,8 +2,8 @@
 
 namespace App\Models\Language;
 
-use App\Models\Auth\User;
 use App\Models\Base\BaseUuidModel;
+use App\Models\User\User;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Language extends BaseUuidModel

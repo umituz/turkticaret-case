@@ -2,9 +2,9 @@
 
 namespace App\Models\Country;
 
-use App\Models\Auth\User;
 use App\Models\Base\BaseUuidModel;
 use App\Models\Currency\Currency;
+use App\Models\User\User;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
