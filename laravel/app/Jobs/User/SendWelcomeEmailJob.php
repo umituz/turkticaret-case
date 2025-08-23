@@ -3,7 +3,7 @@
 namespace App\Jobs\User;
 
 use App\Mail\User\WelcomeMail;
-use App\Models\Auth\User;
+  use App\Models\User\User;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Mail;

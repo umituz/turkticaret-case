@@ -2,7 +2,7 @@
 
 namespace App\Mail\User;
 
-use App\Models\Auth\User;
+use App\Models\User\User;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Address;
 use Illuminate\Mail\Mailables\Content;

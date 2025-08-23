@@ -11,7 +11,7 @@
         "method": "POST",
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"name\": \"Test User\",\n  \"email\": \"newuser@test.com\",\n  \"password\": \"password123\",\n  \"password_confirmation\": \"password123\",\n  \"country_code\": \"TR\"\n}",
+          "raw": "{\n  \"name\": \"Test User\",\n  \"email\": \"newuser@test.com\",\n  \"password\": \"password123\",\n  \"password_confirmation\": \"password123\",\n  \"country_code\": \"TR\",\n  \"terms_accepted\": true\n}",
           "options": {
             "raw": {
               "language": "json"

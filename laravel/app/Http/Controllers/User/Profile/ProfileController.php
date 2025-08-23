@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Profile;
+namespace App\Http\Controllers\User\Profile;
 
 use App\Http\Controllers\BaseController;
-use App\Http\Requests\Profile\ProfileUpdateRequest;
-use App\Http\Resources\Profile\ProfileResource;
-use App\Services\Profile\ProfileService;
+use App\Http\Requests\User\Profile\ProfileUpdateRequest;
+use App\Http\Resources\User\Profile\ProfileResource;
+use App\Services\User\Profile\ProfileService;
 use Illuminate\Http\JsonResponse;
 
 class ProfileController extends BaseController

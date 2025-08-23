@@ -1,11 +1,11 @@
 <?php
 
-namespace Database\Seeders\Auth;
+namespace Database\Seeders\User;
 
 use App\Enums\User\UserTypeEnum;
-use App\Models\Auth\User;
 use App\Models\Country\Country;
 use App\Models\Language\Language;
+use App\Models\User\User;
 use Illuminate\Database\Seeder;
 
 class UserSeeder extends Seeder

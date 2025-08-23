@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Profile;
+namespace App\Http\Requests\User\Profile;
 
 use App\Rules\Profile\AtLeastOneFieldRule;
 use App\Rules\Profile\OldPasswordRule;

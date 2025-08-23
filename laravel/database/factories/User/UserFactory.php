@@ -1,10 +1,10 @@
 <?php
 
-namespace Database\Factories\Auth;
+namespace Database\Factories\User;
 
-use App\Models\Auth\User;
 use App\Models\Country\Country;
 use App\Models\Language\Language;
+use App\Models\User\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;

@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Models\Auth;
+namespace App\Models\User;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\Cart\Cart;
 use App\Models\Country\Country;
 use App\Models\Language\Language;
 use App\Models\Order\Order;
-use Database\Factories\Auth\UserFactory;
+use Database\Factories\User\UserFactory;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -93,6 +93,11 @@ class User extends Authenticatable
     public function country(): BelongsTo
     {
         return $this->belongsTo(Country::class, 'country_uuid', 'uuid');
+    }
+
+    public function userSettings(): HasOne
+    {
+        return $this->hasOne(UserSetting::class, 'user_uuid', 'uuid');
     }
 
     public function scopeActive($query)

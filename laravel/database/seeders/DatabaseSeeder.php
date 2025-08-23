@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use Database\Seeders\Auth\UserSeeder;
 use Database\Seeders\Authority\PermissionSeeder;
 use Database\Seeders\Authority\RolePermissionSeeder;
 use Database\Seeders\Authority\RoleSeeder;
@@ -13,6 +12,8 @@ use Database\Seeders\Currency\CurrencySeeder;
 use Database\Seeders\Language\LanguageSeeder;
 use Database\Seeders\Order\OrderSeeder;
 use Database\Seeders\Product\ProductSeeder;
+use Database\Seeders\User\UserSeeder;
+use Database\Seeders\User\UserSettingsSeeder;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -30,6 +31,7 @@ class DatabaseSeeder extends Seeder
             CurrencySeeder::class,
             CountrySeeder::class,
             UserSeeder::class,
+            UserSettingsSeeder::class,
             CategorySeeder::class,
             ProductSeeder::class,
             CartSeeder::class,
