@@ -4,10 +4,9 @@ namespace Tests\Unit\Models\Language;
 
 use App\Models\Base\BaseUuidModel;
 use App\Models\Language\Language;
-use App\Models\Auth\User;
-use Tests\Base\BaseModelUnitTest;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\Base\BaseModelUnitTest;
 
 #[CoversClass(Language::class)]
 class LanguageTest extends BaseModelUnitTest
@@ -83,8 +82,8 @@ class LanguageTest extends BaseModelUnitTest
     public function it_can_access_users_relationship(): void
     {
         $usersRelation = $this->model->users();
-        
-        $this->assertEquals('App\Models\Auth\User', $usersRelation->getRelated()::class);
+
+        $this->assertEquals('App\Models\User\User', $usersRelation->getRelated()::class);
         $this->assertEquals('language_uuid', $usersRelation->getForeignKeyName());
         $this->assertEquals('uuid', $usersRelation->getLocalKeyName());
     }
@@ -94,7 +93,7 @@ class LanguageTest extends BaseModelUnitTest
     {
         $query = $this->model->newQuery();
         $scopedQuery = $this->model->scopeActive($query);
-        
+
         $this->assertNotNull($scopedQuery);
     }
 
@@ -103,7 +102,7 @@ class LanguageTest extends BaseModelUnitTest
     {
         $query = $this->model->newQuery();
         $scopedQuery = $this->model->scopeByCode($query, 'en');
-        
+
         $this->assertNotNull($scopedQuery);
     }
 
@@ -118,10 +117,10 @@ class LanguageTest extends BaseModelUnitTest
     {
         $this->model->direction = 'rtl';
         $this->assertTrue($this->model->isRTL());
-        
+
         $this->model->direction = 'ltr';
         $this->assertFalse($this->model->isRTL());
-        
+
         $this->model->direction = null;
         $this->assertFalse($this->model->isRTL());
     }
@@ -131,10 +130,10 @@ class LanguageTest extends BaseModelUnitTest
     {
         $this->model->direction = 'ltr';
         $this->assertTrue($this->model->isLTR());
-        
+
         $this->model->direction = 'rtl';
         $this->assertFalse($this->model->isLTR());
-        
+
         $this->model->direction = null;
         $this->assertFalse($this->model->isLTR());
     }
@@ -158,7 +157,7 @@ class LanguageTest extends BaseModelUnitTest
     {
         $this->model->direction = 'RTL';
         $this->assertFalse($this->model->isRTL());
-        
+
         $this->model->direction = 'LTR';
         $this->assertFalse($this->model->isLTR());
     }

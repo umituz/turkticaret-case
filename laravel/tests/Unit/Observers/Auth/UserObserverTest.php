@@ -4,9 +4,11 @@ namespace Tests\Unit\Observers\Auth;
 
 use App\Observers\Auth\UserObserver;
 use App\Observers\Base\BaseObserver;
+use App\Repositories\User\UserSettings\UserSettingsRepositoryInterface;
 use Tests\Base\BaseObserverUnitTest;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use Mockery;
 
 #[CoversClass(UserObserver::class)]
 class UserObserverTest extends BaseObserverUnitTest
@@ -14,6 +16,12 @@ class UserObserverTest extends BaseObserverUnitTest
     protected function getObserverClass(): string
     {
         return UserObserver::class;
+    }
+
+    protected function getObserverDependencies(): array
+    {
+        $userSettingsRepository = Mockery::mock(UserSettingsRepositoryInterface::class);
+        return [$userSettingsRepository];
     }
 
     #[Test]

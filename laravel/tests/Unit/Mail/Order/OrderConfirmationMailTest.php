@@ -3,8 +3,8 @@
 namespace Tests\Unit\Mail\Order;
 
 use App\Mail\Order\OrderConfirmationMail;
-use App\Models\Auth\User;
 use App\Models\Order\Order;
+use App\Models\User\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -105,7 +105,7 @@ class OrderConfirmationMailTest extends TestCase
 
         $envelope = $mailable->envelope();
         $expectedSubject = 'Your Order Has Been Confirmed - #' . strtoupper(substr($order->uuid, 0, 8));
-        
+
         $this->assertEquals($expectedSubject, $envelope->subject);
     }
 
@@ -116,7 +116,7 @@ class OrderConfirmationMailTest extends TestCase
         $mailable = new OrderConfirmationMail($order);
 
         $attachments = $mailable->attachments();
-        
+
         $this->assertIsArray($attachments);
         $this->assertEmpty($attachments);
     }
@@ -128,7 +128,7 @@ class OrderConfirmationMailTest extends TestCase
         $mailable = new OrderConfirmationMail($order);
 
         $content = $mailable->content();
-        
+
         $this->assertEquals('emails.order.confirmation', $content->view);
     }
 
@@ -164,14 +164,14 @@ class OrderConfirmationMailTest extends TestCase
             'email' => 'test@example.com',
             'name' => 'Test Customer'
         ]);
-        
+
         $order = Order::factory()->create([
             'user_uuid' => $user->uuid,
             'total_amount' => 25000
         ]);
-        
+
         $order->setRelation('user', $user);
-        
+
         return $order;
     }
 }

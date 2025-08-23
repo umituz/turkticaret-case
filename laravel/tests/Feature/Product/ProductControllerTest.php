@@ -4,6 +4,7 @@ namespace Tests\Feature\Product;
 
 use App\Models\Category\Category;
 use App\Models\Product\Product;
+use Illuminate\Support\Facades\Mail;
 use Tests\Base\BaseFeatureTest;
 use PHPUnit\Framework\Attributes\Test;
 
@@ -14,6 +15,7 @@ class ProductControllerTest extends BaseFeatureTest
     protected function setUp(): void
     {
         parent::setUp();
+        Mail::fake(); // Prevent email sending issues
         $this->category = $this->createTestCategory();
     }
 

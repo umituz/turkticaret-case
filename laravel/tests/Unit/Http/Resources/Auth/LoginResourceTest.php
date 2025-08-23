@@ -39,6 +39,32 @@ class LoginResourceTest extends BaseResourceUnitTest
         ];
     }
 
+    /**
+     * Create a mock user with role-related methods
+     */
+    protected function createMockUserWithRoles(array $userData = [], array $roleNames = ['user']): \Mockery\MockInterface
+    {
+        $userData = $userData ?: $this->getResourceData();
+        $user = $this->createMockModel($userData);
+        
+        // Mock the hasRole method
+        $user->shouldReceive('hasRole')
+            ->andReturnUsing(function ($roleName) use ($roleNames) {
+                return in_array($roleName, $roleNames);
+            });
+        
+        // Create mock roles collection
+        $rolesCollection = \Mockery::mock();
+        $rolesCollection->shouldReceive('pluck')
+            ->with('name')
+            ->andReturn(collect($roleNames));
+        
+        $user->shouldReceive('getAttribute')->with('roles')->andReturn($rolesCollection);
+        $user->roles = $rolesCollection;
+        
+        return $user;
+    }
+
     #[Test]
     public function resource_extends_json_resource(): void
     {
@@ -56,7 +82,7 @@ class LoginResourceTest extends BaseResourceUnitTest
     {
         // Arrange
         $userData = $this->getResourceData();
-        $user = $this->createMockModel($userData);
+        $user = $this->createMockUserWithRoles($userData, ['user']);
         $request = new Request();
 
         // Act
@@ -68,11 +94,15 @@ class LoginResourceTest extends BaseResourceUnitTest
         $this->assertArrayHasKey('uuid', $result);
         $this->assertArrayHasKey('name', $result);
         $this->assertArrayHasKey('email', $result);
+        $this->assertArrayHasKey('role', $result);
+        $this->assertArrayHasKey('roles', $result);
         $this->assertArrayHasKey('created_at', $result);
 
         $this->assertEquals($userData['uuid'], $result['uuid']);
         $this->assertEquals($userData['name'], $result['name']);
         $this->assertEquals($userData['email'], $result['email']);
+        $this->assertEquals('user', $result['role']);
+        $this->assertEquals(['user'], $result['roles']->toArray());
     }
 
     #[Test]
@@ -80,7 +110,7 @@ class LoginResourceTest extends BaseResourceUnitTest
     {
         // Arrange
         $userData = $this->getResourceData();
-        $user = $this->createMockModel($userData);
+        $user = $this->createMockUserWithRoles($userData, ['user']);
         $request = new Request();
 
         // Act
@@ -101,7 +131,7 @@ class LoginResourceTest extends BaseResourceUnitTest
         $userData = array_merge($this->getResourceData(), [
             'created_at' => $createdAt,
         ]);
-        $user = $this->createMockModel($userData);
+        $user = $this->createMockUserWithRoles($userData, ['user']);
         $request = new Request();
 
         // Act
@@ -119,7 +149,7 @@ class LoginResourceTest extends BaseResourceUnitTest
         $userData = array_merge($this->getResourceData(), [
             'created_at' => null,
         ]);
-        $user = $this->createMockModel($userData);
+        $user = $this->createMockUserWithRoles($userData, ['user']);
         $request = new Request();
 
         // Act
@@ -140,7 +170,7 @@ class LoginResourceTest extends BaseResourceUnitTest
             'email' => 'auth@example.com',
             'created_at' => Carbon::now(),
         ];
-        $user = $this->createMockModel($userData);
+        $user = $this->createMockUserWithRoles($userData, ['Admin']);
         $request = new Request();
 
         // Act
@@ -151,6 +181,7 @@ class LoginResourceTest extends BaseResourceUnitTest
         $this->assertEquals('auth-user-uuid', $result['uuid']);
         $this->assertEquals('Authenticated User', $result['name']);
         $this->assertEquals('auth@example.com', $result['email']);
+        $this->assertEquals('admin', $result['role']);
         $this->assertNotNull($result['created_at']);
     }
 
@@ -161,7 +192,7 @@ class LoginResourceTest extends BaseResourceUnitTest
         $userData = array_merge($this->getResourceData(), [
             'name' => 'John O\'Connor & María José',
         ]);
-        $user = $this->createMockModel($userData);
+        $user = $this->createMockUserWithRoles($userData, ['user']);
         $request = new Request();
 
         // Act
@@ -180,7 +211,7 @@ class LoginResourceTest extends BaseResourceUnitTest
         $userData = array_merge($this->getResourceData(), [
             'uuid' => $testUuid,
         ]);
-        $user = $this->createMockModel($userData);
+        $user = $this->createMockUserWithRoles($userData, ['user']);
         $request = new Request();
 
         // Act
@@ -200,7 +231,7 @@ class LoginResourceTest extends BaseResourceUnitTest
         $userData = array_merge($this->getResourceData(), [
             'email' => $testEmail,
         ]);
-        $user = $this->createMockModel($userData);
+        $user = $this->createMockUserWithRoles($userData, ['user']);
         $request = new Request();
 
         // Act
@@ -219,7 +250,7 @@ class LoginResourceTest extends BaseResourceUnitTest
             'name' => 'Müller Özkan Θεός',
             'email' => 'müller@example.com',
         ]);
-        $user = $this->createMockModel($userData);
+        $user = $this->createMockUserWithRoles($userData, ['user']);
         $request = new Request();
 
         // Act

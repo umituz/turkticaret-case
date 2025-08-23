@@ -2,10 +2,10 @@
 
 namespace Tests\Feature\Auth;
 
-use App\Models\Auth\User;
-use Tests\Base\BaseFeatureTest;
-use PHPUnit\Framework\Attributes\Test;
+use App\Models\User\User;
 use Illuminate\Support\Facades\Hash;
+use PHPUnit\Framework\Attributes\Test;
+use Tests\Base\BaseFeatureTest;
 
 class RegisterControllerTest extends BaseFeatureTest
 {
@@ -163,7 +163,7 @@ class RegisterControllerTest extends BaseFeatureTest
         $token = $response->json('data.token');
         $this->assertNotEmpty($token);
         $this->assertIsString($token);
-        
+
         // Verify token can be used for authentication
         $authenticatedResponse = $this->withHeaders([
             'Authorization' => 'Bearer ' . $token,

@@ -2,17 +2,16 @@
 
 namespace Tests\Traits;
 
-use App\Models\Auth\User;
+use App\Models\Cart\Cart;
+use App\Models\Cart\CartItem;
 use App\Models\Category\Category;
 use App\Models\Country\Country;
 use App\Models\Currency\Currency;
 use App\Models\Language\Language;
-use App\Models\Product\Product;
-use App\Models\Cart\Cart;
-use App\Models\Cart\CartItem;
 use App\Models\Order\Order;
 use App\Models\Order\OrderItem;
-use Illuminate\Support\Facades\Hash;
+use App\Models\Product\Product;
+use App\Models\User\User;
 
 /**
  * Trait providing mock data creation utilities for feature tests
@@ -24,19 +23,26 @@ trait FeatureMocksTrait
      */
     protected function createTestUser(array $attributes = []): User
     {
-        // Create or get default language if not provided
         if (!isset($attributes['language_uuid'])) {
-            $language = Language::where('code', 'en')->first();
-            if (!$language) {
-                $language = Language::factory()->english()->active()->create();
-            }
+            $language = Language::where('code', 'en')->first()
+                ?? Language::factory()->english()->active()->create();
             $attributes['language_uuid'] = $language->uuid;
+        }
+
+        if (!isset($attributes['country_uuid'])) {
+            $currency = Currency::where('code', 'USD')->first()
+                ?? Currency::factory()->create(['code' => 'USD', 'name' => 'US Dollar', 'symbol' => '$', 'decimals' => 2]);
+
+            $country = Country::where('code', 'US')->first()
+                ?? Country::factory()->withCurrency($currency)->create(['code' => 'US', 'name' => 'United States']);
+
+            $attributes['country_uuid'] = $country->uuid;
         }
 
         $defaults = [
             'name' => 'Test User',
             'email' => 'user' . time() . rand(1000, 9999) . '@example.com',
-            'password' => Hash::make('password123'),
+            'password' => 'password123',
             'email_verified_at' => now(),
         ];
 
@@ -52,11 +58,11 @@ trait FeatureMocksTrait
             'email' => 'admin_' . time() . '@turkticaret.test',
             'name' => 'Admin User',
         ], $attributes));
-        
+
         // Create Admin role if it doesn't exist
         $adminRole = \App\Models\Authority\Role::firstOrCreate(['name' => 'Admin', 'guard_name' => 'web']);
         $user->assignRole($adminRole);
-        
+
         return $user;
     }
 
@@ -96,7 +102,7 @@ trait FeatureMocksTrait
     protected function createTestProduct(array $attributes = []): Product
     {
         $category = $attributes['category_uuid'] ?? $this->createTestCategory()->uuid;
-        
+
         $defaults = [
             'name' => 'Test Product ' . time() . rand(1000, 9999),
             'description' => 'A test product description',
@@ -124,7 +130,7 @@ trait FeatureMocksTrait
     protected function createTestCart(User $user = null, array $attributes = []): Cart
     {
         $user = $user ?? $this->createTestUser();
-        
+
         $defaults = [
             'user_uuid' => $user->uuid,
         ];
@@ -139,7 +145,7 @@ trait FeatureMocksTrait
     {
         $cart = $cart ?? $this->createTestCart();
         $product = $product ?? $this->createTestProduct();
-        
+
         $defaults = [
             'cart_uuid' => $cart->uuid,
             'product_uuid' => $product->uuid,
@@ -156,11 +162,11 @@ trait FeatureMocksTrait
     protected function createCartWithItems(User $user = null, int $itemCount = 3): Cart
     {
         $cart = $this->createTestCart($user);
-        
+
         for ($i = 0; $i < $itemCount; $i++) {
             $this->createTestCartItem($cart);
         }
-        
+
         return $cart->fresh();
     }
 
@@ -170,7 +176,7 @@ trait FeatureMocksTrait
     protected function createTestOrder(User $user = null, array $attributes = []): Order
     {
         $user = $user ?? $this->createTestUser();
-        
+
         $defaults = [
             'user_uuid' => $user->uuid,
             'total_amount' => 25000, // Amount in cents
@@ -188,7 +194,7 @@ trait FeatureMocksTrait
     {
         $order = $order ?? $this->createTestOrder();
         $product = $product ?? $this->createTestProduct();
-        
+
         $defaults = [
             'order_uuid' => $order->uuid,
             'product_uuid' => $product->uuid,
@@ -205,13 +211,13 @@ trait FeatureMocksTrait
     protected function createOrderWithItems(User $user = null, int $itemCount = 3): Order
     {
         $order = $this->createTestOrder($user);
-        
+
         $totalAmount = 0;
         for ($i = 0; $i < $itemCount; $i++) {
             $orderItem = $this->createTestOrderItem($order);
             $totalAmount += $orderItem->quantity * $orderItem->unit_price;
         }
-        
+
         $order->update(['total_amount' => $totalAmount]);
         return $order->fresh();
     }
@@ -226,6 +232,7 @@ trait FeatureMocksTrait
             'email' => 'test' . time() . '@example.com',
             'password' => 'Password123!',
             'password_confirmation' => 'Password123!',
+            'country_code' => 'US', // Add default country code
         ];
 
         return array_merge($defaults, $overrides);
@@ -237,7 +244,7 @@ trait FeatureMocksTrait
     protected function createValidLoginData(User $user = null, array $overrides = []): array
     {
         $user = $user ?? $this->createTestUser();
-        
+
         $defaults = [
             'email' => $user->email,
             'password' => 'password123',
@@ -266,7 +273,7 @@ trait FeatureMocksTrait
     protected function createValidProductData(Category $category = null, array $overrides = []): array
     {
         $category = $category ?? $this->createTestCategory();
-        
+
         $defaults = [
             'name' => 'Test Product ' . time(),
             'description' => 'A test product description',
@@ -286,7 +293,7 @@ trait FeatureMocksTrait
     protected function createValidCartItemData(Product $product = null, array $overrides = []): array
     {
         $product = $product ?? $this->createTestProduct();
-        
+
         $defaults = [
             'product_uuid' => $product->uuid,
             'quantity' => 2,
@@ -315,15 +322,15 @@ trait FeatureMocksTrait
     {
         static $testCounter = 0;
         $testCounter++;
-        
+
         $codeChar = chr(65 + ($testCounter % 26)); // A-Z
-        
+
         // Create currency if not provided
         if (!isset($attributes['currency_uuid'])) {
             $currency = Currency::factory()->create();
             $attributes['currency_uuid'] = $currency->uuid;
         }
-        
+
         $defaults = [
             'code' => $codeChar . chr(65 + (intval($testCounter / 26) % 26)),
             'name' => 'Test Country ' . $testCounter,
@@ -348,15 +355,15 @@ trait FeatureMocksTrait
     {
         static $dataCounter = 0;
         $dataCounter++;
-        
+
         $codeChar = chr(68 + ($dataCounter % 22)); // D-Z (avoiding conflicts)
-        
+
         // Create currency if not provided
         if (!isset($overrides['currency_uuid'])) {
             $currency = Currency::factory()->create();
             $overrides['currency_uuid'] = $currency->uuid;
         }
-        
+
         $defaults = [
             'code' => $codeChar . chr(65 + (intval($dataCounter / 22) % 26)),
             'name' => 'Data Country ' . $dataCounter,
@@ -373,7 +380,7 @@ trait FeatureMocksTrait
     {
         static $testCounter = 0;
         $testCounter++;
-        
+
         $defaults = [
             'code' => 'TC' . $testCounter,
             'name' => 'Test Currency ' . $testCounter,
@@ -400,7 +407,7 @@ trait FeatureMocksTrait
     {
         static $dataCounter = 0;
         $dataCounter++;
-        
+
         $defaults = [
             'code' => 'TST' . $dataCounter,
             'name' => 'Test Currency ' . $dataCounter,

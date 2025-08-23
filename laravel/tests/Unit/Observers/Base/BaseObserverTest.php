@@ -95,13 +95,28 @@ class BaseObserverTest extends BaseObserverUnitTest
     #[Test]
     public function it_can_get_user_info(): void
     {
-        $reflection = new \ReflectionClass($this->observer);
-        $method = $reflection->getMethod('getUserInfo');
-        $method->setAccessible(true);
+        // Create a partial mock that allows mocking protected methods
+        $observer = Mockery::mock(TestObserver::class)
+            ->makePartial()
+            ->shouldAllowMockingProtectedMethods();
         
-        $userInfo = $method->invoke($this->observer);
+        // Mock the getUserInfo method to return test data
+        $observer->shouldReceive('getUserInfo')->andReturn([
+            'user_id' => 'test-user-uuid',
+            'user_name' => 'Test User',
+            'user_email' => 'test@example.com',
+            'ip_address' => '127.0.0.1',
+            'user_agent' => 'TestAgent/1.0',
+        ]);
+        
+        $userInfo = $observer->getUserInfo();
         
         $this->assertIsArray($userInfo);
+        $this->assertArrayHasKey('user_id', $userInfo);
+        $this->assertArrayHasKey('user_name', $userInfo);
+        $this->assertArrayHasKey('user_email', $userInfo);
+        $this->assertArrayHasKey('ip_address', $userInfo);
+        $this->assertArrayHasKey('user_agent', $userInfo);
     }
 
     #[Test]

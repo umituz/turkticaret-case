@@ -3,7 +3,7 @@
 namespace Tests\Unit\Mail\User;
 
 use App\Mail\User\WelcomeMail;
-use App\Models\Auth\User;
+use App\Models\User\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -95,7 +95,7 @@ class WelcomeMailTest extends TestCase
         $mailable = new WelcomeMail($user);
 
         $envelope = $mailable->envelope();
-        
+
         $this->assertEquals('Welcome to TurkTicaret - Your E-Commerce Journey Begins!', $envelope->subject);
     }
 
@@ -106,7 +106,7 @@ class WelcomeMailTest extends TestCase
         $mailable = new WelcomeMail($user);
 
         $attachments = $mailable->attachments();
-        
+
         $this->assertIsArray($attachments);
         $this->assertEmpty($attachments);
     }
@@ -118,7 +118,7 @@ class WelcomeMailTest extends TestCase
         $mailable = new WelcomeMail($user);
 
         $content = $mailable->content();
-        
+
         $this->assertEquals('emails.user.welcome', $content->view);
     }
 }

@@ -2,13 +2,11 @@
 
 namespace Tests\Unit\Models\Cart;
 
-use App\Models\Auth\User;
 use App\Models\Base\BaseUuidModel;
 use App\Models\Cart\Cart;
-use App\Models\Cart\CartItem;
-use Tests\Base\BaseModelUnitTest;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\Base\BaseModelUnitTest;
 
 #[CoversClass(Cart::class)]
 class CartTest extends BaseModelUnitTest
@@ -74,8 +72,8 @@ class CartTest extends BaseModelUnitTest
     public function it_can_access_user_relationship(): void
     {
         $userRelation = $this->model->user();
-        
-        $this->assertEquals('App\Models\Auth\User', $userRelation->getRelated()::class);
+
+        $this->assertEquals('App\Models\User\User', $userRelation->getRelated()::class);
         $this->assertEquals('user_uuid', $userRelation->getForeignKeyName());
         $this->assertEquals('uuid', $userRelation->getOwnerKeyName());
     }
@@ -84,7 +82,7 @@ class CartTest extends BaseModelUnitTest
     public function it_can_access_cart_items_relationship(): void
     {
         $cartItemsRelation = $this->model->cartItems();
-        
+
         $this->assertEquals('App\Models\Cart\CartItem', $cartItemsRelation->getRelated()::class);
         $this->assertEquals('cart_uuid', $cartItemsRelation->getForeignKeyName());
         $this->assertEquals('uuid', $cartItemsRelation->getLocalKeyName());

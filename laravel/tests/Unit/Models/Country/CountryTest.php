@@ -4,12 +4,9 @@ namespace Tests\Unit\Models\Country;
 
 use App\Models\Base\BaseUuidModel;
 use App\Models\Country\Country;
-use App\Models\Auth\User;
-use App\Models\Currency\Currency;
-use App\Models\Language\Language;
-use Tests\Base\BaseModelUnitTest;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\Base\BaseModelUnitTest;
 
 #[CoversClass(Country::class)]
 class CountryTest extends BaseModelUnitTest
@@ -82,8 +79,8 @@ class CountryTest extends BaseModelUnitTest
     public function it_can_access_users_relationship(): void
     {
         $usersRelation = $this->model->users();
-        
-        $this->assertEquals('App\Models\Auth\User', $usersRelation->getRelated()::class);
+
+        $this->assertEquals('App\Models\User\User', $usersRelation->getRelated()::class);
         $this->assertEquals('country_code', $usersRelation->getForeignKeyName());
         $this->assertEquals('code', $usersRelation->getLocalKeyName());
     }
@@ -92,7 +89,7 @@ class CountryTest extends BaseModelUnitTest
     public function it_can_access_currencies_relationship(): void
     {
         $currenciesRelation = $this->model->currencies();
-        
+
         $this->assertEquals('App\Models\Currency\Currency', $currenciesRelation->getRelated()::class);
         $this->assertEquals('country_uuid', $currenciesRelation->getForeignKeyName());
         $this->assertEquals('uuid', $currenciesRelation->getLocalKeyName());
@@ -103,7 +100,7 @@ class CountryTest extends BaseModelUnitTest
     {
         $query = $this->model->newQuery();
         $scopedQuery = $this->model->scopeActive($query);
-        
+
         $this->assertNotNull($scopedQuery);
     }
 
@@ -112,7 +109,7 @@ class CountryTest extends BaseModelUnitTest
     {
         $query = $this->model->newQuery();
         $scopedQuery = $this->model->scopeByCode($query, 'US');
-        
+
         $this->assertNotNull($scopedQuery);
     }
 
@@ -126,7 +123,7 @@ class CountryTest extends BaseModelUnitTest
     public function it_gets_default_currency(): void
     {
         $defaultCurrency = $this->model->getDefaultCurrency();
-        
+
         $this->assertNull($defaultCurrency);
     }
 }

@@ -33,7 +33,6 @@ class CategoryResourceTest extends BaseResourceUnitTest
             'name' => 'Electronics',
             'description' => 'Electronic devices and accessories',
             'slug' => 'electronics',
-            'parent_uuid' => null,
             'is_active' => true,
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
@@ -70,7 +69,6 @@ class CategoryResourceTest extends BaseResourceUnitTest
             'name',
             'description',
             'slug',
-            'parent_uuid',
             'is_active',
             'created_at',
             'updated_at',
@@ -91,7 +89,6 @@ class CategoryResourceTest extends BaseResourceUnitTest
             'name' => 'Books & Media',
             'description' => 'Books, magazines, and media content',
             'slug' => 'books-media',
-            'parent_uuid' => null,
             'is_active' => true,
             'created_at' => Carbon::parse('2024-01-01 10:00:00'),
             'updated_at' => Carbon::parse('2024-01-15 14:30:00'),
@@ -178,7 +175,6 @@ class CategoryResourceTest extends BaseResourceUnitTest
         $categoryData = array_merge($this->getResourceData(), [
             'name' => 'Home & Garden',
             'slug' => 'home-garden',
-            'parent_uuid' => null,
             'is_active' => true,
         ]);
         $category = $this->createMockModel($categoryData);
@@ -201,7 +197,6 @@ class CategoryResourceTest extends BaseResourceUnitTest
             'name' => 'Health & Beauty / Personal Care',
             'description' => 'Health, beauty, and personal care products & accessories',
             'slug' => 'health-beauty-personal-care',
-            'parent_uuid' => null,
             'is_active' => true,
         ]);
         $category = $this->createMockModel($categoryData);
@@ -225,7 +220,6 @@ class CategoryResourceTest extends BaseResourceUnitTest
             'name' => 'Spor & Rekreasyon',
             'description' => 'Spor malzemeleri ve rekreasyon ürünleri',
             'slug' => 'spor-rekreasyon',
-            'parent_uuid' => null,
             'is_active' => true,
         ]);
         $category = $this->createMockModel($categoryData);
@@ -247,7 +241,6 @@ class CategoryResourceTest extends BaseResourceUnitTest
         $testUuid = 'f47ac10b-58cc-4372-a567-0e02b2c3d479';
         $categoryData = array_merge($this->getResourceData(), [
             'uuid' => $testUuid,
-            'parent_uuid' => null,
             'is_active' => true,
         ]);
         $category = $this->createMockModel($categoryData);
@@ -270,7 +263,6 @@ class CategoryResourceTest extends BaseResourceUnitTest
             'name' => '',
             'description' => '',
             'slug' => '',
-            'parent_uuid' => null,
             'is_active' => false,
         ]);
         $category = $this->createMockModel($categoryData);

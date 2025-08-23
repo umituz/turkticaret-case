@@ -2,14 +2,13 @@
 
 namespace Tests\Unit\Repositories\User;
 
+use App\Models\User\User;
 use App\Repositories\User\UserRepository;
-use App\Models\Auth\User;
-use Tests\Base\BaseRepositoryUnitTest;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Small;
-use Mockery;
+use PHPUnit\Framework\Attributes\Test;
+use Tests\Base\BaseRepositoryUnitTest;
 
 /**
  * Unit tests for UserRepository

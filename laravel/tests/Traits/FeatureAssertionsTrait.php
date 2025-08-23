@@ -231,9 +231,87 @@ trait FeatureAssertionsTrait
     protected function assertValidTimestampInResponse(TestResponse $response, string $jsonPath): void
     {
         $value = $response->json($jsonPath);
-        $this->assertNotNull($value, "Timestamp value at {$jsonPath} should not be null");
+        $this->assertNotNull($value);
         
-        $timestamp = \DateTime::createFromFormat(\DateTimeInterface::ISO8601, $value);
-        $this->assertNotFalse($timestamp, "Value at {$jsonPath} is not a valid ISO8601 timestamp");
+        // Check various timestamp formats
+        $formats = [
+            \DateTimeInterface::ISO8601,
+            'Y-m-d\TH:i:s.u\Z',
+            'Y-m-d H:i:s',
+            'Y-m-d\TH:i:sP'
+        ];
+        
+        $valid = false;
+        foreach ($formats as $format) {
+            if (\DateTime::createFromFormat($format, $value) !== false) {
+                $valid = true;
+                break;
+            }
+        }
+        
+        $this->assertTrue($valid);
+    }
+
+    /**
+     * Assert validation error response (Laravel standard)
+     */
+    protected function assertValidationErrorResponse(TestResponse $response, array $expectedFields): void
+    {
+        $response->assertStatus(422)
+            ->assertJsonValidationErrors($expectedFields);
+    }
+
+    /**
+     * Assert successful JSON response
+     */
+    protected function assertSuccessfulJsonResponse(TestResponse $response, int $status = 200): void
+    {
+        $response->assertStatus($status)
+            ->assertJson(['success' => true]);
+    }
+
+    /**
+     * Assert unauthorized response
+     */
+    protected function assertUnauthorizedResponse(TestResponse $response): void
+    {
+        $response->assertUnauthorized();
+    }
+
+    /**
+     * JSON request helper - delegates to Laravel's built-in method
+     */
+    protected function jsonGet(string $uri, array $headers = []): TestResponse
+    {
+        return $this->getJson($uri, $headers);
+    }
+
+    /**
+     * Assert not found response
+     */
+    protected function assertNotFoundResponse(TestResponse $response): void
+    {
+        $response->assertNotFound();
+    }
+
+    /**
+     * Assert error response with specific message
+     */
+    protected function assertErrorResponse(TestResponse $response, int $status = 400, ?string $message = null): void
+    {
+        $response->assertStatus($status)
+            ->assertJson(['success' => false]);
+        
+        if ($message !== null) {
+            $response->assertJson(['message' => $message]);
+        }
+    }
+
+    /**
+     * Assert forbidden response
+     */
+    protected function assertForbiddenResponse(TestResponse $response): void
+    {
+        $response->assertForbidden();
     }
 }

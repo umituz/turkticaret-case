@@ -3,11 +3,17 @@
 namespace Tests\Feature\Category;
 
 use App\Models\Category\Category;
+use Illuminate\Support\Facades\Mail;
 use Tests\Base\BaseFeatureTest;
 use PHPUnit\Framework\Attributes\Test;
 
 class CategoryControllerTest extends BaseFeatureTest
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+        Mail::fake(); // Prevent email sending issues
+    }
     #[Test]
     public function it_can_list_categories_with_pagination()
     {

@@ -2,13 +2,11 @@
 
 namespace Tests\Unit\Models\Order;
 
-use App\Models\Auth\User;
 use App\Models\Base\BaseUuidModel;
 use App\Models\Order\Order;
-use App\Models\Order\OrderItem;
-use Tests\Base\BaseModelUnitTest;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\Base\BaseModelUnitTest;
 
 #[CoversClass(Order::class)]
 class OrderTest extends BaseModelUnitTest
@@ -94,8 +92,8 @@ class OrderTest extends BaseModelUnitTest
     public function it_can_access_user_relationship(): void
     {
         $userRelation = $this->model->user();
-        
-        $this->assertEquals('App\Models\Auth\User', $userRelation->getRelated()::class);
+
+        $this->assertEquals('App\Models\User\User', $userRelation->getRelated()::class);
         $this->assertEquals('user_uuid', $userRelation->getForeignKeyName());
         $this->assertEquals('uuid', $userRelation->getOwnerKeyName());
     }
@@ -104,7 +102,7 @@ class OrderTest extends BaseModelUnitTest
     public function it_can_access_order_items_relationship(): void
     {
         $orderItemsRelation = $this->model->orderItems();
-        
+
         $this->assertEquals('App\Models\Order\OrderItem', $orderItemsRelation->getRelated()::class);
         $this->assertEquals('order_uuid', $orderItemsRelation->getForeignKeyName());
         $this->assertEquals('uuid', $orderItemsRelation->getLocalKeyName());

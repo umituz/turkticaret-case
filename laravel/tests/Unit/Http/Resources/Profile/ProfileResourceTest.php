@@ -2,14 +2,14 @@
 
 namespace Tests\Unit\Http\Resources\Profile;
 
-use App\Http\Resources\Profile\ProfileResource;
-use Tests\Base\BaseResourceUnitTest;
+use App\Http\Resources\User\Profile\ProfileResource;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Small;
-use Illuminate\Http\Request;
-use Carbon\Carbon;
+use PHPUnit\Framework\Attributes\Test;
+use Tests\Base\BaseResourceUnitTest;
 
 /**
  * Unit tests for ProfileResource
@@ -180,7 +180,7 @@ class ProfileResourceTest extends BaseResourceUnitTest
         $verifiedAt = Carbon::parse('2024-01-05 14:20:00');
         $createdAt = Carbon::parse('2024-01-01 10:00:00');
         $updatedAt = Carbon::parse('2024-01-15 16:45:00');
-        
+
         $userData = [
             'uuid' => 'profile-user-uuid',
             'name' => 'Profile User',

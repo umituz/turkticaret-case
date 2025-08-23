@@ -81,6 +81,9 @@ abstract class UnitTestCase extends TestCase
         // Setup Spatie Permission
         $this->setupSpatiePermission();
 
+        // Setup Activity Log
+        $this->setupActivityLog();
+
         // Set facade application
         Facade::setFacadeApplication($this->app);
     }
@@ -354,6 +357,34 @@ abstract class UnitTestCase extends TestCase
 
         $this->app->instance('cache', $cacheManager);
         $this->app->instance(\Illuminate\Contracts\Cache\Repository::class, $cache);
+    }
+
+    /**
+     * Setup Activity Log package
+     */
+    protected function setupActivityLog(): void
+    {
+        // Mock the ActivityLog service
+        $activityLogger = Mockery::mock();
+        $activityLogger->shouldReceive('performedOn')->andReturnSelf();
+        $activityLogger->shouldReceive('event')->andReturnSelf();
+        $activityLogger->shouldReceive('causedBy')->andReturnSelf();
+        $activityLogger->shouldReceive('withProperties')->andReturnSelf();
+        $activityLogger->shouldReceive('log')->andReturn(true);
+
+        // Create activity() helper mock
+        if (!function_exists('activity')) {
+            $this->app->singleton('activity_logger', function () use ($activityLogger) {
+                return $activityLogger;
+            });
+        }
+
+        // Mock the activity() function by providing it through the container
+        $this->app->singleton('activity', function () use ($activityLogger) {
+            return function ($logName = 'default') use ($activityLogger) {
+                return $activityLogger;
+            };
+        });
     }
 
     /**

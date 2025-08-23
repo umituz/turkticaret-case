@@ -33,6 +33,21 @@ abstract class BaseObserverUnitTest extends UnitTestCase
         parent::setUp();
         
         $observerClass = $this->getObserverClass();
-        $this->observer = new $observerClass();
+        $dependencies = $this->getObserverDependencies();
+        
+        if (empty($dependencies)) {
+            $this->observer = new $observerClass();
+        } else {
+            $this->observer = new $observerClass(...$dependencies);
+        }
+    }
+
+    /**
+     * Get the dependencies for the observer constructor.
+     * Override this method in specific observer tests that require dependencies.
+     */
+    protected function getObserverDependencies(): array
+    {
+        return [];
     }
 }

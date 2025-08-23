@@ -2,13 +2,11 @@
 
 namespace Tests\Unit\Models\Auth;
 
-use App\Models\Auth\User;
-use App\Models\Cart\Cart;
-use App\Models\Order\Order;
-use Tests\Base\BaseModelUnitTest;
+use App\Models\User\User;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Tests\Base\BaseModelUnitTest;
 
 #[CoversClass(User::class)]
 class UserTest extends BaseModelUnitTest
@@ -51,6 +49,7 @@ class UserTest extends BaseModelUnitTest
             'password',
             'language_uuid',
             'country_uuid',
+            'timezone',
         ];
 
         $this->assertHasFillable($expectedFillable);

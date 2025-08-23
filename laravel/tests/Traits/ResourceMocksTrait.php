@@ -225,6 +225,11 @@ trait ResourceMocksTrait
             ]
         );
         
+        // Add missing methods that Resource Collections expect
+        if (method_exists($paginator, 'total')) {
+            // LengthAwarePaginator already has total() method
+        }
+        
         return $paginator;
     }
 

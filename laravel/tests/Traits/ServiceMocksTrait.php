@@ -114,6 +114,16 @@ trait ServiceMocksTrait
             return $attributes[$key] ?? null;
         });
         
+        // Mock direct property access via magic __isset and __get
+        $model->shouldReceive('__isset')->andReturnUsing(function ($key) use ($attributes) {
+            return array_key_exists($key, $attributes);
+        });
+        
+        // Mock offsetExists for ArrayAccess interface
+        $model->shouldReceive('offsetExists')->andReturnUsing(function ($key) use ($attributes) {
+            return array_key_exists($key, $attributes);
+        });
+        
         // Mock common model methods
         $model->shouldReceive('save')->andReturn(true);
         $model->shouldReceive('delete')->andReturn(true);
@@ -140,6 +150,34 @@ trait ServiceMocksTrait
         });
         
         return $collection;
+    }
+
+    /**
+     * Mock a HasMany relationship for a model
+     */
+    protected function mockHasManyRelation(array $config = []): MockInterface
+    {
+        $relation = Mockery::mock(\Illuminate\Database\Eloquent\Relations\HasMany::class);
+        
+        // Mock builder methods that return self
+        $relation->shouldReceive('where')->andReturnSelf();
+        $relation->shouldReceive('whereIn')->andReturnSelf();
+        $relation->shouldReceive('orderBy')->andReturnSelf();
+        $relation->shouldReceive('limit')->andReturnSelf();
+        $relation->shouldReceive('offset')->andReturnSelf();
+        
+        // Mock methods that return results (with configurable defaults)
+        $relation->shouldReceive('first')->andReturn($config['first'] ?? null);
+        $relation->shouldReceive('get')->andReturn($config['get'] ?? collect([]));
+        $relation->shouldReceive('count')->andReturn($config['count'] ?? 0);
+        $relation->shouldReceive('exists')->andReturn($config['exists'] ?? false);
+        
+        // Mock CRUD methods
+        $relation->shouldReceive('create')->andReturn($config['create'] ?? null);
+        $relation->shouldReceive('delete')->andReturn($config['delete'] ?? true);
+        $relation->shouldReceive('update')->andReturn($config['update'] ?? true);
+        
+        return $relation;
     }
 
     /**

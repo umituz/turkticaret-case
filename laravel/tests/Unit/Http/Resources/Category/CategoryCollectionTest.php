@@ -35,7 +35,6 @@ class CategoryCollectionTest extends BaseResourceUnitTest
                 'name' => 'Electronics',
                 'description' => 'Electronic devices',
                 'slug' => 'electronics',
-                'parent_uuid' => null,
                 'is_active' => true,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
@@ -45,7 +44,6 @@ class CategoryCollectionTest extends BaseResourceUnitTest
                 'name' => 'Books',
                 'description' => 'Books and media',
                 'slug' => 'books',
-                'parent_uuid' => null,
                 'is_active' => true,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
@@ -79,7 +77,6 @@ class CategoryCollectionTest extends BaseResourceUnitTest
                 'name' => 'Electronics',
                 'description' => 'Electronic devices and accessories',
                 'slug' => 'electronics',
-                'parent_uuid' => null,
                 'is_active' => true,
                 'created_at' => Carbon::parse('2024-01-01 10:00:00'),
                 'updated_at' => Carbon::parse('2024-01-01 10:00:00'),
@@ -89,7 +86,6 @@ class CategoryCollectionTest extends BaseResourceUnitTest
                 'name' => 'Books',
                 'description' => 'Books and media content',
                 'slug' => 'books',
-                'parent_uuid' => null,
                 'is_active' => true,
                 'created_at' => Carbon::parse('2024-01-02 11:00:00'),
                 'updated_at' => Carbon::parse('2024-01-02 11:00:00'),
@@ -119,8 +115,8 @@ class CategoryCollectionTest extends BaseResourceUnitTest
     {
         // Arrange
         $categories = [
-            $this->createMockModel(['uuid' => 'cat-1', 'name' => 'Category 1', 'parent_uuid' => null, 'is_active' => true]),
-            $this->createMockModel(['uuid' => 'cat-2', 'name' => 'Category 2', 'parent_uuid' => null, 'is_active' => true]),
+            $this->createMockModel(['uuid' => 'cat-1', 'name' => 'Category 1', 'is_active' => true]),
+            $this->createMockModel(['uuid' => 'cat-2', 'name' => 'Category 2', 'is_active' => true]),
         ];
         $totalCategories = 25;
         $paginator = $this->createMockPaginatedCollection($categories, $totalCategories);
@@ -168,7 +164,6 @@ class CategoryCollectionTest extends BaseResourceUnitTest
             'name' => 'Test Category',
             'description' => 'Test Description',
             'slug' => 'test-category',
-            'parent_uuid' => null,
             'is_active' => true,
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
@@ -200,7 +195,6 @@ class CategoryCollectionTest extends BaseResourceUnitTest
                 'name' => 'Electronics & Technology',
                 'description' => 'Electronic devices, gadgets, and technology products',
                 'slug' => 'electronics-technology',
-                'parent_uuid' => null,
                 'is_active' => true,
                 'created_at' => Carbon::parse('2024-01-01'),
                 'updated_at' => Carbon::parse('2024-01-15'),
@@ -210,7 +204,6 @@ class CategoryCollectionTest extends BaseResourceUnitTest
                 'name' => 'Books & Media',
                 'description' => 'Books, magazines, and digital media',
                 'slug' => 'books-media',
-                'parent_uuid' => null,
                 'is_active' => true,
                 'created_at' => Carbon::parse('2024-01-02'),
                 'updated_at' => Carbon::parse('2024-01-16'),
@@ -238,7 +231,7 @@ class CategoryCollectionTest extends BaseResourceUnitTest
     {
         // Arrange
         $categories = [
-            $this->createMockModel(['uuid' => 'cat-1', 'name' => 'Category 1', 'parent_uuid' => null, 'is_active' => true]),
+            $this->createMockModel(['uuid' => 'cat-1', 'name' => 'Category 1', 'is_active' => true]),
         ];
         
         // Use simple array for testing
@@ -262,7 +255,6 @@ class CategoryCollectionTest extends BaseResourceUnitTest
                 'name' => "Category {$i}",
                 'description' => "Description for category {$i}",
                 'slug' => "category-{$i}",
-                'parent_uuid' => null,
                 'is_active' => true,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
@@ -292,7 +284,6 @@ class CategoryCollectionTest extends BaseResourceUnitTest
                 'uuid' => 'electronics-uuid',
                 'name' => 'Electronics',
                 'slug' => 'electronics',
-                'parent_uuid' => null,
                 'is_active' => true,
             ]),
         ];
