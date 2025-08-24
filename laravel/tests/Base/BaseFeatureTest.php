@@ -30,6 +30,10 @@ abstract class BaseFeatureTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+        
+        // Reset permissions cache for Spatie Permission
+        app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
+        
         $this->setupFeatureTestEnvironment();
     }
 

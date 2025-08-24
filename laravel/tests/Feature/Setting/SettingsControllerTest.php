@@ -51,8 +51,9 @@ class SettingsControllerTest extends BaseFeatureTest
         
         $setting = Setting::factory()->create([
             'key' => 'site_name',
-            'value' => 'Old Name',
-            'is_active' => true
+            'value' => ['value' => 'Old Name'],
+            'is_active' => true,
+            'is_editable' => true
         ]);
 
         $updateData = [
@@ -68,10 +69,9 @@ class SettingsControllerTest extends BaseFeatureTest
             'message' => 'Setting updated successfully.'
         ]);
 
-        $this->assertDatabaseHas('settings', [
-            'key' => 'site_name',
-            'value' => 'New Site Name'
-        ]);
+        // Check if setting was updated correctly
+        $setting = Setting::where('key', 'site_name')->first();
+        $this->assertEquals('New Site Name', $setting->typed_value);
     }
 
     #[Test]
@@ -132,14 +132,16 @@ class SettingsControllerTest extends BaseFeatureTest
         
         $booleanSetting = Setting::factory()->create([
             'key' => 'maintenance_mode',
-            'value' => 'false',
-            'type' => 'boolean'
+            'value' => ['value' => false],
+            'type' => 'boolean',
+            'is_active' => true
         ]);
 
         $stringSetting = Setting::factory()->create([
             'key' => 'site_name',
-            'value' => 'TurkTicaret',
-            'type' => 'string'
+            'value' => ['value' => 'TurkTicaret'],
+            'type' => 'string',
+            'is_active' => true
         ]);
 
         $response = $this->actingAs($adminUser, 'sanctum')->getJson('/api/admin/settings');
@@ -163,17 +165,16 @@ class SettingsControllerTest extends BaseFeatureTest
 
         $updateData = [
             'key' => 'maintenance_mode',
-            'value' => 'true'
+            'value' => true
         ];
 
         $response = $this->actingAs($adminUser, 'sanctum')->putJson('/api/admin/settings', $updateData);
 
         $this->assertSuccessfulJsonResponse($response);
         
-        $this->assertDatabaseHas('settings', [
-            'key' => 'maintenance_mode',
-            'value' => 'true'
-        ]);
+        // Check if setting was updated correctly
+        $setting = Setting::where('key', 'maintenance_mode')->first();
+        $this->assertTrue($setting->typed_value);
     }
 
     #[Test]
@@ -183,23 +184,23 @@ class SettingsControllerTest extends BaseFeatureTest
         
         Setting::factory()->create([
             'key' => 'max_upload_size',
-            'value' => '10',
-            'type' => 'integer'
+            'value' => ['value' => 10],
+            'type' => 'integer',
+            'is_editable' => true
         ]);
 
         $updateData = [
             'key' => 'max_upload_size',
-            'value' => '25'
+            'value' => 25
         ];
 
         $response = $this->actingAs($adminUser, 'sanctum')->putJson('/api/admin/settings', $updateData);
 
         $this->assertSuccessfulJsonResponse($response);
         
-        $this->assertDatabaseHas('settings', [
-            'key' => 'max_upload_size',
-            'value' => '25'
-        ]);
+        // Check if setting was updated correctly
+        $setting = Setting::where('key', 'max_upload_size')->first();
+        $this->assertEquals(25, $setting->typed_value);
     }
 
     #[Test]

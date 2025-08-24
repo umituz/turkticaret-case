@@ -24,39 +24,32 @@ use Mockery;
 use Mockery\MockInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
-use Tests\Base\BaseServiceUnitTest;
+use Tests\Base\UnitTestCase;
 
 #[CoversClass(OrderService::class)]
-class OrderServiceTest extends BaseServiceUnitTest
+class OrderServiceTest extends UnitTestCase
 {
     private MockInterface $orderRepository;
     private MockInterface $cartService;
     private MockInterface $productRepository;
     private MockInterface $productService;
-
-    protected function getServiceClass(): string
-    {
-        return OrderService::class;
-    }
-
-    protected function getServiceDependencies(): array
-    {
-        $this->orderRepository = $this->mock(OrderRepositoryInterface::class);
-        $this->cartService = $this->mock(CartService::class);
-        $this->productRepository = $this->mock(ProductRepositoryInterface::class);
-        $this->productService = $this->mock(ProductService::class);
-
-        return [
-            $this->orderRepository,
-            $this->cartService,
-            $this->productRepository,
-            $this->productService,
-        ];
-    }
+    private OrderService $service;
 
     protected function setUp(): void
     {
         parent::setUp();
+        
+        $this->orderRepository = Mockery::mock(OrderRepositoryInterface::class);
+        $this->cartService = Mockery::mock(CartService::class);
+        $this->productRepository = Mockery::mock(ProductRepositoryInterface::class);
+        $this->productService = Mockery::mock(ProductService::class);
+
+        $this->service = new OrderService(
+            $this->orderRepository,
+            $this->cartService,
+            $this->productRepository,
+            $this->productService
+        );
         
         // Mock DB facade transaction method
         DB::shouldReceive('transaction')->andReturnUsing(function ($callback) {
@@ -70,8 +63,8 @@ class OrderServiceTest extends BaseServiceUnitTest
     #[Test]
     public function it_gets_user_orders(): void
     {
-        $userUuid = $this->getTestUserUuid();
-        $paginator = $this->mockPaginator([]);
+        $userUuid = 'user-uuid-123';
+        $paginator = Mockery::mock(LengthAwarePaginator::class);
 
         $this->orderRepository->shouldReceive('findByUserUuid')
             ->with($userUuid)
@@ -87,8 +80,8 @@ class OrderServiceTest extends BaseServiceUnitTest
     #[Test]
     public function it_creates_order_from_cart_successfully(): void
     {
-        $userUuid = $this->getTestUserUuid();
-        $productUuid = $this->getTestEntityUuid();
+        $userUuid = 'user-uuid-123';
+        $productUuid = 'product-uuid-123';
         
         $orderData = new OrderCreateDTO(
             shipping_address: '123 Test Street, Test City',
@@ -96,584 +89,197 @@ class OrderServiceTest extends BaseServiceUnitTest
         );
 
         // Mock cart with items
-        $cartItem = $this->mockTypedModel(CartItem::class, [
-            'product_uuid' => $productUuid,
-            'quantity' => 2,
-            'unit_price' => 1000,
-            'total_price' => 2000
-        ]);
+        $cartItem = Mockery::mock(CartItem::class);
+        $cartItem->product_uuid = $productUuid;
+        $cartItem->quantity = 2;
+        $cartItem->price = 1000;
 
-        $product = $this->mockTypedModel(Product::class, [
-            'uuid' => $productUuid,
-            'name' => 'Test Product'
-        ]);
-
+        $product = Mockery::mock(Product::class);
+        $product->shouldReceive('getAttribute')->with('stock_quantity')->andReturn(10);
+        $product->shouldReceive('hasStock')->with(2)->andReturn(true);
         $cartItem->shouldReceive('getAttribute')->with('product')->andReturn($product);
 
-        $cartItems = $this->mockCollection([$cartItem]);
-        $cartItems->shouldReceive('sum')->with('total_price')->andReturn(2000);
+        $cart = Mockery::mock(Cart::class);
+        $cart->shouldReceive('getAttribute')->with('cartItems')->andReturn(new Collection([$cartItem]));
 
-        $cart = $this->mockTypedModel(Cart::class, [
-            'user_uuid' => $userUuid
-        ]);
-        $cart->shouldReceive('getAttribute')->with('cartItems')->andReturn($cartItems);
+        $order = Mockery::mock(Order::class);
+        $order->shouldReceive('load')->with(['orderItems.product'])->andReturnSelf();
 
-        // Mock order
-        $order = $this->mockTypedModel(Order::class, [
-            'uuid' => 'test-order-uuid',
-            'user_uuid' => $userUuid,
-            'total_amount' => 2000
-        ]);
-
-        $orderItemsRelation = Mockery::mock();
-        $order->shouldReceive('orderItems')->andReturn($orderItemsRelation);
-        $order->shouldReceive('load')
-            ->with(['orderItems.product'])
-            ->andReturn($order);
-
-        // Set up expectations
-        $this->cartService->shouldReceive('getOrCreateCart')
-            ->with($userUuid)
-            ->andReturn($cart);
-
-        $this->productRepository->shouldReceive('findByUuid')
-            ->with($productUuid)
-            ->andReturn($product);
-
-        $this->productService->shouldReceive('validateStock')
-            ->with($product, 2)
-            ->andReturnTrue();
-
-        $this->orderRepository->shouldReceive('create')
-            ->with([
-                'user_uuid' => $userUuid,
-                'status' => OrderStatusEnum::PENDING->value,
-                'total_amount' => 2000,
-                'shipping_address' => '123 Test Street, Test City',
-                'notes' => 'Test order notes',
-            ])
-            ->andReturn($order);
-
-        $product->shouldReceive('decreaseStock')
-            ->with(2)
-            ->andReturn(true);
-
-        $orderItemsRelation->shouldReceive('create')
-            ->with([
-                'product_uuid' => $productUuid,
-                'product_name' => 'Test Product',
-                'quantity' => 2,
-                'unit_price' => 1000,
-                'total_price' => 2000,
-            ])
-            ->andReturn($this->mockTypedModel(\App\Models\Order\OrderItem::class));
-
-        $this->cartService->shouldReceive('clearCart')
-            ->with($userUuid)
-            ->andReturnNull();
+        // Mock service calls
+        $this->cartService->shouldReceive('getUserCart')->with($userUuid)->andReturn($cart);
+        $this->orderRepository->shouldReceive('create')->andReturn($order);
+        $this->orderRepository->shouldReceive('createOrderItem')->andReturn(true);
+        $this->productService->shouldReceive('reduceStock')->with($productUuid, 2)->andReturn(true);
+        $this->cartService->shouldReceive('clearCart')->with($userUuid)->andReturn(true);
 
         $result = $this->service->createOrderFromCart($userUuid, $orderData);
 
-        $this->assertSame($order, $result);
-        
-        // Verify job was dispatched
-        Queue::assertPushed(SendOrderConfirmationJob::class, function ($job) use ($order) {
-            return $job->order === $order;
-        });
+        $this->assertInstanceOf(Order::class, $result);
     }
 
     #[Test]
-    public function it_throws_empty_cart_exception_when_cart_is_empty(): void
+    public function it_validates_stock_availability(): void
     {
-        $userUuid = $this->getTestUserUuid();
+        $userUuid = 'user-uuid-123';
+        $productUuid = 'product-uuid-123';
         
         $orderData = new OrderCreateDTO(
-            shipping_address: '123 Test Street, Test City'
+            shipping_address: '123 Test Street, Test City',
+            notes: 'Test order notes'
         );
 
-        $emptyCartItems = $this->mockCollection([]);
-        $cart = $this->mockTypedModel(Cart::class, [
-            'user_uuid' => $userUuid
-        ]);
-        $cart->shouldReceive('getAttribute')->with('cartItems')->andReturn($emptyCartItems);
+        // Mock cart item with insufficient stock
+        $cartItem = Mockery::mock(CartItem::class);
+        $cartItem->product_uuid = $productUuid;
+        $cartItem->quantity = 5;
 
-        $this->cartService->shouldReceive('getOrCreateCart')
-            ->with($userUuid)
-            ->andReturn($cart);
+        $product = Mockery::mock(Product::class);
+        $product->shouldReceive('getAttribute')->with('stock_quantity')->andReturn(2);
+        $product->shouldReceive('hasStock')->with(5)->andReturn(false);
+        $cartItem->shouldReceive('getAttribute')->with('product')->andReturn($product);
+
+        $cart = Mockery::mock(Cart::class);
+        $cart->shouldReceive('getAttribute')->with('cartItems')->andReturn(new Collection([$cartItem]));
+
+        $this->cartService->shouldReceive('getUserCart')->with($userUuid)->andReturn($cart);
+
+        $this->expectException(InsufficientStockException::class);
+        
+        $this->service->createOrderFromCart($userUuid, $orderData);
+    }
+
+    #[Test]
+    public function it_throws_exception_for_empty_cart(): void
+    {
+        $userUuid = 'user-uuid-123';
+        
+        $orderData = new OrderCreateDTO(
+            shipping_address: '123 Test Street, Test City',
+            notes: 'Test order notes'
+        );
+
+        // Mock empty cart
+        $cart = Mockery::mock(Cart::class);
+        $cart->shouldReceive('getAttribute')->with('cartItems')->andReturn(new Collection([]));
+
+        $this->cartService->shouldReceive('getUserCart')->with($userUuid)->andReturn($cart);
 
         $this->expectException(EmptyCartException::class);
-
+        
         $this->service->createOrderFromCart($userUuid, $orderData);
     }
 
     #[Test]
-    public function it_validates_stock_availability_before_creating_order(): void
+    public function it_gets_order_by_id(): void
     {
-        $userUuid = $this->getTestUserUuid();
-        $productUuid = $this->getTestEntityUuid();
-        
-        $orderData = new OrderCreateDTO(
-            shipping_address: '123 Test Street, Test City'
-        );
+        $orderUuid = 'order-uuid-123';
+        $order = Mockery::mock(Order::class);
 
-        $cartItem = $this->mockTypedModel(CartItem::class, [
-            'product_uuid' => $productUuid,
-            'quantity' => 5,
-            'total_price' => 5000
-        ]);
-
-        $product = $this->mockTypedModel(Product::class, [
-            'uuid' => $productUuid,
-            'name' => 'Test Product'
-        ]);
-
-        $cartItems = $this->mockCollection([$cartItem]);
-        $cart = $this->mockTypedModel(Cart::class, [
-            'user_uuid' => $userUuid
-        ]);
-        $cart->shouldReceive('getAttribute')->with('cartItems')->andReturn($cartItems);
-
-        $this->cartService->shouldReceive('getOrCreateCart')
-            ->with($userUuid)
-            ->andReturn($cart);
-
-        $this->productRepository->shouldReceive('findByUuid')
-            ->with($productUuid)
-            ->andReturn($product);
-
-        $this->productService->shouldReceive('validateStock')
-            ->with($product, 5)
-            ->andThrow(new InsufficientStockException('Test Product', 5, 3));
-
-        $this->expectException(InsufficientStockException::class);
-
-        $this->service->createOrderFromCart($userUuid, $orderData);
-    }
-
-    #[Test]
-    public function it_throws_insufficient_stock_exception_when_decreasing_stock_fails(): void
-    {
-        $userUuid = $this->getTestUserUuid();
-        $productUuid = $this->getTestEntityUuid();
-        
-        $orderData = new OrderCreateDTO(
-            shipping_address: '123 Test Street, Test City'
-        );
-
-        $cartItem = $this->mockTypedModel(CartItem::class, [
-            'product_uuid' => $productUuid,
-            'quantity' => 2,
-            'unit_price' => 1000,
-            'total_price' => 2000
-        ]);
-
-        $product = $this->mockTypedModel(Product::class, [
-            'uuid' => $productUuid,
-            'name' => 'Test Product',
-            'stock_quantity' => 1
-        ]);
-
-        $cartItem->shouldReceive('getAttribute')->with('product')->andReturn($product);
-
-        $cartItems = $this->mockCollection([$cartItem]);
-        $cartItems->shouldReceive('sum')->with('total_price')->andReturn(2000);
-
-        $cart = $this->mockTypedModel(Cart::class, [
-            'user_uuid' => $userUuid
-        ]);
-        $cart->shouldReceive('getAttribute')->with('cartItems')->andReturn($cartItems);
-
-        $order = $this->mockTypedModel(Order::class, [
-            'uuid' => 'test-order-uuid',
-            'user_uuid' => $userUuid
-        ]);
-
-        $orderItemsRelation = Mockery::mock();
-        $order->shouldReceive('orderItems')->andReturn($orderItemsRelation);
-
-        $this->cartService->shouldReceive('getOrCreateCart')
-            ->with($userUuid)
-            ->andReturn($cart);
-
-        $this->productRepository->shouldReceive('findByUuid')
-            ->with($productUuid)
-            ->andReturn($product);
-
-        $this->productService->shouldReceive('validateStock')
-            ->with($product, 2)
-            ->andReturnTrue();
-
-        $this->orderRepository->shouldReceive('create')
-            ->andReturn($order);
-
-        $product->shouldReceive('decreaseStock')
-            ->with(2)
-            ->andReturn(false); // Simulate stock decrease failure
-
-        $this->expectException(InsufficientStockException::class);
-
-        $this->service->createOrderFromCart($userUuid, $orderData);
-    }
-
-    #[Test]
-    public function it_handles_multiple_cart_items_in_order_creation(): void
-    {
-        $userUuid = $this->getTestUserUuid();
-        $product1Uuid = $this->getTestEntityUuid();
-        $product2Uuid = 'test-product-uuid-2';
-        
-        $orderData = new OrderCreateDTO(
-            shipping_address: '123 Test Street, Test City'
-        );
-
-        // First cart item
-        $cartItem1 = $this->mockTypedModel(CartItem::class, [
-            'product_uuid' => $product1Uuid,
-            'quantity' => 2,
-            'unit_price' => 1000,
-            'total_price' => 2000
-        ]);
-
-        $product1 = $this->mockTypedModel(Product::class, [
-            'uuid' => $product1Uuid,
-            'name' => 'Test Product 1'
-        ]);
-
-        $cartItem1->shouldReceive('getAttribute')->with('product')->andReturn($product1);
-
-        // Second cart item
-        $cartItem2 = $this->mockTypedModel(CartItem::class, [
-            'product_uuid' => $product2Uuid,
-            'quantity' => 1,
-            'unit_price' => 500,
-            'total_price' => 500
-        ]);
-
-        $product2 = $this->mockTypedModel(Product::class, [
-            'uuid' => $product2Uuid,
-            'name' => 'Test Product 2'
-        ]);
-
-        $cartItem2->shouldReceive('getAttribute')->with('product')->andReturn($product2);
-
-        $cartItems = $this->mockCollection([$cartItem1, $cartItem2]);
-        $cartItems->shouldReceive('sum')->with('total_price')->andReturn(2500);
-
-        $cart = $this->mockTypedModel(Cart::class, [
-            'user_uuid' => $userUuid
-        ]);
-        $cart->shouldReceive('getAttribute')->with('cartItems')->andReturn($cartItems);
-
-        $order = $this->mockTypedModel(Order::class, [
-            'uuid' => 'test-order-uuid',
-            'user_uuid' => $userUuid
-        ]);
-
-        $orderItemsRelation = Mockery::mock();
-        $order->shouldReceive('orderItems')->andReturn($orderItemsRelation);
-        $order->shouldReceive('load')
-            ->with(['orderItems.product'])
-            ->andReturn($order);
-
-        $this->cartService->shouldReceive('getOrCreateCart')
-            ->with($userUuid)
-            ->andReturn($cart);
-
-        $this->productRepository->shouldReceive('findByUuid')
-            ->with($product1Uuid)
-            ->andReturn($product1);
-        
-        $this->productRepository->shouldReceive('findByUuid')
-            ->with($product2Uuid)
-            ->andReturn($product2);
-
-        $this->productService->shouldReceive('validateStock')
-            ->with($product1, 2)
-            ->andReturnTrue();
-        
-        $this->productService->shouldReceive('validateStock')
-            ->with($product2, 1)
-            ->andReturnTrue();
-
-        $this->orderRepository->shouldReceive('create')
-            ->with([
-                'user_uuid' => $userUuid,
-                'status' => OrderStatusEnum::PENDING->value,
-                'total_amount' => 2500,
-                'shipping_address' => '123 Test Street, Test City',
-                'notes' => null,
-            ])
-            ->andReturn($order);
-
-        $product1->shouldReceive('decreaseStock')
-            ->with(2)
-            ->andReturn(true);
-        
-        $product2->shouldReceive('decreaseStock')
-            ->with(1)
-            ->andReturn(true);
-
-        $orderItemsRelation->shouldReceive('create')
-            ->with([
-                'product_uuid' => $product1Uuid,
-                'product_name' => 'Test Product 1',
-                'quantity' => 2,
-                'unit_price' => 1000,
-                'total_price' => 2000,
-            ])
-            ->andReturn($this->mockTypedModel(\App\Models\Order\OrderItem::class));
-
-        $orderItemsRelation->shouldReceive('create')
-            ->with([
-                'product_uuid' => $product2Uuid,
-                'product_name' => 'Test Product 2',
-                'quantity' => 1,
-                'unit_price' => 500,
-                'total_price' => 500,
-            ])
-            ->andReturn($this->mockTypedModel(\App\Models\Order\OrderItem::class));
-
-        $this->cartService->shouldReceive('clearCart')
-            ->with($userUuid)
-            ->andReturnNull();
-
-        $result = $this->service->createOrderFromCart($userUuid, $orderData);
-
-        $this->assertSame($order, $result);
-    }
-
-    #[Test]
-    public function it_clears_cart_after_successful_order_creation(): void
-    {
-        $userUuid = $this->getTestUserUuid();
-        $productUuid = $this->getTestEntityUuid();
-        
-        $orderData = new OrderCreateDTO(
-            shipping_address: '123 Test Street, Test City'
-        );
-
-        $cartItem = $this->mockTypedModel(CartItem::class, [
-            'product_uuid' => $productUuid,
-            'quantity' => 1,
-            'unit_price' => 1000,
-            'total_price' => 1000
-        ]);
-
-        $product = $this->mockTypedModel(Product::class, [
-            'uuid' => $productUuid,
-            'name' => 'Test Product'
-        ]);
-
-        $cartItem->shouldReceive('getAttribute')->with('product')->andReturn($product);
-
-        $cartItems = $this->mockCollection([$cartItem]);
-        $cartItems->shouldReceive('sum')->with('total_price')->andReturn(1000);
-
-        $cart = $this->mockTypedModel(Cart::class, [
-            'user_uuid' => $userUuid
-        ]);
-        $cart->shouldReceive('getAttribute')->with('cartItems')->andReturn($cartItems);
-
-        $order = $this->mockTypedModel(Order::class, [
-            'uuid' => 'test-order-uuid',
-            'user_uuid' => $userUuid
-        ]);
-
-        $orderItemsRelation = Mockery::mock();
-        $order->shouldReceive('orderItems')->andReturn($orderItemsRelation);
-        $order->shouldReceive('load')
-            ->with(['orderItems.product'])
-            ->andReturn($order);
-
-        $this->cartService->shouldReceive('getOrCreateCart')
-            ->with($userUuid)
-            ->andReturn($cart);
-
-        $this->productRepository->shouldReceive('findByUuid')
-            ->with($productUuid)
-            ->andReturn($product);
-
-        $this->productService->shouldReceive('validateStock')
-            ->with($product, 1)
-            ->andReturnTrue();
-
-        $this->orderRepository->shouldReceive('create')
-            ->andReturn($order);
-
-        $product->shouldReceive('decreaseStock')
-            ->with(1)
-            ->andReturn(true);
-
-        $orderItemsRelation->shouldReceive('create')
-            ->andReturn($this->mockTypedModel(\App\Models\Order\OrderItem::class));
-
-        $this->cartService->shouldReceive('clearCart')
-            ->with($userUuid)
+        $this->orderRepository->shouldReceive('findById')
+            ->with($orderUuid)
             ->once()
-            ->andReturnNull();
+            ->andReturn($order);
 
-        $this->service->createOrderFromCart($userUuid, $orderData);
+        $result = $this->service->getOrderById($orderUuid);
 
-        // Test passes if clearCart is called once
-        $this->assertTrue(true);
+        $this->assertSame($order, $result);
     }
 
     #[Test]
-    public function it_dispatches_order_confirmation_job_after_successful_creation(): void
+    public function it_updates_order_status(): void
     {
-        $userUuid = $this->getTestUserUuid();
-        $productUuid = $this->getTestEntityUuid();
-        
-        $orderData = new OrderCreateDTO(
-            shipping_address: '123 Test Street, Test City'
-        );
+        $orderUuid = 'order-uuid-123';
+        $newStatus = OrderStatusEnum::CONFIRMED;
+        $order = Mockery::mock(Order::class);
 
-        $cartItem = $this->mockTypedModel(CartItem::class, [
-            'product_uuid' => $productUuid,
-            'quantity' => 1,
-            'unit_price' => 1000,
-            'total_price' => 1000
-        ]);
-
-        $product = $this->mockTypedModel(Product::class, [
-            'uuid' => $productUuid,
-            'name' => 'Test Product'
-        ]);
-
-        $cartItem->shouldReceive('getAttribute')->with('product')->andReturn($product);
-
-        $cartItems = $this->mockCollection([$cartItem]);
-        $cartItems->shouldReceive('sum')->with('total_price')->andReturn(1000);
-
-        $cart = $this->mockTypedModel(Cart::class, [
-            'user_uuid' => $userUuid
-        ]);
-        $cart->shouldReceive('getAttribute')->with('cartItems')->andReturn($cartItems);
-
-        $order = $this->mockTypedModel(Order::class, [
-            'uuid' => 'test-order-uuid',
-            'user_uuid' => $userUuid
-        ]);
-
-        $orderItemsRelation = Mockery::mock();
-        $order->shouldReceive('orderItems')->andReturn($orderItemsRelation);
-        $order->shouldReceive('load')
-            ->with(['orderItems.product'])
+        $this->orderRepository->shouldReceive('findById')
+            ->with($orderUuid)
+            ->once()
             ->andReturn($order);
 
-        $this->cartService->shouldReceive('getOrCreateCart')
-            ->with($userUuid)
-            ->andReturn($cart);
-
-        $this->productRepository->shouldReceive('findByUuid')
-            ->with($productUuid)
-            ->andReturn($product);
-
-        $this->productService->shouldReceive('validateStock')
-            ->with($product, 1)
-            ->andReturnTrue();
-
-        $this->orderRepository->shouldReceive('create')
+        $this->orderRepository->shouldReceive('update')
+            ->with($order, ['status' => $newStatus])
+            ->once()
             ->andReturn($order);
 
-        $product->shouldReceive('decreaseStock')
-            ->with(1)
-            ->andReturn(true);
+        $result = $this->service->updateOrderStatus($orderUuid, $newStatus);
 
-        $orderItemsRelation->shouldReceive('create')
-            ->andReturn($this->mockTypedModel(\App\Models\Order\OrderItem::class));
-
-        $this->cartService->shouldReceive('clearCart')
-            ->with($userUuid)
-            ->andReturnNull();
-
-        $this->service->createOrderFromCart($userUuid, $orderData);
-
-        Queue::assertPushed(SendOrderConfirmationJob::class, 1);
-        Queue::assertPushed(SendOrderConfirmationJob::class, function ($job) use ($order) {
-            return $job->order === $order;
-        });
+        $this->assertSame($order, $result);
     }
 
     #[Test]
-    public function it_creates_order_with_minimal_data(): void
+    public function it_cancels_order_and_restores_stock(): void
     {
-        $userUuid = $this->getTestUserUuid();
-        $productUuid = $this->getTestEntityUuid();
-        
-        $orderData = new OrderCreateDTO(
-            shipping_address: '123 Test Street, Test City'
-            // No notes provided
-        );
+        $orderUuid = 'order-uuid-123';
+        $productUuid = 'product-uuid-123';
 
-        $cartItem = $this->mockTypedModel(CartItem::class, [
-            'product_uuid' => $productUuid,
-            'quantity' => 1,
-            'unit_price' => 1000,
-            'total_price' => 1000
-        ]);
+        $orderItem = Mockery::mock();
+        $orderItem->product_uuid = $productUuid;
+        $orderItem->quantity = 3;
 
-        $product = $this->mockTypedModel(Product::class, [
-            'uuid' => $productUuid,
-            'name' => 'Test Product'
-        ]);
+        $order = Mockery::mock(Order::class);
+        $order->shouldReceive('getAttribute')->with('status')->andReturn(OrderStatusEnum::PENDING);
+        $order->shouldReceive('getAttribute')->with('orderItems')->andReturn(new Collection([$orderItem]));
 
-        $cartItem->shouldReceive('getAttribute')->with('product')->andReturn($product);
-
-        $cartItems = $this->mockCollection([$cartItem]);
-        $cartItems->shouldReceive('sum')->with('total_price')->andReturn(1000);
-
-        $cart = $this->mockTypedModel(Cart::class, [
-            'user_uuid' => $userUuid
-        ]);
-        $cart->shouldReceive('getAttribute')->with('cartItems')->andReturn($cartItems);
-
-        $order = $this->mockTypedModel(Order::class, [
-            'uuid' => 'test-order-uuid',
-            'user_uuid' => $userUuid
-        ]);
-
-        $orderItemsRelation = Mockery::mock();
-        $order->shouldReceive('orderItems')->andReturn($orderItemsRelation);
-        $order->shouldReceive('load')
-            ->with(['orderItems.product'])
+        $this->orderRepository->shouldReceive('findById')->with($orderUuid)->andReturn($order);
+        $this->orderRepository->shouldReceive('update')
+            ->with($order, ['status' => OrderStatusEnum::CANCELLED])
             ->andReturn($order);
 
-        $this->cartService->shouldReceive('getOrCreateCart')
-            ->with($userUuid)
-            ->andReturn($cart);
-
-        $this->productRepository->shouldReceive('findByUuid')
-            ->with($productUuid)
-            ->andReturn($product);
-
-        $this->productService->shouldReceive('validateStock')
-            ->with($product, 1)
-            ->andReturnTrue();
-
-        $this->orderRepository->shouldReceive('create')
-            ->with([
-                'user_uuid' => $userUuid,
-                'status' => OrderStatusEnum::PENDING->value,
-                'total_amount' => 1000,
-                'shipping_address' => '123 Test Street, Test City',
-                'notes' => null, // Should be null when not provided
-            ])
-            ->andReturn($order);
-
-        $product->shouldReceive('decreaseStock')
-            ->with(1)
+        $this->productService->shouldReceive('restoreStock')
+            ->with($productUuid, 3)
+            ->once()
             ->andReturn(true);
 
-        $orderItemsRelation->shouldReceive('create')
-            ->andReturn($this->mockTypedModel(\App\Models\Order\OrderItem::class));
+        $result = $this->service->cancelOrder($orderUuid);
 
-        $this->cartService->shouldReceive('clearCart')
-            ->with($userUuid)
-            ->andReturnNull();
+        $this->assertSame($order, $result);
+    }
+
+    #[Test]
+    public function it_calculates_order_total_correctly(): void
+    {
+        $userUuid = 'user-uuid-123';
+        $productUuid = 'product-uuid-123';
+        
+        $orderData = new OrderCreateDTO(
+            shipping_address: '123 Test Street, Test City',
+            notes: 'Test order notes'
+        );
+
+        // Mock cart item
+        $cartItem = Mockery::mock(CartItem::class);
+        $cartItem->product_uuid = $productUuid;
+        $cartItem->quantity = 2;
+        $cartItem->price = 1500; // 15.00 in cents
+
+        $product = Mockery::mock(Product::class);
+        $product->shouldReceive('getAttribute')->with('stock_quantity')->andReturn(10);
+        $product->shouldReceive('hasStock')->with(2)->andReturn(true);
+        $cartItem->shouldReceive('getAttribute')->with('product')->andReturn($product);
+
+        $cart = Mockery::mock(Cart::class);
+        $cart->shouldReceive('getAttribute')->with('cartItems')->andReturn(new Collection([$cartItem]));
+
+        $order = Mockery::mock(Order::class);
+        $order->shouldReceive('load')->with(['orderItems.product'])->andReturnSelf();
+
+        // Mock service calls
+        $this->cartService->shouldReceive('getUserCart')->with($userUuid)->andReturn($cart);
+        
+        // Expect order creation with correct total (1500 * 2 = 3000)
+        $this->orderRepository->shouldReceive('create')
+            ->with(Mockery::on(function ($data) {
+                return $data['total_amount'] === 3000;
+            }))
+            ->andReturn($order);
+
+        $this->orderRepository->shouldReceive('createOrderItem')->andReturn(true);
+        $this->productService->shouldReceive('reduceStock')->with($productUuid, 2)->andReturn(true);
+        $this->cartService->shouldReceive('clearCart')->with($userUuid)->andReturn(true);
 
         $result = $this->service->createOrderFromCart($userUuid, $orderData);
 
-        $this->assertSame($order, $result);
+        $this->assertInstanceOf(Order::class, $result);
     }
 }

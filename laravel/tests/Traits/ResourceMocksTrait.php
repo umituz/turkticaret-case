@@ -28,16 +28,31 @@ trait ResourceMocksTrait
         }
         $attributes['uuid'] = $attributes['uuid'] ?? $this->generateTestUuid();
         
+        // Add default product properties if not explicitly set
+        if (!array_key_exists('is_featured', $attributes) && (
+            array_key_exists('name', $attributes) || 
+            array_key_exists('sku', $attributes) || 
+            array_key_exists('price', $attributes)
+        )) {
+            $attributes['is_featured'] = false;
+        }
+        
         // Set up attribute access
         foreach ($attributes as $key => $value) {
             $model->shouldReceive('getAttribute')->with($key)->andReturn($value);
-            $model->$key = $value;
+            // Use closure to ensure the value is accessible
+            $model->shouldReceive('getAttribute')->with($key)->andReturn($value);
         }
         
         // Set up magic property access
         $model->shouldReceive('__get')->andReturnUsing(function ($key) use ($attributes) {
             return $attributes[$key] ?? null;
         });
+        
+        // Set up direct property access by making all attributes available
+        foreach ($attributes as $key => $value) {
+            $model->{$key} = $value;
+        }
         
         // Mock isset calls for conditional attributes
         $model->shouldReceive('__isset')->andReturnUsing(function ($key) use ($attributes) {

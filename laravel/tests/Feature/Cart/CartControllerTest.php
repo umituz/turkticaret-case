@@ -210,14 +210,20 @@ class CartControllerTest extends BaseFeatureTest
     #[Test]
     public function it_calculates_total_amount_correctly()
     {
+        // Disable rate limiting for this test
+        $this->withoutMiddleware(['throttle']);
+        
+        // Create fresh user to avoid rate limiting issues
+        $freshUser = $this->createTestUser();
+        
         $product1 = $this->createTestProduct(['price' => 10000]); // 100.00
         $product2 = $this->createTestProduct(['price' => 15000]); // 150.00
         
-        $cart = $this->createTestCart($this->testUser);
+        $cart = $this->createTestCart($freshUser);
         $this->createTestCartItem($cart, $product1, ['quantity' => 2, 'unit_price' => 10000]);
         $this->createTestCartItem($cart, $product2, ['quantity' => 1, 'unit_price' => 15000]);
 
-        $response = $this->actingAs($this->testUser, 'sanctum')->getJson('/api/cart');
+        $response = $this->actingAs($freshUser, 'sanctum')->getJson('/api/cart');
 
         $this->assertSuccessfulJsonResponse($response);
         

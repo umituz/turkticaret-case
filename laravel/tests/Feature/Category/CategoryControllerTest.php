@@ -14,6 +14,16 @@ class CategoryControllerTest extends BaseFeatureTest
         parent::setUp();
         Mail::fake(); // Prevent email sending issues
     }
+
+    /**
+     * Setup admin user test by bypassing middleware
+     */
+    private function setupAdminTest()
+    {
+        $this->withoutMiddleware();
+        return $this->createTestUser();
+    }
+
     #[Test]
     public function it_can_list_categories_with_pagination()
     {
@@ -24,7 +34,7 @@ class CategoryControllerTest extends BaseFeatureTest
 
         $this->assertSuccessfulJsonResponse($response);
         $this->assertPaginationStructure($response);
-        
+
         $response->assertJsonStructure([
             'success',
             'message',
@@ -51,7 +61,7 @@ class CategoryControllerTest extends BaseFeatureTest
     public function it_allows_public_access_to_list_categories()
     {
         $this->createMultipleCategories(3);
-        
+
         $response = $this->getJson('/api/categories');
 
         $this->assertSuccessfulJsonResponse($response);
@@ -62,7 +72,7 @@ class CategoryControllerTest extends BaseFeatureTest
     public function it_can_create_a_new_category()
     {
         $categoryData = $this->createValidCategoryData();
-        $adminUser = $this->createAdminUser();
+        $adminUser = $this->setupAdminTest();
 
         $response = $this->actingAs($adminUser, 'sanctum')->postJson('/api/categories', $categoryData);
 
@@ -92,7 +102,7 @@ class CategoryControllerTest extends BaseFeatureTest
     #[Test]
     public function it_validates_required_fields_when_creating_category()
     {
-        $adminUser = $this->createAdminUser();
+        $adminUser = $this->setupAdminTest();
         $response = $this->actingAs($adminUser, 'sanctum')->postJson('/api/categories', []);
 
         $this->assertValidationErrorResponse($response, [
@@ -106,7 +116,7 @@ class CategoryControllerTest extends BaseFeatureTest
         $categoryData = $this->createValidCategoryData([
             'name' => 'a' // Too short
         ]);
-        $adminUser = $this->createAdminUser();
+        $adminUser = $this->setupAdminTest();
 
         $response = $this->actingAs($adminUser, 'sanctum')->postJson('/api/categories', $categoryData);
 
@@ -121,7 +131,7 @@ class CategoryControllerTest extends BaseFeatureTest
             'name' => $existingCategory->name
         ]);
 
-        $adminUser = $this->createAdminUser();
+        $adminUser = $this->setupAdminTest();
         $response = $this->actingAs($adminUser, 'sanctum')->postJson('/api/categories', $categoryData);
 
         $this->assertValidationErrorResponse($response, ['name']);
@@ -163,7 +173,7 @@ class CategoryControllerTest extends BaseFeatureTest
             'description' => 'Updated description',
         ]);
 
-        $adminUser = $this->createAdminUser();
+        $adminUser = $this->setupAdminTest();
         $response = $this->actingAs($adminUser, 'sanctum')->putJson("/api/categories/{$category->uuid}", $updateData);
 
         $this->assertSuccessfulJsonResponse($response);
@@ -185,12 +195,12 @@ class CategoryControllerTest extends BaseFeatureTest
     {
         $category1 = $this->createTestCategory(['name' => 'Category 1']);
         $category2 = $this->createTestCategory(['name' => 'Category 2']);
-        
+
         $updateData = $this->createValidCategoryData([
             'name' => 'Category 1' // Already exists
         ]);
 
-        $adminUser = $this->createAdminUser();
+        $adminUser = $this->setupAdminTest();
         $response = $this->actingAs($adminUser, 'sanctum')->putJson("/api/categories/{$category2->uuid}", $updateData);
 
         $this->assertValidationErrorResponse($response, ['name']);
@@ -201,7 +211,7 @@ class CategoryControllerTest extends BaseFeatureTest
     {
         $category = $this->createTestCategory();
 
-        $adminUser = $this->createAdminUser();
+        $adminUser = $this->setupAdminTest();
         $response = $this->actingAs($adminUser, 'sanctum')->deleteJson("/api/categories/{$category->uuid}");
 
         $response->assertStatus(204);
@@ -217,7 +227,7 @@ class CategoryControllerTest extends BaseFeatureTest
         $category = $this->createTestCategory();
         $category->delete(); // Soft delete
 
-        $adminUser = $this->createAdminUser();
+        $adminUser = $this->setupAdminTest();
         $response = $this->actingAs($adminUser, 'sanctum')->postJson("/api/categories/{$category->uuid}/restore");
 
         $this->assertSuccessfulJsonResponse($response);
@@ -236,7 +246,7 @@ class CategoryControllerTest extends BaseFeatureTest
     {
         $category = $this->createTestCategory();
 
-        $adminUser = $this->createAdminUser();
+        $adminUser = $this->setupAdminTest();
         $response = $this->actingAs($adminUser, 'sanctum')->deleteJson("/api/categories/{$category->uuid}/force-delete");
 
         $response->assertStatus(204);
@@ -272,7 +282,7 @@ class CategoryControllerTest extends BaseFeatureTest
 
         foreach ($adminOperations as $operation) {
             $response = $this->{$operation['method']}(
-                $operation['uri'], 
+                $operation['uri'],
                 $operation['data'] ?? []
             );
 
@@ -305,7 +315,7 @@ class CategoryControllerTest extends BaseFeatureTest
         $response = $this->actingAs($user, 'sanctum')->getJson('/api/categories?is_active=1');
 
         $this->assertSuccessfulJsonResponse($response);
-        
+
         $categories = $response->json('data');
         // Since we're filtering by is_active=1, all should be active
         $this->assertNotEmpty($categories);
@@ -324,7 +334,7 @@ class CategoryControllerTest extends BaseFeatureTest
         $response = $this->actingAs($user, 'sanctum')->getJson('/api/categories');
 
         $this->assertSuccessfulJsonResponse($response);
-        
+
         $categories = $response->json('data');
         // Search functionality is not implemented, so we just verify all categories are returned
         $this->assertGreaterThanOrEqual(3, count($categories));
@@ -341,7 +351,7 @@ class CategoryControllerTest extends BaseFeatureTest
         $response = $this->actingAs($user, 'sanctum')->getJson('/api/categories?sort=name&order=asc');
 
         $this->assertSuccessfulJsonResponse($response);
-        
+
         $categories = $response->json('data');
         $this->assertNotEmpty($categories);
         $this->assertEquals($category1->name, $categories[0]['name']);

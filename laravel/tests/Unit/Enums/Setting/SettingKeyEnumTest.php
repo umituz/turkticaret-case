@@ -127,7 +127,7 @@ final class SettingKeyEnumTest extends UnitTestCase
             [SettingKeyEnum::THEME, 'Application Theme'],
             [SettingKeyEnum::LOGO_URL, 'Logo URL'],
             [SettingKeyEnum::EMAIL_NOTIFICATIONS_ENABLED, 'Email Notifications Enabled'],
-            [SettingKeyEnum::SMS_NOTIFICATIONS_ENABLED, 'SMS Notifications Enabled'],
+            [SettingKeyEnum::SMS_NOTIFICATIONS_ENABLED, 'SMS Notifications Enabled']
         ];
     }
 
@@ -164,7 +164,7 @@ final class SettingKeyEnumTest extends UnitTestCase
             
             // Notification group
             [SettingKeyEnum::EMAIL_NOTIFICATIONS_ENABLED, 'notification'],
-            [SettingKeyEnum::SMS_NOTIFICATIONS_ENABLED, 'notification'],
+            [SettingKeyEnum::SMS_NOTIFICATIONS_ENABLED, 'notification']
         ];
     }
 
@@ -197,7 +197,7 @@ final class SettingKeyEnumTest extends UnitTestCase
             [SettingKeyEnum::SMS_NOTIFICATIONS_ENABLED, 'boolean'],
             
             // Integer types
-            [SettingKeyEnum::ITEMS_PER_PAGE, 'integer'],
+            [SettingKeyEnum::ITEMS_PER_PAGE, 'integer']
         ];
     }
 
@@ -205,7 +205,10 @@ final class SettingKeyEnumTest extends UnitTestCase
     #[DataProvider('defaultValueDataProvider')]
     public function get_default_value_returns_correct_defaults(SettingKeyEnum $enum, $expectedDefault): void
     {
-        $this->assertEquals($expectedDefault, $enum->getDefaultValue());
+        $defaultValue = $enum->getDefaultValue();
+        $this->assertIsArray($defaultValue);
+        $this->assertArrayHasKey('value', $defaultValue);
+        $this->assertEquals($expectedDefault, $defaultValue['value']);
     }
 
     public static function defaultValueDataProvider(): array
@@ -230,7 +233,7 @@ final class SettingKeyEnumTest extends UnitTestCase
             [SettingKeyEnum::SMS_NOTIFICATIONS_ENABLED, false],
             
             // Integer defaults
-            [SettingKeyEnum::ITEMS_PER_PAGE, 20],
+            [SettingKeyEnum::ITEMS_PER_PAGE, 20]
         ];
     }
 
@@ -258,7 +261,7 @@ final class SettingKeyEnumTest extends UnitTestCase
             [SettingKeyEnum::THEME, 'Default theme for the application'],
             [SettingKeyEnum::LOGO_URL, 'URL or path to the application logo'],
             [SettingKeyEnum::EMAIL_NOTIFICATIONS_ENABLED, 'Enable email notifications globally'],
-            [SettingKeyEnum::SMS_NOTIFICATIONS_ENABLED, 'Enable SMS notifications globally'],
+            [SettingKeyEnum::SMS_NOTIFICATIONS_ENABLED, 'Enable SMS notifications globally']
         ];
     }
 
@@ -327,17 +330,21 @@ final class SettingKeyEnumTest extends UnitTestCase
     {
         foreach (SettingKeyEnum::cases() as $case) {
             $defaultValue = $case->getDefaultValue();
+            $this->assertIsArray($defaultValue);
+            $this->assertArrayHasKey('value', $defaultValue);
+            
+            $actualValue = $defaultValue['value'];
             $expectedType = $case->getType();
             
             switch ($expectedType) {
                 case 'string':
-                    $this->assertIsString($defaultValue, "Default value for {$case->name} should be string");
+                    $this->assertIsString($actualValue, "Default value for {$case->name} should be string");
                     break;
                 case 'boolean':
-                    $this->assertIsBool($defaultValue, "Default value for {$case->name} should be boolean");
+                    $this->assertIsBool($actualValue, "Default value for {$case->name} should be boolean");
                     break;
                 case 'integer':
-                    $this->assertIsInt($defaultValue, "Default value for {$case->name} should be integer");
+                    $this->assertIsInt($actualValue, "Default value for {$case->name} should be integer");
                     break;
             }
         }

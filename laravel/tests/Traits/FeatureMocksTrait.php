@@ -62,6 +62,10 @@ trait FeatureMocksTrait
         // Create Admin role if it doesn't exist
         $adminRole = \App\Models\Authority\Role::firstOrCreate(['name' => 'Admin', 'guard_name' => 'web']);
         $user->assignRole($adminRole);
+        
+        // Refresh user permissions
+        $user->load('roles');
+        app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
         return $user;
     }

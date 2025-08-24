@@ -38,20 +38,20 @@ trait FeatureAssertionsTrait
             'data' => [
                 '*' => []
             ],
+            'links' => [
+                'first',
+                'last',
+                'prev',
+                'next'
+            ],
             'meta' => [
                 'current_page',
-                'last_page',
-                'per_page',
-                'total',
-                'count',
                 'from',
-                'to',
+                'last_page',
                 'path',
-                'first_page_url',
-                'last_page_url',
-                'next_page_url',
-                'prev_page_url',
-                'links'
+                'per_page',
+                'to',
+                'total'
             ]
         ]);
     }
