@@ -2,36 +2,136 @@
 
 namespace App\Enums\Setting;
 
+/**
+ * System setting key enumeration
+ * 
+ * Defines all available system configuration keys used throughout the application.
+ * This enum centralizes setting management and provides metadata for each setting
+ * including type, group, default values, and descriptions. Settings are organized
+ * into logical groups for better management and UI presentation.
+ * 
+ * @method static self DEFAULT_CURRENCY() Default currency setting
+ * @method static self DEFAULT_LANGUAGE() Default language setting
+ * @method static self TAX_ENABLED() Tax calculation toggle
+ * @method static self MAINTENANCE_MODE() Maintenance mode toggle
+ */
 enum SettingKeyEnum: string
 {
     // Commerce Settings
+    /**
+     * Default currency for the application
+     * Used for guest users and as fallback when user preference is not set
+     */
     case DEFAULT_CURRENCY = 'default_currency';
+    
+    /**
+     * Default language for the interface
+     * Applied to guest users and new registrations
+     */
     case DEFAULT_LANGUAGE = 'default_language';
+    
+    /**
+     * Default country for localization
+     * Used for address forms and regional settings
+     */
     case DEFAULT_COUNTRY = 'default_country';
+    
+    /**
+     * Default timezone for date/time operations
+     * Affects how dates are displayed and calculated
+     */
     case DEFAULT_TIMEZONE = 'default_timezone';
+    
+    /**
+     * Global tax calculation toggle
+     * When disabled, no tax calculations are performed
+     */
     case TAX_ENABLED = 'tax_enabled';
+    
+    /**
+     * Global shipping functionality toggle
+     * Controls whether shipping options are available
+     */
     case SHIPPING_ENABLED = 'shipping_enabled';
 
     // System Settings
+    /**
+     * Maintenance mode toggle
+     * When enabled, only admins can access the application
+     */
     case MAINTENANCE_MODE = 'maintenance_mode';
+    
+    /**
+     * Application display name
+     * Used in emails, page titles, and branding
+     */
     case APP_NAME = 'app_name';
+    
+    /**
+     * Base URL of the application
+     * Used for generating absolute URLs in emails and API responses
+     */
     case APP_URL = 'app_url';
+    
+    /**
+     * User registration toggle
+     * Controls whether new users can register accounts
+     */
     case REGISTRATION_ENABLED = 'registration_enabled';
 
     // UI Settings
+    /**
+     * Default pagination size
+     * Number of items shown per page in listings
+     */
     case ITEMS_PER_PAGE = 'items_per_page';
+    
+    /**
+     * Application theme identifier
+     * Determines the visual theme used in the frontend
+     */
     case THEME = 'theme';
+    
+    /**
+     * Logo image URL or path
+     * Used for branding throughout the application
+     */
     case LOGO_URL = 'logo_url';
 
     // Notification Settings
+    /**
+     * Global email notification toggle
+     * Master switch for all email communications
+     */
     case EMAIL_NOTIFICATIONS_ENABLED = 'email_notifications_enabled';
+    
+    /**
+     * Global SMS notification toggle
+     * Master switch for all SMS communications
+     */
     case SMS_NOTIFICATIONS_ENABLED = 'sms_notifications_enabled';
 
+    /**
+     * Get all available setting keys
+     * 
+     * Returns an array of all setting key values for validation
+     * and configuration management interfaces.
+     * 
+     * @return array Array of setting key strings
+     */
     public static function getAvailableKeys(): array
     {
         return array_column(self::cases(), 'value');
     }
 
+    /**
+     * Get human-readable label for the setting
+     * 
+     * Provides display-friendly names for settings in admin interfaces
+     * and configuration panels.
+     * 
+     * @return string Formatted label for the setting
+     */
     public function getLabel(): string
     {
         return match ($this) {
@@ -53,6 +153,14 @@ enum SettingKeyEnum: string
         };
     }
 
+    /**
+     * Get the setting group identifier
+     * 
+     * Groups related settings together for organized display
+     * in configuration interfaces and better management.
+     * 
+     * @return string Setting group identifier
+     */
     public function getGroup(): string
     {
         return match ($this) {
@@ -64,6 +172,14 @@ enum SettingKeyEnum: string
         };
     }
 
+    /**
+     * Get the data type of the setting value
+     * 
+     * Defines the expected data type for validation and
+     * proper form input generation in admin interfaces.
+     * 
+     * @return string Data type (string, boolean, integer)
+     */
     public function getType(): string
     {
         return match ($this) {
@@ -77,6 +193,15 @@ enum SettingKeyEnum: string
         };
     }
 
+    /**
+     * Get the default value for the setting
+     * 
+     * Provides sensible defaults for initial setup and when
+     * settings are reset. Returns value wrapped in array format
+     * consistent with database storage structure.
+     * 
+     * @return array Array with 'value' key containing the default
+     */
     public function getDefaultValue(): mixed
     {
         $rawValue = match ($this) {
@@ -100,6 +225,14 @@ enum SettingKeyEnum: string
         return ['value' => $rawValue];
     }
 
+    /**
+     * Get the setting description
+     * 
+     * Provides detailed explanations of what each setting controls,
+     * helping administrators understand the impact of changes.
+     * 
+     * @return string Detailed description of the setting's purpose
+     */
     public function getDescription(): string
     {
         return match ($this) {

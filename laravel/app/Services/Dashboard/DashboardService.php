@@ -8,10 +8,29 @@ use App\Repositories\Dashboard\DashboardRepositoryInterface;
 use App\Helpers\MoneyHelper;
 use Carbon\Carbon;
 
+/**
+ * Dashboard Service for administrative dashboard operations.
+ * 
+ * Handles comprehensive dashboard data aggregation including system metrics,
+ * user statistics, order analytics, product information, and system status monitoring.
+ * Provides business intelligence and real-time dashboard data for administrators.
+ *
+ * @package App\Services\Dashboard
+ */
 class DashboardService
 {
+    /**
+     * Create a new DashboardService instance.
+     *
+     * @param DashboardRepositoryInterface $dashboardRepository The dashboard repository for analytics operations
+     */
     public function __construct(protected DashboardRepositoryInterface $dashboardRepository) {}
 
+    /**
+     * Get comprehensive dashboard data including stats, activities, and system status.
+     *
+     * @return array Array containing dashboard statistics, recent activities, and system status information
+     */
     public function getDashboardData(): array
     {
         $currentMonth = Carbon::now()->startOfMonth();
@@ -24,6 +43,13 @@ class DashboardService
         ];
     }
 
+    /**
+     * Generate statistical data comparing current and previous month metrics.
+     *
+     * @param Carbon $currentMonth The current month start date for metrics calculation
+     * @param Carbon $previousMonth The previous month start date for comparison
+     * @return array Array containing formatted statistics with percentage changes
+     */
     private function getStats(Carbon $currentMonth, Carbon $previousMonth): array
     {
         $currentUsers = $this->dashboardRepository->getCurrentMonthUsers($currentMonth);
@@ -63,6 +89,11 @@ class DashboardService
         ];
     }
 
+    /**
+     * Retrieve and format recent system activities including orders, users, and products.
+     *
+     * @return array Array of recent activities sorted by timestamp, limited to 10 items
+     */
     private function getRecentActivity(): array
     {
         $orderActivities = $this->dashboardRepository->getRecentOrderActivities();
@@ -107,6 +138,11 @@ class DashboardService
             ->toArray();
     }
 
+    /**
+     * Get comprehensive system status information and health metrics.
+     *
+     * @return array Array containing system component status and health information
+     */
     private function getSystemStatus(): array
     {
         return [
@@ -146,6 +182,12 @@ class DashboardService
         ];
     }
 
+    /**
+     * Format order status history into activity data.
+     *
+     * @param mixed $history The order status history record to format
+     * @return array|null Formatted activity data or null if formatting fails
+     */
     private function formatOrderActivity($history): ?array
     {
         $order = $history->order;
@@ -171,6 +213,16 @@ class DashboardService
         ];
     }
 
+    /**
+     * Generate activity data based on order status transitions.
+     *
+     * @param string|null $oldStatus The previous order status or null for new orders
+     * @param string $newStatus The new order status
+     * @param mixed $order The order model instance
+     * @param mixed $user The user who owns the order
+     * @param mixed $changedBy The user who changed the status
+     * @return array|null Activity data with message and status or null if invalid
+     */
     private function getOrderActivityData(?string $oldStatus, string $newStatus, $order, $user, $changedBy): ?array
     {
         $orderNumber = $order->order_number;
@@ -211,6 +263,13 @@ class DashboardService
         };
     }
 
+    /**
+     * Calculate percentage change between current and previous values.
+     *
+     * @param int|float $current The current period value
+     * @param int|float $previous The previous period value for comparison
+     * @return string Formatted percentage change with sign (e.g., '+15.5%' or '-3.2%')
+     */
     private function calculatePercentageChange(int|float $current, int|float $previous): string
     {
         if ($previous == 0) {
@@ -223,6 +282,11 @@ class DashboardService
         return $sign . number_format($change, 1) . '%';
     }
 
+    /**
+     * Determine storage status based on usage percentage.
+     *
+     * @return string Storage status: 'online', 'warning', or 'offline'
+     */
     private function getStorageStatus(): string
     {
         $usage = $this->getStorageUsagePercentage();
@@ -236,11 +300,21 @@ class DashboardService
         return 'online';
     }
 
+    /**
+     * Get formatted storage usage information.
+     *
+     * @return string Formatted storage usage percentage (e.g., '65% used')
+     */
     private function getStorageUsage(): string
     {
         return $this->getStorageUsagePercentage() . '% used';
     }
 
+    /**
+     * Calculate storage usage as a percentage.
+     *
+     * @return int Storage usage percentage (0-100)
+     */
     private function getStorageUsagePercentage(): int
     {
         $storageUsed = disk_total_space(storage_path()) - disk_free_space(storage_path());

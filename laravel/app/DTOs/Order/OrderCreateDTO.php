@@ -2,6 +2,18 @@
 
 namespace App\DTOs\Order;
 
+/**
+ * Data Transfer Object for order creation operations.
+ * 
+ * Encapsulates validated order data including shipping information
+ * and optional notes for creating new orders from cart contents.
+ * Provides type-safe data transfer between layers.
+ *
+ * @property string $shipping_address The shipping address for the order
+ * @property string|null $notes Optional notes for the order
+ * 
+ * @package App\DTOs\Order
+ */
 readonly class OrderCreateDTO
 {
     public function __construct(
@@ -9,6 +21,12 @@ readonly class OrderCreateDTO
         public ?string $notes = null,
     ) {}
 
+    /**
+     * Create OrderCreateDTO instance from array data.
+     *
+     * @param array $data Array containing shipping_address and optional notes
+     * @return self New OrderCreateDTO instance
+     */
     public static function fromArray(array $data): self
     {
         return new self(
@@ -17,6 +35,11 @@ readonly class OrderCreateDTO
         );
     }
 
+    /**
+     * Convert DTO to array representation.
+     *
+     * @return array Array containing order creation data
+     */
     public function toArray(): array
     {
         return [
