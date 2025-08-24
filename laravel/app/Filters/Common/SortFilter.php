@@ -6,6 +6,7 @@ use App\Filters\Base\AbstractFilter;
 use App\Filters\Base\FilterEnums;
 use Closure;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\DB;
 
 class SortFilter extends AbstractFilter
 {
@@ -23,7 +24,9 @@ class SortFilter extends AbstractFilter
         $sortableFields = $model->sortableFields ?? ['created_at', 'updated_at', 'name'];
         
         if (in_array($orderBy, $sortableFields)) {
-            $builder->orderBy($orderBy, $order);
+            // Secure column name escaping to prevent SQL injection
+            $escapedColumn = DB::getQueryGrammar()->wrap($orderBy);
+            $builder->orderBy(DB::raw($escapedColumn), $order);
         } else {
             $builder->orderBy(FilterEnums::DEFAULT_ORDER_BY, FilterEnums::DEFAULT_ORDER);
         }
