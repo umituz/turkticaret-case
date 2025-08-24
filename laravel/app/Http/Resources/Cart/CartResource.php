@@ -5,8 +5,23 @@ namespace App\Http\Resources\Cart;
 use App\Http\Resources\Base\BaseResource;
 use Illuminate\Http\Request;
 
+/**
+ * API Resource for transforming Cart data.
+ * 
+ * Handles the transformation of Cart model instances into standardized
+ * JSON API responses. Includes cart summary, item collections,
+ * total calculations, and user cart state for e-commerce functionality.
+ *
+ * @package App\Http\Resources\Cart
+ */
 class CartResource extends BaseResource
 {
+    /**
+     * Transform the resource into an array.
+     *
+     * @param Request $request The HTTP request instance
+     * @return array<string, mixed> Array representation of the cart resource
+     */
     public function toArray(Request $request): array
     {
         return [

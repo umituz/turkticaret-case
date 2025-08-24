@@ -5,8 +5,23 @@ namespace App\Http\Resources\User\Address;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * API Resource for transforming UserAddress data.
+ * 
+ * Handles the transformation of UserAddress model instances into standardized
+ * JSON API responses. Includes address details, country information with
+ * conditional loading, and complete contact information for API consumption.
+ *
+ * @package App\Http\Resources\User\Address
+ */
 class AddressResource extends JsonResource
 {
+    /**
+     * Transform the resource into an array.
+     *
+     * @param Request $request The HTTP request instance
+     * @return array<string, mixed> Array representation of the address resource with country information
+     */
     public function toArray(Request $request): array
     {
         return [

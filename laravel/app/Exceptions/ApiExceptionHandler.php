@@ -13,10 +13,28 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Throwable;
 
+/**
+ * API Exception Handler for centralized exception processing.
+ * 
+ * Provides unified exception handling for API requests with standardized
+ * JSON error responses. Maps various exception types to appropriate HTTP
+ * status codes and error messages for consistent API error handling.
+ *
+ * @package App\Exceptions
+ */
 class ApiExceptionHandler
 {
     /**
-     * @throws Throwable
+     * Handle exceptions for API requests with standardized JSON responses.
+     * 
+     * Converts various exception types into consistent JSON error responses
+     * with appropriate HTTP status codes. Only processes API requests or
+     * requests expecting JSON responses.
+     *
+     * @param Throwable $e The exception to handle
+     * @param Request $request The HTTP request instance
+     * @return JsonResponse Standardized JSON error response
+     * @throws Throwable Re-throws non-API exceptions
      */
     public static function handle(Throwable $e, Request $request): JsonResponse
     {

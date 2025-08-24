@@ -19,20 +19,21 @@ class BaseCollection extends ResourceCollection
         if (method_exists($this->resource, 'total')) {
             return [
                 'data' => $this->collection,
+                'links' => [
+                    'first' => $this->url(1),
+                    'last' => $this->url($this->lastPage()),
+                    'prev' => $this->previousPageUrl(),
+                    'next' => $this->nextPageUrl(),
+                ],
                 'meta' => [
-                    'total' => $this->total(),
-                    'count' => $this->count(),
-                    'per_page' => $this->perPage(),
                     'current_page' => $this->currentPage(),
-                    'last_page' => $this->lastPage(),
                     'from' => $this->firstItem(),
-                    'to' => $this->lastItem(),
+                    'last_page' => $this->lastPage(),
                     'path' => $this->path(),
-                    'first_page_url' => $this->url(1),
-                    'last_page_url' => $this->url($this->lastPage()),
-                    'next_page_url' => $this->nextPageUrl(),
-                    'prev_page_url' => $this->previousPageUrl(),
-                    'links' => $this->linkCollection()->toArray(),
+                    'per_page' => $this->perPage(),
+                    'to' => $this->lastItem(),
+                    'total' => $this->total(),
+                    'count' => $this->collection->count(),
                 ],
             ];
         }

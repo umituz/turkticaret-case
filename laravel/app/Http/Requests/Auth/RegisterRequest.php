@@ -6,13 +6,32 @@ use App\Enums\Country\CountryEnum;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
+/**
+ * Request class for user registration.
+ * 
+ * Handles validation of user registration data including email uniqueness,
+ * password strength and confirmation, name validation, and country selection.
+ * Ensures all required fields meet security and business requirements.
+ *
+ * @package App\Http\Requests\Auth
+ */
 class RegisterRequest extends FormRequest
 {
+    /**
+     * Determine if the user is authorized to make this request.
+     *
+     * @return bool Always returns true for public registration
+     */
     public function authorize(): bool
     {
         return true;
     }
 
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, mixed> Array of validation rules
+     */
     public function rules(): array
     {
         return [
@@ -23,6 +42,11 @@ class RegisterRequest extends FormRequest
         ];
     }
 
+    /**
+     * Get custom messages for validator errors.
+     *
+     * @return array<string, string> Array of custom error messages
+     */
     public function messages(): array
     {
         return [

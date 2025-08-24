@@ -7,13 +7,32 @@ use App\Rules\Profile\OldPasswordRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
+/**
+ * Request class for updating user profiles.
+ * 
+ * Handles validation of profile update data including name and email changes,
+ * password updates with old password verification, and ensures at least one
+ * field is provided for update operations.
+ *
+ * @package App\Http\Requests\User\Profile
+ */
 class ProfileUpdateRequest extends FormRequest
 {
+    /**
+     * Determine if the user is authorized to make this request.
+     *
+     * @return bool Always returns true for authenticated users updating their own profile
+     */
     public function authorize(): bool
     {
         return true;
     }
 
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, mixed> Array of validation rules
+     */
     public function rules(): array
     {
         return [
@@ -38,6 +57,11 @@ class ProfileUpdateRequest extends FormRequest
         ];
     }
 
+    /**
+     * Get custom messages for validator errors.
+     *
+     * @return array<string, string> Array of custom error messages
+     */
     public function messages(): array
     {
         return [

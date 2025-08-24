@@ -5,8 +5,23 @@ namespace App\Http\Resources\Order;
 use App\Http\Resources\Base\BaseResource;
 use Illuminate\Http\Request;
 
+/**
+ * API Resource for transforming Order data.
+ * 
+ * Handles the transformation of Order model instances into standardized
+ * JSON API responses. Includes order details, status information, items,
+ * timestamps, and security filtering for public API consumption.
+ *
+ * @package App\Http\Resources\Order
+ */
 class OrderResource extends BaseResource
 {
+    /**
+     * Transform the resource into an array.
+     *
+     * @param Request $request The HTTP request instance
+     * @return array<string, mixed> Array representation of the order resource
+     */
     public function toArray(Request $request): array
     {
         return [

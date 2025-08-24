@@ -6,13 +6,32 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
+/**
+ * Request class for updating existing categories.
+ * 
+ * Handles validation of category update data including name uniqueness
+ * checks that exclude the current category, slug regeneration, and
+ * optional field updates.
+ *
+ * @package App\Http\Requests\Category
+ */
 class CategoryUpdateRequest extends FormRequest
 {
+    /**
+     * Determine if the user is authorized to make this request.
+     *
+     * @return bool Always returns true for authenticated users
+     */
     public function authorize(): bool
     {
         return true;
     }
 
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, mixed> Array of validation rules
+     */
     public function rules(): array
     {
         $categoryUuid = $this->route('category')->uuid;
@@ -31,6 +50,14 @@ class CategoryUpdateRequest extends FormRequest
         ];
     }
 
+    /**
+     * Prepare the data for validation.
+     * 
+     * Automatically generates a new URL-friendly slug from the category name
+     * if the name is being updated.
+     *
+     * @return void
+     */
     protected function prepareForValidation(): void
     {
         if ($this->has('name')) {
@@ -40,6 +67,11 @@ class CategoryUpdateRequest extends FormRequest
         }
     }
 
+    /**
+     * Get custom messages for validator errors.
+     *
+     * @return array<string, string> Array of custom error messages
+     */
     public function messages(): array
     {
         return [

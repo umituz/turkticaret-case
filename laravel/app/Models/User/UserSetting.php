@@ -7,6 +7,27 @@ use App\Models\User\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * UserSetting Model for managing user notification preferences.
+ * 
+ * Handles user-specific notification settings including email, push, SMS,
+ * marketing, order updates, and newsletter preferences. Provides granular
+ * control over user communication preferences.
+ *
+ * @property string $uuid Settings unique identifier
+ * @property string $user_uuid Associated user UUID
+ * @property bool $email_notifications Whether email notifications are enabled
+ * @property bool $push_notifications Whether push notifications are enabled
+ * @property bool $sms_notifications Whether SMS notifications are enabled
+ * @property bool $marketing_notifications Whether marketing communications are enabled
+ * @property bool $order_update_notifications Whether order update notifications are enabled
+ * @property bool $newsletter_notifications Whether newsletter subscriptions are enabled
+ * @property \Carbon\Carbon $created_at Creation timestamp
+ * @property \Carbon\Carbon $updated_at Last update timestamp
+ * @property \Carbon\Carbon|null $deleted_at Soft deletion timestamp
+ * 
+ * @package App\Models\User
+ */
 class UserSetting extends BaseUuidModel
 {
     use HasFactory;
@@ -33,7 +54,9 @@ class UserSetting extends BaseUuidModel
     ];
 
     /**
-     * Get the user that owns the settings
+     * Get the user that owns these settings.
+     *
+     * @return BelongsTo<User>
      */
     public function user(): BelongsTo
     {

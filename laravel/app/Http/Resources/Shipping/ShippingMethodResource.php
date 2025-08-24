@@ -5,8 +5,23 @@ namespace App\Http\Resources\Shipping;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * API Resource for transforming Shipping Method data.
+ * 
+ * Handles the transformation of ShippingMethod model instances into standardized
+ * JSON API responses. Includes shipping pricing, delivery time estimates,
+ * and availability status for checkout and order management.
+ *
+ * @package App\Http\Resources\Shipping
+ */
 class ShippingMethodResource extends JsonResource
 {
+    /**
+     * Transform the resource into an array.
+     *
+     * @param Request $request The HTTP request instance
+     * @return array<string, mixed> Array representation of the shipping method resource
+     */
     public function toArray(Request $request): array
     {
         return [

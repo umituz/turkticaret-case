@@ -5,6 +5,15 @@ namespace App\Policies\Order;
 use App\Models\Order\Order;
 use App\Models\User\User;
 
+/**
+ * Policy class for Order model authorization.
+ * 
+ * Handles authorization logic for order operations including view,
+ * create, update, and delete permissions. Ensures users can only
+ * access their own orders and manage order status updates.
+ *
+ * @package App\Policies\Order
+ */
 class OrderPolicy
 {
     /**

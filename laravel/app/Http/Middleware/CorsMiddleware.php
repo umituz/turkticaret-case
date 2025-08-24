@@ -6,8 +6,27 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * Middleware for handling Cross-Origin Resource Sharing (CORS) headers.
+ * 
+ * This middleware handles CORS preflight requests and adds appropriate
+ * CORS headers to responses to enable cross-origin API access from
+ * frontend applications. Supports credentials and common HTTP methods.
+ *
+ * @package App\Http\Middleware
+ */
 class CorsMiddleware
 {
+    /**
+     * Handle an incoming request and add CORS headers.
+     * 
+     * Handles OPTIONS preflight requests and adds CORS headers to all responses
+     * to allow cross-origin requests from the configured frontend URL.
+     *
+     * @param Request $request The incoming HTTP request
+     * @param Closure $next The next middleware closure
+     * @return Response The HTTP response with CORS headers
+     */
     public function handle(Request $request, Closure $next): Response
     {
         if ($request->getMethod() === 'OPTIONS') {

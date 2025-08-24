@@ -3,7 +3,7 @@
 namespace App\Services\Order;
 
 use App\DTOs\Order\OrderCreateDTO;
-use App\Jobs\Order\SendOrderConfirmationJob;
+use App\Jobs\Order\SendOrderConfirmedJob;
 use App\Models\Order\Order;
 use App\Models\Cart\Cart;
 use App\Repositories\Order\OrderRepositoryInterface;
@@ -54,6 +54,67 @@ class OrderService
     }
 
     /**
+     * Get order status history for a specific order.
+     *
+     * @param Order $order The order to get status history for
+     * @return array Order status history data
+     */
+    public function getOrderStatusHistory(Order $order): array
+    {
+        $history = [];
+        
+        // Order placed
+        $history[] = [
+            'status' => 'pending',
+            'date' => $order->created_at,
+            'description' => 'Order placed'
+        ];
+        
+        // Order processing (if updated_at is different from created_at and status is not pending)
+        if ($order->status->value !== 'pending' && $order->updated_at > $order->created_at) {
+            $history[] = [
+                'status' => 'processing',
+                'date' => $order->updated_at,
+                'description' => 'Order confirmed and processing'
+            ];
+        }
+        
+        // Order shipped
+        if ($order->shipped_at) {
+            $history[] = [
+                'status' => 'shipped',
+                'date' => $order->shipped_at,
+                'description' => 'Order shipped'
+            ];
+        }
+        
+        // Order delivered
+        if ($order->delivered_at) {
+            $history[] = [
+                'status' => 'delivered',
+                'date' => $order->delivered_at,
+                'description' => 'Order delivered'
+            ];
+        }
+        
+        // Current status (if different from the timeline above)
+        $lastHistoryStatus = end($history)['status'] ?? 'pending';
+        if ($order->status->value !== $lastHistoryStatus) {
+            $history[] = [
+                'status' => $order->status->value,
+                'date' => $order->updated_at,
+                'description' => 'Order status updated to ' . ucfirst($order->status->value)
+            ];
+        }
+        
+        return [
+            'order_uuid' => $order->uuid,
+            'current_status' => $order->status->value,
+            'history' => $history
+        ];
+    }
+
+    /**
      * Create a new order from user's cart with comprehensive validation.
      *
      * @param string $userUuid The UUID of the user creating the order
@@ -71,7 +132,7 @@ class OrderService
             $this->transferCartItemsToOrderAndReduceStock($order, $cart);
             $this->cartService->clearCart($userUuid);
 
-            SendOrderConfirmationJob::dispatch($order);
+            SendOrderConfirmedJob::dispatch($order);
 
             return $order->load(['orderItems.product']);
         });

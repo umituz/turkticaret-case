@@ -5,6 +5,15 @@ namespace App\Policies\User\Address;
 use App\Models\User\User;
 use App\Models\User\UserAddress;
 
+/**
+ * Policy class for UserAddress model authorization.
+ * 
+ * Handles authorization logic for user address operations including
+ * view, create, update, and delete permissions. Ensures users can
+ * only access their own addresses.
+ *
+ * @package App\Policies\User\Address
+ */
 class AddressPolicy
 {
     /**

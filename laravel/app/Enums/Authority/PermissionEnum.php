@@ -2,6 +2,15 @@
 
 namespace App\Enums\Authority;
 
+/**
+ * Permission enumeration for role-based access control
+ * 
+ * Defines all available permissions in the application for users, products,
+ * categories, orders, and cart management. Used for implementing role-based
+ * access control (RBAC) throughout the application.
+ * 
+ * @package App\Enums\Authority
+ */
 enum PermissionEnum: string
 {
     // User Management
@@ -33,6 +42,11 @@ enum PermissionEnum: string
     case CART_READ = 'cart.read';
     case CART_UPDATE = 'cart.update';
 
+    /**
+     * Get human-readable description for the permission
+     * 
+     * @return string Permission description for display purposes
+     */
     public function description(): string
     {
         return match($this) {
@@ -62,11 +76,24 @@ enum PermissionEnum: string
         };
     }
 
+    /**
+     * Get all permission values as array
+     * 
+     * @return array Array of all permission string values
+     */
     public static function values(): array
     {
         return array_column(self::cases(), 'value');
     }
 
+    /**
+     * Get all admin permissions
+     * 
+     * Returns all permissions available to admin users including
+     * create, read, update, and delete operations for all resources.
+     * 
+     * @return array Array of admin permission values
+     */
     public static function getAdminPermissions(): array
     {
         return [
@@ -92,6 +119,14 @@ enum PermissionEnum: string
         ];
     }
 
+    /**
+     * Get regular user permissions
+     * 
+     * Returns limited set of permissions for regular users, mainly
+     * read access and basic operations on their own data.
+     * 
+     * @return array Array of regular user permission values
+     */
     public static function getRegularPermissions(): array
     {
         return [

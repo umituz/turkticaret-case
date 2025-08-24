@@ -10,12 +10,16 @@ class SettingCollection extends BaseCollection
 
     public function toArray($request): array
     {
-        return [
-            'data' => $this->collection,
-            'meta' => [
-                'total' => $this->collection->count(),
-                'groups' => $this->collection->groupBy('group')->keys(),
-            ],
-        ];
+        $baseArray = parent::toArray($request);
+        
+        // Add custom groups to meta using the original resource
+        if ($this->resource && method_exists($this->resource, 'groupBy')) {
+            $baseArray['meta']['groups'] = $this->resource->groupBy('group')->keys();
+        } else {
+            // Fallback for empty or non-collection data
+            $baseArray['meta']['groups'] = collect();
+        }
+        
+        return $baseArray;
     }
 }

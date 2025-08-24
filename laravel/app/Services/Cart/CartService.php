@@ -71,30 +71,37 @@ class CartService
                 throw new OutOfStockException($product->name);
             }
 
-            try {
-                // Try to create new cart item
-                $cartItem = $cart->cartItems()->firstOrCreate(
-                    ['product_uuid' => $product->uuid],
-                    [
-                        'quantity' => 0,
-                        'unit_price' => $product->price,
-                    ]
-                );
-            } catch (\Illuminate\Database\QueryException $e) {
-                // Handle PostgreSQL unique constraint violation (23505)
-                if ($e->getCode() === '23505') {
-                    // Race condition occurred, find the existing cart item
-                    $cartItem = $cart->cartItems()->where('product_uuid', $product->uuid)->first();
-                } else {
-                    throw $e;
-                }
+            // Use PostgreSQL's ON CONFLICT to handle race conditions atomically
+            $cartItemUuid = \Str::uuid();
+            $now = now();
+            
+            \DB::statement("
+                INSERT INTO cart_items (uuid, cart_uuid, product_uuid, quantity, unit_price, deleted_at, created_at, updated_at)
+                VALUES (?, ?, ?, ?, ?, NULL, ?, ?)
+                ON CONFLICT (cart_uuid, product_uuid)
+                DO UPDATE SET 
+                    quantity = cart_items.quantity + EXCLUDED.quantity,
+                    updated_at = EXCLUDED.updated_at,
+                    deleted_at = NULL
+            ", [
+                $cartItemUuid,
+                $cart->uuid,
+                $product->uuid,
+                $requestedQuantity,
+                $product->price,
+                $now,
+                $now
+            ]);
+
+            // Find the cart item after upsert
+            $cartItem = $cart->cartItems()
+                ->where('product_uuid', $product->uuid)
+                ->first();
+
+            // Check if cart item was found
+            if (!$cartItem) {
+                throw new \Exception("Cart item not found after upsert operation for product: {$product->name}");
             }
-
-            // Atomically increment quantity
-            $cartItem->increment('quantity', $requestedQuantity);
-
-            // Refresh to get updated values
-            $cartItem->refresh();
 
             // Validate stock after update
             if (!$product->hasStock($cartItem->quantity)) {

@@ -5,13 +5,32 @@ namespace App\Http\Requests\Country;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
+/**
+ * Request class for updating country.
+ * 
+ * Handles validation of country update data including country code uniqueness
+ * verification excluding current country, locale validation, currency relationship
+ * updates, and status management for country modifications.
+ *
+ * @package App\Http\Requests\Country
+ */
 class CountryUpdateRequest extends FormRequest
 {
+    /**
+     * Determine if the user is authorized to make this request.
+     *
+     * @return bool Authorization status
+     */
     public function authorize(): bool
     {
         return true;
     }
 
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, mixed> Array of validation rules
+     */
     public function rules(): array
     {
         $country = $this->route('country');
@@ -25,6 +44,11 @@ class CountryUpdateRequest extends FormRequest
         ];
     }
 
+    /**
+     * Get custom messages for validator errors.
+     *
+     * @return array<string, string> Array of custom error messages
+     */
     public function messages(): array
     {
         return [

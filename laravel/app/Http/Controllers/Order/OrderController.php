@@ -37,7 +37,7 @@ class OrderController extends BaseController
      */
     public function index(): JsonResponse
     {
-        $orders = $this->orderService->getUserOrders(auth()->id());
+        $orders = $this->orderService->getUserOrders(auth()->user()->uuid);
         
         return $this->ok(new OrderCollection($orders));
     }
@@ -77,5 +77,20 @@ class OrderController extends BaseController
         $order->load(['orderItems.product']);
         
         return $this->ok(new OrderResource($order));
+    }
+
+    /**
+     * Get order status history for the specified order.
+     *
+     * @param Order $order The order model instance resolved by route model binding
+     * @return JsonResponse JSON response containing order status history
+     */
+    public function statusHistory(Order $order): JsonResponse
+    {
+        Gate::authorize('view', $order);
+        
+        $history = $this->orderService->getOrderStatusHistory($order);
+        
+        return $this->ok($history);
     }
 }

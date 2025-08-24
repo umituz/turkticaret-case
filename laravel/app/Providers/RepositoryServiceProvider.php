@@ -32,8 +32,25 @@ use App\Repositories\Shipping\ShippingMethodRepository;
 use App\Repositories\Shipping\ShippingMethodRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
 
+/**
+ * Service provider for binding repository interfaces to their implementations.
+ * 
+ * This provider registers all repository interface to concrete implementation
+ * bindings in the service container, enabling dependency injection throughout
+ * the application following the Repository pattern.
+ *
+ * @package App\Providers
+ */
 class RepositoryServiceProvider extends ServiceProvider
 {
+    /**
+     * Register repository bindings in the service container.
+     * 
+     * Binds all repository interfaces to their concrete implementations
+     * to enable dependency injection and loose coupling.
+     *
+     * @return void
+     */
     public function register(): void
     {
         $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
@@ -52,6 +69,11 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(ShippingMethodRepositoryInterface::class, ShippingMethodRepository::class);
     }
 
+    /**
+     * Bootstrap repository services.
+     *
+     * @return void
+     */
     public function boot(): void
     {
         //

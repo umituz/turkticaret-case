@@ -4,13 +4,32 @@ namespace App\Http\Requests\Cart;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Request class for adding products to cart.
+ * 
+ * Handles validation of cart addition data including product existence
+ * validation and quantity constraints. Ensures proper cart item
+ * creation with business rule compliance.
+ *
+ * @package App\Http\Requests\Cart
+ */
 class CartAddRequest extends FormRequest
 {
+    /**
+     * Determine if the user is authorized to make this request.
+     *
+     * @return bool Always returns true for authenticated users adding to cart
+     */
     public function authorize(): bool
     {
         return true;
     }
 
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, string> Array of validation rules
+     */
     public function rules(): array
     {
         return [
@@ -19,6 +38,11 @@ class CartAddRequest extends FormRequest
         ];
     }
 
+    /**
+     * Get custom messages for validator errors.
+     *
+     * @return array<string, string> Array of custom error messages
+     */
     public function messages(): array
     {
         return [

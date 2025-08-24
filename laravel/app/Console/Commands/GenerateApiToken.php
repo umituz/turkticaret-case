@@ -6,6 +6,15 @@ use App\Enums\User\UserTypeEnum;
 use App\Models\User\User;
 use Illuminate\Console\Command;
 
+/**
+ * Console command for generating API tokens.
+ * 
+ * Generates API tokens for users with optional user selection by email.
+ * Includes automatic clipboard copying on macOS and user priority selection.
+ * Used for testing and development purposes.
+ *
+ * @package App\Console\Commands
+ */
 class GenerateApiToken extends Command
 {
     /**

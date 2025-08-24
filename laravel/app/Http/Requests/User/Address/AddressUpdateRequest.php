@@ -4,13 +4,32 @@ namespace App\Http\Requests\User\Address;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Request class for updating user address.
+ * 
+ * Handles validation of address update data including address type validation,
+ * geographical information verification, and optional field handling.
+ * Ensures data integrity for shipping and billing address modifications.
+ *
+ * @package App\Http\Requests\User\Address
+ */
 class AddressUpdateRequest extends FormRequest
 {
+    /**
+     * Determine if the user is authorized to make this request.
+     *
+     * @return bool Authorization status
+     */
     public function authorize(): bool
     {
         return true;
     }
 
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, string> Array of validation rules
+     */
     public function rules(): array
     {
         return [
@@ -29,6 +48,11 @@ class AddressUpdateRequest extends FormRequest
         ];
     }
 
+    /**
+     * Get custom messages for validator errors.
+     *
+     * @return array<string, string> Array of custom error messages
+     */
     public function messages(): array
     {
         return [

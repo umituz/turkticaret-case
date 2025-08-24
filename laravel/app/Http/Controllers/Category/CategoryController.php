@@ -65,22 +65,32 @@ class CategoryController extends BaseController
      * Update the specified category in storage.
      *
      * @param CategoryUpdateRequest $request The validated request containing updated category data
-     * @param Category $category The category model instance resolved by route model binding
+     * @param string|Category $category The category model instance resolved by route model binding or UUID string
      * @return JsonResponse JSON response containing the updated category resource
      */
-    public function update(CategoryUpdateRequest $request, Category $category): JsonResponse
+    public function update(CategoryUpdateRequest $request, $category): JsonResponse
     {
+        // Handle case where route model binding doesn't work and we get UUID string
+        if (is_string($category)) {
+            $category = Category::where('uuid', $category)->firstOrFail();
+        }
+        
         return $this->ok(new CategoryResource($this->categoryService->update($category, $request->validated())));
     }
 
     /**
      * Soft delete the specified category from storage.
      *
-     * @param Category $category The category model instance resolved by route model binding
+     * @param string|Category $category The category model instance resolved by route model binding or UUID string
      * @return JsonResponse JSON response with 204 No Content status
      */
-    public function destroy(Category $category): JsonResponse
+    public function destroy($category): JsonResponse
     {
+        // Handle case where route model binding doesn't work and we get UUID string
+        if (is_string($category)) {
+            $category = Category::where('uuid', $category)->firstOrFail();
+        }
+        
         $this->categoryService->delete($category);
 
         return $this->noContent();

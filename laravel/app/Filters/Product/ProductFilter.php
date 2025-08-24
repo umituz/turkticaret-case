@@ -7,10 +7,31 @@ use App\Traits\SecureInputTrait;
 use Closure;
 use Illuminate\Database\Eloquent\Builder;
 
+/**
+ * Product-specific filter for e-commerce product filtering.
+ * 
+ * Implements comprehensive product filtering including category, price range,
+ * search functionality, and status filters. Includes security measures for
+ * user input sanitization and SQL injection prevention.
+ *
+ * @package App\Filters\Product
+ */
 class ProductFilter extends AbstractFilter
 {
     use SecureInputTrait;
 
+    /**
+     * Apply product-specific filters to the query builder.
+     * 
+     * Implements multiple filter types including category filtering, price range
+     * filtering, full-text search across name and description, active status
+     * filtering, and featured product filtering. All user inputs are sanitized
+     * and validated for security.
+     *
+     * @param Builder $builder The Eloquent query builder instance
+     * @param Closure $next The next filter in the pipeline
+     * @return Builder The modified query builder with applied product filters
+     */
     public function handle(Builder $builder, Closure $next): Builder
     {
         // Category filter

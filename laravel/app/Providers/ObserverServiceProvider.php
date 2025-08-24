@@ -24,8 +24,25 @@ use App\Observers\Order\OrderObserver;
 use App\Observers\Product\ProductObserver;
 use Illuminate\Support\ServiceProvider;
 
+/**
+ * Service provider for registering Eloquent model observers.
+ * 
+ * This provider registers all model observers to handle model lifecycle events
+ * throughout the application. Observers provide hooks for model operations
+ * like creating, updating, deleting, etc.
+ *
+ * @package App\Providers
+ */
 class ObserverServiceProvider extends ServiceProvider
 {
+    /**
+     * Bootstrap model observers.
+     * 
+     * Registers all model observers to listen for model lifecycle events
+     * and perform additional operations when models are manipulated.
+     *
+     * @return void
+     */
     public function boot(): void
     {
         User::observe(UserObserver::class);

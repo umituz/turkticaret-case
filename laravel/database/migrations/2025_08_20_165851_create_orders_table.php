@@ -15,7 +15,7 @@ return new class extends Migration
             $table->uuid()->primary()->comment('Primary key UUID');
             $table->string('order_number')->unique()->comment('Unique order number');
             $table->foreignUuid('user_uuid')->constrained('users', 'uuid')->onDelete('cascade')->comment('Reference to users table');
-            $table->enum('status', ['pending', 'confirmed', 'processing', 'shipped', 'delivered', 'cancelled'])->default('pending')->comment('Order status');
+            $table->string('status', 50)->default('pending')->comment('Order status - validated by OrderStatusEnum');
             $table->unsignedBigInteger('total_amount')->comment('Total order amount in minor units (cents)');
             $table->text('shipping_address')->comment('Shipping address details');
             $table->text('notes')->nullable()->comment('Order notes');

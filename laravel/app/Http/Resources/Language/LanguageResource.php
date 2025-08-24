@@ -5,8 +5,23 @@ namespace App\Http\Resources\Language;
 use App\Http\Resources\Base\BaseResource;
 use Illuminate\Http\Request;
 
+/**
+ * API Resource for transforming Language data.
+ * 
+ * Handles the transformation of Language model instances into standardized
+ * JSON API responses. Includes language details, localization metadata,
+ * and RTL support information for multilingual functionality.
+ *
+ * @package App\Http\Resources\Language
+ */
 class LanguageResource extends BaseResource
 {
+    /**
+     * Transform the resource into an array.
+     *
+     * @param Request $request The HTTP request instance
+     * @return array<string, mixed> Array representation of the language resource
+     */
     public function toArray(Request $request): array
     {
         return [

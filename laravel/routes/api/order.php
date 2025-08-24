@@ -8,9 +8,9 @@ Route::middleware(['auth:sanctum'])->prefix('orders')->group(function () {
     Route::get('/', [OrderController::class, 'index']);
     Route::post('/', [OrderController::class, 'store']);
     Route::get('/{order}', [OrderController::class, 'show']);
+    Route::get('/{order}/status/history', [OrderController::class, 'statusHistory']);
     
     Route::prefix('{order}/status')->group(function () {
         Route::patch('/', [OrderStatusController::class, 'update']);
-        Route::get('/history', [OrderStatusController::class, 'getStatusHistory']);
     });
 });

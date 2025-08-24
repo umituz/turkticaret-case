@@ -4,13 +4,32 @@ namespace App\Http\Requests\Product;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Request class for updating product.
+ * 
+ * Handles validation of product update data including optional field validation,
+ * SKU uniqueness verification excluding current product, price and stock validation,
+ * and category relationship validation for product modifications.
+ *
+ * @package App\Http\Requests\Product
+ */
 class ProductUpdateRequest extends FormRequest
 {
+    /**
+     * Determine if the user is authorized to make this request.
+     *
+     * @return bool Authorization status
+     */
     public function authorize(): bool
     {
         return true;
     }
 
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, string> Array of validation rules
+     */
     public function rules(): array
     {
         return [
@@ -25,6 +44,11 @@ class ProductUpdateRequest extends FormRequest
         ];
     }
 
+    /**
+     * Get custom messages for validator errors.
+     *
+     * @return array<string, string> Array of custom error messages
+     */
     public function messages(): array
     {
         return [

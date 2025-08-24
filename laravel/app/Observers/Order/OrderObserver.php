@@ -2,6 +2,7 @@
 
 namespace App\Observers\Order;
 
+use App\Jobs\Order\SendOrderStatusUpdateEmail;
 use App\Models\Order\Order;
 use App\Models\Order\OrderStatusHistory;
 use App\Observers\Base\BaseObserver;
@@ -42,13 +43,31 @@ class OrderObserver extends BaseObserver
     public function updated(Model $model): void
     {
         if ($model->isDirty('status')) {
+            $oldStatus = $model->getOriginal('status');
+            $newStatus = $model->status->value;
+
+            // Convert enum to string for job serialization
+            if ($oldStatus instanceof \App\Enums\Order\OrderStatusEnum) {
+                $oldStatus = $oldStatus->value;
+            }
+
+            // Create status history record
             OrderStatusHistory::create([
                 'order_uuid' => $model->uuid,
-                'old_status' => $model->getOriginal('status'),
-                'new_status' => $model->status->value,
+                'old_status' => $oldStatus,
+                'new_status' => $newStatus,
                 'changed_by_uuid' => auth()->id(),
                 'notes' => 'Status updated',
             ]);
+
+            // Send email notification to order owner when status changes
+            if ($model->user && $model->user->email) {
+                SendOrderStatusUpdateEmail::dispatch(
+                    $model->load('user', 'orderItems.product'),
+                    $oldStatus,
+                    $newStatus
+                );
+            }
         }
     }
 }

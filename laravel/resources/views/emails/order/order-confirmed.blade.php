@@ -11,16 +11,16 @@
     @endphp
 
     <h1 style="color: #111827; font-size: 24px; margin-bottom: 20px; text-align: center;">
-        🎉 Order Confirmed!
+        🎉 Your Order is Confirmed!
     </h1>
     
     <p style="color: #374151; font-size: 16px; line-height: 1.6; margin-bottom: 20px;">
-        Hello {{ $order->user->name }},
+        Hi {{ $order->user->name }},
     </p>
     
     <p style="color: #374151; font-size: 16px; line-height: 1.6; margin-bottom: 30px;">
-        Thank you for your order! We've received your order and are preparing it for delivery. 
-        You'll receive another email with tracking information once your order ships.
+        Great news! Your order has been confirmed and we're now preparing it for shipment. 
+        We'll send you tracking details as soon as your order is on its way.
     </p>
     
     {{-- Status Badge --}}
@@ -34,8 +34,9 @@
         'title' => '📦 Order Summary',
         'style' => 'highlight',
         'items' => [
-            ['label' => 'Order Number', 'value' => '#' . substr($order->uuid, 0, 8)],
+            ['label' => 'Order Number', 'value' => '#' . $orderNumber],
             ['label' => 'Order Date', 'value' => $order->created_at->format('M d, Y \a\t h:i A')],
+            ['label' => 'Status', 'value' => $statusLabel],
             ['label' => 'Estimated Delivery', 'value' => $order->created_at->addDays(3)->format('M d, Y')],
         ]
     ])
@@ -53,7 +54,7 @@
             // Add total at the end
             $orderItemsData[] = [
                 'label' => '<strong>Total Amount</strong>',
-                'value' => '<strong>₺' . number_format($order->total_amount / 100, 2) . '</strong>'
+                'value' => '<strong>' . $formattedTotal . '</strong>'
             ];
         @endphp
         
@@ -87,10 +88,10 @@
         <tr>
             <td style="background-color: #eff6ff; border: 1px solid #dbeafe; border-radius: 8px; padding: 20px; text-align: center;">
                 <h3 style="color: #1e40af; font-size: 16px; margin: 0 0 10px 0;">
-                    💬 Questions About Your Order?
+                    💬 Need Help?
                 </h3>
                 <p style="color: #1e40af; font-size: 14px; line-height: 1.5; margin: 0;">
-                    Our customer support team is here to help! Contact us anytime with questions about your order.
+                    Have questions about your order? Our customer support team is available 24/7 to assist you.
                 </p>
             </td>
         </tr>

@@ -8,6 +8,7 @@ Route::prefix('products')->group(function () {
     Route::get('/{product}', [ProductController::class, 'show']);
 
     Route::middleware(['auth:sanctum', 'role:Admin'])->group(function () {
+        Route::get('/stats', [ProductController::class, 'statistics']);
         Route::post('/', [ProductController::class, 'store']);
         Route::put('/{product}', [ProductController::class, 'update']);
         Route::delete('/{product}', [ProductController::class, 'destroy']);

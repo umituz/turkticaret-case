@@ -4,8 +4,23 @@ namespace App\Http\Resources\Setting;
 
 use App\Http\Resources\Base\BaseResource;
 
+/**
+ * API Resource for transforming Setting data.
+ * 
+ * Handles the transformation of Setting model instances into standardized
+ * JSON API responses. Includes typed value conversion, configuration grouping,
+ * and editability status for application settings management.
+ *
+ * @package App\Http\Resources\Setting
+ */
 class SettingResource extends BaseResource
 {
+    /**
+     * Transform the resource into an array.
+     *
+     * @param mixed $request The HTTP request instance
+     * @return array<string, mixed> Array representation of the setting resource
+     */
     public function toArray($request): array
     {
         return [

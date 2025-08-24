@@ -5,18 +5,43 @@ namespace App\Repositories\User\UserSettings;
 use App\Models\User\UserSetting;
 use App\Repositories\Base\BaseRepository;
 
+/**
+ * User settings repository for handling user settings database operations.
+ * 
+ * This repository provides methods for managing user settings including
+ * finding settings by user UUID and creating default settings.
+ *
+ * @package App\Repositories\User\UserSettings
+ */
 class UserSettingsRepository extends BaseRepository implements UserSettingsRepositoryInterface
 {
+    /**
+     * Create a new UserSettings repository instance.
+     *
+     * @param UserSetting $model The UserSetting model instance
+     */
     public function __construct(UserSetting $model)
     {
         parent::__construct($model);
     }
 
+    /**
+     * Find user settings by user UUID.
+     *
+     * @param string $userUuid The user UUID to search for
+     * @return UserSetting|null The user settings instance or null if not found
+     */
     public function findByUserUuid(string $userUuid): ?UserSetting
     {
         return $this->model->where('user_uuid', $userUuid)->first();
     }
 
+    /**
+     * Create default settings for a user or return existing settings.
+     *
+     * @param string $userUuid The user UUID to create settings for
+     * @return UserSetting The created or existing user settings instance
+     */
     public function createDefaultSettings(string $userUuid): UserSetting
     {
         $existingSettings = $this->findByUserUuid($userUuid);

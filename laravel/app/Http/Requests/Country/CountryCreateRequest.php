@@ -4,13 +4,32 @@ namespace App\Http\Requests\Country;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Request class for creating country.
+ * 
+ * Handles validation of country creation data including country code uniqueness,
+ * locale validation, currency relationship verification, and activation status
+ * for new country registration in the geographical system.
+ *
+ * @package App\Http\Requests\Country
+ */
 class CountryCreateRequest extends FormRequest
 {
+    /**
+     * Determine if the user is authorized to make this request.
+     *
+     * @return bool Authorization status
+     */
     public function authorize(): bool
     {
         return true;
     }
 
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, string> Array of validation rules
+     */
     public function rules(): array
     {
         return [
@@ -22,6 +41,11 @@ class CountryCreateRequest extends FormRequest
         ];
     }
 
+    /**
+     * Get custom messages for validator errors.
+     *
+     * @return array<string, string> Array of custom error messages
+     */
     public function messages(): array
     {
         return [
