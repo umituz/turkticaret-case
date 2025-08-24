@@ -2,6 +2,7 @@
 
 use App\Exceptions\ApiExceptionHandler;
 use App\Http\Middleware\CorsMiddleware;
+use App\Http\Middleware\SecurityHeadersMiddleware;
 use App\Http\Middleware\TrustedProxiesMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -22,6 +23,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->api(prepend: [
             TrustedProxiesMiddleware::class,
             CorsMiddleware::class,
+            SecurityHeadersMiddleware::class,
         ]);
 
         $middleware->throttleApi('api');
