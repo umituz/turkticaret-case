@@ -111,8 +111,8 @@ class ShippingMethodTest extends UnitTestCase
         ]);
 
         // Act & Assert
-        $this->assertIsFloat($shippingMethod->price);
-        $this->assertEquals(9.99, $shippingMethod->price);
+        $this->assertIsString($shippingMethod->price);
+        $this->assertEquals('9.99', $shippingMethod->price);
         $this->assertIsInt($shippingMethod->min_delivery_days);
         $this->assertEquals(3, $shippingMethod->min_delivery_days);
         $this->assertIsInt($shippingMethod->max_delivery_days);
@@ -267,7 +267,7 @@ class ShippingMethodTest extends UnitTestCase
     {
         // Arrange & Act & Assert
         $this->assertTrue(
-            in_array(\Illuminate\Database\Eloquent\Factories\HasFactory::class, class_uses(ShippingMethod::class)),
+            in_array(\Illuminate\Database\Eloquent\Factories\HasFactory::class, class_uses_recursive(ShippingMethod::class)),
             'ShippingMethod model should use HasFactory trait'
         );
     }

@@ -26,16 +26,26 @@ class CartControllerTest extends BaseFeatureTest
                 'items' => [
                     '*' => [
                         'uuid',
-                        'product_uuid',
+                        'product' => [
+                            'uuid',
+                            'name',
+                            'sku',
+                            'image_path',
+                            'available_stock',
+                            'is_available'
+                        ],
                         'quantity',
                         'unit_price',
-                        'created_at',
-                        'updated_at'
+                        'total_price'
                     ]
                 ],
-                'total_amount',
-                'created_at',
-                'updated_at'
+                'summary' => [
+                    'total_items',
+                    'subtotal',
+                    'total_amount',
+                    'has_stock_issues',
+                    'has_unavailable_items'
+                ]
             ]
         ]);
 
@@ -76,7 +86,7 @@ class CartControllerTest extends BaseFeatureTest
         $response->assertJsonCount(1, 'data.items');
         
         $item = $response->json('data.items.0');
-        $this->assertEquals($product->uuid, $item['product_uuid']);
+        $this->assertEquals($product->uuid, $item['product']['uuid']);
         $this->assertEquals(2, $item['quantity']);
         $this->assertEquals($product->price, $item['unit_price']);
     }
@@ -210,8 +220,6 @@ class CartControllerTest extends BaseFeatureTest
     #[Test]
     public function it_calculates_total_amount_correctly()
     {
-        // Disable rate limiting for this test
-        $this->withoutMiddleware(['throttle']);
         
         // Create fresh user to avoid rate limiting issues
         $freshUser = $this->createTestUser();
@@ -228,7 +236,7 @@ class CartControllerTest extends BaseFeatureTest
         $this->assertSuccessfulJsonResponse($response);
         
         $expectedTotal = (2 * 10000) + (1 * 15000); // 35000
-        $response->assertJsonPath('data.total_amount', $expectedTotal);
+        $response->assertJsonPath('data.summary.total_amount', $expectedTotal);
     }
 
     #[Test] 

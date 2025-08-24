@@ -24,7 +24,8 @@ final class OrderStatusEnumTest extends UnitTestCase
             'PROCESSING',
             'SHIPPED',
             'DELIVERED',
-            'CANCELLED'
+            'CANCELLED',
+            'REFUNDED'
         ];
 
         $actualCases = array_map(fn($case) => $case->name, OrderStatusEnum::cases());
@@ -45,7 +46,8 @@ final class OrderStatusEnumTest extends UnitTestCase
             'PROCESSING' => 'processing',
             'SHIPPED' => 'shipped',
             'DELIVERED' => 'delivered',
-            'CANCELLED' => 'cancelled'
+            'CANCELLED' => 'cancelled',
+            'REFUNDED' => 'refunded'
         ];
 
         foreach ($expectedValues as $caseName => $expectedValue) {
@@ -65,7 +67,8 @@ final class OrderStatusEnumTest extends UnitTestCase
             'processing',
             'shipped',
             'delivered',
-            'cancelled'
+            'cancelled',
+            'refunded'
         ];
 
         $this->assertIsArray($statuses);
@@ -92,6 +95,7 @@ final class OrderStatusEnumTest extends UnitTestCase
             [OrderStatusEnum::SHIPPED, 'Shipped'],
             [OrderStatusEnum::DELIVERED, 'Delivered'],
             [OrderStatusEnum::CANCELLED, 'Cancelled'],
+            [OrderStatusEnum::REFUNDED, 'Refunded'],
         ];
     }
 
@@ -177,7 +181,7 @@ final class OrderStatusEnumTest extends UnitTestCase
 
     #[Test]
     #[DataProvider('deliveredTransitionDataProvider')]
-    public function delivered_status_cannot_transition_to_any_status(OrderStatusEnum $targetStatus, bool $expectedResult): void
+    public function delivered_status_can_transition_to_refunded(OrderStatusEnum $targetStatus, bool $expectedResult): void
     {
         $delivered = OrderStatusEnum::DELIVERED;
         $this->assertEquals($expectedResult, $delivered->canTransitionTo($targetStatus));
@@ -186,18 +190,19 @@ final class OrderStatusEnumTest extends UnitTestCase
     public static function deliveredTransitionDataProvider(): array
     {
         return [
-            [OrderStatusEnum::PENDING, false],        // Final state
-            [OrderStatusEnum::CONFIRMED, false],      // Final state
-            [OrderStatusEnum::PROCESSING, false],     // Final state
-            [OrderStatusEnum::SHIPPED, false],        // Final state
-            [OrderStatusEnum::DELIVERED, false],      // Final state
-            [OrderStatusEnum::CANCELLED, false],      // Final state
+            [OrderStatusEnum::PENDING, false],        // Cannot go back
+            [OrderStatusEnum::CONFIRMED, false],      // Cannot go back
+            [OrderStatusEnum::PROCESSING, false],     // Cannot go back
+            [OrderStatusEnum::SHIPPED, false],        // Cannot go back
+            [OrderStatusEnum::DELIVERED, false],      // Cannot stay same
+            [OrderStatusEnum::CANCELLED, false],      // Cannot go to cancelled
+            [OrderStatusEnum::REFUNDED, true],        // Can be refunded
         ];
     }
 
     #[Test]
     #[DataProvider('cancelledTransitionDataProvider')]
-    public function cancelled_status_cannot_transition_to_any_status(OrderStatusEnum $targetStatus, bool $expectedResult): void
+    public function cancelled_status_can_transition_to_refunded(OrderStatusEnum $targetStatus, bool $expectedResult): void
     {
         $cancelled = OrderStatusEnum::CANCELLED;
         $this->assertEquals($expectedResult, $cancelled->canTransitionTo($targetStatus));
@@ -206,12 +211,34 @@ final class OrderStatusEnumTest extends UnitTestCase
     public static function cancelledTransitionDataProvider(): array
     {
         return [
+            [OrderStatusEnum::PENDING, false],        // Cannot go back
+            [OrderStatusEnum::CONFIRMED, false],      // Cannot go back
+            [OrderStatusEnum::PROCESSING, false],     // Cannot go back
+            [OrderStatusEnum::SHIPPED, false],        // Cannot go back
+            [OrderStatusEnum::DELIVERED, false],      // Cannot go to delivered
+            [OrderStatusEnum::CANCELLED, false],      // Cannot stay same
+            [OrderStatusEnum::REFUNDED, true],        // Can be refunded
+        ];
+    }
+
+    #[Test]
+    #[DataProvider('refundedTransitionDataProvider')]
+    public function refunded_status_cannot_transition_to_any_status(OrderStatusEnum $targetStatus, bool $expectedResult): void
+    {
+        $refunded = OrderStatusEnum::REFUNDED;
+        $this->assertEquals($expectedResult, $refunded->canTransitionTo($targetStatus));
+    }
+
+    public static function refundedTransitionDataProvider(): array
+    {
+        return [
             [OrderStatusEnum::PENDING, false],        // Final state
             [OrderStatusEnum::CONFIRMED, false],      // Final state
             [OrderStatusEnum::PROCESSING, false],     // Final state
             [OrderStatusEnum::SHIPPED, false],        // Final state
             [OrderStatusEnum::DELIVERED, false],      // Final state
             [OrderStatusEnum::CANCELLED, false],      // Final state
+            [OrderStatusEnum::REFUNDED, false],       // Final state
         ];
     }
 
@@ -345,7 +372,7 @@ final class OrderStatusEnumTest extends UnitTestCase
     #[Test]
     public function final_states_cannot_transition_anywhere(): void
     {
-        $finalStates = [OrderStatusEnum::DELIVERED, OrderStatusEnum::CANCELLED];
+        $finalStates = [OrderStatusEnum::REFUNDED];
         
         foreach ($finalStates as $finalState) {
             foreach (OrderStatusEnum::cases() as $targetState) {

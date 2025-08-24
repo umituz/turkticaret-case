@@ -34,6 +34,17 @@ abstract class BaseFeatureTest extends TestCase
         // Reset permissions cache for Spatie Permission
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
         
+        // Clear rate limiting cache for tests
+        \Illuminate\Support\Facades\RateLimiter::clear('login');
+        \Illuminate\Support\Facades\RateLimiter::clear('register');
+        
+        // Disable all throttling middleware for tests
+        $this->withoutMiddleware([
+            'throttle',
+            'throttle:api', 
+            'throttle:60,1'
+        ]);
+        
         $this->setupFeatureTestEnvironment();
     }
 
@@ -137,6 +148,11 @@ abstract class BaseFeatureTest extends TestCase
             'country_uuid' => Country::where('code', 'US')->first()->uuid,
         ]);
         
+        // Assign admin role if it exists
+        if (\Spatie\Permission\Models\Role::where('name', 'admin')->exists()) {
+            $adminUser->assignRole('admin');
+        }
+        
         return $adminUser;
     }
 
@@ -162,6 +178,11 @@ abstract class BaseFeatureTest extends TestCase
      */
     protected function tearDown(): void
     {
+        // Clear rate limiting cache after each test
+        \Illuminate\Support\Facades\RateLimiter::clear('login');
+        \Illuminate\Support\Facades\RateLimiter::clear('register');
+        \Illuminate\Support\Facades\Cache::flush();
+        
         parent::tearDown();
     }
 }

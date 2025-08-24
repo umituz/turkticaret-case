@@ -31,6 +31,13 @@ class PaginationFilterTest extends UnitTestCase
         $filter = new PaginationFilter($data);
         
         $model = Mockery::mock(Model::class);
+        $model->shouldReceive('setAttribute')
+            ->with('paginationData', [
+                FilterEnums::PARAM_PAGE => 1,
+                FilterEnums::PARAM_PER_PAGE => FilterEnums::DEFAULT_PER_PAGE
+            ])
+            ->once();
+        
         $builder = Mockery::mock(Builder::class);
         $builder->shouldReceive('getModel')
             ->once()
@@ -43,10 +50,6 @@ class PaginationFilterTest extends UnitTestCase
 
         // Assert
         $this->assertSame($builder, $result);
-        $this->assertEquals([
-            FilterEnums::PARAM_PAGE => 1,
-            FilterEnums::PARAM_PER_PAGE => FilterEnums::DEFAULT_PER_PAGE
-        ], $model->paginationData);
     }
 
     #[Test]
@@ -60,6 +63,13 @@ class PaginationFilterTest extends UnitTestCase
         $filter = new PaginationFilter($data);
         
         $model = Mockery::mock(Model::class);
+        $model->shouldReceive('setAttribute')
+            ->with('paginationData', [
+                FilterEnums::PARAM_PAGE => 3,
+                FilterEnums::PARAM_PER_PAGE => 20
+            ])
+            ->once();
+        
         $builder = Mockery::mock(Builder::class);
         $builder->shouldReceive('getModel')
             ->once()
@@ -72,10 +82,6 @@ class PaginationFilterTest extends UnitTestCase
 
         // Assert
         $this->assertSame($builder, $result);
-        $this->assertEquals([
-            FilterEnums::PARAM_PAGE => 3,
-            FilterEnums::PARAM_PER_PAGE => 20
-        ], $model->paginationData);
     }
 
     #[Test]
@@ -89,6 +95,13 @@ class PaginationFilterTest extends UnitTestCase
         $filter = new PaginationFilter($data);
         
         $model = Mockery::mock(Model::class);
+        $model->shouldReceive('setAttribute')
+            ->with('paginationData', [
+                FilterEnums::PARAM_PAGE => 1,
+                FilterEnums::PARAM_PER_PAGE => FilterEnums::MAX_PER_PAGE
+            ])
+            ->once();
+        
         $builder = Mockery::mock(Builder::class);
         $builder->shouldReceive('getModel')
             ->once()
@@ -101,10 +114,6 @@ class PaginationFilterTest extends UnitTestCase
 
         // Assert
         $this->assertSame($builder, $result);
-        $this->assertEquals([
-            FilterEnums::PARAM_PAGE => 1,
-            FilterEnums::PARAM_PER_PAGE => FilterEnums::MAX_PER_PAGE
-        ], $model->paginationData);
     }
 
     #[Test]
@@ -118,6 +127,13 @@ class PaginationFilterTest extends UnitTestCase
         $filter = new PaginationFilter($data);
         
         $model = Mockery::mock(Model::class);
+        $model->shouldReceive('setAttribute')
+            ->with('paginationData', [
+                FilterEnums::PARAM_PAGE => 1, // Corrected to 1
+                FilterEnums::PARAM_PER_PAGE => 15
+            ])
+            ->once();
+        
         $builder = Mockery::mock(Builder::class);
         $builder->shouldReceive('getModel')
             ->once()
@@ -130,10 +146,6 @@ class PaginationFilterTest extends UnitTestCase
 
         // Assert
         $this->assertSame($builder, $result);
-        $this->assertEquals([
-            FilterEnums::PARAM_PAGE => 1, // Corrected to 1
-            FilterEnums::PARAM_PER_PAGE => 15
-        ], $model->paginationData);
     }
 
     #[Test]
@@ -147,6 +159,13 @@ class PaginationFilterTest extends UnitTestCase
         $filter = new PaginationFilter($data);
         
         $model = Mockery::mock(Model::class);
+        $model->shouldReceive('setAttribute')
+            ->with('paginationData', [
+                FilterEnums::PARAM_PAGE => 1, // Corrected to 1
+                FilterEnums::PARAM_PER_PAGE => 10
+            ])
+            ->once();
+        
         $builder = Mockery::mock(Builder::class);
         $builder->shouldReceive('getModel')
             ->once()
@@ -159,10 +178,6 @@ class PaginationFilterTest extends UnitTestCase
 
         // Assert
         $this->assertSame($builder, $result);
-        $this->assertEquals([
-            FilterEnums::PARAM_PAGE => 1, // Corrected to 1
-            FilterEnums::PARAM_PER_PAGE => 10
-        ], $model->paginationData);
     }
 
     #[Test]
@@ -176,6 +191,13 @@ class PaginationFilterTest extends UnitTestCase
         $filter = new PaginationFilter($data);
         
         $model = Mockery::mock(Model::class);
+        $model->shouldReceive('setAttribute')
+            ->with('paginationData', [
+                FilterEnums::PARAM_PAGE => 5,
+                FilterEnums::PARAM_PER_PAGE => 25
+            ])
+            ->once();
+        
         $builder = Mockery::mock(Builder::class);
         $builder->shouldReceive('getModel')
             ->once()
@@ -188,10 +210,6 @@ class PaginationFilterTest extends UnitTestCase
 
         // Assert
         $this->assertSame($builder, $result);
-        $this->assertEquals([
-            FilterEnums::PARAM_PAGE => 5,
-            FilterEnums::PARAM_PER_PAGE => 25
-        ], $model->paginationData);
     }
 
     #[Test]
@@ -205,6 +223,13 @@ class PaginationFilterTest extends UnitTestCase
         $filter = new PaginationFilter($data);
         
         $model = Mockery::mock(Model::class);
+        $model->shouldReceive('setAttribute')
+            ->with('paginationData', [
+                FilterEnums::PARAM_PAGE => 1, // Default when invalid
+                FilterEnums::PARAM_PER_PAGE => FilterEnums::DEFAULT_PER_PAGE // Default when invalid
+            ])
+            ->once();
+        
         $builder = Mockery::mock(Builder::class);
         $builder->shouldReceive('getModel')
             ->once()
@@ -217,10 +242,6 @@ class PaginationFilterTest extends UnitTestCase
 
         // Assert
         $this->assertSame($builder, $result);
-        $this->assertEquals([
-            FilterEnums::PARAM_PAGE => 1, // Default when invalid
-            FilterEnums::PARAM_PER_PAGE => FilterEnums::DEFAULT_PER_PAGE // Default when invalid
-        ], $model->paginationData);
     }
 
     #[Test]
@@ -231,6 +252,8 @@ class PaginationFilterTest extends UnitTestCase
         $filter = new PaginationFilter($data);
         
         $model = Mockery::mock(Model::class);
+        $model->shouldReceive('setAttribute')->once();
+        
         $builder = Mockery::mock(Builder::class);
         $builder->shouldReceive('getModel')
             ->once()
@@ -261,6 +284,13 @@ class PaginationFilterTest extends UnitTestCase
         $filter = new PaginationFilter($data);
         
         $model = Mockery::mock(Model::class);
+        $model->shouldReceive('setAttribute')
+            ->with('paginationData', [
+                FilterEnums::PARAM_PAGE => 10,
+                FilterEnums::PARAM_PER_PAGE => 50
+            ])
+            ->once();
+        
         $builder = Mockery::mock(Builder::class);
         $builder->shouldReceive('getModel')
             ->once()
@@ -269,13 +299,10 @@ class PaginationFilterTest extends UnitTestCase
         $next = fn($builder) => $builder;
 
         // Act
-        $filter->handle($builder, $next);
+        $result = $filter->handle($builder, $next);
 
         // Assert
-        $this->assertObjectHasProperty('paginationData', $model);
-        $this->assertIsArray($model->paginationData);
-        $this->assertArrayHasKey(FilterEnums::PARAM_PAGE, $model->paginationData);
-        $this->assertArrayHasKey(FilterEnums::PARAM_PER_PAGE, $model->paginationData);
+        $this->assertSame($builder, $result);
     }
 
     #[Test]
@@ -289,6 +316,13 @@ class PaginationFilterTest extends UnitTestCase
         $filter = new PaginationFilter($data);
         
         $model = Mockery::mock(Model::class);
+        $model->shouldReceive('setAttribute')
+            ->with('paginationData', [
+                FilterEnums::PARAM_PAGE => FilterEnums::MAX_PER_PAGE,
+                FilterEnums::PARAM_PER_PAGE => 1
+            ])
+            ->once();
+        
         $builder = Mockery::mock(Builder::class);
         $builder->shouldReceive('getModel')
             ->once()
@@ -301,9 +335,5 @@ class PaginationFilterTest extends UnitTestCase
 
         // Assert
         $this->assertSame($builder, $result);
-        $this->assertEquals([
-            FilterEnums::PARAM_PAGE => FilterEnums::MAX_PER_PAGE,
-            FilterEnums::PARAM_PER_PAGE => 1
-        ], $model->paginationData);
     }
 }

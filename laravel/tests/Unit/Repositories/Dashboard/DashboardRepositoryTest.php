@@ -39,8 +39,9 @@ class DashboardRepositoryTest extends UnitTestCase
     #[Test]
     public function get_total_users_returns_user_count(): void
     {
-        // Arrange
-        User::shouldReceive('count')
+        // Arrange - Mock the User model 
+        $userMock = Mockery::mock('overload:' . User::class);
+        $userMock->shouldReceive('count')
             ->once()
             ->andReturn(150);
 
@@ -57,8 +58,9 @@ class DashboardRepositoryTest extends UnitTestCase
         // Arrange
         $currentMonth = Carbon::parse('2024-01-01');
         $mockQuery = Mockery::mock();
+        $userMock = Mockery::mock('overload:' . User::class);
         
-        User::shouldReceive('where')
+        $userMock->shouldReceive('where')
             ->once()
             ->with('created_at', '>=', $currentMonth)
             ->andReturn($mockQuery);
@@ -81,8 +83,9 @@ class DashboardRepositoryTest extends UnitTestCase
         $previousMonth = Carbon::parse('2023-12-01');
         $currentMonth = Carbon::parse('2024-01-01');
         $mockQuery = Mockery::mock();
+        $userMock = Mockery::mock('overload:' . User::class);
         
-        User::shouldReceive('whereBetween')
+        $userMock->shouldReceive('whereBetween')
             ->once()
             ->with('created_at', [$previousMonth, $currentMonth])
             ->andReturn($mockQuery);
@@ -104,8 +107,9 @@ class DashboardRepositoryTest extends UnitTestCase
         // Arrange
         $currentMonth = Carbon::parse('2024-01-01');
         $mockQuery = Mockery::mock();
+        $orderMock = Mockery::mock('overload:' . Order::class);
         
-        Order::shouldReceive('where')
+        $orderMock->shouldReceive('where')
             ->once()
             ->with('created_at', '>=', $currentMonth)
             ->andReturn($mockQuery);
@@ -128,8 +132,9 @@ class DashboardRepositoryTest extends UnitTestCase
         $previousMonth = Carbon::parse('2023-12-01');
         $currentMonth = Carbon::parse('2024-01-01');
         $mockQuery = Mockery::mock();
+        $orderMock = Mockery::mock('overload:' . Order::class);
         
-        Order::shouldReceive('whereBetween')
+        $orderMock->shouldReceive('whereBetween')
             ->once()
             ->with('created_at', [$previousMonth, $currentMonth])
             ->andReturn($mockQuery);
@@ -149,7 +154,8 @@ class DashboardRepositoryTest extends UnitTestCase
     public function get_total_products_returns_product_count(): void
     {
         // Arrange
-        Product::shouldReceive('count')
+        $productMock = Mockery::mock('overload:' . Product::class);
+        $productMock->shouldReceive('count')
             ->once()
             ->andReturn(500);
 
@@ -166,8 +172,9 @@ class DashboardRepositoryTest extends UnitTestCase
         // Arrange
         $currentMonth = Carbon::parse('2024-01-01');
         $mockQuery = Mockery::mock();
+        $productMock = Mockery::mock('overload:' . Product::class);
         
-        Product::shouldReceive('where')
+        $productMock->shouldReceive('where')
             ->once()
             ->with('created_at', '>=', $currentMonth)
             ->andReturn($mockQuery);
@@ -190,8 +197,9 @@ class DashboardRepositoryTest extends UnitTestCase
         $currentMonth = Carbon::parse('2024-01-01');
         $mockQuery1 = Mockery::mock();
         $mockQuery2 = Mockery::mock();
+        $orderMock = Mockery::mock('overload:' . Order::class);
         
-        Order::shouldReceive('where')
+        $orderMock->shouldReceive('where')
             ->once()
             ->with('created_at', '>=', $currentMonth)
             ->andReturn($mockQuery1);
@@ -222,8 +230,9 @@ class DashboardRepositoryTest extends UnitTestCase
         $currentMonth = Carbon::parse('2024-01-01');
         $mockQuery1 = Mockery::mock();
         $mockQuery2 = Mockery::mock();
+        $orderMock = Mockery::mock('overload:' . Order::class);
         
-        Order::shouldReceive('whereBetween')
+        $orderMock->shouldReceive('whereBetween')
             ->once()
             ->with('created_at', [$previousMonth, $currentMonth])
             ->andReturn($mockQuery1);
@@ -254,8 +263,9 @@ class DashboardRepositoryTest extends UnitTestCase
         $mockQuery2 = Mockery::mock();
         $mockQuery3 = Mockery::mock();
         $expectedCollection = Mockery::mock(Collection::class);
+        $orderStatusHistoryMock = Mockery::mock('overload:' . OrderStatusHistory::class);
         
-        OrderStatusHistory::shouldReceive('with')
+        $orderStatusHistoryMock->shouldReceive('with')
             ->once()
             ->with(['order.user'])
             ->andReturn($mockQuery1);
@@ -290,8 +300,9 @@ class DashboardRepositoryTest extends UnitTestCase
         $mockQuery2 = Mockery::mock();
         $mockQuery3 = Mockery::mock();
         $expectedCollection = Mockery::mock(Collection::class);
+        $orderStatusHistoryMock = Mockery::mock('overload:' . OrderStatusHistory::class);
         
-        OrderStatusHistory::shouldReceive('with')
+        $orderStatusHistoryMock->shouldReceive('with')
             ->once()
             ->with(['order.user'])
             ->andReturn($mockQuery1);
@@ -324,8 +335,9 @@ class DashboardRepositoryTest extends UnitTestCase
         $mockQuery1 = Mockery::mock();
         $mockQuery2 = Mockery::mock();
         $expectedCollection = Mockery::mock(Collection::class);
+        $userMock = Mockery::mock('overload:' . User::class);
         
-        User::shouldReceive('orderBy')
+        $userMock->shouldReceive('orderBy')
             ->once()
             ->with('created_at', 'desc')
             ->andReturn($mockQuery1);
@@ -353,8 +365,9 @@ class DashboardRepositoryTest extends UnitTestCase
         $mockQuery1 = Mockery::mock();
         $mockQuery2 = Mockery::mock();
         $expectedCollection = Mockery::mock(Collection::class);
+        $productMock = Mockery::mock('overload:' . Product::class);
         
-        Product::shouldReceive('orderBy')
+        $productMock->shouldReceive('orderBy')
             ->once()
             ->with('updated_at', 'desc')
             ->andReturn($mockQuery1);

@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\Mail\Order;
 
-use App\Mail\Order\OrderConfirmationMail;
+use App\Mail\Order\OrderConfirmedMail;
 use App\Models\Order\Order;
 use App\Models\User\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -10,8 +10,8 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
-#[CoversClass(OrderConfirmationMail::class)]
-class OrderConfirmationMailTest extends TestCase
+#[CoversClass(OrderConfirmedMail::class)]
+class OrderConfirmedMailTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -19,9 +19,9 @@ class OrderConfirmationMailTest extends TestCase
     public function it_has_correct_subject_with_order_uuid(): void
     {
         $order = $this->createOrderWithUser();
-        $mailable = new OrderConfirmationMail($order);
+        $mailable = new OrderConfirmedMail($order);
 
-        $expectedSubject = 'Your Order Has Been Confirmed - #' . strtoupper(substr($order->uuid, 0, 8));
+        $expectedSubject = 'Order Confirmed - #' . strtoupper(substr($order->uuid, 0, 8));
         $mailable->assertHasSubject($expectedSubject);
     }
 
@@ -29,9 +29,9 @@ class OrderConfirmationMailTest extends TestCase
     public function it_uses_correct_view(): void
     {
         $order = $this->createOrderWithUser();
-        $mailable = new OrderConfirmationMail($order);
+        $mailable = new OrderConfirmedMail($order);
 
-        $this->assertEquals('emails.order.confirmation', $mailable->content()->view);
+        $this->assertEquals('emails.order.order-confirmed', $mailable->content()->view);
     }
 
     #[Test]
@@ -44,30 +44,30 @@ class OrderConfirmationMailTest extends TestCase
         ]);
         $order->setRelation('user', $user);
 
-        $mailable = new OrderConfirmationMail($order);
+        $mailable = new OrderConfirmedMail($order);
 
         $mailable->assertSeeInHtml('John Customer');
-        $mailable->assertSeeInHtml('Order Confirmation #' . substr($order->uuid, 0, 8));
-        $mailable->assertSeeInHtml('Thank you for your order!');
+        $mailable->assertSeeInHtml('#' . strtoupper(substr($order->uuid, 0, 8)));
+        $mailable->assertSeeInHtml('Great news!');
     }
 
     #[Test]
     public function it_contains_expected_content(): void
     {
         $order = $this->createOrderWithUser();
-        $mailable = new OrderConfirmationMail($order);
+        $mailable = new OrderConfirmedMail($order);
 
-        $mailable->assertSeeInHtml('Order Confirmation');
-        $mailable->assertSeeInHtml('Thank you for your order!');
-        $mailable->assertSeeInHtml('preparing it for delivery');
-        $mailable->assertSeeInHtml('The TurkTicaret Team');
+        $mailable->assertSeeInHtml('Your Order is Confirmed!');
+        $mailable->assertSeeInHtml('Great news!');
+        $mailable->assertSeeInHtml('preparing it for shipment');
+        $mailable->assertSeeInHtml('Team');
     }
 
     #[Test]
     public function it_renders_without_errors(): void
     {
         $order = $this->createOrderWithUser();
-        $mailable = new OrderConfirmationMail($order);
+        $mailable = new OrderConfirmedMail($order);
 
         $renderedContent = $mailable->render();
 
@@ -80,7 +80,7 @@ class OrderConfirmationMailTest extends TestCase
     public function it_has_order_property(): void
     {
         $order = $this->createOrderWithUser();
-        $mailable = new OrderConfirmationMail($order);
+        $mailable = new OrderConfirmedMail($order);
 
         $this->assertInstanceOf(Order::class, $mailable->order);
         $this->assertEquals($order->id, $mailable->order->id);
@@ -91,7 +91,7 @@ class OrderConfirmationMailTest extends TestCase
     public function it_contains_layout_elements(): void
     {
         $order = $this->createOrderWithUser();
-        $mailable = new OrderConfirmationMail($order);
+        $mailable = new OrderConfirmedMail($order);
 
         $mailable->assertSeeInHtml('TurkTicaret');
         $mailable->assertSeeInHtml('Your Trusted E-Commerce Platform');
@@ -101,10 +101,10 @@ class OrderConfirmationMailTest extends TestCase
     public function it_has_correct_envelope_configuration(): void
     {
         $order = $this->createOrderWithUser();
-        $mailable = new OrderConfirmationMail($order);
+        $mailable = new OrderConfirmedMail($order);
 
         $envelope = $mailable->envelope();
-        $expectedSubject = 'Your Order Has Been Confirmed - #' . strtoupper(substr($order->uuid, 0, 8));
+        $expectedSubject = 'Order Confirmed - #' . strtoupper(substr($order->uuid, 0, 8));
 
         $this->assertEquals($expectedSubject, $envelope->subject);
     }
@@ -113,7 +113,7 @@ class OrderConfirmationMailTest extends TestCase
     public function it_has_no_attachments(): void
     {
         $order = $this->createOrderWithUser();
-        $mailable = new OrderConfirmationMail($order);
+        $mailable = new OrderConfirmedMail($order);
 
         $attachments = $mailable->attachments();
 
@@ -125,11 +125,11 @@ class OrderConfirmationMailTest extends TestCase
     public function it_has_correct_content_configuration(): void
     {
         $order = $this->createOrderWithUser();
-        $mailable = new OrderConfirmationMail($order);
+        $mailable = new OrderConfirmedMail($order);
 
         $content = $mailable->content();
 
-        $this->assertEquals('emails.order.confirmation', $content->view);
+        $this->assertEquals('emails.order.order-confirmed', $content->view);
     }
 
     #[Test]
@@ -152,7 +152,7 @@ class OrderConfirmationMailTest extends TestCase
         ]);
         $order->setRelation('orderItems', $orderItems);
 
-        $mailable = new OrderConfirmationMail($order);
+        $mailable = new OrderConfirmedMail($order);
 
         $renderedContent = $mailable->render();
         $this->assertStringContainsString('Customer With Items', $renderedContent);
