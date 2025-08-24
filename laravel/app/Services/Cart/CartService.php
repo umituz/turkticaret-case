@@ -2,19 +2,42 @@
 
 namespace App\Services\Cart;
 
+use App\DTOs\Cart\CartData;
+use App\DTOs\Cart\UpdateCartItemDTO;
 use App\Exceptions\Product\InsufficientStockException;
 use App\Exceptions\Product\OutOfStockException;
 use App\Models\Cart\Cart;
 use App\Repositories\Cart\CartRepositoryInterface;
 use App\Repositories\Product\ProductRepositoryInterface;
 
+/**
+ * Shopping Cart Service for cart management operations.
+ *
+ * Handles comprehensive cart operations including creating carts,
+ * adding/updating/removing items, stock validation, and cart clearing.
+ * Implements business rules for inventory management and cart persistence.
+ *
+ * @package App\Services\Cart
+ */
 class CartService
 {
+    /**
+     * Create a new CartService instance.
+     *
+     * @param CartRepositoryInterface $cartRepository The cart repository for data operations
+     * @param ProductRepositoryInterface $productRepository The product repository for product data
+     */
     public function __construct(
         protected CartRepositoryInterface $cartRepository,
         protected ProductRepositoryInterface $productRepository
     ) {}
 
+    /**
+     * Get existing cart or create a new one for the user.
+     *
+     * @param string $userUuid The UUID of the user to get or create cart for
+     * @return Cart The user's cart with loaded relationships
+     */
     public function getOrCreateCart(string $userUuid): Cart
     {
         $cart = $this->cartRepository->findByUserUuid($userUuid);
@@ -29,76 +52,98 @@ class CartService
     }
 
     /**
-     * @param string $userUuid
-     * @param array $data
-     * @return Cart
-     * @throws InsufficientStockException
-     * @throws OutOfStockException
+     * Add a product to the user's cart with stock validation.
+     *
+     * @param string $userUuid The UUID of the user adding to cart
+     * @param array $data Array containing product_uuid and quantity
+     * @return Cart The updated cart with loaded relationships
+     * @throws InsufficientStockException When requested quantity exceeds available stock
+     * @throws OutOfStockException When the product is completely out of stock
      */
-    public function addToCart(string $userUuid, array $data): Cart
+    public function addToCart(string $userUuid, \App\DTOs\Cart\AddToCartDTO $data): \App\DTOs\Cart\CartData
     {
-        $cart = $this->getOrCreateCart($userUuid);
-        $product = $this->productRepository->findByUuid($data['product_uuid']);
-
-        $existingItem = $cart->cartItems()->where('product_uuid', $product->uuid)->first();
-        $requestedQuantity = $data['quantity'];
-
-        if ($existingItem) {
-            $totalQuantity = $existingItem->quantity + $requestedQuantity;
+        return \DB::transaction(function () use ($userUuid, $data) {
+            $cart = $this->getOrCreateCart($userUuid);
+            $product = $this->productRepository->findByUuid($data->product_uuid);
+            $requestedQuantity = $data->quantity;
 
             if ($product->stock_quantity == 0) {
                 throw new OutOfStockException($product->name);
-            } elseif (!$product->hasStock($totalQuantity)) {
-                throw new InsufficientStockException($product->name, $totalQuantity, $product->stock_quantity);
             }
 
-            $existingItem->update([
-                'quantity' => $totalQuantity,
-            ]);
-        } else {
-            if ($product->stock_quantity == 0) {
-                throw new OutOfStockException($product->name);
-            } elseif (!$product->hasStock($requestedQuantity)) {
-                throw new InsufficientStockException($product->name, $requestedQuantity, $product->stock_quantity);
+            try {
+                // Try to create new cart item
+                $cartItem = $cart->cartItems()->firstOrCreate(
+                    ['product_uuid' => $product->uuid],
+                    [
+                        'quantity' => 0,
+                        'unit_price' => $product->price,
+                    ]
+                );
+            } catch (\Illuminate\Database\QueryException $e) {
+                // Handle PostgreSQL unique constraint violation (23505)
+                if ($e->getCode() === '23505') {
+                    // Race condition occurred, find the existing cart item
+                    $cartItem = $cart->cartItems()->where('product_uuid', $product->uuid)->first();
+                } else {
+                    throw $e;
+                }
             }
 
-            $cart->cartItems()->create([
-                'product_uuid' => $product->uuid,
-                'quantity' => $requestedQuantity,
-                'unit_price' => $product->price,
-            ]);
-        }
+            // Atomically increment quantity
+            $cartItem->increment('quantity', $requestedQuantity);
 
-        return $cart->fresh(['cartItems.product']);
+            // Refresh to get updated values
+            $cartItem->refresh();
+
+            // Validate stock after update
+            if (!$product->hasStock($cartItem->quantity)) {
+                throw new InsufficientStockException($product->name, $cartItem->quantity, $product->stock_quantity);
+            }
+
+            return \App\DTOs\Cart\CartData::fromModel($cart->fresh(['cartItems.product']));
+        });
     }
 
     /**
-     * @throws InsufficientStockException
-     * @throws OutOfStockException
+     * Update quantity of a specific item in the user's cart.
+     *
+     * @param string $userUuid The UUID of the user updating cart item
+     * @param UpdateCartItemDTO $data Array containing product_uuid and new quantity
+     * @return CartData The updated cart with loaded relationships
+     * @throws InsufficientStockException When new quantity exceeds available stock
+     * @throws OutOfStockException When the product is completely out of stock
      */
-    public function updateCartItem(string $userUuid, array $data): Cart
+    public function updateCartItem(string $userUuid, \App\DTOs\Cart\UpdateCartItemDTO $data): \App\DTOs\Cart\CartData
     {
         $cart = $this->getOrCreateCart($userUuid);
 
-        $cartItem = $cart->cartItems()->where('product_uuid', $data['product_uuid'])->first();
+        $cartItem = $cart->cartItems()->where('product_uuid', $data->product_uuid)->first();
 
         if ($cartItem) {
-            $product = $this->productRepository->findByUuid($data['product_uuid']);
+            $product = $this->productRepository->findByUuid($data->product_uuid);
 
             if ($product->stock_quantity == 0) {
                 throw new OutOfStockException($product->name);
-            } elseif (!$product->hasStock($data['quantity'])) {
-                throw new InsufficientStockException($product->name, $data['quantity'], $product->stock_quantity);
+            } elseif (!$product->hasStock($data->quantity)) {
+                throw new InsufficientStockException($product->name, $data->quantity, $product->stock_quantity);
             }
 
             $cartItem->update([
-                'quantity' => $data['quantity'],
+                'quantity' => $data->quantity,
             ]);
         }
 
-        return $cart->fresh(['cartItems.product']);
+        return \App\DTOs\Cart\CartData::fromModel($cart->fresh(['cartItems.product']));
     }
 
+    /**
+     * Remove a specific product from the user's cart.
+     *
+     * @param string $userUuid The UUID of the user removing from cart
+     * @param string $productUuid The UUID of the product to remove
+     * @return Cart The updated cart with loaded relationships
+     */
     public function removeFromCart(string $userUuid, string $productUuid): Cart
     {
         $cart = $this->getOrCreateCart($userUuid);
@@ -108,6 +153,12 @@ class CartService
         return $cart->fresh(['cartItems.product']);
     }
 
+    /**
+     * Clear all items from the user's cart.
+     *
+     * @param string $userUuid The UUID of the user whose cart to clear
+     * @return void
+     */
     public function clearCart(string $userUuid): void
     {
         $cart = $this->getOrCreateCart($userUuid);

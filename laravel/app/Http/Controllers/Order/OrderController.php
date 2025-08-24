@@ -12,10 +12,29 @@ use App\Services\Order\OrderService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Gate;
 
+/**
+ * REST API Controller for Order management.
+ * 
+ * Handles order operations including creating orders from cart, viewing user orders,
+ * and order details with authorization checks. Manages the complete order lifecycle
+ * from cart conversion to order completion.
+ *
+ * @package App\Http\Controllers\Order
+ */
 class OrderController extends BaseController
 {
+    /**
+     * Create a new OrderController instance.
+     *
+     * @param OrderService $orderService The order service for business logic operations
+     */
     public function __construct(protected OrderService $orderService) {}
 
+    /**
+     * Display a listing of the authenticated user's orders.
+     *
+     * @return JsonResponse JSON response containing the user's order collection
+     */
     public function index(): JsonResponse
     {
         $orders = $this->orderService->getUserOrders(auth()->id());
@@ -23,6 +42,12 @@ class OrderController extends BaseController
         return $this->ok(new OrderCollection($orders));
     }
 
+    /**
+     * Create a new order from the user's cart.
+     *
+     * @param OrderCreateRequest $request The validated request containing order creation data
+     * @return JsonResponse JSON response containing the created order resource with 201 status, or error response if creation fails
+     */
     public function store(OrderCreateRequest $request): JsonResponse
     {
         try {
@@ -39,6 +64,12 @@ class OrderController extends BaseController
         }
     }
 
+    /**
+     * Display the specified order with authorization check.
+     *
+     * @param Order $order The order model instance resolved by route model binding
+     * @return JsonResponse JSON response containing the order resource with loaded relationships
+     */
     public function show(Order $order): JsonResponse
     {
         Gate::authorize('view', $order);

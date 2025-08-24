@@ -12,10 +12,31 @@ use App\Services\Order\OrderStatusService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Gate;
 
+/**
+ * REST API Controller for Order Status management.
+ * 
+ * Handles order status updates and status history tracking with proper
+ * authorization checks. Manages the complete order status lifecycle
+ * including status transitions and history logging.
+ *
+ * @package App\Http\Controllers\Order
+ */
 class OrderStatusController extends BaseController
 {
+    /**
+     * Create a new OrderStatusController instance.
+     *
+     * @param OrderStatusService $orderStatusService The order status service for status operations
+     */
     public function __construct(protected OrderStatusService $orderStatusService) {}
 
+    /**
+     * Update the status of the specified order.
+     *
+     * @param Order $order The order model instance resolved by route model binding
+     * @param OrderStatusUpdateRequest $request The validated request containing new status
+     * @return JsonResponse JSON response containing updated order resource or error message
+     */
     public function update(Order $order, OrderStatusUpdateRequest $request): JsonResponse
     {
         Gate::authorize('updateStatus', $order);
@@ -34,6 +55,12 @@ class OrderStatusController extends BaseController
     }
 
 
+    /**
+     * Get the complete status history for the specified order.
+     *
+     * @param Order $order The order model instance resolved by route model binding
+     * @return JsonResponse JSON response containing order status history with change details
+     */
     public function getStatusHistory(Order $order): JsonResponse
     {
         Gate::authorize('view', $order);
