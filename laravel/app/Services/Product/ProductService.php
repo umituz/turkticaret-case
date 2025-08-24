@@ -13,8 +13,8 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
  * Product Service for business logic operations.
  * 
  * Handles complex product operations including CRUD operations with media management,
- * stock validation, inventory statistics, related product recommendations,
- * and soft delete functionality. Implements business rules and data validation.
+ * stock validation, inventory statistics, and soft delete functionality. 
+ * Implements business rules and data validation.
  *
  * @package App\Services\Product
  */
@@ -178,21 +178,4 @@ class ProductService
         ];
     }
 
-    /**
-     * Get related products based on category and other criteria.
-     *
-     * @param Product $product The product to find related products for
-     * @param int $limit Maximum number of related products to return (default: 8)
-     * @return array Array of related product data
-     */
-    public function getRelatedProducts(Product $product, int $limit = 8): array
-    {
-        return $this->productRepository->getQuery()
-            ->where('category_uuid', $product->category_uuid)
-            ->where('uuid', '!=', $product->uuid)
-            ->where('is_active', true)
-            ->limit($limit)
-            ->get()
-            ->toArray();
-    }
 }

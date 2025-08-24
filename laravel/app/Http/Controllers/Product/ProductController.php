@@ -16,8 +16,7 @@ use Illuminate\Http\JsonResponse;
  * REST API Controller for Product management.
  * 
  * Handles CRUD operations and additional product-related functionality including
- * soft deletes, product statistics, and related product recommendations.
- * All responses are formatted as standardized JSON API responses.
+ * soft deletes and product statistics. All responses are formatted as standardized JSON API responses.
  *
  * @package App\Http\Controllers\Product
  */
@@ -126,16 +125,4 @@ class ProductController extends BaseController
         return $this->ok($statistics);
     }
 
-    /**
-     * Get related products based on category and other criteria.
-     *
-     * @param Product $product The product model instance to find related products for
-     * @return JsonResponse JSON response containing array of related products
-     */
-    public function related(Product $product): JsonResponse
-    {
-        $relatedProducts = $this->productService->getRelatedProducts($product);
-
-        return $this->ok($relatedProducts);
-    }
 }

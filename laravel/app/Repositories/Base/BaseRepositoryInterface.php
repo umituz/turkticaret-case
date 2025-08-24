@@ -17,7 +17,7 @@ interface BaseRepositoryInterface
 
     public function exists(string $key, $value);
 
-    public function paginate(array $relations = [], int $count = ApiEnums::DEFAULT_PAGINATION);
+    public function paginate(array $relations = [], int $count = null);
 
     public function total();
 
