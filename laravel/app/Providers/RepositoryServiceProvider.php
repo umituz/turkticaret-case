@@ -26,6 +26,10 @@ use App\Repositories\User\UserRepository;
 use App\Repositories\User\UserRepositoryInterface;
 use App\Repositories\User\UserSettings\UserSettingsRepository;
 use App\Repositories\User\UserSettings\UserSettingsRepositoryInterface;
+use App\Repositories\User\Address\AddressRepository;
+use App\Repositories\User\Address\AddressRepositoryInterface;
+use App\Repositories\Shipping\ShippingMethodRepository;
+use App\Repositories\Shipping\ShippingMethodRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -44,7 +48,8 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(SettingsRepositoryInterface::class, SettingsRepository::class);
         $this->app->bind(OrderStatusRepositoryInterface::class, OrderStatusRepository::class);
         $this->app->bind(DashboardRepositoryInterface::class, DashboardRepository::class);
-
+        $this->app->bind(AddressRepositoryInterface::class, AddressRepository::class);
+        $this->app->bind(ShippingMethodRepositoryInterface::class, ShippingMethodRepository::class);
     }
 
     public function boot(): void

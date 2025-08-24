@@ -100,6 +100,11 @@ class User extends Authenticatable
         return $this->hasOne(UserSetting::class, 'user_uuid', 'uuid');
     }
 
+    public function addresses(): HasMany
+    {
+        return $this->hasMany(UserAddress::class, 'user_uuid', 'uuid');
+    }
+
     public function scopeActive($query)
     {
         return $query->whereNull('deleted_at');

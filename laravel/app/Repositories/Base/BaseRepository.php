@@ -10,6 +10,15 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Exception;
 
+/**
+ * Base Repository providing common database operations.
+ * 
+ * Implements the repository pattern with comprehensive CRUD operations,
+ * transaction management, pagination, soft deletes, and error handling.
+ * All application repositories should extend this base implementation.
+ *
+ * @package App\Repositories\Base
+ */
 class BaseRepository implements BaseRepositoryInterface
 {
     protected Model $model;

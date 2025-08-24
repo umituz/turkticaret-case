@@ -1,0 +1,212 @@
+{
+  "info": {
+    "name": "User Addresses",
+    "description": "User address management endpoints - CRUD operations for managing user shipping and billing addresses",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "List User Addresses",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{base_url}}/addresses",
+          "host": ["{{base_url}}"],
+          "path": ["addresses"]
+        },
+        "description": "Get all addresses for the authenticated user (both shipping and billing addresses)"
+      }
+    },
+    {
+      "name": "List User Addresses with Pagination",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{base_url}}/addresses?page={{page}}&per_page={{per_page}}",
+          "host": ["{{base_url}}"],
+          "path": ["addresses"],
+          "query": [
+            {
+              "key": "page",
+              "value": "{{page}}",
+              "description": "Page number for pagination"
+            },
+            {
+              "key": "per_page",
+              "value": "{{per_page}}",
+              "description": "Number of items per page"
+            }
+          ]
+        },
+        "description": "Get user addresses with pagination support"
+      }
+    },
+    {
+      "name": "List Addresses by Type",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{base_url}}/addresses?type=shipping",
+          "host": ["{{base_url}}"],
+          "path": ["addresses"],
+          "query": [
+            {
+              "key": "type",
+              "value": "shipping",
+              "description": "Filter by address type (shipping or billing)"
+            }
+          ]
+        },
+        "description": "Get addresses filtered by type (shipping or billing)"
+      }
+    },
+    {
+      "name": "List Default Addresses Only",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{base_url}}/addresses?is_default=true",
+          "host": ["{{base_url}}"],
+          "path": ["addresses"],
+          "query": [
+            {
+              "key": "is_default",
+              "value": "true",
+              "description": "Filter to show only default addresses"
+            }
+          ]
+        },
+        "description": "Get only the default addresses for the user"
+      }
+    },
+    {
+      "name": "Create Billing Address",
+      "request": {
+        "method": "POST",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"type\": \"billing\",\n  \"is_default\": true,\n  \"first_name\": \"John\",\n  \"last_name\": \"Doe\",\n  \"company\": \"Acme Corporation\",\n  \"address_line_1\": \"123 Business Street\",\n  \"address_line_2\": \"Suite 100\",\n  \"city\": \"Istanbul\",\n  \"state\": \"Marmara\",\n  \"postal_code\": \"34000\",\n  \"country_uuid\": \"{{country_uuid}}\",\n  \"phone\": \"+90 555 123 4567\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/addresses",
+          "host": ["{{base_url}}"],
+          "path": ["addresses"]
+        },
+        "description": "Create a new billing address for the authenticated user"
+      }
+    },
+    {
+      "name": "Create Shipping Address",
+      "request": {
+        "method": "POST",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"type\": \"shipping\",\n  \"is_default\": false,\n  \"first_name\": \"Jane\",\n  \"last_name\": \"Smith\",\n  \"address_line_1\": \"456 Delivery Avenue\",\n  \"city\": \"Ankara\",\n  \"state\": \"Ankara\",\n  \"postal_code\": \"06000\",\n  \"country_uuid\": \"{{country_uuid}}\",\n  \"phone\": \"+90 555 987 6543\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/addresses",
+          "host": ["{{base_url}}"],
+          "path": ["addresses"]
+        },
+        "description": "Create a new shipping address for the authenticated user"
+      }
+    },
+    {
+      "name": "Show Specific Address",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{base_url}}/addresses/{{address_uuid}}",
+          "host": ["{{base_url}}"],
+          "path": ["addresses", "{{address_uuid}}"]
+        },
+        "description": "Get details of a specific user address by UUID"
+      }
+    },
+    {
+      "name": "Update Address",
+      "request": {
+        "method": "PUT",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"type\": \"billing\",\n  \"is_default\": true,\n  \"first_name\": \"John Updated\",\n  \"last_name\": \"Doe Updated\",\n  \"company\": \"Updated Company Ltd\",\n  \"address_line_1\": \"789 Updated Street\",\n  \"address_line_2\": \"Floor 5\",\n  \"city\": \"Istanbul\",\n  \"state\": \"Marmara\",\n  \"postal_code\": \"34100\",\n  \"country_uuid\": \"{{country_uuid}}\",\n  \"phone\": \"+90 555 111 2233\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/addresses/{{address_uuid}}",
+          "host": ["{{base_url}}"],
+          "path": ["addresses", "{{address_uuid}}"]
+        },
+        "description": "Update an existing user address"
+      }
+    },
+    {
+      "name": "Update Address Partially",
+      "request": {
+        "method": "PUT",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"phone\": \"+90 555 999 8888\",\n  \"company\": \"New Company Name\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/addresses/{{address_uuid}}",
+          "host": ["{{base_url}}"],
+          "path": ["addresses", "{{address_uuid}}"]
+        },
+        "description": "Partially update an address (only specified fields)"
+      }
+    },
+    {
+      "name": "Set Address as Default",
+      "request": {
+        "method": "PUT",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"is_default\": true\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/addresses/{{address_uuid}}",
+          "host": ["{{base_url}}"],
+          "path": ["addresses", "{{address_uuid}}"]
+        },
+        "description": "Set a specific address as the default address"
+      }
+    },
+    {
+      "name": "Delete Address",
+      "request": {
+        "method": "DELETE",
+        "url": {
+          "raw": "{{base_url}}/addresses/{{address_uuid}}",
+          "host": ["{{base_url}}"],
+          "path": ["addresses", "{{address_uuid}}"]
+        },
+        "description": "Delete a specific user address (soft delete)"
+      }
+    }
+  ]
+}

@@ -1,0 +1,230 @@
+{
+  "info": {
+    "_postman_id": "shipping-methods-collection",
+    "name": "Shipping Methods",
+    "description": "Collection for shipping method management endpoints. Provides access to available shipping options with pricing and delivery time information for order fulfillment.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Get Available Shipping Methods",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Response status code is 200', function () {",
+              "    pm.expect(pm.response.code).to.equal(200);",
+              "});",
+              "",
+              "pm.test('Response has required structure', function () {",
+              "    const responseJson = pm.response.json();",
+              "    pm.expect(responseJson).to.have.property('success', true);",
+              "    pm.expect(responseJson).to.have.property('message');",
+              "    pm.expect(responseJson).to.have.property('data');",
+              "});",
+              "",
+              "pm.test('Shipping methods data is an array', function () {",
+              "    const responseJson = pm.response.json();",
+              "    pm.expect(responseJson.data).to.be.an('array');",
+              "});",
+              "",
+              "pm.test('Each shipping method has required properties', function () {",
+              "    const responseJson = pm.response.json();",
+              "    if (responseJson.data.length > 0) {",
+              "        const firstMethod = responseJson.data[0];",
+              "        pm.expect(firstMethod).to.have.property('uuid');",
+              "        pm.expect(firstMethod).to.have.property('name');",
+              "        pm.expect(firstMethod).to.have.property('description');",
+              "        pm.expect(firstMethod).to.have.property('price');",
+              "        pm.expect(firstMethod).to.have.property('min_delivery_days');",
+              "        pm.expect(firstMethod).to.have.property('max_delivery_days');",
+              "        pm.expect(firstMethod).to.have.property('is_active');",
+              "        pm.expect(firstMethod).to.have.property('delivery_time');",
+              "    }",
+              "});",
+              "",
+              "pm.test('Price is a valid number format', function () {",
+              "    const responseJson = pm.response.json();",
+              "    if (responseJson.data.length > 0) {",
+              "        const firstMethod = responseJson.data[0];",
+              "        pm.expect(firstMethod.price).to.match(/^\\d+\\.\\d{2}$/);",
+              "    }",
+              "});",
+              "",
+              "pm.test('Delivery days are valid integers', function () {",
+              "    const responseJson = pm.response.json();",
+              "    if (responseJson.data.length > 0) {",
+              "        const firstMethod = responseJson.data[0];",
+              "        pm.expect(firstMethod.min_delivery_days).to.be.a('number');",
+              "        pm.expect(firstMethod.max_delivery_days).to.be.a('number');",
+              "        pm.expect(firstMethod.min_delivery_days).to.be.at.least(1);",
+              "        pm.expect(firstMethod.max_delivery_days).to.be.at.least(firstMethod.min_delivery_days);",
+              "    }",
+              "});",
+              "",
+              "pm.test('All methods are active', function () {",
+              "    const responseJson = pm.response.json();",
+              "    responseJson.data.forEach(method => {",
+              "        pm.expect(method.is_active).to.equal(true);",
+              "    });",
+              "});",
+              "",
+              "pm.test('Methods are sorted by sort_order and price', function () {",
+              "    const responseJson = pm.response.json();",
+              "    if (responseJson.data.length > 1) {",
+              "        for (let i = 1; i < responseJson.data.length; i++) {",
+              "            const current = responseJson.data[i];",
+              "            const previous = responseJson.data[i - 1];",
+              "            ",
+              "            if (current.sort_order === previous.sort_order) {",
+              "                pm.expect(parseFloat(current.price)).to.be.at.least(parseFloat(previous.price));",
+              "            } else {",
+              "                pm.expect(current.sort_order).to.be.at.least(previous.sort_order);",
+              "            }",
+              "        }",
+              "    }",
+              "});",
+              "",
+              "pm.test('Response time is acceptable', function () {",
+              "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+              "});",
+              "",
+              "// Save first shipping method UUID for other requests",
+              "pm.test('Save first shipping method UUID', function () {",
+              "    const responseJson = pm.response.json();",
+              "    if (responseJson.data.length > 0) {",
+              "        pm.collectionVariables.set('shipping_method_uuid', responseJson.data[0].uuid);",
+              "    }",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/shipping/methods",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "shipping",
+            "methods"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Successful Response - Active Shipping Methods",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/shipping/methods",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "shipping",
+                "methods"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache, private"
+            },
+            {
+              "key": "Date",
+              "value": "Sat, 24 Aug 2025 11:45:00 GMT"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"message\": \"Shipping methods retrieved successfully.\",\n    \"data\": [\n        {\n            \"uuid\": \"01912345-6789-7123-8901-234567890123\",\n            \"name\": \"Standard Shipping\",\n            \"description\": \"Standard delivery within business days\",\n            \"price\": \"9.99\",\n            \"min_delivery_days\": 3,\n            \"max_delivery_days\": 5,\n            \"is_active\": true,\n            \"sort_order\": 1,\n            \"delivery_time\": \"3-5 business days\",\n            \"created_at\": \"2025-08-24T11:41:55.000000Z\",\n            \"updated_at\": \"2025-08-24T11:41:55.000000Z\"\n        },\n        {\n            \"uuid\": \"01912345-6789-7123-8901-234567890124\",\n            \"name\": \"Express Shipping\",\n            \"description\": \"Fast delivery for urgent orders\",\n            \"price\": \"19.99\",\n            \"min_delivery_days\": 1,\n            \"max_delivery_days\": 2,\n            \"is_active\": true,\n            \"sort_order\": 2,\n            \"delivery_time\": \"1-2 business days\",\n            \"created_at\": \"2025-08-24T11:41:55.000000Z\",\n            \"updated_at\": \"2025-08-24T11:41:55.000000Z\"\n        },\n        {\n            \"uuid\": \"01912345-6789-7123-8901-234567890125\",\n            \"name\": \"Next Day Delivery\",\n            \"description\": \"Get your order tomorrow\",\n            \"price\": \"29.99\",\n            \"min_delivery_days\": 1,\n            \"max_delivery_days\": 1,\n            \"is_active\": true,\n            \"sort_order\": 3,\n            \"delivery_time\": \"1 business day\",\n            \"created_at\": \"2025-08-24T11:41:55.000000Z\",\n            \"updated_at\": \"2025-08-24T11:41:55.000000Z\"\n        },\n        {\n            \"uuid\": \"01912345-6789-7123-8901-234567890126\",\n            \"name\": \"Economy Shipping\",\n            \"description\": \"Budget-friendly shipping option\",\n            \"price\": \"4.99\",\n            \"min_delivery_days\": 7,\n            \"max_delivery_days\": 10,\n            \"is_active\": true,\n            \"sort_order\": 4,\n            \"delivery_time\": \"7-10 business days\",\n            \"created_at\": \"2025-08-24T11:41:55.000000Z\",\n            \"updated_at\": \"2025-08-24T11:41:55.000000Z\"\n        }\n    ],\n    \"errors\": []\n}"
+        },
+        {
+          "name": "Unauthorized Response - Missing Token",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/shipping/methods",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "shipping",
+                "methods"
+              ]
+            }
+          },
+          "status": "Unauthorized",
+          "code": 401,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache, private"
+            },
+            {
+              "key": "Date",
+              "value": "Sat, 24 Aug 2025 11:45:00 GMT"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"message\": \"Unauthenticated.\"\n}"
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "shipping_method_uuid",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}

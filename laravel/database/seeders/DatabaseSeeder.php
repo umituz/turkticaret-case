@@ -14,7 +14,9 @@ use Database\Seeders\Order\OrderSeeder;
 use Database\Seeders\Product\ProductSeeder;
 use Database\Seeders\Setting\SettingsSeeder;
 use Database\Seeders\User\UserSeeder;
+use Database\Seeders\User\UserAddressSeeder;
 use Database\Seeders\User\UserSettingsSeeder;
+use Database\Seeders\Shipping\ShippingMethodSeeder;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -33,7 +35,9 @@ class DatabaseSeeder extends Seeder
             CountrySeeder::class,
             SettingsSeeder::class,
             UserSeeder::class,
+            UserAddressSeeder::class,
             UserSettingsSeeder::class,
+            ShippingMethodSeeder::class,
             CategorySeeder::class,
             ProductSeeder::class,
             CartSeeder::class,

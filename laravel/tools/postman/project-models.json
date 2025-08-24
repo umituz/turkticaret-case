@@ -29,6 +29,18 @@
       "value": "test",
       "type": "string",
       "description": "Search term for filtering"
+    },
+    {
+      "key": "address_uuid",
+      "value": "00000000-0000-0000-0000-000000000002",
+      "type": "string",
+      "description": "UUID of a user address for testing"
+    },
+    {
+      "key": "country_uuid",
+      "value": "00000000-0000-0000-0000-000000000003",
+      "type": "string",
+      "description": "UUID of a country for address testing (Turkey)"
     }
   ]
 }
