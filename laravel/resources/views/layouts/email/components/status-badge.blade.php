@@ -22,8 +22,9 @@
         'inactive' => 'background-color: #f3f4f6; color: #6b7280; border: 1px solid #d1d5db;',
     ];
     
-    $selectedStyle = $badgeStyles[$status] ?? $badgeStyles['pending'];
-    $displayText = $text ?? ucfirst($status);
+    $statusValue = is_object($status) && method_exists($status, 'value') ? $status->value : $status;
+    $selectedStyle = $badgeStyles[$statusValue] ?? $badgeStyles['pending'];
+    $displayText = $text ?? ucfirst($statusValue);
 @endphp
 
 <table role="presentation" cellspacing="0" cellpadding="0" border="0" style="margin: 10px 0;">
