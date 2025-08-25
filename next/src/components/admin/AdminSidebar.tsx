@@ -49,7 +49,8 @@ const navItems: NavItem[] = [
   {
     title: 'Settings',
     href: '/dashboard/settings',
-    icon: Settings
+    icon: Settings,
+    badge: 'Coming Soon'
   },
 ];
 
