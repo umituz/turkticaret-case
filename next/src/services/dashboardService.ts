@@ -3,31 +3,22 @@ import { apiClient } from '@/lib/api';
 export interface StatItem {
   title: string;
   value: string;
-  change: string;
   description: string;
 }
 
 export interface ActivityItem {
   uuid: string | null;
-  type: 'order' | 'user' | 'product' | 'system';
+  type: 'order' | 'user';
   message: string;
   timestamp: string;
   user?: string;
   status: 'success' | 'warning' | 'info';
 }
 
-export interface SystemStatusItem {
-  id: string;
-  label: string;
-  status: 'online' | 'offline' | 'warning' | 'maintenance';
-  value?: string;
-  last_updated: string;
-}
 
 export interface DashboardData {
   stats: StatItem[];
   recent_activity: ActivityItem[];
-  system_status: SystemStatusItem[];
 }
 
 export interface DashboardResponse {

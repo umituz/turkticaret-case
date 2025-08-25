@@ -222,7 +222,7 @@ function AdminOrdersPageContent() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              -
+              Coming Soon
             </div>
           </CardContent>
         </Card>

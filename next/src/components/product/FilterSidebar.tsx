@@ -9,6 +9,7 @@ import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
 import { X } from 'lucide-react';
 import { getAllCategories } from '@/services/categoryService';
+import { validatePriceRange, isPriceInputValid } from '@/lib/price-validation';
 
 import type { ProductFilters } from '@/types/api';
 import type { Category } from '@/types/category';
@@ -42,6 +43,13 @@ export const FilterSidebar = ({ filters, onFiltersChange, onClearFilters }: Filt
     fetchCategories();
   }, []);
 
+  useEffect(() => {
+    setPriceRange({
+      min: filters.min_price?.toString() || '',
+      max: filters.max_price?.toString() || ''
+    });
+  }, [filters.min_price, filters.max_price]);
+
   const handleCategoryChange = (categoryUuid: string) => {
     onFiltersChange({
       ...filters,
@@ -50,10 +58,16 @@ export const FilterSidebar = ({ filters, onFiltersChange, onClearFilters }: Filt
   };
 
   const handlePriceChange = () => {
+    const validation = validatePriceRange(priceRange);
+    
+    if (!validation.isValid) {
+      return;
+    }
+    
     onFiltersChange({
       ...filters,
-      min_price: priceRange.min ? parseFloat(priceRange.min) : undefined,
-      max_price: priceRange.max ? parseFloat(priceRange.max) : undefined
+      min_price: validation.minPrice,
+      max_price: validation.maxPrice
     });
   };
 
@@ -174,7 +188,17 @@ export const FilterSidebar = ({ filters, onFiltersChange, onClearFilters }: Filt
                   type="number"
                   placeholder="0"
                   value={priceRange.min}
-                  onChange={(e) => setPriceRange(prev => ({ ...prev, min: e.target.value }))}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    if (isPriceInputValid(value)) {
+                      setPriceRange(prev => ({ ...prev, min: value }));
+                    }
+                  }}
+                  onKeyPress={(e) => {
+                    if (e.key === 'Enter') {
+                      handlePriceChange();
+                    }
+                  }}
                   className="text-sm"
                 />
               </div>
@@ -185,7 +209,17 @@ export const FilterSidebar = ({ filters, onFiltersChange, onClearFilters }: Filt
                   type="number"
                   placeholder="∞"
                   value={priceRange.max}
-                  onChange={(e) => setPriceRange(prev => ({ ...prev, max: e.target.value }))}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    if (isPriceInputValid(value)) {
+                      setPriceRange(prev => ({ ...prev, max: value }));
+                    }
+                  }}
+                  onKeyPress={(e) => {
+                    if (e.key === 'Enter') {
+                      handlePriceChange();
+                    }
+                  }}
                   className="text-sm"
                 />
               </div>
@@ -195,8 +229,9 @@ export const FilterSidebar = ({ filters, onFiltersChange, onClearFilters }: Filt
               size="sm"
               onClick={handlePriceChange}
               className="w-full"
+              disabled={!validatePriceRange(priceRange).isValid}
             >
-              Apply Price Filter
+              {validatePriceRange(priceRange).errorMessage || 'Apply Price Filter'}
             </Button>
           </div>
         </div>

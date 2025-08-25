@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Repositories\Dashboard;
 
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 
 /**
@@ -26,38 +25,11 @@ interface DashboardRepositoryInterface
     public function getTotalUsers(): int;
     
     /**
-     * Get the number of users registered in the current month.
+     * Get the total number of orders in the system.
      *
-     * @param Carbon $currentMonth The current month reference date
-     * @return int Current month user registration count
+     * @return int Total order count
      */
-    public function getCurrentMonthUsers(Carbon $currentMonth): int;
-    
-    /**
-     * Get the number of users registered in the previous month.
-     *
-     * @param Carbon $previousMonth The previous month start date
-     * @param Carbon $currentMonth The current month start date  
-     * @return int Previous month user registration count
-     */
-    public function getPreviousMonthUsers(Carbon $previousMonth, Carbon $currentMonth): int;
-    
-    /**
-     * Get the number of orders placed in the current month.
-     *
-     * @param Carbon $currentMonth The current month reference date
-     * @return int Current month order count
-     */
-    public function getCurrentMonthOrders(Carbon $currentMonth): int;
-    
-    /**
-     * Get the number of orders placed in the previous month.
-     *
-     * @param Carbon $previousMonth The previous month start date
-     * @param Carbon $currentMonth The current month start date
-     * @return int Previous month order count
-     */
-    public function getPreviousMonthOrders(Carbon $previousMonth, Carbon $currentMonth): int;
+    public function getTotalOrders(): int;
     
     /**
      * Get the total number of products in the system.
@@ -66,30 +38,7 @@ interface DashboardRepositoryInterface
      */
     public function getTotalProducts(): int;
     
-    /**
-     * Get the number of products added in the current month.
-     *
-     * @param Carbon $currentMonth The current month reference date
-     * @return int Current month product count
-     */
-    public function getCurrentMonthProducts(Carbon $currentMonth): int;
     
-    /**
-     * Get the total revenue generated in the current month.
-     *
-     * @param Carbon $currentMonth The current month reference date
-     * @return float Current month revenue amount
-     */
-    public function getCurrentMonthRevenue(Carbon $currentMonth): float;
-    
-    /**
-     * Get the total revenue generated in the previous month.
-     *
-     * @param Carbon $previousMonth The previous month start date
-     * @param Carbon $currentMonth The current month start date
-     * @return float Previous month revenue amount
-     */
-    public function getPreviousMonthRevenue(Carbon $previousMonth, Carbon $currentMonth): float;
     
     /**
      * Get recent order activities for dashboard display.
@@ -107,18 +56,5 @@ interface DashboardRepositoryInterface
      */
     public function getRecentUserRegistrations(int $limit = 3): Collection;
     
-    /**
-     * Get recent product updates for dashboard display.
-     *
-     * @param int $limit Maximum number of product updates to retrieve
-     * @return Collection<int, mixed> Collection of recent product updates
-     */
-    public function getRecentProductUpdates(int $limit = 2): Collection;
     
-    /**
-     * Check the current database connection status.
-     *
-     * @return string Database status indicator
-     */
-    public function checkDatabaseStatus(): string;
 }

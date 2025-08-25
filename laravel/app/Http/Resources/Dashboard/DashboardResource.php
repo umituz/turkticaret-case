@@ -11,8 +11,8 @@ use Illuminate\Http\Resources\Json\JsonResource;
  * API Resource for transforming Dashboard data.
  * 
  * Handles the transformation of dashboard analytics data into standardized
- * JSON API responses. Includes statistical metrics, recent activity logs,
- * and system status information for administrative dashboards.
+ * JSON API responses. Includes statistical metrics and recent activity logs
+ * for administrative dashboards.
  *
  * @package App\Http\Resources\Dashboard
  */
@@ -28,8 +28,7 @@ class DashboardResource extends JsonResource
     {
         return [
             'stats' => $this->resource['stats'],
-            'recent_activity' => $this->resource['recent_activity'],
-            'system_status' => $this->resource['system_status']
+            'recent_activity' => $this->resource['recent_activity']
         ];
     }
 }

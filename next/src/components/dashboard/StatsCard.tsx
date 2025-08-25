@@ -37,9 +37,11 @@ export const StatsCard = ({
       </CardHeader>
       <CardContent>
         <div className="text-2xl font-bold">{value}</div>
-        <p className="text-xs text-muted-foreground">
-          <span className={getTrendColor()}>{change}</span> from last month
-        </p>
+        {change && (
+          <p className="text-xs text-muted-foreground">
+            <span className={getTrendColor()}>{change}</span> from last month
+          </p>
+        )}
         <p className="text-xs text-muted-foreground mt-1">{description}</p>
       </CardContent>
     </Card>

@@ -4,7 +4,6 @@ import { useAuth } from '@/hooks/useAuth';
 import { StatsCard } from '@/components/dashboard/StatsCard';
 import { QuickActions } from '@/components/dashboard/QuickActions';
 import { RecentActivity } from '@/components/dashboard/RecentActivity';
-import { SystemStatus } from '@/components/dashboard/SystemStatus';
 import { dashboardService, type DashboardData } from '@/services/dashboardService';
 import { useState, useEffect } from 'react';
 import { 
@@ -102,19 +101,16 @@ export default function DashboardPage() {
             key={stat.title}
             title={stat.title}
             value={stat.value}
-            change={stat.change}
             description={stat.description}
             icon={getStatIcon(stat.title)}
-            trend="up"
           />
         ))}
       </div>
 
       {}
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-6 md:grid-cols-2">
         <QuickActions />
         <RecentActivity activities={dashboardData.recent_activity} />
-        <SystemStatus statusItems={dashboardData.system_status} />
       </div>
     </>
   );
