@@ -48,13 +48,13 @@ class ProductFilter extends AbstractFilter
             $builder->where('price', '<=', $this->data['max_price']);
         }
 
-        // Search in product name and description
+        // Search in product name and description (case-insensitive)
         if (!empty($this->data['search'])) {
             $builder->where(function ($query) {
                 // Sanitize and escape search input for security
                 $search = $this->escapeLikeWildcards($this->sanitizeString($this->data['search']));
-                $query->where('name', 'LIKE', '%' . $search . '%')
-                      ->orWhere('description', 'LIKE', '%' . $search . '%');
+                $query->where('name', 'ILIKE', '%' . $search . '%')
+                      ->orWhere('description', 'ILIKE', '%' . $search . '%');
             });
         }
 
