@@ -29,16 +29,13 @@ cd turkticaret-case
 # Enter Laravel container
 docker exec -it turkticaret_laravel bash
 
-# Install dependencies
-composer install
-
 # Run migrations and seed data
 php artisan migrate:fresh --seed
 ```
 
 4. **Generate API token for testing**
 ```bash
-docker exec -it turkticaret_laravel php artisan api:token admin@turkticaret.test --name=api-testing
+docker exec -it turkticaret_laravel php artisan api:token admin@test.com --name=api-testing
 ```
 
 ## 🏗️ Architecture
@@ -194,16 +191,6 @@ docker exec -it turkticaret_laravel php artisan test tests/Unit/Models/Product/P
 - Soft deletes for data integrity
 - Comprehensive indexing for performance
 - Foreign key constraints for referential integrity
-
-## 🎯 Development Standards
-
-### Code Quality
-- **PSR-12** coding standards
-- **100% test coverage** requirement
-- **Comprehensive documentation** in CLAUDE.md files
-- **English-only** code and comments
-- **Modular architecture** with clear separation of concerns
-
 
 ## 🔧 Application Access
 
