@@ -79,8 +79,27 @@ fi
 
 print_status "Starting Turkticaret development environment..."
 
-# Create network if it doesn't exist
-docker network create turkticaret_network 2>/dev/null || print_warning "Network turkticaret_network already exists"
+# Function to check and create Docker network
+create_network() {
+    local network_name="turkticaret_network"
+    
+    print_status "Checking Docker network: $network_name"
+    
+    if docker network inspect $network_name >/dev/null 2>&1; then
+        print_status "Network $network_name already exists"
+    else
+        print_status "Creating Docker network: $network_name"
+        if docker network create $network_name >/dev/null 2>&1; then
+            print_success "Network $network_name created successfully"
+        else
+            print_error "Failed to create network $network_name"
+            exit 1
+        fi
+    fi
+}
+
+# Create network before starting services
+create_network
 
 # Build and start services
 print_status "Building and starting Docker containers..."
