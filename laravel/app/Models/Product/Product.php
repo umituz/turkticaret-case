@@ -10,6 +10,7 @@ use App\Traits\Filterable;
 use App\Traits\HasSlug;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Traits\HasMoneyAttributes;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
@@ -35,12 +36,11 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  */
 class Product extends BaseUuidModel implements HasMedia
 {
-    use Filterable, InteractsWithMedia, HasSlug;
+    use Filterable, InteractsWithMedia, HasSlug, HasMoneyAttributes;
 
     protected $fillable = [
         'name',
         'description',
-        'slug',
         'sku',
         'price',
         'stock_quantity',
@@ -136,6 +136,22 @@ class Product extends BaseUuidModel implements HasMedia
     {
         return $this->increment('stock_quantity', $quantity);
     }
+
+    /**
+     * Register media collections for product images.
+     *
+     * @return void
+     */
+    /**
+     * Define money attributes for HasMoneyAttributes trait.
+     *
+     * @return array
+     */
+    protected function getMoneyAttributes(): array
+    {
+        return ['price'];
+    }
+
 
     /**
      * Register media collections for product images.
