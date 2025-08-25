@@ -37,7 +37,6 @@ import {
   Download,
   RefreshCw,
   Calendar,
-  DollarSign,
   Truck,
   CheckCircle,
   Clock
@@ -55,7 +54,7 @@ function OrdersPageContent() {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [dateFilter, setDateFilter] = useState<string>('all');
-  const [orderStats, setOrderStats] = useState({ totalSpent: 0, monthlyCount: 0 });
+  const [orderStats, setOrderStats] = useState({ monthlyCount: 0 });
   const [mounted, setMounted] = useState(false);
   
   
@@ -87,7 +86,6 @@ function OrdersPageContent() {
         const result = await getOrders(apiFilters);
         setOrders(result.orders);
         
-        const totalSpent = result.orders.reduce((sum, order) => sum + order.total.raw, 0);
         const now = new Date();
         const monthlyCount = result.orders.filter(order => {
           const orderDate = new Date(order.createdAt);
@@ -95,7 +93,7 @@ function OrdersPageContent() {
                  orderDate.getFullYear() === now.getFullYear();
         }).length;
         
-        setOrderStats({ totalSpent, monthlyCount });
+        setOrderStats({ monthlyCount });
       },
       {
         onError: (error) => {
@@ -223,7 +221,7 @@ function OrdersPageContent() {
           </div>
 
           {}
-          <div className="grid gap-4 md:grid-cols-3">
+          <div className="grid gap-4 md:grid-cols-2">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Total Orders</CardTitle>
@@ -231,18 +229,6 @@ function OrdersPageContent() {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{orders.length}</div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Total Spent</CardTitle>
-                <DollarSign className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">
-                  -
-                </div>
               </CardContent>
             </Card>
 

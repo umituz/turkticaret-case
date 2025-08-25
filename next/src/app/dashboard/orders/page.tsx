@@ -27,8 +27,7 @@ import {
   CheckCircle,
   Clock,
   XCircle,
-  AlertCircle,
-  TrendingUp
+  AlertCircle
 } from 'lucide-react';
 
 function AdminOrdersPageContent() {
@@ -40,7 +39,7 @@ function AdminOrdersPageContent() {
   const { guardedExecution, shouldPreventExecution } = useLogoutGuard();
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
-  const [orderStats, setOrderStats] = useState({ totalOrders: 0, totalRevenue: 0 });
+  const [orderStats, setOrderStats] = useState({ totalOrders: 0 });
   const [mounted, setMounted] = useState(false);
   const [updatingStatus, setUpdatingStatus] = useState<string | null>(null);
   
@@ -64,10 +63,8 @@ function AdminOrdersPageContent() {
         const result = await getAllOrders({});
         setOrders(result.orders);
         
-        const totalRevenue = result.orders.reduce((sum, order) => sum + order.total.raw, 0);
         setOrderStats({ 
-          totalOrders: result.orders.length, 
-          totalRevenue 
+          totalOrders: result.orders.length
         });
       },
       {
@@ -204,7 +201,7 @@ function AdminOrdersPageContent() {
       </div>
 
       {}
-      <div className="grid gap-4 md:grid-cols-3">
+      <div className="grid gap-4 md:grid-cols-2">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Orders</CardTitle>
@@ -212,18 +209,6 @@ function AdminOrdersPageContent() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{orderStats.totalOrders}</div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
-            <TrendingUp className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              Coming Soon
-            </div>
           </CardContent>
         </Card>
 

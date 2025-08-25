@@ -17,9 +17,7 @@ import {
   ArrowLeft,
   Package,
   Calendar,
-  DollarSign,
   MapPin,
-  CreditCard,
   Download,
   RefreshCw,
   Truck
@@ -287,43 +285,6 @@ function OrderDetailPageContent() {
             </Card>
 
             {}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center space-x-2">
-                  <DollarSign className="h-5 w-5" />
-                  <span>Payment Summary</span>
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Subtotal</span>
-                  <span>{order.subtotal.formatted}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Shipping</span>
-                  <span>{order.shipping.formatted}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Tax</span>
-                  <span>{order.tax.formatted}</span>
-                </div>
-                {order.discount.raw > 0 && (
-                  <div className="flex justify-between text-green-600">
-                    <span>Discount</span>
-                    <span>-{order.discount.formatted}</span>
-                  </div>
-                )}
-                <hr />
-                <div className="flex justify-between font-semibold text-lg">
-                  <span>Total</span>
-                  <span>{order.total.formatted}</span>
-                </div>
-                <div className="flex items-center space-x-2 text-sm text-muted-foreground">
-                  <CreditCard className="h-4 w-4" />
-                  <span>Paid with {order.paymentMethod}</span>
-                </div>
-              </CardContent>
-            </Card>
           </div>
 
           {}

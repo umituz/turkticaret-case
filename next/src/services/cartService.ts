@@ -29,7 +29,7 @@ export interface CartItem {
   name: string;
   price: MoneyInfo;
   salePrice?: MoneyInfo;
-  total: MoneyInfo;
+  total: MoneyInfo | null;
   image?: string;
   quantity: number;
   variant?: string;

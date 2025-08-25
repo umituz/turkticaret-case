@@ -2,11 +2,6 @@ import { Product, ProductStats } from '@/types/product';
 import { Category, CategoryStats } from '@/types/category';
 
 
-export const CURRENCY_CONFIG = {
-  default: 'USD',
-  locale: 'en-US',
-} as const;
-
 
 
 export interface StockStatus {

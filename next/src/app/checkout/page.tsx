@@ -632,7 +632,7 @@ export default function CheckoutPage() {
                         <p className="text-sm text-muted-foreground">Qty: {item.quantity}</p>
                       </div>
                       <div className="text-sm font-medium">
-                        {item.total.formatted}
+                        {item.total?.formatted}
                       </div>
                     </div>
                   ))}
