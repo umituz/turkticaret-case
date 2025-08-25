@@ -261,10 +261,7 @@ function AdminOrdersPageContent() {
               <Package className="mx-auto h-12 w-12 text-muted-foreground" />
               <h3 className="mt-2 text-sm font-medium">No orders found</h3>
               <p className="mt-1 text-sm text-muted-foreground">
-                {searchTerm || statusFilter !== 'all' || dateFilter !== 'all' 
-                  ? 'Try adjusting your filters.' 
-                  : 'No orders have been placed yet.'
-                }
+                No orders have been placed yet.
               </p>
             </div>
           ) : (
