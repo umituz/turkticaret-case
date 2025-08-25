@@ -7,6 +7,7 @@ use App\Exceptions\Product\InsufficientStockException;
 use App\Exceptions\Product\OutOfStockException;
 use App\Http\Controllers\BaseController;
 use App\Http\Requests\Cart\CartAddRequest;
+use App\Http\Requests\Cart\CartRemoveRequest;
 use App\Http\Requests\Cart\CartUpdateRequest;
 use App\Http\Resources\Cart\CartResource;
 use App\Services\Cart\CartService;
@@ -79,12 +80,13 @@ class CartController extends BaseController
     /**
      * Remove a specific product from the cart.
      *
-     * @param string $productUuid The UUID of the product to remove from cart
+     * @param CartRemoveRequest $request The validated request containing product UUID
      * @return JsonResponse JSON response containing the updated cart resource
      */
-    public function remove(string $productUuid): JsonResponse
+    public function remove(CartRemoveRequest $request): JsonResponse
     {
-        $cart = $this->cartService->removeFromCart(auth()->user()->uuid, $productUuid);
+        $validated = $request->validated();
+        $cart = $this->cartService->removeFromCart(auth()->user()->uuid, $validated['product_uuid']);
 
         return $this->ok(new CartResource($cart));
     }
