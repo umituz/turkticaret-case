@@ -35,12 +35,14 @@ class OrderService
      * @param CartService $cartService The cart service for cart operations
      * @param ProductRepositoryInterface $productRepository The product repository for product data
      * @param ProductService $productService The product service for stock validation
+     * @param OrderStatusHistoryService $historyService The order status history service
      */
     public function __construct(
         protected OrderRepositoryInterface $orderRepository,
         protected CartService $cartService,
         protected ProductRepositoryInterface $productRepository,
-        protected ProductService $productService
+        protected ProductService $productService,
+        protected OrderStatusHistoryService $historyService
     ) {}
 
     /**
@@ -62,57 +64,7 @@ class OrderService
      */
     public function getOrderStatusHistory(Order $order): array
     {
-        $history = [];
-
-        // Order placed
-        $history[] = [
-            'status' => 'pending',
-            'date' => $order->created_at,
-            'description' => 'Order placed'
-        ];
-
-        // Order processing (if updated_at is different from created_at and status is not pending)
-        if ($order->status->value !== 'pending' && $order->updated_at > $order->created_at) {
-            $history[] = [
-                'status' => 'processing',
-                'date' => $order->updated_at,
-                'description' => 'Order confirmed and processing'
-            ];
-        }
-
-        // Order shipped
-        if ($order->shipped_at) {
-            $history[] = [
-                'status' => 'shipped',
-                'date' => $order->shipped_at,
-                'description' => 'Order shipped'
-            ];
-        }
-
-        // Order delivered
-        if ($order->delivered_at) {
-            $history[] = [
-                'status' => 'delivered',
-                'date' => $order->delivered_at,
-                'description' => 'Order delivered'
-            ];
-        }
-
-        // Current status (if different from the timeline above)
-        $lastHistoryStatus = end($history)['status'] ?? 'pending';
-        if ($order->status->value !== $lastHistoryStatus) {
-            $history[] = [
-                'status' => $order->status->value,
-                'date' => $order->updated_at,
-                'description' => 'Order status updated to ' . ucfirst($order->status->value)
-            ];
-        }
-
-        return [
-            'order_uuid' => $order->uuid,
-            'current_status' => $order->status->value,
-            'history' => $history
-        ];
+        return $this->historyService->buildHistory($order);
     }
 
     /**
