@@ -21,7 +21,7 @@
     {{-- Status Badge --}}
     @include('layouts.email.components.status-badge', [
         'status' => $newStatus,
-        'text' => ucfirst($newStatus)
+        'text' => $statusMessage
     ])
     
     {{-- Order Details Info Box --}}
@@ -29,7 +29,6 @@
         $orderDetailsItems = [
             ['label' => 'Order Number', 'value' => $order_number],
             ['label' => 'Order Date', 'value' => $order_date_formatted],
-            ['label' => 'Total Amount', 'value' => $total_amount_formatted],
         ];
         
         // Add status-specific dates

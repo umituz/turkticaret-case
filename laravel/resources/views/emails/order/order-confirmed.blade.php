@@ -42,19 +42,9 @@
     ])
 
     @if($order_items_data && count($order_items_data) > 0)
-        @php
-            // Add total amount at the end of items
-            $allItems = array_merge($order_items_data, [
-                [
-                    'label' => '<strong>Total Amount</strong>',
-                    'value' => '<strong>' . $total_amount_formatted . '</strong>'
-                ]
-            ]);
-        @endphp
-
         @include('layouts.email.components.info-box', [
             'title' => '🛒 Items Ordered',
-            'items' => $allItems
+            'items' => $order_items_data
         ])
     @endif
 
