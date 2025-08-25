@@ -3,8 +3,8 @@
 namespace App\Repositories\Order;
 
 use App\Enums\ApiEnums;
-use App\Enums\Order\OrderStatusEnum;
 use App\Models\Order\Order;
+use App\Queries\Order\OrderStatisticsQuery;
 use App\Repositories\Base\BaseRepository;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
@@ -102,21 +102,7 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
      */
     public function getOrderStatistics(): array
     {
-        $totalOrders = $this->model->count();
-        $pendingOrders = $this->model->where('status', OrderStatusEnum::PENDING)->count();
-        $processingOrders = $this->model->where('status', OrderStatusEnum::PROCESSING)->count();
-        $shippedOrders = $this->model->where('status', OrderStatusEnum::SHIPPED)->count();
-        $deliveredOrders = $this->model->where('status', OrderStatusEnum::DELIVERED)->count();
-        $cancelledOrders = $this->model->where('status', OrderStatusEnum::CANCELLED)->count();
-
-        return [
-            'total' => $totalOrders,
-            'pending' => $pendingOrders,
-            'processing' => $processingOrders,
-            'shipped' => $shippedOrders,
-            'delivered' => $deliveredOrders,
-            'cancelled' => $cancelledOrders,
-        ];
+        return app(OrderStatisticsQuery::class)->getOrderStatistics();
     }
 
     /**

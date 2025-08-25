@@ -6,6 +6,7 @@ use App\DTOs\Order\OrderStatusChangeDTO;
 use App\Models\Order\Order;
 use App\Notifications\Order\OrderStatusUpdatedNotification;
 use App\Repositories\Order\OrderStatusHistoryRepositoryInterface;
+use App\Traits\ActivityLoggable;
 
 /**
  * Order Notification Service for handling order-related notifications and status history.
@@ -18,6 +19,8 @@ use App\Repositories\Order\OrderStatusHistoryRepositoryInterface;
  */
 class OrderNotificationService
 {
+    use ActivityLoggable;
+
     public function __construct(protected OrderStatusHistoryRepositoryInterface $statusHistoryRepository) {}
 
     /**
@@ -34,6 +37,9 @@ class OrderNotificationService
 
         // Create status history record
         $this->createStatusHistoryRecord($dto);
+
+        // Log activity for dashboard recent activity
+        $this->logStatusChangeActivity($order, $dto->getOldStatusValue(), $newStatus);
 
         // Send notification to user
         $this->sendStatusUpdateNotification($dto);
@@ -65,6 +71,31 @@ class OrderNotificationService
                 $dto->newStatus
             ));
         }
+    }
+
+    /**
+     * Log order status change activity for dashboard display.
+     *
+     * @param Order $order The order being updated
+     * @param string|null $oldStatus The previous status value
+     * @param string $newStatus The new status value
+     * @return void
+     */
+    protected function logStatusChangeActivity(Order $order, ?string $oldStatus, string $newStatus): void
+    {
+        $description = $oldStatus 
+            ? "Order #{$order->order_number} status changed from {$oldStatus} to {$newStatus}"
+            : "Order #{$order->order_number} status set to {$newStatus}";
+
+        activity('order_status_change')
+            ->performedOn($order)
+            ->causedBy(auth()->user())
+            ->withProperty('order_number', $order->order_number)
+            ->withProperty('old_status', $oldStatus)
+            ->withProperty('new_status', $newStatus)
+            ->withProperty('user_email', $order->user?->email)
+            ->withProperty('total_amount', $order->total_amount)
+            ->log($description);
     }
 
     /**

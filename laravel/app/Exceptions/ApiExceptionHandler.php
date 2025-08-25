@@ -11,6 +11,7 @@ use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Spatie\Permission\Exceptions\UnauthorizedException;
 use Throwable;
 
 /**
@@ -63,6 +64,11 @@ class ApiExceptionHandler
                 $e instanceof AccessDeniedHttpException => response()->error(
                     errors: [],
                     message: 'This action is unauthorized.',
+                    statusCode: 403
+                ),
+                $e instanceof UnauthorizedException => response()->error(
+                    errors: [],
+                    message: 'User does not have the right roles.',
                     statusCode: 403
                 ),
                 $e instanceof OutOfStockException, $e instanceof InsufficientStockException => response()->error(

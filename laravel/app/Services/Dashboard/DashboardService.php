@@ -99,6 +99,7 @@ class DashboardService
         $orderActivities = $this->dashboardRepository->getRecentOrderActivities();
         $userRegistrations = $this->dashboardRepository->getRecentUserRegistrations();
         $productUpdates = $this->dashboardRepository->getRecentProductUpdates();
+        $activityLogs = $this->dashboardRepository->getRecentActivityLogs();
 
         $activities = collect();
 
@@ -128,6 +129,13 @@ class DashboardService
                 'timestamp' => $product->updated_at->diffForHumans(),
                 'status' => 'info'
             ]);
+        }
+
+        foreach ($activityLogs as $activity) {
+            $activityData = $this->formatActivityLogEntry($activity);
+            if ($activityData) {
+                $activities->push($activityData);
+            }
         }
 
         return $activities->sortByDesc(function ($item) {
@@ -211,6 +219,55 @@ class DashboardService
             'user' => $user->name ?? 'Unknown User',
             'status' => $activityData['status']
         ];
+    }
+
+    /**
+     * Format activity log entry for dashboard display.
+     *
+     * @param mixed $activity The activity log entry from Spatie ActivityLog
+     * @return array|null Formatted activity data or null if formatting fails
+     */
+    private function formatActivityLogEntry($activity): ?array
+    {
+        try {
+            $properties = $activity->properties ?? collect();
+            $orderNumber = $properties->get('order_number', 'Unknown');
+            $newStatus = $properties->get('new_status', 'unknown');
+            $oldStatus = $properties->get('old_status');
+            
+            $statusConfig = $this->getActivityLogStatusConfig($newStatus);
+            
+            return [
+                'uuid' => 'activity_' . $activity->id,
+                'type' => 'order_status',
+                'message' => $activity->description,
+                'timestamp' => $activity->created_at->diffForHumans(),
+                'user' => $activity->causer?->name ?? 'System',
+                'status' => $statusConfig['status'],
+                'order_number' => $orderNumber
+            ];
+        } catch (\Exception $e) {
+            return null;
+        }
+    }
+
+    /**
+     * Get status configuration for activity log entries.
+     *
+     * @param string $status The order status
+     * @return array Status configuration with color/type information
+     */
+    private function getActivityLogStatusConfig(string $status): array
+    {
+        return match ($status) {
+            'pending' => ['status' => 'info'],
+            'confirmed' => ['status' => 'success'],
+            'processing' => ['status' => 'info'],
+            'shipped' => ['status' => 'success'],
+            'delivered' => ['status' => 'success'],
+            'cancelled' => ['status' => 'warning'],
+            default => ['status' => 'info']
+        };
     }
 
     /**

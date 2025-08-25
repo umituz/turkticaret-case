@@ -12,6 +12,7 @@ use App\Models\User\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
+use Spatie\Activitylog\Models\Activity;
 
 /**
  * Repository class for managing dashboard data operations.
@@ -164,6 +165,21 @@ class DashboardRepository implements DashboardRepositoryInterface
     public function getRecentProductUpdates(int $limit = 2): Collection
     {
         return Product::orderBy('updated_at', 'desc')
+            ->limit($limit)
+            ->get();
+    }
+
+    /**
+     * Get recent activities from activity log for dashboard display.
+     *
+     * @param int $limit The maximum number of activities to retrieve (default: 5)
+     * @return Collection Collection of recent activity log entries with relationships
+     */
+    public function getRecentActivityLogs(int $limit = 5): Collection
+    {
+        return Activity::with(['causer', 'subject'])
+            ->where('log_name', 'order_status_change')
+            ->orderBy('created_at', 'desc')
             ->limit($limit)
             ->get();
     }

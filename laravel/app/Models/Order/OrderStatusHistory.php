@@ -5,11 +5,12 @@ namespace App\Models\Order;
 use App\Enums\Order\OrderStatusEnum;
 use App\Models\Base\BaseUuidModel;
 use App\Models\User\User;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * OrderStatusHistory Model for tracking order status changes.
- * 
+ *
  * Maintains an audit trail of order status transitions including timestamps,
  * responsible users, and optional notes. Provides complete order status
  * history for order management and customer service purposes.
@@ -20,10 +21,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property OrderStatusEnum $new_status New order status
  * @property string|null $changed_by_uuid UUID of user who changed the status
  * @property string|null $notes Optional notes about the status change
- * @property \Carbon\Carbon $created_at Status change timestamp
- * @property \Carbon\Carbon $updated_at Last update timestamp
- * @property \Carbon\Carbon|null $deleted_at Soft deletion timestamp
- * 
+ * @property Carbon $created_at Status change timestamp
+ * @property Carbon $updated_at Last update timestamp
+ * @property Carbon|null $deleted_at Soft deletion timestamp
+ *
  * @package App\Models\Order
  */
 class OrderStatusHistory extends BaseUuidModel
@@ -36,11 +37,6 @@ class OrderStatusHistory extends BaseUuidModel
         'new_status',
         'changed_by_uuid',
         'notes',
-    ];
-
-    protected $casts = [
-        'old_status' => OrderStatusEnum::class,
-        'new_status' => OrderStatusEnum::class,
     ];
 
     /**
