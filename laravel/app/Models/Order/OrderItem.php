@@ -4,11 +4,13 @@ namespace App\Models\Order;
 
 use App\Models\Base\BaseUuidModel;
 use App\Models\Product\Product;
+use App\Traits\HasMoneyAttributes;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * OrderItem Model representing individual items within orders.
- * 
+ *
  * Manages order item data including product references, pricing, and quantities.
  * Each order item captures a snapshot of product information at the time of purchase
  * to preserve historical data even if the original product is modified or deleted.
@@ -20,14 +22,15 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $quantity Number of units ordered
  * @property int $unit_price Price per unit in cents
  * @property int $total_price Total item price in cents (quantity * unit_price)
- * @property \Carbon\Carbon $created_at Creation timestamp
- * @property \Carbon\Carbon $updated_at Last update timestamp
- * @property \Carbon\Carbon|null $deleted_at Soft deletion timestamp
- * 
+ * @property Carbon $created_at Creation timestamp
+ * @property Carbon $updated_at Last update timestamp
+ * @property Carbon|null $deleted_at Soft deletion timestamp
+ *
  * @package App\Models\Order
  */
 class OrderItem extends BaseUuidModel
 {
+    use HasMoneyAttributes;
 
     protected $fillable = [
         'order_uuid',
@@ -62,5 +65,15 @@ class OrderItem extends BaseUuidModel
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class, 'product_uuid', 'uuid');
+    }
+
+    /**
+     * Define which attributes should be treated as money values.
+     *
+     * @return array<string> Array of money attribute names
+     */
+    protected function getMoneyAttributes(): array
+    {
+        return ['unit_price', 'total_price'];
     }
 }
