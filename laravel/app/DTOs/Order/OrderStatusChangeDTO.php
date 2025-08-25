@@ -78,7 +78,7 @@ class OrderStatusChangeDTO
 
         return is_object($this->oldStatus) && method_exists($this->oldStatus, 'value')
             ? $this->oldStatus->value
-            : $this->oldStatus;
+            : (string) $this->oldStatus;
     }
 
     /**
