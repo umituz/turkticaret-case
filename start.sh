@@ -101,6 +101,15 @@ create_network() {
 # Create network before starting services
 create_network
 
+# Build base image first
+print_status "Building base image first..."
+if docker build -t turkticaret-base:latest -f docker/base.Dockerfile .; then
+    print_success "Base image built successfully"
+else
+    print_error "Failed to build base image"
+    exit 1
+fi
+
 # Build and start services
 print_status "Building and starting Docker containers..."
 docker compose up -d --build
