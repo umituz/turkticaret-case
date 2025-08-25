@@ -23,7 +23,7 @@ class OrderStatusHistorySeeder extends Seeder
                 OrderStatusHistory::create([
                     'order_uuid' => $order->uuid,
                     'old_status' => null,
-                    'new_status' => $order->status,
+                    'new_status' => $order->status->value,
                     'changed_by_uuid' => $admin->uuid,
                     'notes' => 'Initial order status',
                 ]);

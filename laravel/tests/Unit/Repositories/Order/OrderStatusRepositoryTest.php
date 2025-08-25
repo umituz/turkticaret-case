@@ -53,8 +53,8 @@ class OrderStatusRepositoryTest extends UnitTestCase
             ->once()
             ->with([
                 'order_uuid' => 'test-order-uuid',
-                'old_status' => OrderStatusEnum::PENDING,
-                'new_status' => OrderStatusEnum::CONFIRMED,
+                'old_status' => OrderStatusEnum::PENDING->value,
+                'new_status' => OrderStatusEnum::CONFIRMED->value,
                 'changed_by_uuid' => 'admin-user-id',
                 'notes' => 'Status updated via admin panel',
             ]);
@@ -114,8 +114,8 @@ class OrderStatusRepositoryTest extends UnitTestCase
             ->once()
             ->with([
                 'order_uuid' => 'test-order-uuid',
-                'old_status' => OrderStatusEnum::CONFIRMED,
-                'new_status' => OrderStatusEnum::SHIPPED,
+                'old_status' => OrderStatusEnum::CONFIRMED->value,
+                'new_status' => OrderStatusEnum::SHIPPED->value,
                 'changed_by_uuid' => 'specific-admin-id',
                 'notes' => 'Status updated via admin panel',
             ]);
@@ -148,8 +148,8 @@ class OrderStatusRepositoryTest extends UnitTestCase
             ->once()
             ->with([
                 'order_uuid' => 'test-order-uuid',
-                'old_status' => OrderStatusEnum::PROCESSING,
-                'new_status' => OrderStatusEnum::DELIVERED,
+                'old_status' => OrderStatusEnum::PROCESSING->value,
+                'new_status' => OrderStatusEnum::DELIVERED->value,
                 'changed_by_uuid' => null,
                 'notes' => 'Status updated via admin panel',
             ]);
@@ -183,8 +183,8 @@ class OrderStatusRepositoryTest extends UnitTestCase
             ->once()
             ->with([
                 'order_uuid' => $uniqueOrderUuid,
-                'old_status' => OrderStatusEnum::PENDING,
-                'new_status' => OrderStatusEnum::CANCELLED,
+                'old_status' => OrderStatusEnum::PENDING->value,
+                'new_status' => OrderStatusEnum::CANCELLED->value,
                 'changed_by_uuid' => 'test-user',
                 'notes' => 'Status updated via admin panel',
             ]);

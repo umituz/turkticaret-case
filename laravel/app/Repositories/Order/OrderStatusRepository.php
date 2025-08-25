@@ -37,8 +37,8 @@ class OrderStatusRepository implements OrderStatusRepositoryInterface
         if ($result) {
             OrderStatusHistory::create([
                 'order_uuid' => $order->uuid,
-                'old_status' => $oldStatus,
-                'new_status' => $newStatus,
+                'old_status' => $oldStatus?->value,
+                'new_status' => $newStatus->value,
                 'changed_by_uuid' => auth()->id(),
                 'notes' => 'Status updated via admin panel',
             ]);

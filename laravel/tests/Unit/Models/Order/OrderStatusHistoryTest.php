@@ -84,8 +84,8 @@ class OrderStatusHistoryTest extends UnitTestCase
         // Arrange
         $attributes = [
             'order_uuid' => 'test-order-uuid',
-            'old_status' => OrderStatusEnum::PENDING,
-            'new_status' => OrderStatusEnum::CONFIRMED,
+            'old_status' => OrderStatusEnum::PENDING->value,
+            'new_status' => OrderStatusEnum::CONFIRMED->value,
             'changed_by_uuid' => 'test-user-uuid',
             'notes' => 'Status changed due to payment confirmation',
         ];
@@ -152,8 +152,8 @@ class OrderStatusHistoryTest extends UnitTestCase
         // Arrange
         $history = new OrderStatusHistory([
             'order_uuid' => 'test-order',
-            'old_status' => OrderStatusEnum::PENDING,
-            'new_status' => OrderStatusEnum::CONFIRMED,
+            'old_status' => OrderStatusEnum::PENDING->value,
+            'new_status' => OrderStatusEnum::CONFIRMED->value,
             'changed_by_uuid' => null, // Optional - system change
             'notes' => null, // Optional
         ]);

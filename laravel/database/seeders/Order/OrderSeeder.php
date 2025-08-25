@@ -58,7 +58,7 @@ class OrderSeeder extends Seeder
         OrderStatusHistory::create([
             'order_uuid' => $order->uuid,
             'old_status' => null,
-            'new_status' => OrderStatusEnum::PENDING,
+            'new_status' => OrderStatusEnum::PENDING->value,
             'changed_by_uuid' => $adminUser->uuid,
             'notes' => 'Order placed by customer',
             'created_at' => $createdAt,
@@ -71,8 +71,8 @@ class OrderSeeder extends Seeder
         $confirmedAt = $createdAt->copy()->addMinutes(rand(10, 60));
         OrderStatusHistory::create([
             'order_uuid' => $order->uuid,
-            'old_status' => OrderStatusEnum::PENDING,
-            'new_status' => OrderStatusEnum::CONFIRMED,
+            'old_status' => OrderStatusEnum::PENDING->value,
+            'new_status' => OrderStatusEnum::CONFIRMED->value,
             'changed_by_uuid' => $adminUser->uuid,
             'notes' => 'Order confirmed by admin',
             'created_at' => $confirmedAt,
@@ -85,8 +85,8 @@ class OrderSeeder extends Seeder
         $processingAt = $confirmedAt->copy()->addMinutes(rand(30, 120));
         OrderStatusHistory::create([
             'order_uuid' => $order->uuid,
-            'old_status' => OrderStatusEnum::CONFIRMED,
-            'new_status' => OrderStatusEnum::PROCESSING,
+            'old_status' => OrderStatusEnum::CONFIRMED->value,
+            'new_status' => OrderStatusEnum::PROCESSING->value,
             'changed_by_uuid' => $adminUser->uuid,
             'notes' => 'Order is being prepared',
             'created_at' => $processingAt,
@@ -99,8 +99,8 @@ class OrderSeeder extends Seeder
         $shippedAt = $processingAt->copy()->addMinutes(rand(60, 240));
         OrderStatusHistory::create([
             'order_uuid' => $order->uuid,
-            'old_status' => OrderStatusEnum::PROCESSING,
-            'new_status' => OrderStatusEnum::SHIPPED,
+            'old_status' => OrderStatusEnum::PROCESSING->value,
+            'new_status' => OrderStatusEnum::SHIPPED->value,
             'changed_by_uuid' => $adminUser->uuid,
             'notes' => 'Order shipped to customer',
             'created_at' => $shippedAt,
@@ -113,8 +113,8 @@ class OrderSeeder extends Seeder
         $deliveredAt = $shippedAt->copy()->addMinutes(rand(120, 480));
         OrderStatusHistory::create([
             'order_uuid' => $order->uuid,
-            'old_status' => OrderStatusEnum::SHIPPED,
-            'new_status' => OrderStatusEnum::DELIVERED,
+            'old_status' => OrderStatusEnum::SHIPPED->value,
+            'new_status' => OrderStatusEnum::DELIVERED->value,
             'changed_by_uuid' => $adminUser->uuid,
             'notes' => 'Order delivered successfully',
             'created_at' => $deliveredAt,

@@ -194,7 +194,7 @@ class DashboardRepositoryTest extends TestCase
             OrderStatusHistory::create([
                 'uuid' => fake()->uuid(),
                 'order_uuid' => $order->uuid,
-                'new_status' => OrderStatusEnum::DELIVERED,
+                'new_status' => OrderStatusEnum::DELIVERED->value,
                 'created_at' => Carbon::now()->subMinutes(rand(1, 60)),
                 'updated_at' => Carbon::now()
             ]);
@@ -205,7 +205,7 @@ class DashboardRepositoryTest extends TestCase
             OrderStatusHistory::create([
                 'uuid' => fake()->uuid(),
                 'order_uuid' => $order->uuid,
-                'new_status' => OrderStatusEnum::PENDING,
+                'new_status' => OrderStatusEnum::PENDING->value,
                 'created_at' => Carbon::now()->subMinutes(rand(1, 120)),
                 'updated_at' => Carbon::now()
             ]);
@@ -225,7 +225,7 @@ class DashboardRepositoryTest extends TestCase
             OrderStatusHistory::create([
                 'uuid' => fake()->uuid(),
                 'order_uuid' => $order->uuid,
-                'new_status' => OrderStatusEnum::DELIVERED,
+                'new_status' => OrderStatusEnum::DELIVERED->value,
                 'created_at' => Carbon::now()->subMinutes(rand(1, 120)),
                 'updated_at' => Carbon::now()
             ]);
