@@ -91,7 +91,7 @@ class OrderStatusChangeDTO
         return [
             'order_uuid' => $this->order->uuid,
             'old_status' => $this->getOldStatusValue(),
-            'new_status' => $this->newStatus,
+            'new_status' => (string) $this->newStatus,
             'changed_by_uuid' => $this->changedByUuid,
             'notes' => $this->notes,
         ];
