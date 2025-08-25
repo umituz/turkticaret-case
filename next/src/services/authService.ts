@@ -43,13 +43,13 @@ class AuthService extends BaseService<User, User, never> {
 
   async getCsrfCookie(): Promise<boolean> {
     try {
-      const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-      if (!baseUrl) {
-        throw new Error('NEXT_PUBLIC_BASE_URL environment variable is not set');
+      const sanctumUrl = process.env.NEXT_PUBLIC_SANCTUM_URL;
+      if (!sanctumUrl) {
+        throw new Error('NEXT_PUBLIC_SANCTUM_URL environment variable is not set');
       }
       
       
-      const response = await fetch(`${baseUrl}${API_ENDPOINTS.AUTH.CSRF_COOKIE}`, {
+      const response = await fetch(`${sanctumUrl}${API_ENDPOINTS.AUTH.CSRF_COOKIE}`, {
         method: 'GET',
         credentials: 'include',
         headers: {
