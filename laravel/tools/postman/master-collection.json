@@ -177,6 +177,30 @@
       "item": [
         { "$ref": "collections/health/health.json#/item/0" }
       ]
+    },
+    {
+      "name": "Admin Management",
+      "description": "Administrative endpoints for managing orders and viewing dashboard analytics",
+      "item": [
+        {
+          "name": "Admin Dashboard",
+          "description": "Admin dashboard overview and analytics",
+          "item": [
+            { "$ref": "collections/admin/admin-dashboard.json#/item/0" }
+          ]
+        },
+        {
+          "name": "Admin Orders",
+          "description": "Admin order management for viewing and updating order statuses",
+          "item": [
+            { "$ref": "collections/admin/admin-orders.json#/item/0" },
+            { "$ref": "collections/admin/admin-orders.json#/item/1" },
+            { "$ref": "collections/admin/admin-orders.json#/item/2" },
+            { "$ref": "collections/admin/admin-orders.json#/item/3" },
+            { "$ref": "collections/admin/admin-orders.json#/item/4" }
+          ]
+        }
+      ]
     }
   ],
   "variable": [

@@ -5928,6 +5928,322 @@
           }
         }
       ]
+    },
+    {
+      "name": "Admin Management",
+      "description": "Administrative endpoints for managing orders and viewing dashboard analytics",
+      "item": [
+        {
+          "name": "Admin Dashboard",
+          "description": "Admin dashboard overview and analytics",
+          "item": [
+            {
+              "name": "Get Dashboard Overview",
+              "request": {
+                "method": "GET",
+                "url": {
+                  "raw": "{{base_url}}/admin/dashboard",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "admin",
+                    "dashboard"
+                  ]
+                },
+                "description": "Get admin dashboard overview with key metrics, recent activities, and summary statistics",
+                "name": "Get Dashboard Overview",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}",
+                    "type": "text"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Admin Orders",
+          "description": "Admin order management for viewing and updating order statuses",
+          "item": [
+            {
+              "name": "List All Orders",
+              "request": {
+                "method": "GET",
+                "url": {
+                  "raw": "{{base_url}}/admin/orders?per_page={{per_page}}&page={{page}}",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "admin",
+                    "orders"
+                  ],
+                  "query": [
+                    {
+                      "key": "status",
+                      "value": "pending",
+                      "description": "Filter by order status (pending, processing, shipped, delivered, cancelled)",
+                      "disabled": true
+                    },
+                    {
+                      "key": "user_uuid",
+                      "value": "{{user_uuid}}",
+                      "description": "Filter by user UUID",
+                      "disabled": true
+                    },
+                    {
+                      "key": "order_number",
+                      "value": "",
+                      "description": "Filter by order number",
+                      "disabled": true
+                    },
+                    {
+                      "key": "date_from",
+                      "value": "2025-01-01",
+                      "description": "Filter orders from date (Y-m-d format)",
+                      "disabled": true
+                    },
+                    {
+                      "key": "date_to",
+                      "value": "2025-12-31",
+                      "description": "Filter orders to date (Y-m-d format)",
+                      "disabled": true
+                    },
+                    {
+                      "key": "per_page",
+                      "value": "{{per_page}}",
+                      "description": "Number of items per page (1-100)"
+                    },
+                    {
+                      "key": "page",
+                      "value": "{{page}}",
+                      "description": "Page number"
+                    }
+                  ]
+                },
+                "description": "Retrieve all orders with optional filters for admin dashboard",
+                "name": "List All Orders",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}",
+                    "type": "text"
+                  }
+                ]
+              }
+            },
+            {
+              "name": "Get Order Statistics",
+              "request": {
+                "method": "GET",
+                "url": {
+                  "raw": "{{base_url}}/admin/orders/statistics",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "admin",
+                    "orders",
+                    "statistics"
+                  ]
+                },
+                "description": "Get order statistics for admin dashboard including totals, status breakdown, and revenue metrics",
+                "name": "Get Order Statistics",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}",
+                    "type": "text"
+                  }
+                ]
+              }
+            },
+            {
+              "name": "Show Order Details",
+              "request": {
+                "method": "GET",
+                "url": {
+                  "raw": "{{base_url}}/admin/orders/{{order_uuid}}",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "admin",
+                    "orders",
+                    "{{order_uuid}}"
+                  ]
+                },
+                "description": "Get detailed order information including user details, items, and payment information",
+                "name": "Show Order Details",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}",
+                    "type": "text"
+                  }
+                ]
+              }
+            },
+            {
+              "name": "Update Order Status",
+              "request": {
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"processing\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/admin/orders/{{order_uuid}}/status",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "admin",
+                    "orders",
+                    "{{order_uuid}}",
+                    "status"
+                  ]
+                },
+                "description": "Update order status. Valid statuses: pending, processing, shipped, delivered, cancelled",
+                "name": "Update Order Status",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}",
+                    "type": "text"
+                  }
+                ]
+              }
+            },
+            {
+              "name": "Get Order Status History",
+              "request": {
+                "method": "GET",
+                "url": {
+                  "raw": "{{base_url}}/admin/orders/{{order_uuid}}/status/history",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "admin",
+                    "orders",
+                    "{{order_uuid}}",
+                    "status",
+                    "history"
+                  ]
+                },
+                "description": "Get complete status change history for an order including timestamps and user who made changes",
+                "name": "Get Order Status History",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}",
+                    "type": "text"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "variable": [
