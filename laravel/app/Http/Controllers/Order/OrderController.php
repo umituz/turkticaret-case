@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Order;
 
 use App\DTOs\Order\OrderCreateDTO;
+use App\Exceptions\Order\EmptyCartException;
+use App\Exceptions\Product\InsufficientStockException;
 use App\Http\Controllers\BaseController;
 use App\Http\Requests\Order\OrderCreateRequest;
 use App\Http\Resources\Order\OrderCollection;
@@ -47,21 +49,15 @@ class OrderController extends BaseController
      *
      * @param OrderCreateRequest $request The validated request containing order creation data
      * @return JsonResponse JSON response containing the created order resource with 201 status, or error response if creation fails
+     * @throws EmptyCartException
+     * @throws InsufficientStockException
      */
     public function store(OrderCreateRequest $request): JsonResponse
     {
-        try {
-            $orderData = OrderCreateDTO::fromArray($request->validated());
+        $orderData = OrderCreateDTO::fromArray($request->validated());
+        $order = $this->orderService->createOrderFromCart(auth()->id(), $orderData);
 
-            $order = $this->orderService->createOrderFromCart(
-                auth()->id(),
-                $orderData
-            );
-
-            return $this->created(new OrderResource($order));
-        } catch (\Exception $e) {
-            return $this->error([$e->getMessage()], 'Failed to create order');
-        }
+        return $this->created(new OrderResource($order));
     }
 
     /**
