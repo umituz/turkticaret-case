@@ -4,7 +4,6 @@ namespace App\Models\Order;
 
 use App\Models\Base\BaseUuidModel;
 use App\Models\Product\Product;
-use App\Traits\HasMoneyAttributes;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -30,8 +29,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class OrderItem extends BaseUuidModel
 {
-    use HasMoneyAttributes;
-
     protected $fillable = [
         'order_uuid',
         'product_uuid',
@@ -67,13 +64,4 @@ class OrderItem extends BaseUuidModel
         return $this->belongsTo(Product::class, 'product_uuid', 'uuid');
     }
 
-    /**
-     * Define which attributes should be treated as money values.
-     *
-     * @return array<string> Array of money attribute names
-     */
-    protected function getMoneyAttributes(): array
-    {
-        return ['unit_price', 'total_price'];
-    }
 }

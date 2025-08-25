@@ -2,9 +2,9 @@
 
 namespace App\Http\Resources\Order;
 
-use App\Helpers\MoneyHelper;
 use App\Http\Resources\Base\BaseResource;
 use App\Http\Resources\Product\ProductResource;
+use App\Helpers\MoneyHelper;
 use Illuminate\Http\Request;
 
 /**

@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources\Product;
 
-use App\Helpers\MoneyHelper;
 use App\Http\Resources\Base\BaseResource;
 use App\Http\Resources\Category\CategoryResource;
 use Illuminate\Http\Request;
@@ -32,7 +31,7 @@ class ProductResource extends BaseResource
             'slug' => $this->slug,
             'description' => $this->description,
             'sku' => $this->sku,
-            'price' => MoneyHelper::getAmountInfo($this->price ?? 0),
+            'price' => $this->price_info,
             'stock_quantity' => $this->stock_quantity,
             'image_path' => $this->getFirstMediaUrl('images'),
             'is_active' => $this->is_active,

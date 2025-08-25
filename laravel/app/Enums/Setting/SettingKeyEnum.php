@@ -184,7 +184,7 @@ enum SettingKeyEnum: string
     public function getDefaultValue(): mixed
     {
         $rawValue = match ($this) {
-            self::DEFAULT_CURRENCY => 'TRY',
+            self::DEFAULT_CURRENCY => '₺',
             self::DEFAULT_LANGUAGE => 'tr',
             self::DEFAULT_COUNTRY => 'TR',
             self::DEFAULT_TIMEZONE => 'Europe/Istanbul',

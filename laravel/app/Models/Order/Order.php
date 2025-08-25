@@ -5,7 +5,6 @@ namespace App\Models\Order;
 use App\Enums\Order\OrderStatusEnum;
 use App\Models\Base\BaseUuidModel;
 use App\Models\User\User;
-use App\Traits\HasMoneyAttributes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -33,8 +32,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class Order extends BaseUuidModel
 {
-    use HasMoneyAttributes;
-
     protected $fillable = [
         'order_number',
         'user_uuid',
@@ -83,13 +80,4 @@ class Order extends BaseUuidModel
         return $this->hasMany(OrderStatusHistory::class, 'order_uuid', 'uuid')->orderBy('created_at', 'desc');
     }
 
-    /**
-     * Define which attributes should be treated as money values.
-     *
-     * @return array<string> Array of money attribute names
-     */
-    protected function getMoneyAttributes(): array
-    {
-        return ['total_amount'];
-    }
 }

@@ -2,9 +2,11 @@
 
 namespace App\Helpers;
 
+use App\Enums\Setting\SettingKeyEnum;
+
 /**
  * Helper class for money-related operations and formatting.
- * 
+ *
  * This class provides utilities for working with monetary values,
  * including conversion between major and minor units (cents),
  * formatting for display, and amount information analysis.
@@ -16,16 +18,17 @@ class MoneyHelper
 {
     /**
      * Get comprehensive information about a monetary amount.
-     * 
+     *
      * Provides raw value, formatted display, and classification
      * of the amount as positive, negative, or zero.
      *
      * @param int $value Amount in minor units (cents)
-     * @param string $currency Currency symbol for formatting
+     * @param string|null $currency Currency symbol for formatting
      * @return array Array containing raw, formatted, and type information
      */
-    public static function getAmountInfo(int $value, string $currency = '₺'): array
+    public static function getAmountInfo(int $value, string $currency = null): array
     {
+        $currency = $currency ?? SettingKeyEnum::DEFAULT_CURRENCY->getDefaultValue()['value'];
         $raw = $value / 100;
         $formatted = number_format($raw, 2) . ' ' . $currency;
 
@@ -47,12 +50,14 @@ class MoneyHelper
      * Format a monetary amount for display.
      *
      * @param int $value Amount in minor units (cents)
-     * @param string $currency Currency symbol for formatting
+     * @param string|null $currency Currency symbol for formatting
      * @return string Formatted amount with currency symbol
      */
-    public static function formatAmount(int $value, string $currency = '₺'): string
+    public static function formatAmount(int $value, string $currency = null): string
     {
+        $currency = $currency ?? SettingKeyEnum::DEFAULT_CURRENCY->getDefaultValue()['value'];
         $amount = $value / 100;
+
         return number_format($amount, 2) . ' ' . $currency;
     }
 

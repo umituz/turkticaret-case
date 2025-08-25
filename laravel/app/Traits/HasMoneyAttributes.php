@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Traits;
 
 use App\Helpers\MoneyHelper;
+use App\Enums\Setting\SettingKeyEnum;
 
 /**
  * HasMoneyAttributes trait for money value handling and formatting.
@@ -55,10 +56,6 @@ trait HasMoneyAttributes
      */
     public function __get($key)
     {
-        if (in_array($key, $this->getMoneyAttributes())) {
-            return parent::__get($key);
-        }
-
         if ($this->isMoneyFormattedAttribute($key)) {
             return $this->getFormattedMoneyAttribute($key);
         }
@@ -162,20 +159,30 @@ trait HasMoneyAttributes
      * Get the appropriate currency symbol for this model.
      *
      * Attempts to retrieve the currency symbol from related models (user's
-     * country currency or model's country currency), falling back to '$'.
+     * country currency or model's country currency), falling back to default currency from settings.
      *
      * @return string The currency symbol to use for formatting
      */
     private function getCurrencySymbol(): string
     {
         if ($this->relationLoaded('user') && $this->user?->relationLoaded('country') && $this->user?->country?->relationLoaded('currency')) {
-            return $this->user->country->currency->symbol ?? '$';
+            return $this->user->country->currency->symbol ?? $this->getDefaultCurrency();
         }
 
         if ($this->relationLoaded('country') && $this->country?->relationLoaded('currency')) {
-            return $this->country->currency->symbol ?? '$';
+            return $this->country->currency->symbol ?? $this->getDefaultCurrency();
         }
 
-        return '$';
+        return $this->getDefaultCurrency();
+    }
+
+    /**
+     * Get default currency symbol from settings.
+     *
+     * @return string Default currency symbol
+     */
+    private function getDefaultCurrency(): string
+    {
+        return SettingKeyEnum::DEFAULT_CURRENCY->getDefaultValue()['value'];
     }
 }
