@@ -36,7 +36,7 @@ class ProductUpdateRequest extends FormRequest
             'name' => 'sometimes|string|min:3|max:255',
             'description' => 'nullable|string|max:1000',
             'sku' => 'sometimes|string|max:50|unique:products,sku,' . $this->product?->uuid . ',uuid',
-            'price' => 'sometimes|integer|min:1',
+            'price' => 'sometimes|numeric|min:1',
             'stock_quantity' => 'sometimes|integer|min:0',
             'image_path' => 'nullable|string|max:500',
             'is_active' => 'boolean',

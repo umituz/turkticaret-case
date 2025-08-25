@@ -23,11 +23,16 @@
         We'll send you tracking details as soon as your order is on its way.
     </p>
 
-    {{-- Status Badge --}}
-    @include('layouts.email.components.status-badge', [
-        'status' => 'confirmed',
-        'text' => 'Order Confirmed'
-    ])
+    {{-- Status Text --}}
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" style="margin: 10px 0;">
+        <tr>
+            <td style="text-align: center;">
+                <p style="color: #065f46; font-size: 14px; font-weight: bold; margin: 0;">
+                    ✅ Order Confirmed
+                </p>
+            </td>
+        </tr>
+    </table>
 
     {{-- Order Summary Info Box --}}
     @include('layouts.email.components.info-box', [

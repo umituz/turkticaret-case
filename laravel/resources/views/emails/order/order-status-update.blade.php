@@ -18,11 +18,16 @@
         {{ $statusDescription }}
     </p>
     
-    {{-- Status Badge --}}
-    @include('layouts.email.components.status-badge', [
-        'status' => $newStatus,
-        'text' => $statusMessage
-    ])
+    {{-- Status Text --}}
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" style="margin: 10px 0;">
+        <tr>
+            <td style="text-align: center;">
+                <p style="color: #374151; font-size: 14px; font-weight: bold; margin: 0;">
+                    📦 {{ $statusMessage }}
+                </p>
+            </td>
+        </tr>
+    </table>
     
     {{-- Order Details Info Box --}}
     @php

@@ -12,8 +12,7 @@ layouts/email/
 │   ├── header.blade.php        # Email header with branding
 │   ├── footer.blade.php        # Email footer with links
 │   ├── button.blade.php        # Reusable button component
-│   ├── info-box.blade.php      # Information display boxes
-│   └── status-badge.blade.php  # Status badges for orders
+│   └── info-box.blade.php      # Information display boxes
 └── README.md                   # This documentation
 ```
 
@@ -61,13 +60,6 @@ layouts/email/
 ])
 ```
 
-#### Status Badge Component
-```blade
-@include('layouts.email.components.status-badge', [
-    'status' => 'confirmed', // confirmed, processing, shipped, delivered, cancelled, refunded
-    'text' => 'Order Confirmed' // optional, defaults to ucfirst($status)
-])
-```
 
 ### Header Configuration
 Configure the header by setting these PHP variables before your content:
