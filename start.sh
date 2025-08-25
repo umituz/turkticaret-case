@@ -27,14 +27,50 @@ print_error() {
     echo -e "${RED}[ERROR]${NC} $1"
 }
 
-# Check if .env file exists in laravel directory
-if [ ! -f laravel/.env ]; then
-    print_error "laravel/.env file not found!"
-    exit 1
-fi
+# Function to create .env from .env.example
+create_env_from_example() {
+    local dir=$1
+    local name=$2
+    
+    if [ ! -f "$dir/.env" ]; then
+        if [ -f "$dir/.env.example" ]; then
+            print_warning "$name .env file not found, creating from .env.example..."
+            cp "$dir/.env.example" "$dir/.env"
+            
+            # Generate APP_KEY for Laravel if it's empty
+            if [ "$name" = "Laravel" ] && [ -f "$dir/.env" ]; then
+                if grep -q "^APP_KEY=$" "$dir/.env"; then
+                    print_status "Generating Laravel APP_KEY..."
+                    # Generate a base64 encoded random key
+                    KEY=$(openssl rand -base64 32)
+                    # Use sed compatible with macOS
+                    sed -i '' "s/^APP_KEY=$/APP_KEY=base64:$KEY/" "$dir/.env"
+                    print_success "APP_KEY generated successfully"
+                fi
+            fi
+            
+            print_success "$name .env file created from .env.example"
+        else
+            print_error "$name .env.example file not found in $dir!"
+            print_error "Please create $dir/.env.example first"
+            exit 1
+        fi
+    else
+        print_status "$name .env file already exists"
+    fi
+}
+
+# Check and create .env files
+create_env_from_example "laravel" "Laravel"
+create_env_from_example "next" "Next.js"
 
 # Load environment variables from laravel directory
-source laravel/.env
+if [ -f laravel/.env ]; then
+    source laravel/.env
+else
+    print_error "Failed to create or load laravel/.env"
+    exit 1
+fi
 
 # Basic environment check
 if [ -z "$HOST_UID" ]; then
