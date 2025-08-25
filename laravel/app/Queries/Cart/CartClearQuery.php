@@ -17,7 +17,7 @@ class CartClearQuery
     /**
      * Clear all cart items.
      *
-     * Soft deletes all items in the specified cart by setting deleted_at timestamp.
+     * Force deletes all items in the specified cart by permanently removing them from database.
      *
      * @param string $cartUuid The cart UUID
      * @return void
@@ -26,6 +26,6 @@ class CartClearQuery
     {
         CartItem::where('cart_uuid', $cartUuid)
             ->whereNull('deleted_at')
-            ->update(['deleted_at' => now()]);
+            ->forceDelete();
     }
 }
