@@ -16,8 +16,11 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { useToast } from '@/hooks/use-toast';
 import { useSearch } from '@/hooks/useSearch';
-import { getAllCategories, deleteCategory, getCategoryStats } from '@/services/categoryService';
-import { Category, CategoryStats } from '@/types/category';
+import { getAllCategories, deleteCategory } from '@/services/categoryService';
+import { Category } from '@/types/category';
+import { useAuth } from '@/hooks/useAuth';
+import { useRouter } from 'next/navigation';
+import { useLogoutGuard } from '@/hooks/useLogoutGuard';
 import {
   Plus,
   Search,
@@ -27,14 +30,14 @@ import {
   Eye,
   Filter,
   Tags,
-  CheckCircle,
-  XCircle,
-  Package
+  XCircle
 } from 'lucide-react';
 
 export default function CategoriesPage() {
+  const { user, isLoading } = useAuth();
+  const router = useRouter();
+  const { guardedExecution, shouldPreventExecution } = useLogoutGuard();
   const [categories, setCategories] = useState<Category[]>([]);
-  const [stats, setStats] = useState<CategoryStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [deleteLoading, setDeleteLoading] = useState<string | null>(null);
   const { toast } = useToast();
@@ -51,36 +54,45 @@ export default function CategoriesPage() {
     toastRef.current = toast;
   }, [toast]);
 
-  const loadStats = useCallback(async () => {
-    try {
-      const statsData = await getCategoryStats();
-      setStats(statsData);
-    } catch (error) {
-      console.error('Failed to load stats:', error);
-    }
-  }, []);
-
   const loadCategories = useCallback(async (searchQuery = '') => {
-    try {
-      setLoading(true);
-      const data = await getAllCategories({ search: searchQuery });
-      setCategories(data);
-    } catch {
-      toastRef.current({
-        title: 'Error!',
-        description: 'Failed to load categories.',
-        variant: 'destructive',
-      });
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+    await guardedExecution(
+      async () => {
+        setLoading(true);
+        const data = await getAllCategories({ search: searchQuery });
+        setCategories(data);
+      },
+      {
+        onError: () => {
+          toastRef.current({
+            title: 'Error!',
+            description: 'Failed to load categories.',
+            variant: 'destructive',
+          });
+        }
+      }
+    );
+    setLoading(false);
+  }, [guardedExecution]);
 
-  
   useEffect(() => {
-    loadCategories(debouncedSearchTerm);
-    loadStats();
-  }, [debouncedSearchTerm, loadCategories, loadStats]);
+    if (shouldPreventExecution()) {
+      return;
+    }
+    
+    if (!isLoading && !user) {
+      router.push('/auth/login');
+      return;
+    }
+
+    if (user?.role !== 'admin') {
+      router.push('/');
+      return;
+    }
+
+    if (user) {
+      loadCategories(debouncedSearchTerm);
+    }
+  }, [debouncedSearchTerm, loadCategories, user, isLoading, router, shouldPreventExecution]);
 
   const handleDelete = async (uuid: string, name: string) => {
     if (!confirm(`Are you sure you want to delete "${name}"? This action cannot be undone.`)) {
@@ -98,7 +110,6 @@ export default function CategoriesPage() {
       
       
       loadCategories(debouncedSearchTerm);
-      loadStats();
     } catch (error) {
       toastRef.current({
         title: 'Error!',
@@ -137,50 +148,6 @@ export default function CategoriesPage() {
         </Button>
       </div>
 
-      {}
-      {!loading && stats && (
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total Categories</CardTitle>
-              <Tags className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stats.totalCategories}</div>
-            </CardContent>
-          </Card>
-          
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Active Categories</CardTitle>
-              <CheckCircle className="h-4 w-4 text-green-600" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-green-600">{stats.activeCategories}</div>
-            </CardContent>
-          </Card>
-          
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Inactive Categories</CardTitle>
-              <XCircle className="h-4 w-4 text-red-600" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-red-600">{stats.inactiveCategories}</div>
-            </CardContent>
-          </Card>
-          
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">With Products</CardTitle>
-              <Package className="h-4 w-4 text-blue-600" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-blue-600">{stats.categoriesWithProducts}</div>
-            </CardContent>
-          </Card>
-        </div>
-      )}
 
       {}
       <Card>

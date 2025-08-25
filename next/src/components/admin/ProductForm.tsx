@@ -16,6 +16,7 @@ import {
 } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
 import { Badge } from '@/components/ui/badge';
+import { ComingSoon } from '@/components/ui/coming-soon';
 import { useToast } from '@/hooks/use-toast';
 import { createProduct, updateProduct } from '@/services/productService';
 import { getAllCategories } from '@/services/categoryService';
@@ -48,6 +49,7 @@ export const ProductForm = ({ product, mode }: ProductFormProps) => {
     quantity: 0,
     lowStockThreshold: 5,
     categorySlug: '',
+    categoryUuid: '',
     brand: '',
     weight: undefined,
     images: [],
@@ -71,6 +73,7 @@ export const ProductForm = ({ product, mode }: ProductFormProps) => {
     loadCategories();
     
     if (product && mode === 'edit') {
+      const category = categories.find(c => c.slug === product.categorySlug);
       setFormData({
         name: product.name,
         description: product.description,
@@ -84,6 +87,7 @@ export const ProductForm = ({ product, mode }: ProductFormProps) => {
         quantity: product.quantity,
         lowStockThreshold: product.lowStockThreshold,
         categorySlug: product.categorySlug,
+        categoryUuid: category?.uuid || '',
         brand: product.brand || '',
         weight: product.weight,
         images: product.images,
@@ -127,7 +131,7 @@ export const ProductForm = ({ product, mode }: ProductFormProps) => {
       newErrors.comparePrice = 'Compare price must be greater than regular price';
     }
 
-    if (!formData.categorySlug) {
+    if (!formData.categoryUuid) {
       newErrors.categorySlug = 'Please select a category';
     }
 
@@ -283,12 +287,16 @@ export const ProductForm = ({ product, mode }: ProductFormProps) => {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="shortDescription">Short Description</Label>
+                  <div className="flex items-center space-x-2">
+                    <Label htmlFor="shortDescription">Short Description</Label>
+                    <ComingSoon />
+                  </div>
                   <Input
                     id="shortDescription"
                     value={formData.shortDescription}
                     onChange={(e) => setFormData(prev => ({ ...prev, shortDescription: e.target.value }))}
                     placeholder="Brief one-line description"
+                    disabled
                   />
                 </div>
 
@@ -331,7 +339,10 @@ export const ProductForm = ({ product, mode }: ProductFormProps) => {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="comparePrice">Compare Price</Label>
+                    <div className="flex items-center space-x-2">
+                      <Label htmlFor="comparePrice">Compare Price</Label>
+                      <ComingSoon />
+                    </div>
                     <Input
                       id="comparePrice"
                       type="number"
@@ -341,12 +352,16 @@ export const ProductForm = ({ product, mode }: ProductFormProps) => {
                       onChange={(e) => setFormData(prev => ({ ...prev, comparePrice: e.target.value ? { raw: parseFloat(e.target.value), formatted: '', formatted_minus: '', type: 'positive' } : undefined }))}
                       placeholder="0.00"
                       className={errors.comparePrice ? 'border-red-500' : ''}
+                      disabled
                     />
                     {errors.comparePrice && <p className="text-sm text-red-600">{errors.comparePrice}</p>}
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="costPrice">Cost Price</Label>
+                    <div className="flex items-center space-x-2">
+                      <Label htmlFor="costPrice">Cost Price</Label>
+                      <ComingSoon />
+                    </div>
                     <Input
                       id="costPrice"
                       type="number"
@@ -355,6 +370,7 @@ export const ProductForm = ({ product, mode }: ProductFormProps) => {
                       value={formData.costPrice?.raw || ''}
                       onChange={(e) => setFormData(prev => ({ ...prev, costPrice: e.target.value ? { raw: parseFloat(e.target.value), formatted: '', formatted_minus: '', type: 'positive' } : undefined }))}
                       placeholder="0.00"
+                      disabled
                     />
                   </div>
                 </div>
@@ -364,8 +380,13 @@ export const ProductForm = ({ product, mode }: ProductFormProps) => {
             {}
             <Card>
               <CardHeader>
-                <CardTitle>Product Images</CardTitle>
-                <CardDescription>Add product images</CardDescription>
+                <div className="flex items-center space-x-2">
+                  <div>
+                    <CardTitle>Product Images</CardTitle>
+                    <CardDescription>Add product images</CardDescription>
+                  </div>
+                  <ComingSoon />
+                </div>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex space-x-2">
@@ -373,8 +394,9 @@ export const ProductForm = ({ product, mode }: ProductFormProps) => {
                     placeholder="Image URL"
                     value={imageUrl}
                     onChange={(e) => setImageUrl(e.target.value)}
+                    disabled
                   />
-                  <Button type="button" onClick={addImage} variant="outline">
+                  <Button type="button" onClick={addImage} variant="outline" disabled>
                     <Plus className="h-4 w-4" />
                   </Button>
                 </div>
@@ -429,15 +451,22 @@ export const ProductForm = ({ product, mode }: ProductFormProps) => {
                 <div className="space-y-2">
                   <Label htmlFor="categorySlug">Category *</Label>
                   <Select
-                    value={formData.categorySlug}
-                    onValueChange={(value) => setFormData(prev => ({ ...prev, categorySlug: value }))}
+                    value={formData.categoryUuid}
+                    onValueChange={(value) => {
+                      const category = categories.find(c => c.uuid === value);
+                      setFormData(prev => ({ 
+                        ...prev, 
+                        categoryUuid: value,
+                        categorySlug: category?.slug || ''
+                      }));
+                    }}
                   >
                     <SelectTrigger className={errors.categorySlug ? 'border-red-500' : ''}>
                       <SelectValue placeholder="Select category" />
                     </SelectTrigger>
                     <SelectContent>
                       {categories?.map?.((category) => (
-                        <SelectItem key={category.uuid} value={category.slug}>
+                        <SelectItem key={category.uuid} value={category.uuid}>
                           {category.name}
                         </SelectItem>
                       ))}
@@ -447,25 +476,33 @@ export const ProductForm = ({ product, mode }: ProductFormProps) => {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="brand">Brand</Label>
+                  <div className="flex items-center space-x-2">
+                    <Label htmlFor="brand">Brand</Label>
+                    <ComingSoon />
+                  </div>
                   <Input
                     id="brand"
                     value={formData.brand}
                     onChange={(e) => setFormData(prev => ({ ...prev, brand: e.target.value }))}
                     placeholder="e.g., Apple, Samsung"
+                    disabled
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <Label>Tags</Label>
+                  <div className="flex items-center space-x-2">
+                    <Label>Tags</Label>
+                    <ComingSoon />
+                  </div>
                   <div className="flex space-x-2">
                     <Input
                       placeholder="Add tag"
                       value={tagInput}
                       onChange={(e) => setTagInput(e.target.value)}
                       onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), addTag())}
+                      disabled
                     />
-                    <Button type="button" onClick={addTag} variant="outline">
+                    <Button type="button" onClick={addTag} variant="outline" disabled>
                       <Plus className="h-4 w-4" />
                     </Button>
                   </div>
@@ -486,7 +523,10 @@ export const ProductForm = ({ product, mode }: ProductFormProps) => {
             {}
             <Card>
               <CardHeader>
-                <CardTitle>Inventory</CardTitle>
+                <div className="flex items-center space-x-2">
+                  <CardTitle>Inventory</CardTitle>
+                  <ComingSoon />
+                </div>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex items-center justify-between">
@@ -546,7 +586,10 @@ export const ProductForm = ({ product, mode }: ProductFormProps) => {
             {}
             <Card>
               <CardHeader>
-                <CardTitle>Settings</CardTitle>
+                <div className="flex items-center space-x-2">
+                  <CardTitle>Settings</CardTitle>
+                  <ComingSoon />
+                </div>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex items-center justify-between">

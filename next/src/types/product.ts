@@ -50,6 +50,7 @@ export interface ProductFormData {
   quantity: number;
   lowStockThreshold?: number;
   categorySlug?: string;
+  categoryUuid?: string;
   brand?: string;
   weight?: number;
   images: ProductImage[];

@@ -16,8 +16,8 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { useToast } from '@/hooks/use-toast';
 import { useSearch } from '@/hooks/useSearch';
-import { getAllProducts, deleteProduct, getProductStats } from '@/services/productService';
-import { Product, ProductStats } from '@/types/product';
+import { getAllProducts, deleteProduct } from '@/services/productService';
+import { Product } from '@/types/product';
 import Image from 'next/image';
 import {
   Plus,
@@ -28,17 +28,13 @@ import {
   Eye,
   Filter,
   Package,
-  CheckCircle,
   Star,
-  AlertTriangle,
-  DollarSign,
   Image as ImageIcon,
   XCircle
 } from 'lucide-react';
 
 export default function ProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
-  const [stats, setStats] = useState<ProductStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [deleteLoading, setDeleteLoading] = useState<string | null>(null);
   const { toast } = useToast();
@@ -55,14 +51,6 @@ export default function ProductsPage() {
     toastRef.current = toast;
   }, [toast]);
 
-  const loadStats = useCallback(async () => {
-    try {
-      const statsData = await getProductStats();
-      setStats(statsData);
-    } catch (error) {
-      console.error('Failed to load stats:', error);
-    }
-  }, []);
 
   const loadProducts = useCallback(async (searchQuery = '') => {
     try {
@@ -83,8 +71,7 @@ export default function ProductsPage() {
   
   useEffect(() => {
     loadProducts(debouncedSearchTerm);
-    loadStats();
-  }, [debouncedSearchTerm, loadProducts, loadStats]);
+  }, [debouncedSearchTerm, loadProducts]);
 
   const handleDelete = async (uuid: string, name: string) => {
     if (!confirm(`Are you sure you want to delete "${name}"? This action cannot be undone.`)) {
@@ -102,7 +89,6 @@ export default function ProductsPage() {
       
       
       loadProducts(debouncedSearchTerm);
-      loadStats();
     } catch (error) {
       toastRef.current({
         title: 'Error!',
@@ -157,50 +143,6 @@ export default function ProductsPage() {
         </Button>
       </div>
 
-      {}
-      {!loading && stats && (
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total Products</CardTitle>
-              <Package className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stats.totalProducts}</div>
-            </CardContent>
-          </Card>
-          
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Active Products</CardTitle>
-              <CheckCircle className="h-4 w-4 text-green-600" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-green-600">{stats.activeProducts}</div>
-            </CardContent>
-          </Card>
-          
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Out of Stock</CardTitle>
-              <AlertTriangle className="h-4 w-4 text-red-600" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-red-600">{stats.outOfStockProducts}</div>
-            </CardContent>
-          </Card>
-          
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total Value</CardTitle>
-              <DollarSign className="h-4 w-4 text-blue-600" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-blue-600">{stats.totalValue.formatted}</div>
-            </CardContent>
-          </Card>
-        </div>
-      )}
 
       {}
       <Card>

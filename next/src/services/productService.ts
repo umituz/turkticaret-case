@@ -31,14 +31,15 @@ class ProductService extends BaseService<Product, ApiProduct, ProductFilters> {
     };
   }
 
-  protected mapToApi(product: Partial<Product>): Partial<ApiProduct> {
+  protected mapToApi(product: Partial<Product> | any): Partial<ApiProduct> {
     return {
       name: product.name,
       slug: product.slug,
       description: product.description,
-      price: product.price,
+      price: product.price?.raw || 0,
       sku: product.sku,
       stock_quantity: product.quantity,
+      category_uuid: product.categoryUuid,
       is_active: product.isActive,
       is_featured: product.isFeatured
     };
