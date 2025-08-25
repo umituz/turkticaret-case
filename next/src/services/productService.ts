@@ -81,6 +81,7 @@ export const getAllProducts = async (filters?: ProductFilters) => {
 };
 
 export const getProductByUuid = (uuid: string) => productService.getByUuid(uuid);
+export const getProductBySlug = (slug: string) => productService.getBySlug(slug);
 
 export const createProduct = (data: ProductFormData) => productService.create(data as Partial<Product>);
 export const updateProduct = (uuid: string, data: ProductFormData) => productService.update(uuid, data as Partial<Product>);

@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import Image from 'next/image';
 import { useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
@@ -76,7 +75,7 @@ export const ProductCard = ({ product, viewMode = 'grid', priority = false }: Pr
     return (
       <Card className="group hover:shadow-lg transition-all duration-300">
         <div className="flex">
-          <Link href={`/product/${product.slug}`} className="flex flex-1">
+          <div className="flex flex-1">
             <div className="w-48 h-32 bg-muted relative overflow-hidden flex-shrink-0">
               {product.images?.[0]?.url ? (
                 <Image
@@ -143,7 +142,7 @@ export const ProductCard = ({ product, viewMode = 'grid', priority = false }: Pr
                 </div>
               </div>
             </div>
-          </Link>
+          </div>
 
           <div className="p-4 flex flex-col justify-center space-y-2">
             <Button 
@@ -162,7 +161,7 @@ export const ProductCard = ({ product, viewMode = 'grid', priority = false }: Pr
 
   return (
     <Card className="group hover:shadow-lg transition-all duration-300 hover:-translate-y-1 overflow-hidden">
-      <Link href={`/product/${product.slug}`} className="block">
+      <div className="block">
         <div className="aspect-square bg-muted relative overflow-hidden">
           {product.images?.[0]?.url ? (
             <Image
@@ -227,7 +226,7 @@ export const ProductCard = ({ product, viewMode = 'grid', priority = false }: Pr
             </div>
           </div>
         </CardContent>
-      </Link>
+      </div>
 
       <CardFooter className="p-4 pt-0">
         <Button 
