@@ -122,6 +122,41 @@ services:
       timeout: 5s
       retries: 3
 
+  turkticaret-next:
+    container_name: 'turkticaret_next'
+    build:
+      context: .
+      dockerfile: docker/frontend/local.Dockerfile
+      args:
+        PROJECT_NAME: turkticaret
+        HOST_UID: ${HOST_UID:-1001}
+        HOST_GID: ${HOST_GID:-1001}
+    volumes:
+      - ./next:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - NEXT_TELEMETRY_DISABLED=1
+    env_file:
+      - ./next/.env
+    ports:
+      - "3000:3000"
+    networks:
+      - turkticaret_network
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 2G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000", "||", "exit", "1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
 volumes:
   redis-data:
     driver: local

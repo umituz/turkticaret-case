@@ -1,8 +1,8 @@
-# TurkTicaret Case - E-Commerce API Project
+# TurkTicaret Case - Full-Stack E-Commerce Platform
 
 ## 📋 Project Overview
 
-TurkTicaret Case is a comprehensive e-commerce API built with Laravel 12.x, featuring a complete product catalog, cart management, order processing system, and user authentication. The project follows modern Laravel development patterns with Docker containerization and comprehensive testing coverage.
+TurkTicaret Case is a comprehensive full-stack e-commerce platform featuring a Laravel 12.x API backend and a modern Next.js 15 frontend. The project includes complete product catalog, cart management, order processing system, user authentication, and a responsive web interface. The platform follows modern development patterns with Docker containerization and comprehensive testing coverage.
 
 ## 🚀 Quick Start
 
@@ -46,12 +46,20 @@ docker exec -it turkticaret_laravel php artisan api:token admin@turkticaret.test
 The project follows a modular, service-oriented architecture:
 
 ### Core Technologies
+
+#### Backend
 - **Laravel 12.x** - PHP Framework
 - **PostgreSQL 16** - Primary Database
 - **Redis 6.2** - Caching & Sessions
-- **Docker** - Containerization
 - **Laravel Sanctum** - API Authentication
 - **PHPUnit/Pest** - Testing Framework
+
+#### Frontend
+- **Next.js 15** - React Framework
+- **TypeScript** - Type Safety
+- **Tailwind CSS** - Utility-first CSS
+- **Redux Toolkit** - State Management
+- **Radix UI** - Component Library
 
 ### Architectural Patterns
 - **Repository Pattern** - Data access abstraction
@@ -108,27 +116,34 @@ Base URL: `http://localhost:8080`
 ## 🐳 Docker Environment
 
 ### Container Services
-- **turkticaret_laravel** - Laravel application (Port: 8080)
+- **turkticaret_laravel** - Laravel API backend (Port: 8080)
+- **turkticaret_next** - Next.js frontend (Port: 3000)
 - **turkticaret_postgres** - PostgreSQL database (Port: 5433)
 - **turkticaret_redis** - Redis cache
 - **turkticaret_mailhog** - Email testing (Port: 8025)
 
 ### Development Commands
 ```bash
-# Start services
+# Start all services
 ./start.sh
 
-# Stop services
+# Stop all services
 ./stop.sh
 
-# Access Laravel container
-docker exec -it turkticaret_laravel bash
+# Start specific services
+docker-compose up turkticaret-laravel -d
+docker-compose up turkticaret-next -d
+
+# Access containers
+docker exec -it turkticaret_laravel bash    # Laravel backend
+docker exec -it turkticaret_next sh         # Next.js frontend
 
 # Database access
 docker exec -it turkticaret_postgres psql -U postgres -d turkticaret_case
 
 # View logs
-docker logs turkticaret_laravel
+docker logs turkticaret_laravel             # Backend logs
+docker logs turkticaret_next               # Frontend logs
 ```
 
 ## 🧪 Testing
@@ -190,9 +205,16 @@ docker exec -it turkticaret_laravel php artisan test tests/Unit/Models/Product/P
 - **Modular architecture** with clear separation of concerns
 
 
-## 🔧 API Testing
+## 🔧 Application Access
 
-### Postman Collection
+### Web Application
+- **Frontend**: http://localhost:3000 - Next.js e-commerce interface
+- **Backend API**: http://localhost:8080 - Laravel API endpoints
+- **Email Testing**: http://localhost:8025 - Mailhog interface
+
+### API Testing
+
+#### Postman Collection
 The project includes a comprehensive Postman collection:
 ```bash
 # Located at: laravel/tools/postman/
@@ -200,20 +222,44 @@ The project includes a comprehensive Postman collection:
 - environments/local.json
 ```
 
-### Authentication
+#### Authentication
 All protected endpoints require Bearer token authentication:
 ```
 Authorization: Bearer {your-api-token}
 ```
 
+### Frontend Development
+```bash
+# Access Next.js container for development
+docker exec -it turkticaret_next sh
+
+# Install new dependencies
+npm install <package-name>
+
+# Run frontend tests (if available)
+npm run test
+
+# Build for production
+npm run build
+```
+
 ## 📈 Performance
 
 ### Optimization Features
+
+#### Backend (Laravel)
 - **Database indexing** on frequently queried columns
 - **Eager loading** to prevent N+1 queries
 - **Redis caching** for session and cache management
 - **Query optimization** with proper relationship loading
 - **API resource transformation** for efficient data serialization
+
+#### Frontend (Next.js)
+- **Server-side rendering (SSR)** for improved SEO and performance
+- **Static site generation (SSG)** for faster page loads
+- **Image optimization** with Next.js Image component
+- **Code splitting** for reduced bundle sizes
+- **TypeScript** for type safety and better development experience
 
 ## 📝 License
 
