@@ -30,7 +30,7 @@
         'items' => [
             ['label' => 'Order Number', 'value' => $order->order_number],
             ['label' => 'Order Date', 'value' => $order->created_at->format('M d, Y \a\t h:i A')],
-            ['label' => 'Total Amount', 'value' => '₺' . number_format($order->total_amount / 100, 2)],
+            ['label' => 'Total Amount', 'value' => \App\Helpers\MoneyHelper::getAmountInfo($order->total_amount)['formatted']],
             ...(($order->shipped_at && $newStatus === 'shipped') ? [
                 ['label' => 'Shipped Date', 'value' => $order->shipped_at->format('M d, Y \a\t h:i A')]
             ] : []),
@@ -46,9 +46,10 @@
         @include('layouts.email.components.info-box', [
             'title' => '📋 Order Items',
             'items' => $order->orderItems->map(function($item) {
+                $unitPriceInfo = \App\Helpers\MoneyHelper::getAmountInfo($item->unit_price);
                 return [
                     'label' => $item->product_name,
-                    'value' => $item->quantity . 'x ₺' . number_format($item->unit_price / 100, 2)
+                    'value' => $item->quantity . 'x ' . $unitPriceInfo['formatted']
                 ];
             })->toArray()
         ])

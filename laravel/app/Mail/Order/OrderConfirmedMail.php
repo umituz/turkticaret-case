@@ -2,6 +2,7 @@
 
 namespace App\Mail\Order;
 
+use App\Helpers\MoneyHelper;
 use App\Helpers\Order\OrderHelper;
 use App\Models\Order\Order;
 use Illuminate\Mail\Mailable;
@@ -60,7 +61,7 @@ class OrderConfirmedMail extends Mailable
                 'order' => $this->order,
                 'orderNumber' => OrderHelper::getOrderNumber($this->order),
                 'orderTitle' => OrderHelper::getOrderTitle($this->order),
-                'formattedTotal' => OrderHelper::formatAmount($this->order->total_amount),
+                'totalAmount' => MoneyHelper::getAmountInfo($this->order->total_amount),
                 'statusLabel' => OrderHelper::getStatusLabel($this->order),
             ],
         );

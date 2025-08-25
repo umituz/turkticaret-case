@@ -1,3 +1,4 @@
+@php use App\Helpers\MoneyHelper; @endphp
 @extends('layouts.email.base')
 
 @section('title', 'Order Confirmation - ' . config('app.name'))
@@ -13,22 +14,22 @@
     <h1 style="color: #111827; font-size: 24px; margin-bottom: 20px; text-align: center;">
         🎉 Your Order is Confirmed!
     </h1>
-    
+
     <p style="color: #374151; font-size: 16px; line-height: 1.6; margin-bottom: 20px;">
         Hi {{ $order->user->name }},
     </p>
-    
+
     <p style="color: #374151; font-size: 16px; line-height: 1.6; margin-bottom: 30px;">
-        Great news! Your order has been confirmed and we're now preparing it for shipment. 
+        Great news! Your order has been confirmed and we're now preparing it for shipment.
         We'll send you tracking details as soon as your order is on its way.
     </p>
-    
+
     {{-- Status Badge --}}
     @include('layouts.email.components.status-badge', [
         'status' => 'confirmed',
         'text' => 'Order Confirmed'
     ])
-    
+
     {{-- Order Summary Info Box --}}
     @include('layouts.email.components.info-box', [
         'title' => '📦 Order Summary',
@@ -40,30 +41,30 @@
             ['label' => 'Estimated Delivery', 'value' => $order->created_at->addDays(3)->format('M d, Y')],
         ]
     ])
-    
-    {{-- Order Items Info Box --}}
+
     @if($order->orderItems && $order->orderItems->count() > 0)
         @php
             $orderItemsData = [];
             foreach($order->orderItems as $item) {
+                $itemAmountInfo = MoneyHelper::getAmountInfo($item->total_price);
                 $orderItemsData[] = [
                     'label' => $item->product_name . ' (x' . $item->quantity . ')',
-                    'value' => '₺' . number_format($item->total_price / 100, 2)
+                    'value' => $itemAmountInfo['formatted']
                 ];
             }
             // Add total at the end
             $orderItemsData[] = [
                 'label' => '<strong>Total Amount</strong>',
-                'value' => '<strong>' . $formattedTotal . '</strong>'
+                'value' => '<strong>' . $totalAmount['formatted'] . '</strong>'
             ];
         @endphp
-        
+
         @include('layouts.email.components.info-box', [
             'title' => '🛒 Items Ordered',
             'items' => $orderItemsData
         ])
     @endif
-    
+
     {{-- Shipping Information --}}
     @if($order->shipping_address)
         @include('layouts.email.components.info-box', [
@@ -74,7 +75,7 @@
             ]
         ])
     @endif
-    
+
     {{-- Track Order Button --}}
     @include('layouts.email.components.button', [
         'url' => config('app.frontend_url') . '/account/orders/' . $order->uuid,
@@ -82,7 +83,7 @@
         'color' => 'success',
         'align' => 'center'
     ])
-    
+
     {{-- Help Section --}}
     <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-top: 30px;">
         <tr>
@@ -96,12 +97,12 @@
             </td>
         </tr>
     </table>
-    
+
     {{-- Thank You Message --}}
     <p style="color: #374151; font-size: 16px; line-height: 1.6; margin-top: 30px; margin-bottom: 10px; text-align: center;">
         Thank you for choosing {{ config('app.name') }}!
     </p>
-    
+
     <p style="color: #374151; font-size: 16px; line-height: 1.6; margin: 0; text-align: center;">
         <strong>Best regards,</strong><br>
         The {{ config('app.name') }} Team
