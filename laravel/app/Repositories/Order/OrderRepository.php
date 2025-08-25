@@ -10,7 +10,7 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 /**
  * Order Repository for order-specific database operations.
- * 
+ *
  * Handles comprehensive order data operations including user-specific queries,
  * order number lookups, filtered searches, and order statistics generation.
  * Extends BaseRepository to provide order-specific functionality.
@@ -129,10 +129,17 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
      */
     public function updateOrderStatus(string $orderUuid, string $status, array $additionalData = []): bool
     {
+        $order = $this->findByUuid($orderUuid);
+        if (!$order) {
+            return false;
+        }
+
         $updateData = array_merge(['status' => $status], $additionalData);
-        
-        return $this->model
-            ->where('uuid', $orderUuid)
-            ->update($updateData);
+
+        foreach ($updateData as $key => $value) {
+            $order->$key = $value;
+        }
+
+        return $order->save();
     }
 }

@@ -18,6 +18,8 @@ use App\Repositories\Order\OrderRepository;
 use App\Repositories\Order\OrderRepositoryInterface;
 use App\Repositories\Order\OrderStatusRepository;
 use App\Repositories\Order\OrderStatusRepositoryInterface;
+use App\Repositories\Order\OrderStatusHistoryRepository;
+use App\Repositories\Order\OrderStatusHistoryRepositoryInterface;
 use App\Repositories\Product\ProductRepository;
 use App\Repositories\Product\ProductRepositoryInterface;
 use App\Repositories\Setting\SettingsRepository;
@@ -58,6 +60,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(ProductRepositoryInterface::class, ProductRepository::class);
         $this->app->bind(CartRepositoryInterface::class, CartRepository::class);
         $this->app->bind(OrderRepositoryInterface::class, OrderRepository::class);
+        $this->app->bind(OrderStatusHistoryRepositoryInterface::class, OrderStatusHistoryRepository::class);
         $this->app->bind(CountryRepositoryInterface::class, CountryRepository::class);
         $this->app->bind(CurrencyRepositoryInterface::class, CurrencyRepository::class);
         $this->app->bind(LanguageRepositoryInterface::class,  LanguageRepository::class);

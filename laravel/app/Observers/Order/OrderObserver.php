@@ -2,15 +2,16 @@
 
 namespace App\Observers\Order;
 
-use App\Notifications\Order\OrderStatusUpdatedNotification;
 use App\Models\Order\Order;
-use App\Models\Order\OrderStatusHistory;
 use App\Observers\Base\BaseObserver;
+use App\Services\Order\OrderNotificationService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
 class OrderObserver extends BaseObserver
 {
+    public function __construct(protected OrderNotificationService $notificationService) {}
+
     /**
      * Handle the Order "creating" event.
      */
@@ -28,13 +29,9 @@ class OrderObserver extends BaseObserver
      */
     public function created(Model $model): void
     {
-        OrderStatusHistory::create([
-            'order_uuid' => $model->uuid,
-            'old_status' => null,
-            'new_status' => $model->status->value,
-            'changed_by_uuid' => auth()->id(),
-            'notes' => 'Order created',
-        ]);
+        if ($model instanceof Order) {
+            $this->notificationService->handleOrderCreated($model);
+        }
     }
 
     /**
@@ -42,32 +39,11 @@ class OrderObserver extends BaseObserver
      */
     public function updated(Model $model): void
     {
-        if ($model->isDirty('status')) {
+        if ($model instanceof Order && $model->isDirty('status')) {
             $oldStatus = $model->getOriginal('status');
             $newStatus = $model->status->value;
 
-            // Convert enum to string for job serialization
-            if ($oldStatus instanceof \App\Enums\Order\OrderStatusEnum) {
-                $oldStatus = $oldStatus->value;
-            }
-
-            // Create status history record
-            OrderStatusHistory::create([
-                'order_uuid' => $model->uuid,
-                'old_status' => $oldStatus,
-                'new_status' => $newStatus,
-                'changed_by_uuid' => auth()->id(),
-                'notes' => 'Status updated',
-            ]);
-
-            // Send email notification to order owner when status changes
-            if ($model->user && $model->user->email) {
-                $model->user->notify(new OrderStatusUpdatedNotification(
-                    $model->load('user', 'orderItems.product'),
-                    $oldStatus,
-                    $newStatus
-                ));
-            }
+            $this->notificationService->handleStatusChange($model, $oldStatus, $newStatus);
         }
     }
 }
