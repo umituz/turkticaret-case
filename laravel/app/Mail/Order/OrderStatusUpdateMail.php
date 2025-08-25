@@ -49,15 +49,16 @@ class OrderStatusUpdateMail extends Mailable
      */
     public function content(): Content
     {
-        $emailData = $this->orderMailService->prepareOrderStatusUpdateData($this->order, $this->newStatus);
+        $emailData = $this->orderMailService->prepareOrderStatusUpdateData(
+            $this->order, 
+            $this->oldStatus, 
+            $this->newStatus
+        );
         
         return new Content(
             view: 'emails.order.order-status-update',
             with: array_merge([
                 'order' => $this->order,
-                'oldStatus' => $this->oldStatus->value,
-                'newStatus' => $this->newStatus->value,
-                'statusMessage' => $this->newStatus->getLabel(),
                 'statusDescription' => $this->getStatusDescription($this->newStatus),
             ], $emailData),
         );

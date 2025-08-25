@@ -41,10 +41,11 @@ class OrderMailService
      * Prepare all data needed for order status update email template.
      *
      * @param Order $order The order to prepare status update email data for
+     * @param OrderStatusEnum $oldStatus The old order status enum
      * @param OrderStatusEnum $newStatus The new order status enum
      * @return array Formatted email data ready for template consumption
      */
-    public function prepareOrderStatusUpdateData(Order $order, OrderStatusEnum $newStatus): array
+    public function prepareOrderStatusUpdateData(Order $order, OrderStatusEnum $oldStatus, OrderStatusEnum $newStatus): array
     {
         return [
             'order_number' => $order->order_number,
@@ -52,7 +53,21 @@ class OrderMailService
             'order_date_formatted' => $order->created_at->format('M d, Y \a\t h:i A'),
             'order_items_display' => $this->prepareOrderItemsForStatusUpdate($order),
             'status_dates' => $this->prepareStatusDates($order, $newStatus),
+            'oldStatus' => $this->prepareStatusForTemplate($oldStatus),
+            'newStatus' => $this->prepareStatusForTemplate($newStatus),
+            'statusMessage' => $newStatus->getLabel(),
         ];
+    }
+
+    /**
+     * Convert enum status to template-safe string value.
+     *
+     * @param OrderStatusEnum $status The status enum to convert
+     * @return string The string value safe for template usage
+     */
+    private function prepareStatusForTemplate(OrderStatusEnum $status): string
+    {
+        return $status->value;
     }
 
     /**
