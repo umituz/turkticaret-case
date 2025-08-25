@@ -4,7 +4,7 @@ namespace App\Services\Order;
 
 use App\DTOs\Order\OrderCreateDTO;
 use App\Exceptions\Product\OutOfStockException;
-use App\Jobs\Order\SendOrderConfirmedJob;
+use App\Notifications\Order\OrderConfirmedNotification;
 use App\Models\Order\Order;
 use App\Models\Cart\Cart;
 use App\Repositories\Order\OrderRepositoryInterface;
@@ -133,7 +133,7 @@ class OrderService
             $this->transferCartItemsToOrderAndReduceStock($order, $cart);
             $this->cartService->clearCart($userUuid);
 
-            SendOrderConfirmedJob::dispatch($order);
+            $order->user->notify(new OrderConfirmedNotification($order));
 
             return $order->load(['orderItems.product']);
         });

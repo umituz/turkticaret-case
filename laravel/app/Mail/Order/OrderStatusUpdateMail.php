@@ -2,6 +2,7 @@
 
 namespace App\Mail\Order;
 
+use App\Enums\Order\OrderStatusEnum;
 use App\Models\Order\Order;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
@@ -11,7 +12,7 @@ use Illuminate\Queue\SerializesModels;
 
 /**
  * Mailable class for order status update notifications.
- * 
+ *
  * Sends email notifications to customers when their order status changes.
  * Includes dynamic subject lines, status descriptions, and formatted
  * email content for professional order communication.
@@ -47,7 +48,7 @@ class OrderStatusUpdateMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.order-status-update',
+            view: 'emails.order.order-status-update',
             with: [
                 'order' => $this->order,
                 'oldStatus' => $this->oldStatus,
@@ -68,26 +69,20 @@ class OrderStatusUpdateMail extends Mailable
 
     private function getStatusMessage(string $status): string
     {
-        return match ($status) {
-            'confirmed' => 'Order Confirmed',
-            'processing' => 'Order Processing',
-            'shipped' => 'Order Shipped',
-            'delivered' => 'Order Delivered',
-            'cancelled' => 'Order Cancelled',
-            'refunded' => 'Order Refunded',
-            default => 'Status Updated',
-        };
+        $statusEnum = OrderStatusEnum::tryFrom($status);
+
+        return $statusEnum ? $statusEnum->getLabel() : 'Status Updated';
     }
 
     private function getStatusDescription(string $status): string
     {
         return match ($status) {
-            'confirmed' => 'Your order has been confirmed and is being prepared.',
-            'processing' => 'Your order is currently being processed and prepared for shipment.',
-            'shipped' => 'Your order has been shipped and is on its way to you.',
-            'delivered' => 'Your order has been successfully delivered.',
-            'cancelled' => 'Your order has been cancelled. If you have any questions, please contact our support team.',
-            'refunded' => 'Your order has been refunded. The refund will be processed to your original payment method.',
+            OrderStatusEnum::CONFIRMED->value => 'Your order has been confirmed and is being prepared.',
+            OrderStatusEnum::PROCESSING->value => 'Your order is currently being processed and prepared for shipment.',
+            OrderStatusEnum::SHIPPED->value => 'Your order has been shipped and is on its way to you.',
+            OrderStatusEnum::DELIVERED->value => 'Your order has been successfully delivered.',
+            OrderStatusEnum::CANCELLED->value => 'Your order has been cancelled. If you have any questions, please contact our support team.',
+            OrderStatusEnum::REFUNDED->value => 'Your order has been refunded. The refund will be processed to your original payment method.',
             default => 'Your order status has been updated.',
         };
     }

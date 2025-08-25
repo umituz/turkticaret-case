@@ -2,7 +2,7 @@
 
 namespace App\Observers\Order;
 
-use App\Jobs\Order\SendOrderStatusUpdateEmail;
+use App\Notifications\Order\OrderStatusUpdatedNotification;
 use App\Models\Order\Order;
 use App\Models\Order\OrderStatusHistory;
 use App\Observers\Base\BaseObserver;
@@ -62,11 +62,11 @@ class OrderObserver extends BaseObserver
 
             // Send email notification to order owner when status changes
             if ($model->user && $model->user->email) {
-                SendOrderStatusUpdateEmail::dispatch(
+                $model->user->notify(new OrderStatusUpdatedNotification(
                     $model->load('user', 'orderItems.product'),
                     $oldStatus,
                     $newStatus
-                );
+                ));
             }
         }
     }
