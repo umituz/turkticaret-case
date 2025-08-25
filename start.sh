@@ -129,9 +129,19 @@ fi
 
 if docker ps | grep -q turkticaret_postgres; then
     print_success "PostgreSQL is running!"
+    
+    # Run migrations and seeders
+    print_status "Running Laravel migrations and seeders..."
+    if docker exec turkticaret_laravel php artisan migrate:fresh --seed; then
+        print_success "Database migrations and seeders completed successfully!"
+    else
+        print_error "Failed to run migrations and seeders"
+        exit 1
+    fi
 else
     print_error "PostgreSQL failed to start"
     docker compose logs postgres
+    exit 1
 fi
 
 if docker ps | grep -q turkticaret_redis; then
