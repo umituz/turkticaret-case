@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests\Admin\Order;
 
+use App\Enums\Order\OrderStatusEnum;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Enum;
 
 /**
  * Form request for admin order listing with filters.
@@ -32,7 +34,7 @@ class AdminOrderListRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'status' => 'sometimes|string|in:pending,processing,shipped,delivered,cancelled',
+            'status' => ['sometimes', 'string', new Enum(OrderStatusEnum::class)],
             'user_uuid' => 'sometimes|string|uuid',
             'order_number' => 'sometimes|string|max:50',
             'date_from' => 'sometimes|date|date_format:Y-m-d',
@@ -48,8 +50,10 @@ class AdminOrderListRequest extends FormRequest
      */
     public function messages(): array
     {
+        $availableStatuses = implode(', ', OrderStatusEnum::getAvailableStatuses());
+        
         return [
-            'status.in' => 'Status must be one of: pending, processing, shipped, delivered, cancelled',
+            'status.Illuminate\Validation\Rules\Enum' => "Status must be one of: {$availableStatuses}",
             'user_uuid.uuid' => 'User UUID must be a valid UUID format',
             'date_from.date_format' => 'Date from must be in Y-m-d format',
             'date_to.date_format' => 'Date to must be in Y-m-d format',

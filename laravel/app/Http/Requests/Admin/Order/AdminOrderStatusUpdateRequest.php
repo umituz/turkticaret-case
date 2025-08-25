@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests\Admin\Order;
 
+use App\Enums\Order\OrderStatusEnum;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Enum;
 
 /**
  * Form request for admin order status updates.
@@ -32,7 +34,7 @@ class AdminOrderStatusUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'status' => 'required|string|in:pending,processing,shipped,delivered,cancelled',
+            'status' => ['required', 'string', new Enum(OrderStatusEnum::class)],
         ];
     }
 
@@ -43,9 +45,11 @@ class AdminOrderStatusUpdateRequest extends FormRequest
      */
     public function messages(): array
     {
+        $availableStatuses = implode(', ', OrderStatusEnum::getAvailableStatuses());
+        
         return [
             'status.required' => 'Order status is required',
-            'status.in' => 'Status must be one of: pending, processing, shipped, delivered, cancelled',
+            'status.Illuminate\Validation\Rules\Enum' => "Status must be one of: {$availableStatuses}",
         ];
     }
 
