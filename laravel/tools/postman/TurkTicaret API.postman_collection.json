@@ -4329,32 +4329,1238 @@
           "description": "Order status management endpoints for updating order statuses and viewing available transitions",
           "item": [
             {
-              "$ref": "collections/orders/order-statuses.json#/item/0",
-              "name": "undefined Request 1"
+              "name": "Update Order Status",
+              "request": {
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"confirmed\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/orders/{{order_uuid}}/status",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "orders",
+                    "{{order_uuid}}",
+                    "status"
+                  ]
+                },
+                "description": "Update order status with proper validation and transition rules",
+                "name": "Update Order Status",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}",
+                    "type": "text"
+                  }
+                ]
+              },
+              "response": [
+                {
+                  "name": "Success Response",
+                  "originalRequest": {
+                    "method": "PATCH",
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"status\": \"confirmed\"\n}"
+                    },
+                    "url": "{{base_url}}/orders/{{order_uuid}}/status"
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "body": "{\n    \"success\": true,\n    \"message\": \"Order status updated successfully\",\n    \"data\": {\n        \"uuid\": \"0198d5bf-a0b3-72d1-8c56-b4824c7f7630\",\n        \"order_number\": \"ORD-2025-001\",\n        \"status\": \"confirmed\",\n        \"old_status\": \"pending\",\n        \"total_amount\": 15000,\n        \"updated_at\": \"2025-08-23T14:30:00.000000Z\",\n        \"status_history\": {\n            \"uuid\": \"0198d5bf-h0i3-72d1-8c56-b4824c7f7641\",\n            \"old_status\": \"pending\",\n            \"new_status\": \"confirmed\",\n            \"notes\": \"Status updated via admin panel\",\n            \"changed_by_uuid\": \"0198d5bf-a001-72b1-80fc-37402118ff2f\",\n            \"created_at\": \"2025-08-23T14:30:00.000000Z\"\n        }\n    },\n    \"errors\": []\n}"
+                },
+                {
+                  "name": "Validation Error - Invalid Status",
+                  "originalRequest": {
+                    "method": "PATCH",
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"status\": \"invalid_status\"\n}"
+                    },
+                    "url": "{{base_url}}/orders/{{order_uuid}}/status"
+                  },
+                  "status": "Unprocessable Entity",
+                  "code": 422,
+                  "body": "{\n    \"success\": false,\n    \"message\": \"Validation failed\",\n    \"data\": null,\n    \"errors\": [\n        \"The status field must be a valid order status (pending, confirmed, processing, shipped, delivered, cancelled)\"\n    ]\n}"
+                },
+                {
+                  "name": "Business Logic Error - Invalid Transition",
+                  "originalRequest": {
+                    "method": "PATCH",
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"status\": \"delivered\"\n}"
+                    },
+                    "url": "{{base_url}}/orders/{{order_uuid}}/status"
+                  },
+                  "status": "Unprocessable Entity",
+                  "code": 422,
+                  "body": "{\n    \"success\": false,\n    \"message\": \"Invalid status transition\",\n    \"data\": null,\n    \"errors\": [\n        \"Cannot transition from 'pending' to 'delivered'. Valid next statuses are: confirmed, cancelled\"\n    ]\n}"
+                },
+                {
+                  "name": "Order Not Found",
+                  "originalRequest": {
+                    "method": "PATCH",
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"status\": \"confirmed\"\n}"
+                    },
+                    "url": "{{base_url}}/orders/non-existent-uuid/status"
+                  },
+                  "status": "Not Found",
+                  "code": 404,
+                  "body": "{\n    \"success\": false,\n    \"message\": \"Order not found\",\n    \"data\": null,\n    \"errors\": [\n        \"No order found with the specified UUID\"\n    ]\n}"
+                }
+              ]
             },
             {
-              "$ref": "collections/orders/order-statuses.json#/item/1",
-              "name": "undefined Request 2"
+              "name": "Get Available Status Transitions",
+              "request": {
+                "method": "GET",
+                "url": {
+                  "raw": "{{base_url}}/orders/{{order_uuid}}/status/available",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "orders",
+                    "{{order_uuid}}",
+                    "status",
+                    "available"
+                  ]
+                },
+                "description": "Get available status transitions for current order status",
+                "name": "Get Available Status Transitions",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}",
+                    "type": "text"
+                  }
+                ]
+              },
+              "response": [
+                {
+                  "name": "Success Response - Pending Order",
+                  "originalRequest": {
+                    "method": "GET",
+                    "url": "{{base_url}}/orders/{{order_uuid}}/status/available"
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "body": "{\n    \"success\": true,\n    \"message\": \"Available status transitions retrieved successfully\",\n    \"data\": {\n        \"current_status\": \"pending\",\n        \"available_transitions\": [\n            {\n                \"status\": \"confirmed\",\n                \"description\": \"Confirm the order for processing\"\n            },\n            {\n                \"status\": \"cancelled\",\n                \"description\": \"Cancel the order\"\n            }\n        ]\n    },\n    \"errors\": []\n}"
+                },
+                {
+                  "name": "Success Response - Processing Order",
+                  "originalRequest": {
+                    "method": "GET",
+                    "url": "{{base_url}}/orders/{{order_uuid}}/status/available"
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "body": "{\n    \"success\": true,\n    \"message\": \"Available status transitions retrieved successfully\",\n    \"data\": {\n        \"current_status\": \"processing\",\n        \"available_transitions\": [\n            {\n                \"status\": \"shipped\",\n                \"description\": \"Mark order as shipped\"\n            },\n            {\n                \"status\": \"cancelled\",\n                \"description\": \"Cancel the order\"\n            }\n        ]\n    },\n    \"errors\": []\n}"
+                },
+                {
+                  "name": "Success Response - Delivered Order",
+                  "originalRequest": {
+                    "method": "GET",
+                    "url": "{{base_url}}/orders/{{order_uuid}}/status/available"
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "body": "{\n    \"success\": true,\n    \"message\": \"Available status transitions retrieved successfully\",\n    \"data\": {\n        \"current_status\": \"delivered\",\n        \"available_transitions\": [],\n        \"message\": \"Order is in final state. No further transitions available.\"\n    },\n    \"errors\": []\n}"
+                },
+                {
+                  "name": "Order Not Found",
+                  "originalRequest": {
+                    "method": "GET",
+                    "url": "{{base_url}}/orders/non-existent-uuid/status/available"
+                  },
+                  "status": "Not Found",
+                  "code": 404,
+                  "body": "{\n    \"success\": false,\n    \"message\": \"Order not found\",\n    \"data\": null,\n    \"errors\": [\n        \"No order found with the specified UUID\"\n    ]\n}"
+                }
+              ]
             },
             {
-              "$ref": "collections/orders/order-statuses.json#/item/2",
-              "name": "undefined Request 3"
+              "name": "Get Order Status History",
+              "request": {
+                "method": "GET",
+                "url": {
+                  "raw": "{{base_url}}/orders/{{order_uuid}}/status/history",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "orders",
+                    "{{order_uuid}}",
+                    "status",
+                    "history"
+                  ]
+                },
+                "description": "Get complete status change history for an order with user details and timestamps",
+                "name": "Get Order Status History",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}",
+                    "type": "text"
+                  }
+                ]
+              },
+              "response": [
+                {
+                  "name": "Success Response - Complete History",
+                  "originalRequest": {
+                    "method": "GET",
+                    "url": "{{base_url}}/orders/{{order_uuid}}/status/history"
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "body": "{\n    \"success\": true,\n    \"message\": \"Order status history retrieved successfully\",\n    \"data\": {\n        \"order_uuid\": \"0198d5bf-a0b3-72d1-8c56-b4824c7f7630\",\n        \"order_number\": \"ORD-2025-001\",\n        \"current_status\": \"delivered\",\n        \"history\": [\n            {\n                \"uuid\": \"0198d5bf-h0i3-72d1-8c56-b4824c7f7641\",\n                \"old_status\": null,\n                \"new_status\": \"pending\",\n                \"notes\": \"Order created\",\n                \"changed_by_uuid\": \"0198d5bf-a001-72b1-80fc-37402118ff2f\",\n                \"created_at\": \"2025-08-23T10:30:00.000000Z\",\n                \"changed_by\": {\n                    \"uuid\": \"0198d5bf-a001-72b1-80fc-37402118ff2f\",\n                    \"name\": \"John Doe\",\n                    \"email\": \"john@example.com\"\n                }\n            },\n            {\n                \"uuid\": \"0198d5bf-i0j3-72d1-8c56-b4824c7f7642\",\n                \"old_status\": \"pending\",\n                \"new_status\": \"confirmed\",\n                \"notes\": \"Status updated via admin panel\",\n                \"changed_by_uuid\": \"0198d5bf-b002-72b1-80fc-37402118ff3f\",\n                \"created_at\": \"2025-08-23T11:15:00.000000Z\",\n                \"changed_by\": {\n                    \"uuid\": \"0198d5bf-b002-72b1-80fc-37402118ff3f\",\n                    \"name\": \"Admin User\",\n                    \"email\": \"admin@turkticaret.test\"\n                }\n            },\n            {\n                \"uuid\": \"0198d5bf-j0k3-72d1-8c56-b4824c7f7643\",\n                \"old_status\": \"confirmed\",\n                \"new_status\": \"processing\",\n                \"notes\": \"Status updated via admin panel\",\n                \"changed_by_uuid\": \"0198d5bf-b002-72b1-80fc-37402118ff3f\",\n                \"created_at\": \"2025-08-23T12:00:00.000000Z\",\n                \"changed_by\": {\n                    \"uuid\": \"0198d5bf-b002-72b1-80fc-37402118ff3f\",\n                    \"name\": \"Admin User\",\n                    \"email\": \"admin@turkticaret.test\"\n                }\n            },\n            {\n                \"uuid\": \"0198d5bf-k0l3-72d1-8c56-b4824c7f7644\",\n                \"old_status\": \"processing\",\n                \"new_status\": \"shipped\",\n                \"notes\": \"Status updated via admin panel\",\n                \"changed_by_uuid\": \"0198d5bf-b002-72b1-80fc-37402118ff3f\",\n                \"created_at\": \"2025-08-23T14:30:00.000000Z\",\n                \"changed_by\": {\n                    \"uuid\": \"0198d5bf-b002-72b1-80fc-37402118ff3f\",\n                    \"name\": \"Admin User\",\n                    \"email\": \"admin@turkticaret.test\"\n                }\n            },\n            {\n                \"uuid\": \"0198d5bf-l0m3-72d1-8c56-b4824c7f7645\",\n                \"old_status\": \"shipped\",\n                \"new_status\": \"delivered\",\n                \"notes\": \"Status updated via admin panel\",\n                \"changed_by_uuid\": \"0198d5bf-b002-72b1-80fc-37402118ff3f\",\n                \"created_at\": \"2025-08-23T16:45:00.000000Z\",\n                \"changed_by\": {\n                    \"uuid\": \"0198d5bf-b002-72b1-80fc-37402118ff3f\",\n                    \"name\": \"Admin User\",\n                    \"email\": \"admin@turkticaret.test\"\n                }\n            }\n        ],\n        \"total_transitions\": 5\n    },\n    \"errors\": []\n}"
+                },
+                {
+                  "name": "Success Response - New Order",
+                  "originalRequest": {
+                    "method": "GET",
+                    "url": "{{base_url}}/orders/{{order_uuid}}/status/history"
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "body": "{\n    \"success\": true,\n    \"message\": \"Order status history retrieved successfully\",\n    \"data\": {\n        \"order_uuid\": \"0198d5bf-n0o3-72d1-8c56-b4824c7f7646\",\n        \"order_number\": \"ORD-2025-002\",\n        \"current_status\": \"pending\",\n        \"history\": [\n            {\n                \"uuid\": \"0198d5bf-p0q3-72d1-8c56-b4824c7f7647\",\n                \"old_status\": null,\n                \"new_status\": \"pending\",\n                \"notes\": \"Order created\",\n                \"changed_by_uuid\": \"0198d5bf-a003-72b1-80fc-37402118ff4f\",\n                \"created_at\": \"2025-08-23T17:00:00.000000Z\",\n                \"changed_by\": {\n                    \"uuid\": \"0198d5bf-a003-72b1-80fc-37402118ff4f\",\n                    \"name\": \"Jane Smith\",\n                    \"email\": \"jane@example.com\"\n                }\n            }\n        ],\n        \"total_transitions\": 1\n    },\n    \"errors\": []\n}"
+                },
+                {
+                  "name": "Order Not Found",
+                  "originalRequest": {
+                    "method": "GET",
+                    "url": "{{base_url}}/orders/non-existent-uuid/status/history"
+                  },
+                  "status": "Not Found",
+                  "code": 404,
+                  "body": "{\n    \"success\": false,\n    \"message\": \"Order not found\",\n    \"data\": null,\n    \"errors\": [\n        \"No order found with the specified UUID\"\n    ]\n}"
+                }
+              ]
             },
             {
-              "$ref": "collections/orders/order-statuses.json#/item/3",
-              "name": "undefined Request 4"
+              "name": "Status Workflow - Complete Order Lifecycle",
+              "description": "Complete order status workflow from pending to delivered",
+              "item": [
+                {
+                  "name": "1. Check Initial Status",
+                  "request": {
+                    "method": "GET",
+                    "url": {
+                      "raw": "{{base_url}}/orders/{{order_uuid}}",
+                      "host": [
+                        "{{base_url}}"
+                      ],
+                      "path": [
+                        "orders",
+                        "{{order_uuid}}"
+                      ]
+                    },
+                    "description": "Step 1: Check initial order status (should be pending)",
+                    "name": "1. Check Initial Status",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json",
+                        "type": "text"
+                      },
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json",
+                        "type": "text"
+                      },
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{token}}",
+                        "type": "text"
+                      }
+                    ]
+                  },
+                  "response": [
+                    {
+                      "name": "Success Response - Pending Order",
+                      "originalRequest": {
+                        "method": "GET",
+                        "url": "{{base_url}}/orders/{{order_uuid}}"
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "body": "{\n    \"success\": true,\n    \"message\": \"Order retrieved successfully\",\n    \"data\": {\n        \"uuid\": \"0198d5bf-a0b3-72d1-8c56-b4824c7f7630\",\n        \"order_number\": \"ORD-2025-001\",\n        \"status\": \"pending\",\n        \"total_amount\": 15000,\n        \"shipping_address\": \"123 Main St, Istanbul, Turkey\",\n        \"notes\": \"Customer requested express delivery\",\n        \"shipped_at\": null,\n        \"delivered_at\": null,\n        \"created_at\": \"2025-08-23T10:30:00.000000Z\",\n        \"updated_at\": \"2025-08-23T10:30:00.000000Z\",\n        \"user\": {\n            \"uuid\": \"0198d5bf-a001-72b1-80fc-37402118ff2f\",\n            \"name\": \"John Doe\",\n            \"email\": \"john@example.com\"\n        }\n    },\n    \"errors\": []\n}"
+                    }
+                  ]
+                },
+                {
+                  "name": "2. Confirm Order",
+                  "request": {
+                    "method": "PATCH",
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"status\": \"confirmed\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{base_url}}/orders/{{order_uuid}}/status",
+                      "host": [
+                        "{{base_url}}"
+                      ],
+                      "path": [
+                        "orders",
+                        "{{order_uuid}}",
+                        "status"
+                      ]
+                    },
+                    "description": "Step 2: Confirm the order (pending → confirmed)",
+                    "name": "2. Confirm Order",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json",
+                        "type": "text"
+                      },
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json",
+                        "type": "text"
+                      },
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{token}}",
+                        "type": "text"
+                      }
+                    ]
+                  },
+                  "response": [
+                    {
+                      "name": "Success Response - Order Confirmed",
+                      "originalRequest": {
+                        "method": "PATCH",
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"status\": \"confirmed\"\n}"
+                        },
+                        "url": "{{base_url}}/orders/{{order_uuid}}/status"
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "body": "{\n    \"success\": true,\n    \"message\": \"Order status updated successfully\",\n    \"data\": {\n        \"uuid\": \"0198d5bf-a0b3-72d1-8c56-b4824c7f7630\",\n        \"order_number\": \"ORD-2025-001\",\n        \"status\": \"confirmed\",\n        \"old_status\": \"pending\",\n        \"total_amount\": 15000,\n        \"updated_at\": \"2025-08-23T11:15:00.000000Z\",\n        \"status_history\": {\n            \"uuid\": \"0198d5bf-i0j3-72d1-8c56-b4824c7f7642\",\n            \"old_status\": \"pending\",\n            \"new_status\": \"confirmed\",\n            \"notes\": \"Status updated via admin panel\",\n            \"changed_by_uuid\": \"0198d5bf-b002-72b1-80fc-37402118ff3f\",\n            \"created_at\": \"2025-08-23T11:15:00.000000Z\"\n        }\n    },\n    \"errors\": []\n}"
+                    }
+                  ]
+                },
+                {
+                  "name": "3. Start Processing",
+                  "request": {
+                    "method": "PATCH",
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"status\": \"processing\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{base_url}}/orders/{{order_uuid}}/status",
+                      "host": [
+                        "{{base_url}}"
+                      ],
+                      "path": [
+                        "orders",
+                        "{{order_uuid}}",
+                        "status"
+                      ]
+                    },
+                    "description": "Step 3: Start processing the order (confirmed → processing)",
+                    "name": "3. Start Processing",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json",
+                        "type": "text"
+                      },
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json",
+                        "type": "text"
+                      },
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{token}}",
+                        "type": "text"
+                      }
+                    ]
+                  },
+                  "response": [
+                    {
+                      "name": "Success Response - Order Processing",
+                      "originalRequest": {
+                        "method": "PATCH",
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"status\": \"processing\"\n}"
+                        },
+                        "url": "{{base_url}}/orders/{{order_uuid}}/status"
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "body": "{\n    \"success\": true,\n    \"message\": \"Order status updated successfully\",\n    \"data\": {\n        \"uuid\": \"0198d5bf-a0b3-72d1-8c56-b4824c7f7630\",\n        \"order_number\": \"ORD-2025-001\",\n        \"status\": \"processing\",\n        \"old_status\": \"confirmed\",\n        \"total_amount\": 15000,\n        \"updated_at\": \"2025-08-23T12:00:00.000000Z\",\n        \"status_history\": {\n            \"uuid\": \"0198d5bf-j0k3-72d1-8c56-b4824c7f7643\",\n            \"old_status\": \"confirmed\",\n            \"new_status\": \"processing\",\n            \"notes\": \"Status updated via admin panel\",\n            \"changed_by_uuid\": \"0198d5bf-b002-72b1-80fc-37402118ff3f\",\n            \"created_at\": \"2025-08-23T12:00:00.000000Z\"\n        }\n    },\n    \"errors\": []\n}"
+                    }
+                  ]
+                },
+                {
+                  "name": "4. Ship Order",
+                  "request": {
+                    "method": "PATCH",
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"status\": \"shipped\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{base_url}}/orders/{{order_uuid}}/status",
+                      "host": [
+                        "{{base_url}}"
+                      ],
+                      "path": [
+                        "orders",
+                        "{{order_uuid}}",
+                        "status"
+                      ]
+                    },
+                    "description": "Step 4: Ship the order (processing → shipped). Automatically sets shipped_at timestamp",
+                    "name": "4. Ship Order",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json",
+                        "type": "text"
+                      },
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json",
+                        "type": "text"
+                      },
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{token}}",
+                        "type": "text"
+                      }
+                    ]
+                  },
+                  "response": [
+                    {
+                      "name": "Success Response - Order Shipped",
+                      "originalRequest": {
+                        "method": "PATCH",
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"status\": \"shipped\"\n}"
+                        },
+                        "url": "{{base_url}}/orders/{{order_uuid}}/status"
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "body": "{\n    \"success\": true,\n    \"message\": \"Order status updated successfully\",\n    \"data\": {\n        \"uuid\": \"0198d5bf-a0b3-72d1-8c56-b4824c7f7630\",\n        \"order_number\": \"ORD-2025-001\",\n        \"status\": \"shipped\",\n        \"old_status\": \"processing\",\n        \"total_amount\": 15000,\n        \"shipped_at\": \"2025-08-23T14:30:00.000000Z\",\n        \"delivered_at\": null,\n        \"updated_at\": \"2025-08-23T14:30:00.000000Z\",\n        \"status_history\": {\n            \"uuid\": \"0198d5bf-k0l3-72d1-8c56-b4824c7f7644\",\n            \"old_status\": \"processing\",\n            \"new_status\": \"shipped\",\n            \"notes\": \"Status updated via admin panel\",\n            \"changed_by_uuid\": \"0198d5bf-b002-72b1-80fc-37402118ff3f\",\n            \"created_at\": \"2025-08-23T14:30:00.000000Z\"\n        }\n    },\n    \"errors\": []\n}"
+                    }
+                  ]
+                },
+                {
+                  "name": "5. Deliver Order",
+                  "request": {
+                    "method": "PATCH",
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"status\": \"delivered\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{base_url}}/orders/{{order_uuid}}/status",
+                      "host": [
+                        "{{base_url}}"
+                      ],
+                      "path": [
+                        "orders",
+                        "{{order_uuid}}",
+                        "status"
+                      ]
+                    },
+                    "description": "Step 5: Mark order as delivered (shipped → delivered). Automatically sets delivered_at timestamp",
+                    "name": "5. Deliver Order",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json",
+                        "type": "text"
+                      },
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json",
+                        "type": "text"
+                      },
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{token}}",
+                        "type": "text"
+                      }
+                    ]
+                  },
+                  "response": [
+                    {
+                      "name": "Success Response",
+                      "originalRequest": {
+                        "method": "PATCH",
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"status\": \"delivered\"\n}"
+                        },
+                        "url": "{{base_url}}/orders/{{order_uuid}}/status"
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "body": "{\n    \"success\": true,\n    \"message\": \"Order status updated successfully\",\n    \"data\": {\n        \"uuid\": \"0198d5bf-a0b3-72d1-8c56-b4824c7f7630\",\n        \"order_number\": \"ORD-2025-001\",\n        \"status\": \"delivered\",\n        \"old_status\": \"shipped\",\n        \"total_amount\": 15000,\n        \"shipped_at\": \"2025-08-23T14:30:00.000000Z\",\n        \"delivered_at\": \"2025-08-23T16:45:00.000000Z\",\n        \"updated_at\": \"2025-08-23T16:45:00.000000Z\",\n        \"status_history\": {\n            \"uuid\": \"0198d5bf-l0m3-72d1-8c56-b4824c7f7645\",\n            \"old_status\": \"shipped\",\n            \"new_status\": \"delivered\",\n            \"notes\": \"Status updated via admin panel\",\n            \"changed_by_uuid\": \"0198d5bf-b002-72b1-80fc-37402118ff3f\",\n            \"created_at\": \"2025-08-23T16:45:00.000000Z\"\n        }\n    },\n    \"errors\": []\n}"
+                    }
+                  ]
+                },
+                {
+                  "name": "6. Verify Final Status",
+                  "request": {
+                    "method": "GET",
+                    "url": {
+                      "raw": "{{base_url}}/orders/{{order_uuid}}",
+                      "host": [
+                        "{{base_url}}"
+                      ],
+                      "path": [
+                        "orders",
+                        "{{order_uuid}}"
+                      ]
+                    },
+                    "description": "Step 6: Verify final order status and timestamps",
+                    "name": "6. Verify Final Status",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json",
+                        "type": "text"
+                      },
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json",
+                        "type": "text"
+                      },
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{token}}",
+                        "type": "text"
+                      }
+                    ]
+                  },
+                  "response": [
+                    {
+                      "name": "Success Response",
+                      "originalRequest": {
+                        "method": "GET",
+                        "url": "{{base_url}}/orders/{{order_uuid}}"
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "body": "{\n    \"success\": true,\n    \"message\": \"Order retrieved successfully\",\n    \"data\": {\n        \"uuid\": \"0198d5bf-a0b3-72d1-8c56-b4824c7f7630\",\n        \"order_number\": \"ORD-2025-001\",\n        \"status\": \"delivered\",\n        \"total_amount\": 15000,\n        \"shipped_at\": \"2025-08-23T14:30:00.000000Z\",\n        \"delivered_at\": \"2025-08-23T16:45:00.000000Z\",\n        \"updated_at\": \"2025-08-23T16:45:00.000000Z\"\n    },\n    \"errors\": []\n}"
+                    }
+                  ]
+                },
+                {
+                  "name": "7. View Complete Status History",
+                  "request": {
+                    "method": "GET",
+                    "url": {
+                      "raw": "{{base_url}}/orders/{{order_uuid}}/status/history",
+                      "host": [
+                        "{{base_url}}"
+                      ],
+                      "path": [
+                        "orders",
+                        "{{order_uuid}}",
+                        "status",
+                        "history"
+                      ]
+                    },
+                    "description": "Step 7: View complete status change history with all transitions",
+                    "name": "7. View Complete Status History",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json",
+                        "type": "text"
+                      },
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json",
+                        "type": "text"
+                      },
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{token}}",
+                        "type": "text"
+                      }
+                    ]
+                  },
+                  "response": [
+                    {
+                      "name": "Success Response",
+                      "originalRequest": {
+                        "method": "GET",
+                        "url": "{{base_url}}/orders/{{order_uuid}}/status/history"
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "body": "{\n    \"success\": true,\n    \"message\": \"Order status history retrieved successfully\",\n    \"data\": {\n        \"order_uuid\": \"0198d5bf-a0b3-72d1-8c56-b4824c7f7630\",\n        \"order_number\": \"ORD-2025-001\",\n        \"current_status\": \"delivered\",\n        \"history\": [\n            {\n                \"uuid\": \"0198d5bf-h0i3-72d1-8c56-b4824c7f7641\",\n                \"old_status\": null,\n                \"new_status\": \"pending\",\n                \"notes\": \"Order created\",\n                \"changed_by_uuid\": \"0198d5bf-a001-72b1-80fc-37402118ff2f\",\n                \"created_at\": \"2025-08-23T10:30:00.000000Z\"\n            },\n            {\n                \"uuid\": \"0198d5bf-i0j3-72d1-8c56-b4824c7f7642\",\n                \"old_status\": \"pending\",\n                \"new_status\": \"confirmed\",\n                \"notes\": \"Status updated via admin panel\",\n                \"changed_by_uuid\": \"0198d5bf-b002-72b1-80fc-37402118ff3f\",\n                \"created_at\": \"2025-08-23T11:15:00.000000Z\"\n            },\n            {\n                \"uuid\": \"0198d5bf-j0k3-72d1-8c56-b4824c7f7643\",\n                \"old_status\": \"confirmed\",\n                \"new_status\": \"processing\",\n                \"notes\": \"Status updated via admin panel\",\n                \"changed_by_uuid\": \"0198d5bf-b002-72b1-80fc-37402118ff3f\",\n                \"created_at\": \"2025-08-23T12:00:00.000000Z\"\n            },\n            {\n                \"uuid\": \"0198d5bf-k0l3-72d1-8c56-b4824c7f7644\",\n                \"old_status\": \"processing\",\n                \"new_status\": \"shipped\",\n                \"notes\": \"Status updated via admin panel\",\n                \"changed_by_uuid\": \"0198d5bf-b002-72b1-80fc-37402118ff3f\",\n                \"created_at\": \"2025-08-23T14:30:00.000000Z\"\n            },\n            {\n                \"uuid\": \"0198d5bf-l0m3-72d1-8c56-b4824c7f7645\",\n                \"old_status\": \"shipped\",\n                \"new_status\": \"delivered\",\n                \"notes\": \"Status updated via admin panel\",\n                \"changed_by_uuid\": \"0198d5bf-b002-72b1-80fc-37402118ff3f\",\n                \"created_at\": \"2025-08-23T16:45:00.000000Z\"\n            }\n        ],\n        \"total_transitions\": 5\n    },\n    \"errors\": []\n}"
+                    }
+                  ]
+                }
+              ]
             },
             {
-              "$ref": "collections/orders/order-statuses.json#/item/4",
-              "name": "undefined Request 5"
+              "name": "Status Validation Tests",
+              "description": "Test status transition validation and error handling",
+              "item": [
+                {
+                  "name": "Invalid Status Transition",
+                  "request": {
+                    "method": "PATCH",
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"status\": \"delivered\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{base_url}}/orders/{{order_uuid}}/status",
+                      "host": [
+                        "{{base_url}}"
+                      ],
+                      "path": [
+                        "orders",
+                        "{{order_uuid}}",
+                        "status"
+                      ]
+                    },
+                    "description": "Try invalid status transition (e.g., pending → delivered) - should fail",
+                    "name": "Invalid Status Transition",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json",
+                        "type": "text"
+                      },
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json",
+                        "type": "text"
+                      },
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{token}}",
+                        "type": "text"
+                      }
+                    ]
+                  },
+                  "response": [
+                    {
+                      "name": "Error Response - Invalid Transition",
+                      "originalRequest": {
+                        "method": "PATCH",
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"status\": \"delivered\"\n}"
+                        },
+                        "url": "{{base_url}}/orders/{{order_uuid}}/status"
+                      },
+                      "status": "Unprocessable Entity",
+                      "code": 422,
+                      "body": "{\n    \"success\": false,\n    \"message\": \"Invalid status transition\",\n    \"data\": null,\n    \"errors\": [\n        \"Cannot transition from 'pending' to 'delivered'. Valid next statuses are: confirmed, cancelled\"\n    ]\n}"
+                    }
+                  ]
+                },
+                {
+                  "name": "Invalid Status Value",
+                  "request": {
+                    "method": "PATCH",
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"status\": \"invalid_status\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{base_url}}/orders/{{order_uuid}}/status",
+                      "host": [
+                        "{{base_url}}"
+                      ],
+                      "path": [
+                        "orders",
+                        "{{order_uuid}}",
+                        "status"
+                      ]
+                    },
+                    "description": "Try invalid status value - should fail validation",
+                    "name": "Invalid Status Value",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json",
+                        "type": "text"
+                      },
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json",
+                        "type": "text"
+                      },
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{token}}",
+                        "type": "text"
+                      }
+                    ]
+                  },
+                  "response": [
+                    {
+                      "name": "Error Response - Invalid Status",
+                      "originalRequest": {
+                        "method": "PATCH",
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"status\": \"invalid_status\"\n}"
+                        },
+                        "url": "{{base_url}}/orders/{{order_uuid}}/status"
+                      },
+                      "status": "Unprocessable Entity",
+                      "code": 422,
+                      "body": "{\n    \"success\": false,\n    \"message\": \"Validation failed\",\n    \"data\": null,\n    \"errors\": [\n        \"The status field must be a valid order status (pending, confirmed, processing, shipped, delivered, cancelled)\"\n    ]\n}"
+                    }
+                  ]
+                },
+                {
+                  "name": "Missing Status Field",
+                  "request": {
+                    "method": "PATCH",
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"note\": \"Missing status field\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{base_url}}/orders/{{order_uuid}}/status",
+                      "host": [
+                        "{{base_url}}"
+                      ],
+                      "path": [
+                        "orders",
+                        "{{order_uuid}}",
+                        "status"
+                      ]
+                    },
+                    "description": "Try update without status field - should fail validation",
+                    "name": "Missing Status Field",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json",
+                        "type": "text"
+                      },
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json",
+                        "type": "text"
+                      },
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{token}}",
+                        "type": "text"
+                      }
+                    ]
+                  },
+                  "response": [
+                    {
+                      "name": "Error Response - Missing Field",
+                      "originalRequest": {
+                        "method": "PATCH",
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"note\": \"Missing status field\"\n}"
+                        },
+                        "url": "{{base_url}}/orders/{{order_uuid}}/status"
+                      },
+                      "status": "Unprocessable Entity",
+                      "code": 422,
+                      "body": "{\n    \"success\": false,\n    \"message\": \"Validation failed\",\n    \"data\": null,\n    \"errors\": [\n        \"The status field is required\"\n    ]\n}"
+                    }
+                  ]
+                },
+                {
+                  "name": "Update Delivered Order Status",
+                  "request": {
+                    "method": "PATCH",
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"status\": \"processing\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{base_url}}/orders/{{order_uuid}}/status",
+                      "host": [
+                        "{{base_url}}"
+                      ],
+                      "path": [
+                        "orders",
+                        "{{order_uuid}}",
+                        "status"
+                      ]
+                    },
+                    "description": "Try to change delivered order status - should fail (delivered is final)",
+                    "name": "Update Delivered Order Status",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json",
+                        "type": "text"
+                      },
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json",
+                        "type": "text"
+                      },
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{token}}",
+                        "type": "text"
+                      }
+                    ]
+                  },
+                  "response": [
+                    {
+                      "name": "Error Response - Final Status",
+                      "originalRequest": {
+                        "method": "PATCH",
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"status\": \"processing\"\n}"
+                        },
+                        "url": "{{base_url}}/orders/{{order_uuid}}/status"
+                      },
+                      "status": "Unprocessable Entity",
+                      "code": 422,
+                      "body": "{\n    \"success\": false,\n    \"message\": \"Invalid status transition\",\n    \"data\": null,\n    \"errors\": [\n        \"Cannot transition from 'delivered' status. Order is in final state\"\n    ]\n}"
+                    }
+                  ]
+                }
+              ]
             },
             {
-              "$ref": "collections/orders/order-statuses.json#/item/5",
-              "name": "undefined Request 6"
-            },
-            {
-              "$ref": "collections/orders/order-statuses.json#/item/6",
-              "name": "undefined Request 7"
+              "name": "Cancel Order Scenarios",
+              "description": "Test order cancellation at different stages",
+              "item": [
+                {
+                  "name": "Cancel Pending Order",
+                  "request": {
+                    "method": "PATCH",
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"status\": \"cancelled\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{base_url}}/orders/{{order_uuid}}/status",
+                      "host": [
+                        "{{base_url}}"
+                      ],
+                      "path": [
+                        "orders",
+                        "{{order_uuid}}",
+                        "status"
+                      ]
+                    },
+                    "description": "Cancel order while pending (pending → cancelled)",
+                    "name": "Cancel Pending Order",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json",
+                        "type": "text"
+                      },
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json",
+                        "type": "text"
+                      },
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{token}}",
+                        "type": "text"
+                      }
+                    ]
+                  },
+                  "response": [
+                    {
+                      "name": "Success Response - Order Cancelled",
+                      "originalRequest": {
+                        "method": "PATCH",
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"status\": \"cancelled\"\n}"
+                        },
+                        "url": "{{base_url}}/orders/{{order_uuid}}/status"
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "body": "{\n    \"success\": true,\n    \"message\": \"Order status updated successfully\",\n    \"data\": {\n        \"uuid\": \"0198d5bf-a0b3-72d1-8c56-b4824c7f7630\",\n        \"order_number\": \"ORD-2025-001\",\n        \"status\": \"cancelled\",\n        \"old_status\": \"pending\",\n        \"total_amount\": 15000,\n        \"updated_at\": \"2025-08-23T14:30:00.000000Z\"\n    },\n    \"errors\": []\n}"
+                    }
+                  ]
+                },
+                {
+                  "name": "Cancel Confirmed Order",
+                  "request": {
+                    "method": "PATCH",
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"status\": \"cancelled\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{base_url}}/orders/{{order_uuid}}/status",
+                      "host": [
+                        "{{base_url}}"
+                      ],
+                      "path": [
+                        "orders",
+                        "{{order_uuid}}",
+                        "status"
+                      ]
+                    },
+                    "description": "Cancel order while confirmed (confirmed → cancelled)",
+                    "name": "Cancel Confirmed Order",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json",
+                        "type": "text"
+                      },
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json",
+                        "type": "text"
+                      },
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{token}}",
+                        "type": "text"
+                      }
+                    ]
+                  },
+                  "response": [
+                    {
+                      "name": "Success Response - Order Cancelled",
+                      "originalRequest": {
+                        "method": "PATCH",
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"status\": \"cancelled\"\n}"
+                        },
+                        "url": "{{base_url}}/orders/{{order_uuid}}/status"
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "body": "{\n    \"success\": true,\n    \"message\": \"Order status updated successfully\",\n    \"data\": {\n        \"uuid\": \"0198d5bf-a0b3-72d1-8c56-b4824c7f7630\",\n        \"order_number\": \"ORD-2025-001\",\n        \"status\": \"cancelled\",\n        \"old_status\": \"confirmed\",\n        \"total_amount\": 15000,\n        \"updated_at\": \"2025-08-23T14:30:00.000000Z\"\n    },\n    \"errors\": []\n}"
+                    }
+                  ]
+                },
+                {
+                  "name": "Cancel Processing Order",
+                  "request": {
+                    "method": "PATCH",
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"status\": \"cancelled\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{base_url}}/orders/{{order_uuid}}/status",
+                      "host": [
+                        "{{base_url}}"
+                      ],
+                      "path": [
+                        "orders",
+                        "{{order_uuid}}",
+                        "status"
+                      ]
+                    },
+                    "description": "Cancel order while processing (processing → cancelled)",
+                    "name": "Cancel Processing Order",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json",
+                        "type": "text"
+                      },
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json",
+                        "type": "text"
+                      },
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{token}}",
+                        "type": "text"
+                      }
+                    ]
+                  },
+                  "response": [
+                    {
+                      "name": "Success Response - Order Cancelled",
+                      "originalRequest": {
+                        "method": "PATCH",
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"status\": \"cancelled\"\n}"
+                        },
+                        "url": "{{base_url}}/orders/{{order_uuid}}/status"
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "body": "{\n    \"success\": true,\n    \"message\": \"Order status updated successfully\",\n    \"data\": {\n        \"uuid\": \"0198d5bf-a0b3-72d1-8c56-b4824c7f7630\",\n        \"order_number\": \"ORD-2025-001\",\n        \"status\": \"cancelled\",\n        \"old_status\": \"processing\",\n        \"total_amount\": 15000,\n        \"updated_at\": \"2025-08-23T14:30:00.000000Z\"\n    },\n    \"errors\": []\n}"
+                    }
+                  ]
+                },
+                {
+                  "name": "Try Cancel Shipped Order",
+                  "request": {
+                    "method": "PATCH",
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"status\": \"cancelled\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{base_url}}/orders/{{order_uuid}}/status",
+                      "host": [
+                        "{{base_url}}"
+                      ],
+                      "path": [
+                        "orders",
+                        "{{order_uuid}}",
+                        "status"
+                      ]
+                    },
+                    "description": "Try to cancel shipped order - should fail (shipped cannot be cancelled)",
+                    "name": "Try Cancel Shipped Order",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json",
+                        "type": "text"
+                      },
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json",
+                        "type": "text"
+                      },
+                      {
+                        "key": "Authorization",
+                        "value": "Bearer {{token}}",
+                        "type": "text"
+                      }
+                    ]
+                  },
+                  "response": [
+                    {
+                      "name": "Error Response - Cannot Cancel Shipped",
+                      "originalRequest": {
+                        "method": "PATCH",
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"status\": \"cancelled\"\n}"
+                        },
+                        "url": "{{base_url}}/orders/{{order_uuid}}/status"
+                      },
+                      "status": "Unprocessable Entity",
+                      "code": 422,
+                      "body": "{\n    \"success\": false,\n    \"message\": \"Invalid status transition\",\n    \"data\": null,\n    \"errors\": [\n        \"Cannot transition from 'shipped' to 'cancelled'. Shipped orders cannot be cancelled\"\n    ]\n}"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }
@@ -4455,7 +5661,7 @@
             "method": "POST",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"code\": \"TR\",\n  \"name\": \"Turkey\",\n  \"currency_uuid\": \"{{currency_uuid}}\",\n  \"is_active\": true\n}",
+              "raw": "{\n  \"code\": \"NL\",\n  \"name\": \"Netherlands\",\n  \"locale\": \"en-NL\",\n  \"currency_uuid\": \"{{currency_uuid}}\",\n  \"is_active\": true\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -4567,7 +5773,7 @@
             "method": "PUT",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"code\": \"TR\",\n  \"name\": \"Republic of Turkey\",\n  \"currency_uuid\": \"{{currency_uuid}}\",\n  \"is_active\": true\n}",
+              "raw": "{\n  \"code\": \"NL\",\n  \"name\": \"Kingdom of the Netherlands\",\n  \"locale\": \"en-NL\",\n  \"currency_uuid\": \"{{currency_uuid}}\",\n  \"is_active\": true\n}",
               "options": {
                 "raw": {
                   "language": "json"

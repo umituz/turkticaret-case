@@ -119,8 +119,7 @@
             { "$ref": "collections/orders/order-statuses.json#/item/2" },
             { "$ref": "collections/orders/order-statuses.json#/item/3" },
             { "$ref": "collections/orders/order-statuses.json#/item/4" },
-            { "$ref": "collections/orders/order-statuses.json#/item/5" },
-            { "$ref": "collections/orders/order-statuses.json#/item/6" }
+            { "$ref": "collections/orders/order-statuses.json#/item/5" }
           ]
         }
       ]
