@@ -243,12 +243,14 @@ class CartResourceTest extends BaseResourceUnitTest
             (object)['quantity' => 3],
             (object)['quantity' => 1],
         ]);
-        $cartItems->shouldReceive('sum')->with('quantity')->andReturn(6); // 2 + 3 + 1
         
         $cartData = $this->getResourceData();
-        $cart = $this->createMockModel($cartData);
-        $cart->shouldReceive('getAttribute')->with('cartItems')->andReturn($cartItems);
-        $cart->cartItems = $cartItems;
+        $cart = $this->createMockModelWithRelations($cartData, [
+            'cartItems' => $cartItems,
+        ]);
+        
+        // Mock whenLoaded to return the collection
+        $cart->shouldReceive('whenLoaded')->with('cartItems')->andReturn($cartItems);
         
         $request = new Request();
 
@@ -270,12 +272,14 @@ class CartResourceTest extends BaseResourceUnitTest
             (object)['total_price' => 4999],
             (object)['total_price' => 1500],
         ]);
-        $cartItems->shouldReceive('sum')->with('total_price')->andReturn(10497); // 3998 + 4999 + 1500
         
         $cartData = $this->getResourceData();
-        $cart = $this->createMockModel($cartData);
-        $cart->shouldReceive('getAttribute')->with('cartItems')->andReturn($cartItems);
-        $cart->cartItems = $cartItems;
+        $cart = $this->createMockModelWithRelations($cartData, [
+            'cartItems' => $cartItems,
+        ]);
+        
+        // Mock whenLoaded to return the collection
+        $cart->shouldReceive('whenLoaded')->with('cartItems')->andReturn($cartItems);
         
         $request = new Request();
 
@@ -284,8 +288,9 @@ class CartResourceTest extends BaseResourceUnitTest
         $result = $resource->toArray($request);
 
         // Assert
-        $this->assertEquals(10497, $result['total_amount']);
-        $this->assertIsInt($result['total_amount']);
+        $this->assertArrayHasKey('raw', $result['total_amount']);
+        $this->assertEquals(104.97, $result['total_amount']['raw']);
+        $this->assertIsArray($result['total_amount']);
     }
 
     #[Test]
@@ -293,13 +298,14 @@ class CartResourceTest extends BaseResourceUnitTest
     {
         // Arrange
         $cartItems = $this->createMockCollection([]);
-        $cartItems->shouldReceive('sum')->with('quantity')->andReturn(0);
-        $cartItems->shouldReceive('sum')->with('total_price')->andReturn(0);
         
         $cartData = $this->getResourceData();
-        $cart = $this->createMockModel($cartData);
-        $cart->shouldReceive('getAttribute')->with('cartItems')->andReturn($cartItems);
-        $cart->cartItems = $cartItems;
+        $cart = $this->createMockModelWithRelations($cartData, [
+            'cartItems' => $cartItems,
+        ]);
+        
+        // Mock whenLoaded to return the empty collection
+        $cart->shouldReceive('whenLoaded')->with('cartItems')->andReturn($cartItems);
         
         $request = new Request();
 
@@ -309,7 +315,8 @@ class CartResourceTest extends BaseResourceUnitTest
 
         // Assert
         $this->assertEquals(0, $result['total_items']);
-        $this->assertEquals(0, $result['total_amount']);
+        $this->assertArrayHasKey('raw', $result['total_amount']);
+        $this->assertEquals(0.0, $result['total_amount']['raw']);
     }
 
     #[Test]
@@ -318,8 +325,7 @@ class CartResourceTest extends BaseResourceUnitTest
         // Arrange
         $cartData = $this->getResourceData();
         $cart = $this->createMockModel($cartData);
-        $cart->shouldReceive('getAttribute')->with('cartItems')->andReturn(null);
-        $cart->cartItems = null;
+        $cart->shouldReceive('relationLoaded')->with('cartItems')->andReturn(false);
         
         $request = new Request();
 
@@ -329,7 +335,8 @@ class CartResourceTest extends BaseResourceUnitTest
 
         // Assert
         $this->assertEquals(0, $result['total_items']);
-        $this->assertEquals(0, $result['total_amount']);
+        $this->assertArrayHasKey('raw', $result['total_amount']);
+        $this->assertEquals(0.0, $result['total_amount']['raw']);
     }
 
     #[Test]
@@ -366,13 +373,14 @@ class CartResourceTest extends BaseResourceUnitTest
     {
         // Arrange
         $cartItems = $this->createMockCollection(array_fill(0, 50, (object)['quantity' => 1, 'total_price' => 999]));
-        $cartItems->shouldReceive('sum')->with('quantity')->andReturn(50); // 50 items, 1 each
-        $cartItems->shouldReceive('sum')->with('total_price')->andReturn(49950); // 50 * 999
         
         $cartData = $this->getResourceData();
-        $cart = $this->createMockModel($cartData);
-        $cart->shouldReceive('getAttribute')->with('cartItems')->andReturn($cartItems);
-        $cart->cartItems = $cartItems;
+        $cart = $this->createMockModelWithRelations($cartData, [
+            'cartItems' => $cartItems,
+        ]);
+        
+        // Mock whenLoaded to return the collection
+        $cart->shouldReceive('whenLoaded')->with('cartItems')->andReturn($cartItems);
         
         $request = new Request();
 
@@ -382,7 +390,8 @@ class CartResourceTest extends BaseResourceUnitTest
 
         // Assert
         $this->assertEquals(50, $result['total_items']);
-        $this->assertEquals(49950, $result['total_amount']);
+        $this->assertArrayHasKey('raw', $result['total_amount']);
+        $this->assertEquals(499.5, $result['total_amount']['raw']);
     }
 
     #[Test]
@@ -392,13 +401,14 @@ class CartResourceTest extends BaseResourceUnitTest
         $cartItems = $this->createMockCollection([
             (object)['quantity' => 1, 'total_price' => 99999999], // Very expensive item
         ]);
-        $cartItems->shouldReceive('sum')->with('quantity')->andReturn(1);
-        $cartItems->shouldReceive('sum')->with('total_price')->andReturn(99999999);
         
         $cartData = $this->getResourceData();
-        $cart = $this->createMockModel($cartData);
-        $cart->shouldReceive('getAttribute')->with('cartItems')->andReturn($cartItems);
-        $cart->cartItems = $cartItems;
+        $cart = $this->createMockModelWithRelations($cartData, [
+            'cartItems' => $cartItems,
+        ]);
+        
+        // Mock whenLoaded to return the collection
+        $cart->shouldReceive('whenLoaded')->with('cartItems')->andReturn($cartItems);
         
         $request = new Request();
 
@@ -408,7 +418,8 @@ class CartResourceTest extends BaseResourceUnitTest
 
         // Assert
         $this->assertEquals(1, $result['total_items']);
-        $this->assertEquals(99999999, $result['total_amount']);
+        $this->assertArrayHasKey('raw', $result['total_amount']);
+        $this->assertEquals(999999.99, $result['total_amount']['raw']);
     }
 
     #[Test]
@@ -420,13 +431,14 @@ class CartResourceTest extends BaseResourceUnitTest
             (object)['quantity' => 1, 'total_price' => 5000],   // High price, low quantity
             (object)['quantity' => 3, 'total_price' => 1500],   // Medium price, medium quantity
         ]);
-        $cartItems->shouldReceive('sum')->with('quantity')->andReturn(14); // 10 + 1 + 3
-        $cartItems->shouldReceive('sum')->with('total_price')->andReturn(7000); // 500 + 5000 + 1500
         
         $cartData = $this->getResourceData();
-        $cart = $this->createMockModel($cartData);
-        $cart->shouldReceive('getAttribute')->with('cartItems')->andReturn($cartItems);
-        $cart->cartItems = $cartItems;
+        $cart = $this->createMockModelWithRelations($cartData, [
+            'cartItems' => $cartItems,
+        ]);
+        
+        // Mock whenLoaded to return the collection
+        $cart->shouldReceive('whenLoaded')->with('cartItems')->andReturn($cartItems);
         
         $request = new Request();
 
@@ -436,6 +448,7 @@ class CartResourceTest extends BaseResourceUnitTest
 
         // Assert
         $this->assertEquals(14, $result['total_items']);
-        $this->assertEquals(7000, $result['total_amount']);
+        $this->assertArrayHasKey('raw', $result['total_amount']);
+        $this->assertEquals(70.0, $result['total_amount']['raw']);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Services\Cart;
 
+use App\DTOs\Cart\CartItemDTO;
 use App\Exceptions\Product\InsufficientStockException;
 use App\Exceptions\Product\OutOfStockException;
 use App\Models\Cart\Cart;
@@ -149,10 +150,7 @@ class CartServiceTest extends BaseServiceUnitTest
             ->with($productUuid)
             ->andReturn($product);
 
-        $data = [
-            'product_uuid' => $productUuid,
-            'quantity' => $quantity
-        ];
+        $data = new CartItemDTO($productUuid, $quantity);
 
         $result = $this->service->addToCart($userUuid, $data);
 
@@ -211,10 +209,7 @@ class CartServiceTest extends BaseServiceUnitTest
             ->with($productUuid)
             ->andReturn($product);
 
-        $data = [
-            'product_uuid' => $productUuid,
-            'quantity' => $additionalQuantity
-        ];
+        $data = new CartItemDTO($productUuid, $additionalQuantity);
 
         $result = $this->service->addToCart($userUuid, $data);
 
@@ -254,10 +249,7 @@ class CartServiceTest extends BaseServiceUnitTest
             ->with($productUuid)
             ->andReturn($product);
 
-        $data = [
-            'product_uuid' => $productUuid,
-            'quantity' => $quantity
-        ];
+        $data = new CartItemDTO($productUuid, $quantity);
 
         $this->expectException(OutOfStockException::class);
 
@@ -302,10 +294,7 @@ class CartServiceTest extends BaseServiceUnitTest
             ->with($productUuid)
             ->andReturn($product);
 
-        $data = [
-            'product_uuid' => $productUuid,
-            'quantity' => $quantity
-        ];
+        $data = new CartItemDTO($productUuid, $quantity);
 
         $this->expectException(InsufficientStockException::class);
 
@@ -351,10 +340,7 @@ class CartServiceTest extends BaseServiceUnitTest
             ->with($productUuid)
             ->andReturn($product);
 
-        $data = [
-            'product_uuid' => $productUuid,
-            'quantity' => $additionalQuantity
-        ];
+        $data = new CartItemDTO($productUuid, $additionalQuantity);
 
         $this->expectException(OutOfStockException::class);
 
@@ -411,10 +397,7 @@ class CartServiceTest extends BaseServiceUnitTest
             ->with($productUuid)
             ->andReturn($product);
 
-        $data = [
-            'product_uuid' => $productUuid,
-            'quantity' => $newQuantity
-        ];
+        $data = new CartItemDTO($productUuid, $newQuantity);
 
         $result = $this->service->updateCartItem($userUuid, $data);
 
@@ -473,10 +456,7 @@ class CartServiceTest extends BaseServiceUnitTest
         // Let's mock the jsonSerialize method to avoid serialization issues
         $cart->shouldReceive('jsonSerialize')->andReturn(['test' => 'cart']);
 
-        $data = [
-            'product_uuid' => $productUuid,
-            'quantity' => $newQuantity
-        ];
+        $data = new CartItemDTO($productUuid, $newQuantity);
         
         $this->expectException(OutOfStockException::class);
         
@@ -532,10 +512,7 @@ class CartServiceTest extends BaseServiceUnitTest
         $cart->shouldReceive('fresh')->with(['cartItems.product'])->andReturnSelf();
         $cart->shouldReceive('jsonSerialize')->andReturn(['test' => 'cart']);
 
-        $data = [
-            'product_uuid' => $productUuid,
-            'quantity' => $newQuantity
-        ];
+        $data = new CartItemDTO($productUuid, $newQuantity);
 
         $this->expectException(InsufficientStockException::class);
 
@@ -568,10 +545,7 @@ class CartServiceTest extends BaseServiceUnitTest
             ->with($userUuid)
             ->andReturn($cart);
 
-        $data = [
-            'product_uuid' => $productUuid,
-            'quantity' => $newQuantity
-        ];
+        $data = new CartItemDTO($productUuid, $newQuantity);
 
         $result = $this->service->updateCartItem($userUuid, $data);
 
@@ -707,10 +681,7 @@ class CartServiceTest extends BaseServiceUnitTest
             ->with($productUuid)
             ->andReturn($product);
 
-        $data = [
-            'product_uuid' => $productUuid,
-            'quantity' => $newQuantity
-        ];
+        $data = new CartItemDTO($productUuid, $newQuantity);
 
         $result = $this->service->updateCartItem($userUuid, $data);
 

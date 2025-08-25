@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\DTOs\Cart;
 
-use App\DTOs\Cart\AddToCartDTO;
+use App\DTOs\Cart\CartItemDTO;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\Group;
@@ -10,14 +10,14 @@ use PHPUnit\Framework\Attributes\Small;
 use Tests\Base\UnitTestCase;
 
 /**
- * Unit tests for AddToCartDTO
- * Tests DTO creation, validation and conversion methods
+ * Unit tests for CartItemDTO
+ * Tests unified DTO for cart item operations including add and update
  */
-#[CoversClass(AddToCartDTO::class)]
+#[CoversClass(CartItemDTO::class)]
 #[Group('unit')]
 #[Group('dtos')]
 #[Small]
-class AddToCartDTOTest extends UnitTestCase
+class CartItemDTOTest extends UnitTestCase
 {
     #[Test]
     public function it_can_be_instantiated_with_required_properties(): void
@@ -27,7 +27,7 @@ class AddToCartDTOTest extends UnitTestCase
         $quantity = 5;
 
         // Act
-        $dto = new AddToCartDTO($productUuid, $quantity);
+        $dto = new CartItemDTO($productUuid, $quantity);
 
         // Assert
         $this->assertEquals($productUuid, $dto->product_uuid);
@@ -44,10 +44,10 @@ class AddToCartDTOTest extends UnitTestCase
         ];
 
         // Act
-        $dto = AddToCartDTO::fromArray($data);
+        $dto = CartItemDTO::fromArray($data);
 
         // Assert
-        $this->assertInstanceOf(AddToCartDTO::class, $dto);
+        $this->assertInstanceOf(CartItemDTO::class, $dto);
         $this->assertEquals($data['product_uuid'], $dto->product_uuid);
         $this->assertEquals($data['quantity'], $dto->quantity);
     }
@@ -56,7 +56,7 @@ class AddToCartDTOTest extends UnitTestCase
     public function to_array_converts_dto_to_array_for_database(): void
     {
         // Arrange
-        $dto = new AddToCartDTO('product-123', 2);
+        $dto = new CartItemDTO('product-123', 2);
         $expectedArray = [
             'product_uuid' => 'product-123',
             'quantity' => 2,
@@ -79,7 +79,7 @@ class AddToCartDTOTest extends UnitTestCase
         ];
 
         // Act
-        $dto = AddToCartDTO::fromArray($originalData);
+        $dto = CartItemDTO::fromArray($originalData);
         $resultArray = $dto->toArray();
 
         // Assert
@@ -93,7 +93,7 @@ class AddToCartDTOTest extends UnitTestCase
         $quantities = [1, 5, 99, 100];
         
         foreach ($quantities as $quantity) {
-            $dto = new AddToCartDTO('test-uuid', $quantity);
+            $dto = new CartItemDTO('test-uuid', $quantity);
             $this->assertEquals($quantity, $dto->quantity);
         }
     }
@@ -109,7 +109,7 @@ class AddToCartDTOTest extends UnitTestCase
         ];
         
         foreach ($uuids as $uuid) {
-            $dto = new AddToCartDTO($uuid, 1);
+            $dto = new CartItemDTO($uuid, 1);
             $this->assertEquals($uuid, $dto->product_uuid);
         }
     }
@@ -124,7 +124,7 @@ class AddToCartDTOTest extends UnitTestCase
         ];
 
         // Act
-        $dto = AddToCartDTO::fromArray($minimalData);
+        $dto = CartItemDTO::fromArray($minimalData);
 
         // Assert
         $this->assertEquals($minimalData['product_uuid'], $dto->product_uuid);
@@ -135,10 +135,44 @@ class AddToCartDTOTest extends UnitTestCase
     public function dto_properties_are_readonly(): void
     {
         // Arrange
-        $dto = new AddToCartDTO('test-uuid', 5);
+        $dto = new CartItemDTO('test-uuid', 5);
 
         // Assert - PHP readonly properties are enforced by the language
         $this->assertEquals('test-uuid', $dto->product_uuid);
         $this->assertEquals(5, $dto->quantity);
+    }
+
+    #[Test]
+    public function it_can_be_used_for_cart_add_operations(): void
+    {
+        // Arrange
+        $data = [
+            'product_uuid' => 'add-operation-uuid',
+            'quantity' => 2,
+        ];
+
+        // Act
+        $dto = CartItemDTO::fromArray($data);
+
+        // Assert - Same DTO can be used for both add and update operations
+        $this->assertEquals($data['product_uuid'], $dto->product_uuid);
+        $this->assertEquals($data['quantity'], $dto->quantity);
+    }
+
+    #[Test]
+    public function it_can_be_used_for_cart_update_operations(): void
+    {
+        // Arrange
+        $data = [
+            'product_uuid' => 'update-operation-uuid',
+            'quantity' => 8,
+        ];
+
+        // Act
+        $dto = CartItemDTO::fromArray($data);
+
+        // Assert - Same DTO can be used for both add and update operations
+        $this->assertEquals($data['product_uuid'], $dto->product_uuid);
+        $this->assertEquals($data['quantity'], $dto->quantity);
     }
 }

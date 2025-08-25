@@ -23,12 +23,9 @@ final class SettingKeyEnumTest extends UnitTestCase
             'DEFAULT_LANGUAGE', 
             'DEFAULT_COUNTRY',
             'DEFAULT_TIMEZONE',
-            'TAX_ENABLED',
-            'SHIPPING_ENABLED',
             'MAINTENANCE_MODE',
             'APP_NAME',
             'APP_URL',
-            'REGISTRATION_ENABLED',
             'ITEMS_PER_PAGE',
             'THEME',
             'LOGO_URL',
@@ -53,12 +50,9 @@ final class SettingKeyEnumTest extends UnitTestCase
             'DEFAULT_LANGUAGE' => 'default_language',
             'DEFAULT_COUNTRY' => 'default_country',
             'DEFAULT_TIMEZONE' => 'default_timezone',
-            'TAX_ENABLED' => 'tax_enabled',
-            'SHIPPING_ENABLED' => 'shipping_enabled',
             'MAINTENANCE_MODE' => 'maintenance_mode',
             'APP_NAME' => 'app_name',
             'APP_URL' => 'app_url',
-            'REGISTRATION_ENABLED' => 'registration_enabled',
             'ITEMS_PER_PAGE' => 'items_per_page',
             'THEME' => 'theme',
             'LOGO_URL' => 'logo_url',
@@ -82,12 +76,9 @@ final class SettingKeyEnumTest extends UnitTestCase
             'default_language',
             'default_country',
             'default_timezone',
-            'tax_enabled',
-            'shipping_enabled',
             'maintenance_mode',
             'app_name',
             'app_url',
-            'registration_enabled',
             'items_per_page',
             'theme',
             'logo_url',
@@ -117,12 +108,9 @@ final class SettingKeyEnumTest extends UnitTestCase
             [SettingKeyEnum::DEFAULT_LANGUAGE, 'Default Language'],
             [SettingKeyEnum::DEFAULT_COUNTRY, 'Default Country'],
             [SettingKeyEnum::DEFAULT_TIMEZONE, 'Default Timezone'],
-            [SettingKeyEnum::TAX_ENABLED, 'Tax Enabled'],
-            [SettingKeyEnum::SHIPPING_ENABLED, 'Shipping Enabled'],
             [SettingKeyEnum::MAINTENANCE_MODE, 'Maintenance Mode'],
             [SettingKeyEnum::APP_NAME, 'Application Name'],
             [SettingKeyEnum::APP_URL, 'Application URL'],
-            [SettingKeyEnum::REGISTRATION_ENABLED, 'User Registration Enabled'],
             [SettingKeyEnum::ITEMS_PER_PAGE, 'Items Per Page'],
             [SettingKeyEnum::THEME, 'Application Theme'],
             [SettingKeyEnum::LOGO_URL, 'Logo URL'],
@@ -143,8 +131,6 @@ final class SettingKeyEnumTest extends UnitTestCase
         return [
             // Commerce group
             [SettingKeyEnum::DEFAULT_CURRENCY, 'commerce'],
-            [SettingKeyEnum::TAX_ENABLED, 'commerce'],
-            [SettingKeyEnum::SHIPPING_ENABLED, 'commerce'],
             
             // Localization group
             [SettingKeyEnum::DEFAULT_LANGUAGE, 'localization'],
@@ -155,7 +141,6 @@ final class SettingKeyEnumTest extends UnitTestCase
             [SettingKeyEnum::MAINTENANCE_MODE, 'system'],
             [SettingKeyEnum::APP_NAME, 'system'],
             [SettingKeyEnum::APP_URL, 'system'],
-            [SettingKeyEnum::REGISTRATION_ENABLED, 'system'],
             
             // UI group
             [SettingKeyEnum::ITEMS_PER_PAGE, 'ui'],
@@ -189,10 +174,7 @@ final class SettingKeyEnumTest extends UnitTestCase
             [SettingKeyEnum::LOGO_URL, 'string'],
             
             // Boolean types
-            [SettingKeyEnum::TAX_ENABLED, 'boolean'],
-            [SettingKeyEnum::SHIPPING_ENABLED, 'boolean'],
             [SettingKeyEnum::MAINTENANCE_MODE, 'boolean'],
-            [SettingKeyEnum::REGISTRATION_ENABLED, 'boolean'],
             [SettingKeyEnum::EMAIL_NOTIFICATIONS_ENABLED, 'boolean'],
             [SettingKeyEnum::SMS_NOTIFICATIONS_ENABLED, 'boolean'],
             
@@ -225,10 +207,7 @@ final class SettingKeyEnumTest extends UnitTestCase
             [SettingKeyEnum::LOGO_URL, '/images/logo.png'],
             
             // Boolean defaults
-            [SettingKeyEnum::TAX_ENABLED, true],
-            [SettingKeyEnum::SHIPPING_ENABLED, true],
             [SettingKeyEnum::MAINTENANCE_MODE, false],
-            [SettingKeyEnum::REGISTRATION_ENABLED, true],
             [SettingKeyEnum::EMAIL_NOTIFICATIONS_ENABLED, true],
             [SettingKeyEnum::SMS_NOTIFICATIONS_ENABLED, false],
             
@@ -251,12 +230,9 @@ final class SettingKeyEnumTest extends UnitTestCase
             [SettingKeyEnum::DEFAULT_LANGUAGE, 'Default language for guest users'],
             [SettingKeyEnum::DEFAULT_COUNTRY, 'Default country for guest users'],
             [SettingKeyEnum::DEFAULT_TIMEZONE, 'Default timezone for the application'],
-            [SettingKeyEnum::TAX_ENABLED, 'Enable tax calculations globally'],
-            [SettingKeyEnum::SHIPPING_ENABLED, 'Enable shipping functionality'],
             [SettingKeyEnum::MAINTENANCE_MODE, 'Put application in maintenance mode'],
             [SettingKeyEnum::APP_NAME, 'Application display name'],
             [SettingKeyEnum::APP_URL, 'Base URL of the application'],
-            [SettingKeyEnum::REGISTRATION_ENABLED, 'Allow new user registrations'],
             [SettingKeyEnum::ITEMS_PER_PAGE, 'Default number of items per page in listings'],
             [SettingKeyEnum::THEME, 'Default theme for the application'],
             [SettingKeyEnum::LOGO_URL, 'URL or path to the application logo'],
@@ -380,7 +356,7 @@ final class SettingKeyEnumTest extends UnitTestCase
 
         $commerceNames = array_map(fn($case) => $case->name, $commerceSettings);
         
-        $expectedCommerce = ['DEFAULT_CURRENCY', 'TAX_ENABLED', 'SHIPPING_ENABLED'];
+        $expectedCommerce = ['DEFAULT_CURRENCY'];
         
         foreach ($expectedCommerce as $expected) {
             $this->assertContains($expected, $commerceNames, "Missing commerce setting: {$expected}");

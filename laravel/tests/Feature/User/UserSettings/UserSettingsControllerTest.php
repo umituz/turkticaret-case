@@ -177,8 +177,8 @@ class UserSettingsControllerTest extends BaseFeatureTest
     {
         $passwordData = [
             'current_password' => 'password123',
-            'new_password' => 'newpassword456',
-            'new_password_confirmation' => 'newpassword456',
+            'password' => 'newpassword456',
+            'password_confirmation' => 'newpassword456',
         ];
 
         $response = $this->actingAs($this->testUser, 'sanctum')->putJson(
@@ -208,8 +208,8 @@ class UserSettingsControllerTest extends BaseFeatureTest
 
         $this->assertValidationErrorResponse($response, [
             'current_password',
-            'new_password',
-            'new_password_confirmation'
+            'password',
+            'password_confirmation'
         ]);
     }
 
@@ -218,8 +218,8 @@ class UserSettingsControllerTest extends BaseFeatureTest
     {
         $passwordData = [
             'current_password' => 'wrongpassword',
-            'new_password' => 'newpassword456',
-            'new_password_confirmation' => 'newpassword456',
+            'password' => 'newpassword456',
+            'password_confirmation' => 'newpassword456',
         ];
 
         $response = $this->actingAs($this->testUser, 'sanctum')->putJson(
@@ -239,8 +239,8 @@ class UserSettingsControllerTest extends BaseFeatureTest
     {
         $passwordData = [
             'current_password' => 'password123',
-            'new_password' => 'newpassword456',
-            'new_password_confirmation' => 'differentpassword',
+            'password' => 'newpassword456',
+            'password_confirmation' => 'differentpassword',
         ];
 
         $response = $this->actingAs($this->testUser, 'sanctum')->putJson(
@@ -248,7 +248,7 @@ class UserSettingsControllerTest extends BaseFeatureTest
             $passwordData
         );
 
-        $this->assertValidationErrorResponse($response, ['new_password']);
+        $this->assertValidationErrorResponse($response, ['password']);
     }
 
     #[Test]

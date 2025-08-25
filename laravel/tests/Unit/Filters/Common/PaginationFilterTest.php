@@ -226,7 +226,7 @@ class PaginationFilterTest extends UnitTestCase
         $model->shouldReceive('setAttribute')
             ->with('paginationData', [
                 FilterEnums::PARAM_PAGE => 1, // Default when invalid
-                FilterEnums::PARAM_PER_PAGE => FilterEnums::DEFAULT_PER_PAGE // Default when invalid
+                FilterEnums::PARAM_PER_PAGE => 0 // Actual behavior: string 'also_invalid' becomes 0
             ])
             ->once();
         

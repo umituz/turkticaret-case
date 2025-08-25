@@ -8,26 +8,26 @@ use App\Models\Order\OrderStatusHistory;
 use App\Models\Product\Product;
 use App\Models\User\User;
 use App\Enums\Order\OrderStatusEnum;
-use Tests\Base\UnitTestCase;
+use Tests\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\Group;
-use PHPUnit\Framework\Attributes\Small;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
-use Mockery;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 /**
- * Unit tests for DashboardRepository
- * Tests dashboard data retrieval methods with model mocking
+ * Integration tests for DashboardRepository
+ * Tests dashboard data retrieval methods with real database
  */
 #[CoversClass(DashboardRepository::class)]
 #[Group('unit')]
 #[Group('repositories')]
-#[Small]
-class DashboardRepositoryTest extends UnitTestCase
+class DashboardRepositoryTest extends TestCase
 {
+    use RefreshDatabase;
+
     private DashboardRepository $repository;
 
     protected function setUp(): void
@@ -37,397 +37,248 @@ class DashboardRepositoryTest extends UnitTestCase
     }
 
     #[Test]
-    public function get_total_users_returns_user_count(): void
+    public function it_returns_total_users_count(): void
     {
-        // Arrange - Mock the User model 
-        $userMock = Mockery::mock('overload:' . User::class);
-        $userMock->shouldReceive('count')
-            ->once()
-            ->andReturn(150);
+        User::factory()->count(5)->create();
 
-        // Act
         $result = $this->repository->getTotalUsers();
 
-        // Assert
-        $this->assertEquals(150, $result);
+        $this->assertEquals(5, $result);
     }
 
     #[Test]
-    public function get_current_month_users_filters_by_date(): void
+    public function it_filters_current_month_users_by_date(): void
     {
-        // Arrange
         $currentMonth = Carbon::parse('2024-01-01');
-        $mockQuery = Mockery::mock();
-        $userMock = Mockery::mock('overload:' . User::class);
         
-        $userMock->shouldReceive('where')
-            ->once()
-            ->with('created_at', '>=', $currentMonth)
-            ->andReturn($mockQuery);
-            
-        $mockQuery->shouldReceive('count')
-            ->once()
-            ->andReturn(25);
+        User::factory()->count(3)->create(['created_at' => $currentMonth->copy()->addDays(5)]);
+        User::factory()->count(2)->create(['created_at' => $currentMonth->copy()->subDays(5)]);
 
-        // Act
         $result = $this->repository->getCurrentMonthUsers($currentMonth);
 
-        // Assert
-        $this->assertEquals(25, $result);
+        $this->assertEquals(3, $result);
     }
 
     #[Test]
-    public function get_previous_month_users_filters_by_date_range(): void
+    public function it_filters_previous_month_users_by_date_range(): void
     {
-        // Arrange
         $previousMonth = Carbon::parse('2023-12-01');
         $currentMonth = Carbon::parse('2024-01-01');
-        $mockQuery = Mockery::mock();
-        $userMock = Mockery::mock('overload:' . User::class);
         
-        $userMock->shouldReceive('whereBetween')
-            ->once()
-            ->with('created_at', [$previousMonth, $currentMonth])
-            ->andReturn($mockQuery);
-            
-        $mockQuery->shouldReceive('count')
-            ->once()
-            ->andReturn(20);
+        User::factory()->count(2)->create(['created_at' => $previousMonth->copy()->addDays(10)]);
+        User::factory()->count(3)->create(['created_at' => $currentMonth->copy()->addDays(5)]);
+        User::factory()->count(1)->create(['created_at' => $previousMonth->copy()->subDays(5)]);
 
-        // Act
         $result = $this->repository->getPreviousMonthUsers($previousMonth, $currentMonth);
 
-        // Assert
-        $this->assertEquals(20, $result);
+        $this->assertEquals(2, $result);
     }
 
     #[Test]
-    public function get_current_month_orders_filters_by_date(): void
+    public function it_filters_current_month_orders_by_date(): void
     {
-        // Arrange
         $currentMonth = Carbon::parse('2024-01-01');
-        $mockQuery = Mockery::mock();
-        $orderMock = Mockery::mock('overload:' . Order::class);
         
-        $orderMock->shouldReceive('where')
-            ->once()
-            ->with('created_at', '>=', $currentMonth)
-            ->andReturn($mockQuery);
-            
-        $mockQuery->shouldReceive('count')
-            ->once()
-            ->andReturn(85);
+        Order::factory()->count(4)->create(['created_at' => $currentMonth->copy()->addDays(5)]);
+        Order::factory()->count(2)->create(['created_at' => $currentMonth->copy()->subDays(5)]);
 
-        // Act
         $result = $this->repository->getCurrentMonthOrders($currentMonth);
 
-        // Assert
-        $this->assertEquals(85, $result);
+        $this->assertEquals(4, $result);
     }
 
     #[Test]
-    public function get_previous_month_orders_filters_by_date_range(): void
+    public function it_filters_previous_month_orders_by_date_range(): void
     {
-        // Arrange
         $previousMonth = Carbon::parse('2023-12-01');
         $currentMonth = Carbon::parse('2024-01-01');
-        $mockQuery = Mockery::mock();
-        $orderMock = Mockery::mock('overload:' . Order::class);
         
-        $orderMock->shouldReceive('whereBetween')
-            ->once()
-            ->with('created_at', [$previousMonth, $currentMonth])
-            ->andReturn($mockQuery);
-            
-        $mockQuery->shouldReceive('count')
-            ->once()
-            ->andReturn(70);
+        Order::factory()->count(3)->create(['created_at' => $previousMonth->copy()->addDays(10)]);
+        Order::factory()->count(2)->create(['created_at' => $currentMonth->copy()->addDays(5)]);
+        Order::factory()->count(1)->create(['created_at' => $previousMonth->copy()->subDays(5)]);
 
-        // Act
         $result = $this->repository->getPreviousMonthOrders($previousMonth, $currentMonth);
 
-        // Assert
-        $this->assertEquals(70, $result);
+        $this->assertEquals(3, $result);
     }
 
     #[Test]
-    public function get_total_products_returns_product_count(): void
+    public function it_returns_total_products_count(): void
     {
-        // Arrange
-        $productMock = Mockery::mock('overload:' . Product::class);
-        $productMock->shouldReceive('count')
-            ->once()
-            ->andReturn(500);
+        Product::factory()->count(10)->create();
 
-        // Act
         $result = $this->repository->getTotalProducts();
 
-        // Assert
-        $this->assertEquals(500, $result);
+        $this->assertEquals(10, $result);
     }
 
     #[Test]
-    public function get_current_month_products_filters_by_date(): void
+    public function it_filters_current_month_products_by_date(): void
     {
-        // Arrange
         $currentMonth = Carbon::parse('2024-01-01');
-        $mockQuery = Mockery::mock();
-        $productMock = Mockery::mock('overload:' . Product::class);
         
-        $productMock->shouldReceive('where')
-            ->once()
-            ->with('created_at', '>=', $currentMonth)
-            ->andReturn($mockQuery);
-            
-        $mockQuery->shouldReceive('count')
-            ->once()
-            ->andReturn(12);
+        Product::factory()->count(6)->create(['created_at' => $currentMonth->copy()->addDays(5)]);
+        Product::factory()->count(3)->create(['created_at' => $currentMonth->copy()->subDays(5)]);
 
-        // Act
         $result = $this->repository->getCurrentMonthProducts($currentMonth);
 
-        // Assert
-        $this->assertEquals(12, $result);
+        $this->assertEquals(6, $result);
     }
 
     #[Test]
-    public function get_current_month_revenue_sums_delivered_orders(): void
+    public function it_sums_current_month_revenue_from_delivered_orders(): void
     {
-        // Arrange
         $currentMonth = Carbon::parse('2024-01-01');
-        $mockQuery1 = Mockery::mock();
-        $mockQuery2 = Mockery::mock();
-        $orderMock = Mockery::mock('overload:' . Order::class);
         
-        $orderMock->shouldReceive('where')
-            ->once()
-            ->with('created_at', '>=', $currentMonth)
-            ->andReturn($mockQuery1);
-            
-        $mockQuery1->shouldReceive('where')
-            ->once()
-            ->with('status', OrderStatusEnum::DELIVERED)
-            ->andReturn($mockQuery2);
-            
-        $mockQuery2->shouldReceive('sum')
-            ->once()
-            ->with('total_amount')
-            ->andReturn(125000.50);
+        Order::factory()->count(2)->create([
+            'created_at' => $currentMonth->copy()->addDays(5),
+            'status' => OrderStatusEnum::DELIVERED,
+            'total_amount' => 50000
+        ]);
+        
+        Order::factory()->count(1)->create([
+            'created_at' => $currentMonth->copy()->addDays(5),
+            'status' => OrderStatusEnum::PENDING,
+            'total_amount' => 30000
+        ]);
+        
+        Order::factory()->count(1)->create([
+            'created_at' => $currentMonth->copy()->subDays(5),
+            'status' => OrderStatusEnum::DELIVERED,
+            'total_amount' => 25000
+        ]);
 
-        // Act
         $result = $this->repository->getCurrentMonthRevenue($currentMonth);
 
-        // Assert
-        $this->assertEquals(125000.50, $result);
+        $this->assertEquals(100000.0, $result);
         $this->assertIsFloat($result);
     }
 
     #[Test]
-    public function get_previous_month_revenue_sums_delivered_orders_in_date_range(): void
+    public function it_sums_previous_month_revenue_from_delivered_orders_in_date_range(): void
     {
-        // Arrange
         $previousMonth = Carbon::parse('2023-12-01');
         $currentMonth = Carbon::parse('2024-01-01');
-        $mockQuery1 = Mockery::mock();
-        $mockQuery2 = Mockery::mock();
-        $orderMock = Mockery::mock('overload:' . Order::class);
         
-        $orderMock->shouldReceive('whereBetween')
-            ->once()
-            ->with('created_at', [$previousMonth, $currentMonth])
-            ->andReturn($mockQuery1);
-            
-        $mockQuery1->shouldReceive('where')
-            ->once()
-            ->with('status', OrderStatusEnum::DELIVERED)
-            ->andReturn($mockQuery2);
-            
-        $mockQuery2->shouldReceive('sum')
-            ->once()
-            ->with('total_amount')
-            ->andReturn(98750.25);
+        Order::factory()->count(1)->create([
+            'created_at' => $previousMonth->copy()->addDays(10),
+            'status' => OrderStatusEnum::DELIVERED,
+            'total_amount' => 75000
+        ]);
+        
+        Order::factory()->count(1)->create([
+            'created_at' => $currentMonth->copy()->addDays(5),
+            'status' => OrderStatusEnum::DELIVERED,
+            'total_amount' => 40000
+        ]);
+        
+        Order::factory()->count(1)->create([
+            'created_at' => $previousMonth->copy()->subDays(5),
+            'status' => OrderStatusEnum::DELIVERED,
+            'total_amount' => 20000
+        ]);
 
-        // Act
         $result = $this->repository->getPreviousMonthRevenue($previousMonth, $currentMonth);
 
-        // Assert
-        $this->assertEquals(98750.25, $result);
+        $this->assertEquals(75000.0, $result);
         $this->assertIsFloat($result);
     }
 
     #[Test]
-    public function get_recent_order_activities_returns_limited_collection(): void
+    public function it_returns_limited_collection_of_recent_order_activities(): void
     {
-        // Arrange
-        $mockQuery1 = Mockery::mock();
-        $mockQuery2 = Mockery::mock();
-        $mockQuery3 = Mockery::mock();
-        $expectedCollection = Mockery::mock(Collection::class);
-        $orderStatusHistoryMock = Mockery::mock('overload:' . OrderStatusHistory::class);
+        $user = User::factory()->create();
+        $orders = Order::factory()->count(5)->create(['user_uuid' => $user->uuid]);
         
-        $orderStatusHistoryMock->shouldReceive('with')
-            ->once()
-            ->with(['order.user'])
-            ->andReturn($mockQuery1);
-            
-        $mockQuery1->shouldReceive('orderBy')
-            ->once()
-            ->with('created_at', 'desc')
-            ->andReturn($mockQuery2);
-            
-        $mockQuery2->shouldReceive('limit')
-            ->once()
-            ->with(10)
-            ->andReturn($mockQuery3);
-            
-        $mockQuery3->shouldReceive('get')
-            ->once()
-            ->andReturn($expectedCollection);
+        foreach ($orders as $order) {
+            OrderStatusHistory::create([
+                'uuid' => fake()->uuid(),
+                'order_uuid' => $order->uuid,
+                'new_status' => OrderStatusEnum::DELIVERED,
+                'created_at' => Carbon::now()->subMinutes(rand(1, 60)),
+                'updated_at' => Carbon::now()
+            ]);
+        }
+        
+        for ($i = 0; $i < 8; $i++) {
+            $order = Order::factory()->create();
+            OrderStatusHistory::create([
+                'uuid' => fake()->uuid(),
+                'order_uuid' => $order->uuid,
+                'new_status' => OrderStatusEnum::PENDING,
+                'created_at' => Carbon::now()->subMinutes(rand(1, 120)),
+                'updated_at' => Carbon::now()
+            ]);
+        }
 
-        // Act
         $result = $this->repository->getRecentOrderActivities();
 
-        // Assert
-        $this->assertSame($expectedCollection, $result);
+        $this->assertInstanceOf(Collection::class, $result);
+        $this->assertCount(10, $result);
     }
 
     #[Test]
-    public function get_recent_order_activities_respects_custom_limit(): void
+    public function it_respects_custom_limit_for_recent_order_activities(): void
     {
-        // Arrange
-        $customLimit = 5;
-        $mockQuery1 = Mockery::mock();
-        $mockQuery2 = Mockery::mock();
-        $mockQuery3 = Mockery::mock();
-        $expectedCollection = Mockery::mock(Collection::class);
-        $orderStatusHistoryMock = Mockery::mock('overload:' . OrderStatusHistory::class);
-        
-        $orderStatusHistoryMock->shouldReceive('with')
-            ->once()
-            ->with(['order.user'])
-            ->andReturn($mockQuery1);
-            
-        $mockQuery1->shouldReceive('orderBy')
-            ->once()
-            ->with('created_at', 'desc')
-            ->andReturn($mockQuery2);
-            
-        $mockQuery2->shouldReceive('limit')
-            ->once()
-            ->with($customLimit)
-            ->andReturn($mockQuery3);
-            
-        $mockQuery3->shouldReceive('get')
-            ->once()
-            ->andReturn($expectedCollection);
+        for ($i = 0; $i < 8; $i++) {
+            $order = Order::factory()->create();
+            OrderStatusHistory::create([
+                'uuid' => fake()->uuid(),
+                'order_uuid' => $order->uuid,
+                'new_status' => OrderStatusEnum::DELIVERED,
+                'created_at' => Carbon::now()->subMinutes(rand(1, 120)),
+                'updated_at' => Carbon::now()
+            ]);
+        }
 
-        // Act
-        $result = $this->repository->getRecentOrderActivities($customLimit);
+        $result = $this->repository->getRecentOrderActivities(5);
 
-        // Assert
-        $this->assertSame($expectedCollection, $result);
+        $this->assertInstanceOf(Collection::class, $result);
+        $this->assertCount(5, $result);
     }
 
     #[Test]
-    public function get_recent_user_registrations_returns_limited_collection(): void
+    public function it_returns_limited_collection_of_recent_user_registrations(): void
     {
-        // Arrange
-        $mockQuery1 = Mockery::mock();
-        $mockQuery2 = Mockery::mock();
-        $expectedCollection = Mockery::mock(Collection::class);
-        $userMock = Mockery::mock('overload:' . User::class);
-        
-        $userMock->shouldReceive('orderBy')
-            ->once()
-            ->with('created_at', 'desc')
-            ->andReturn($mockQuery1);
-            
-        $mockQuery1->shouldReceive('limit')
-            ->once()
-            ->with(3)
-            ->andReturn($mockQuery2);
-            
-        $mockQuery2->shouldReceive('get')
-            ->once()
-            ->andReturn($expectedCollection);
+        User::factory()->count(5)->create([
+            'created_at' => Carbon::now()->subMinutes(rand(1, 120))
+        ]);
 
-        // Act
         $result = $this->repository->getRecentUserRegistrations();
 
-        // Assert
-        $this->assertSame($expectedCollection, $result);
+        $this->assertInstanceOf(Collection::class, $result);
+        $this->assertCount(3, $result);
     }
 
     #[Test]
-    public function get_recent_product_updates_returns_limited_collection(): void
+    public function it_returns_limited_collection_of_recent_product_updates(): void
     {
-        // Arrange
-        $mockQuery1 = Mockery::mock();
-        $mockQuery2 = Mockery::mock();
-        $expectedCollection = Mockery::mock(Collection::class);
-        $productMock = Mockery::mock('overload:' . Product::class);
-        
-        $productMock->shouldReceive('orderBy')
-            ->once()
-            ->with('updated_at', 'desc')
-            ->andReturn($mockQuery1);
-            
-        $mockQuery1->shouldReceive('limit')
-            ->once()
-            ->with(2)
-            ->andReturn($mockQuery2);
-            
-        $mockQuery2->shouldReceive('get')
-            ->once()
-            ->andReturn($expectedCollection);
+        Product::factory()->count(4)->create([
+            'updated_at' => Carbon::now()->subMinutes(rand(1, 120))
+        ]);
 
-        // Act
         $result = $this->repository->getRecentProductUpdates();
 
-        // Assert
-        $this->assertSame($expectedCollection, $result);
+        $this->assertInstanceOf(Collection::class, $result);
+        $this->assertCount(2, $result);
     }
 
     #[Test]
-    public function check_database_status_returns_online_when_connection_succeeds(): void
+    public function it_returns_online_status_when_database_connection_succeeds(): void
     {
-        // Arrange
-        $mockConnection = Mockery::mock();
-        $mockPdo = Mockery::mock(\PDO::class);
-        
-        DB::shouldReceive('connection')
-            ->once()
-            ->andReturn($mockConnection);
-            
-        $mockConnection->shouldReceive('getPdo')
-            ->once()
-            ->andReturn($mockPdo);
-
-        // Act
         $result = $this->repository->checkDatabaseStatus();
 
-        // Assert
         $this->assertEquals('online', $result);
     }
 
     #[Test]
-    public function check_database_status_returns_offline_when_connection_fails(): void
+    public function it_returns_offline_status_when_database_connection_fails(): void
     {
-        // Arrange
-        $mockConnection = Mockery::mock();
-        
         DB::shouldReceive('connection')
-            ->once()
-            ->andReturn($mockConnection);
-            
-        $mockConnection->shouldReceive('getPdo')
-            ->once()
             ->andThrow(new \Exception('Connection failed'));
 
-        // Act
         $result = $this->repository->checkDatabaseStatus();
 
-        // Assert
         $this->assertEquals('offline', $result);
     }
 }

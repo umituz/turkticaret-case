@@ -120,8 +120,11 @@ class CartItemResourceTest extends BaseResourceUnitTest
         $this->assertEquals('cart-item-test-uuid', $result['uuid']);
         $this->assertEquals('product-uuid-456', $result['product_uuid']);
         $this->assertEquals(3, $result['quantity']);
-        $this->assertEquals(2999, $result['unit_price']);
-        $this->assertEquals(8997, $result['total_price']);
+        $this->assertArrayHasKey('raw', $result['unit_price']);
+        $this->assertArrayHasKey('formatted', $result['unit_price']);
+        $this->assertEquals(29.99, $result['unit_price']['raw']);
+        $this->assertArrayHasKey('raw', $result['total_price']);
+        $this->assertEquals(89.97, $result['total_price']['raw']);
     }
 
     #[Test]
@@ -228,11 +231,13 @@ class CartItemResourceTest extends BaseResourceUnitTest
 
         // Assert
         $this->assertEquals(5, $result['quantity']);
-        $this->assertEquals(4999, $result['unit_price']);
-        $this->assertEquals(24995, $result['total_price']);
+        $this->assertEquals(49.99, $result['unit_price']['raw']);
+        $this->assertEquals(249.95, $result['total_price']['raw']);
         $this->assertIsInt($result['quantity']);
-        $this->assertIsInt($result['unit_price']);
-        $this->assertIsInt($result['total_price']);
+        $this->assertIsArray($result['unit_price']);
+        $this->assertIsArray($result['total_price']);
+        $this->assertIsFloat($result['unit_price']['raw']);
+        $this->assertIsFloat($result['total_price']['raw']);
     }
 
     #[Test]
@@ -253,8 +258,8 @@ class CartItemResourceTest extends BaseResourceUnitTest
 
         // Assert
         $this->assertEquals(1, $result['quantity']);
-        $this->assertEquals(1500, $result['unit_price']);
-        $this->assertEquals(1500, $result['total_price']);
+        $this->assertEquals(15.0, $result['unit_price']['raw']);
+        $this->assertEquals(15.0, $result['total_price']['raw']);
     }
 
     #[Test]
@@ -275,8 +280,8 @@ class CartItemResourceTest extends BaseResourceUnitTest
 
         // Assert
         $this->assertEquals(100, $result['quantity']);
-        $this->assertEquals(99, $result['unit_price']);
-        $this->assertEquals(9900, $result['total_price']);
+        $this->assertEquals(0.99, $result['unit_price']['raw']);
+        $this->assertEquals(99.0, $result['total_price']['raw']);
     }
 
     #[Test]
@@ -320,10 +325,12 @@ class CartItemResourceTest extends BaseResourceUnitTest
         $result = $resource->toArray($request);
 
         // Assert
-        $this->assertEquals(99999999, $result['unit_price']);
-        $this->assertEquals(199999998, $result['total_price']);
-        $this->assertIsInt($result['unit_price']);
-        $this->assertIsInt($result['total_price']);
+        $this->assertEquals(999999.99, $result['unit_price']['raw']);
+        $this->assertEquals(1999999.98, $result['total_price']['raw']);
+        $this->assertIsArray($result['unit_price']);
+        $this->assertIsArray($result['total_price']);
+        $this->assertIsFloat($result['unit_price']['raw']);
+        $this->assertIsFloat($result['total_price']['raw']);
     }
 
     #[Test]
@@ -331,13 +338,17 @@ class CartItemResourceTest extends BaseResourceUnitTest
     {
         // Arrange - Test various quantity and price combinations
         $testCases = [
-            ['quantity' => 3, 'unit_price' => 1000, 'total_price' => 3000],
-            ['quantity' => 7, 'unit_price' => 599, 'total_price' => 4193],
-            ['quantity' => 12, 'unit_price' => 250, 'total_price' => 3000],
+            ['quantity' => 3, 'unit_price' => 1000, 'expected_unit' => 10.0, 'expected_total' => 30.0],
+            ['quantity' => 7, 'unit_price' => 599, 'expected_unit' => 5.99, 'expected_total' => 41.93],
+            ['quantity' => 12, 'unit_price' => 250, 'expected_unit' => 2.5, 'expected_total' => 30.0],
         ];
 
         foreach ($testCases as $testCase) {
-            $cartItemData = array_merge($this->getResourceData(), $testCase);
+            $cartItemData = array_merge($this->getResourceData(), [
+                'quantity' => $testCase['quantity'],
+                'unit_price' => $testCase['unit_price'],
+                'total_price' => $testCase['unit_price'] * $testCase['quantity']
+            ]);
             $cartItem = $this->createMockModel($cartItemData);
             $request = new Request();
 
@@ -347,8 +358,8 @@ class CartItemResourceTest extends BaseResourceUnitTest
 
             // Assert
             $this->assertEquals($testCase['quantity'], $result['quantity']);
-            $this->assertEquals($testCase['unit_price'], $result['unit_price']);
-            $this->assertEquals($testCase['total_price'], $result['total_price']);
+            $this->assertEquals($testCase['expected_unit'], $result['unit_price']['raw']);
+            $this->assertEquals($testCase['expected_total'], $result['total_price']['raw']);
         }
     }
 

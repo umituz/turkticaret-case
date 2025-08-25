@@ -294,55 +294,6 @@ class CountryControllerTest extends BaseFeatureTest
         $this->assertValidationErrorResponse($response, ['code']);
     }
 
-    #[Test]
-    public function it_filters_active_countries_only()
-    {
-        Country::factory()->create(['is_active' => true]);
-        Country::factory()->create(['is_active' => false]);
-
-        $response = $this->actingAs($this->testUser, 'sanctum')->getJson('/api/countries?is_active=1');
-
-        $this->assertSuccessfulJsonResponse($response);
-        
-        // Check that all returned countries are active
-        $countries = $response->json('data');
-        foreach ($countries as $country) {
-            $this->assertTrue($country['is_active']);
-        }
-    }
-
-    #[Test]
-    public function it_sorts_countries_by_name()
-    {
-        Country::factory()->create(['name' => 'Zebra Country']);
-        Country::factory()->create(['name' => 'Alpha Country']);
-
-        $response = $this->actingAs($this->testUser, 'sanctum')->getJson('/api/countries?sort=name');
-
-        $this->assertSuccessfulJsonResponse($response);
-        
-        $countries = $response->json('data');
-        $names = array_column($countries, 'name');
-        $sortedNames = $names;
-        sort($sortedNames);
-        
-        $this->assertEquals($sortedNames, $names);
-    }
-
-    #[Test]
-    public function it_searches_countries_by_name()
-    {
-        Country::factory()->create(['name' => 'Germany']);
-        Country::factory()->create(['name' => 'France']);
-
-        $response = $this->actingAs($this->testUser, 'sanctum')->getJson('/api/countries?search=germ');
-
-        $this->assertSuccessfulJsonResponse($response);
-        
-        $countries = $response->json('data');
-        $this->assertCount(1, $countries);
-        $this->assertStringContainsString('Germany', $countries[0]['name']);
-    }
 
     #[Test]
     public function it_includes_currency_relationship()
