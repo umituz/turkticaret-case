@@ -40,8 +40,8 @@ class DatabaseSeeder extends Seeder
             ShippingMethodSeeder::class,
             CategorySeeder::class,
             ProductSeeder::class,
-            CartSeeder::class,
-            OrderSeeder::class,
+            #CartSeeder::class, // not necessary
+            #OrderSeeder::class, // not necessary
         ]);
     }
 }

@@ -21,8 +21,8 @@ class UserSettingsPasswordChangeRequest extends FormRequest
     {
         return [
             'current_password' => 'required|string',
-            'new_password' => 'required|string|min:8|confirmed',
-            'new_password_confirmation' => 'required|string',
+            'password' => 'required|string|min:8|confirmed',
+            'password_confirmation' => 'required|string',
         ];
     }
 
@@ -34,12 +34,12 @@ class UserSettingsPasswordChangeRequest extends FormRequest
         return [
             'current_password.required' => 'Current password is required.',
             'current_password.string' => 'Current password must be a valid string.',
-            'new_password.required' => 'New password is required.',
-            'new_password.string' => 'New password must be a valid string.',
-            'new_password.min' => 'New password must be at least 8 characters long.',
-            'new_password.confirmed' => 'New password confirmation does not match.',
-            'new_password_confirmation.required' => 'New password confirmation is required.',
-            'new_password_confirmation.string' => 'New password confirmation must be a valid string.',
+            'password.required' => 'New password is required.',
+            'password.string' => 'New password must be a valid string.',
+            'password.min' => 'New password must be at least 8 characters long.',
+            'password.confirmed' => 'New password confirmation does not match.',
+            'password_confirmation.required' => 'New password confirmation is required.',
+            'password_confirmation.string' => 'New password confirmation must be a valid string.',
         ];
     }
 }

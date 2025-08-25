@@ -59,4 +59,16 @@ class UserSettingsRepository extends BaseRepository implements UserSettingsRepos
             'newsletter_notifications' => false,
         ]);
     }
+
+    /**
+     * Update user settings by user UUID.
+     *
+     * @param string $userUuid The user UUID to update settings for
+     * @param array $data The data to update
+     * @return bool Whether the update was successful
+     */
+    public function updateByUserUuid(string $userUuid, array $data): bool
+    {
+        return $this->model->where('user_uuid', $userUuid)->update($data);
+    }
 }

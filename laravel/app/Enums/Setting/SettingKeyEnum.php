@@ -12,7 +12,6 @@ namespace App\Enums\Setting;
  * 
  * @method static self DEFAULT_CURRENCY() Default currency setting
  * @method static self DEFAULT_LANGUAGE() Default language setting
- * @method static self TAX_ENABLED() Tax calculation toggle
  * @method static self MAINTENANCE_MODE() Maintenance mode toggle
  */
 enum SettingKeyEnum: string
@@ -42,17 +41,6 @@ enum SettingKeyEnum: string
      */
     case DEFAULT_TIMEZONE = 'default_timezone';
     
-    /**
-     * Global tax calculation toggle
-     * When disabled, no tax calculations are performed
-     */
-    case TAX_ENABLED = 'tax_enabled';
-    
-    /**
-     * Global shipping functionality toggle
-     * Controls whether shipping options are available
-     */
-    case SHIPPING_ENABLED = 'shipping_enabled';
 
     // System Settings
     /**
@@ -73,11 +61,6 @@ enum SettingKeyEnum: string
      */
     case APP_URL = 'app_url';
     
-    /**
-     * User registration toggle
-     * Controls whether new users can register accounts
-     */
-    case REGISTRATION_ENABLED = 'registration_enabled';
 
     // UI Settings
     /**
@@ -139,12 +122,9 @@ enum SettingKeyEnum: string
             self::DEFAULT_LANGUAGE => 'Default Language',
             self::DEFAULT_COUNTRY => 'Default Country',
             self::DEFAULT_TIMEZONE => 'Default Timezone',
-            self::TAX_ENABLED => 'Tax Enabled',
-            self::SHIPPING_ENABLED => 'Shipping Enabled',
             self::MAINTENANCE_MODE => 'Maintenance Mode',
             self::APP_NAME => 'Application Name',
             self::APP_URL => 'Application URL',
-            self::REGISTRATION_ENABLED => 'User Registration Enabled',
             self::ITEMS_PER_PAGE => 'Items Per Page',
             self::THEME => 'Application Theme',
             self::LOGO_URL => 'Logo URL',
@@ -164,9 +144,9 @@ enum SettingKeyEnum: string
     public function getGroup(): string
     {
         return match ($this) {
-            self::DEFAULT_CURRENCY, self::TAX_ENABLED, self::SHIPPING_ENABLED => 'commerce',
+            self::DEFAULT_CURRENCY => 'commerce',
             self::DEFAULT_LANGUAGE, self::DEFAULT_COUNTRY, self::DEFAULT_TIMEZONE => 'localization',
-            self::MAINTENANCE_MODE, self::APP_NAME, self::APP_URL, self::REGISTRATION_ENABLED => 'system',
+            self::MAINTENANCE_MODE, self::APP_NAME, self::APP_URL => 'system',
             self::ITEMS_PER_PAGE, self::THEME, self::LOGO_URL => 'ui',
             self::EMAIL_NOTIFICATIONS_ENABLED, self::SMS_NOTIFICATIONS_ENABLED => 'notification',
         };
@@ -184,8 +164,7 @@ enum SettingKeyEnum: string
     {
         return match ($this) {
             self::DEFAULT_CURRENCY, self::DEFAULT_LANGUAGE, self::DEFAULT_COUNTRY => 'string',
-            self::TAX_ENABLED, self::SHIPPING_ENABLED, self::MAINTENANCE_MODE,
-            self::REGISTRATION_ENABLED, self::EMAIL_NOTIFICATIONS_ENABLED,
+            self::MAINTENANCE_MODE, self::EMAIL_NOTIFICATIONS_ENABLED,
             self::SMS_NOTIFICATIONS_ENABLED => 'boolean',
             self::ITEMS_PER_PAGE => 'integer',
             self::DEFAULT_TIMEZONE, self::APP_NAME, self::APP_URL,
@@ -209,12 +188,9 @@ enum SettingKeyEnum: string
             self::DEFAULT_LANGUAGE => 'tr',
             self::DEFAULT_COUNTRY => 'TR',
             self::DEFAULT_TIMEZONE => 'Europe/Istanbul',
-            self::TAX_ENABLED => true,
-            self::SHIPPING_ENABLED => true,
             self::MAINTENANCE_MODE => false,
             self::APP_NAME => 'TurkTicaret',
             self::APP_URL => 'http://localhost:8080',
-            self::REGISTRATION_ENABLED => true,
             self::ITEMS_PER_PAGE => 20,
             self::THEME => 'default',
             self::LOGO_URL => '/images/logo.png',
@@ -240,12 +216,9 @@ enum SettingKeyEnum: string
             self::DEFAULT_LANGUAGE => 'Default language for guest users',
             self::DEFAULT_COUNTRY => 'Default country for guest users',
             self::DEFAULT_TIMEZONE => 'Default timezone for the application',
-            self::TAX_ENABLED => 'Enable tax calculations globally',
-            self::SHIPPING_ENABLED => 'Enable shipping functionality',
             self::MAINTENANCE_MODE => 'Put application in maintenance mode',
             self::APP_NAME => 'Application display name',
             self::APP_URL => 'Base URL of the application',
-            self::REGISTRATION_ENABLED => 'Allow new user registrations',
             self::ITEMS_PER_PAGE => 'Default number of items per page in listings',
             self::THEME => 'Default theme for the application',
             self::LOGO_URL => 'URL or path to the application logo',

@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\Cart;
 
+use App\DTOs\Cart\CartItemDTO;
+use App\Exceptions\Product\InsufficientStockException;
+use App\Exceptions\Product\OutOfStockException;
 use App\Http\Controllers\BaseController;
 use App\Http\Requests\Cart\CartAddRequest;
 use App\Http\Requests\Cart\CartUpdateRequest;
@@ -11,7 +14,6 @@ use Illuminate\Http\JsonResponse;
 
 /**
  * REST API Controller for Shopping Cart management.
- * 
  * Handles shopping cart operations including adding/removing products,
  * updating quantities, viewing cart contents, and clearing the entire cart.
  * All cart operations are scoped to the authenticated user.
@@ -34,10 +36,9 @@ class CartController extends BaseController
      */
     public function index(): JsonResponse
     {
-        $cart = $this->cartService->getOrCreateCart(auth()->id());
-        $cartData = \App\DTOs\Cart\CartData::fromModel($cart);
-        
-        return $this->ok($cartData->toArray());
+        $cart = $this->cartService->getOrCreateCart(auth()->user()->uuid);
+
+        return $this->ok(new CartResource($cart));
     }
 
     /**
@@ -45,17 +46,15 @@ class CartController extends BaseController
      *
      * @param CartAddRequest $request The validated request containing product UUID and quantity
      * @return JsonResponse JSON response containing the updated cart resource
+     * @throws InsufficientStockException
+     * @throws OutOfStockException
      */
     public function add(CartAddRequest $request): JsonResponse
     {
-        $addToCartData = \App\DTOs\Cart\AddToCartDTO::fromArray($request->validated());
-        
-        $cart = $this->cartService->addToCart(
-            auth()->id(),
-            $addToCartData
-        );
+        $cartItemData = CartItemDTO::fromArray($request->validated());
+        $cart = $this->cartService->addToCart(auth()->user()->uuid, $cartItemData);
 
-        return $this->ok($cart->toArray());
+        return $this->ok(new CartResource($cart));
     }
 
     /**
@@ -63,17 +62,18 @@ class CartController extends BaseController
      *
      * @param CartUpdateRequest $request The validated request containing product UUID and new quantity
      * @return JsonResponse JSON response containing the updated cart resource
+     * @throws InsufficientStockException
+     * @throws OutOfStockException
      */
     public function update(CartUpdateRequest $request): JsonResponse
     {
-        $updateCartItemData = \App\DTOs\Cart\UpdateCartItemDTO::fromArray($request->validated());
-        
+        $cartItemData = CartItemDTO::fromArray($request->validated());
         $cart = $this->cartService->updateCartItem(
-            auth()->id(),
-            $updateCartItemData
+            auth()->user()->uuid,
+            $cartItemData
         );
 
-        return $this->ok($cart->toArray());
+        return $this->ok(new CartResource($cart));
     }
 
     /**
@@ -84,7 +84,7 @@ class CartController extends BaseController
      */
     public function remove(string $productUuid): JsonResponse
     {
-        $cart = $this->cartService->removeFromCart(auth()->id(), $productUuid);
+        $cart = $this->cartService->removeFromCart(auth()->user()->uuid, $productUuid);
 
         return $this->ok(new CartResource($cart));
     }
@@ -96,7 +96,7 @@ class CartController extends BaseController
      */
     public function clear(): JsonResponse
     {
-        $this->cartService->clearCart(auth()->id());
+        $this->cartService->clearCart(auth()->user()->uuid);
 
         return $this->noContent();
     }

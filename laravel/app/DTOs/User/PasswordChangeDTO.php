@@ -41,7 +41,7 @@ readonly class PasswordChangeDTO
     {
         return new self(
             currentPassword: $data['current_password'],
-            newPassword: $data['new_password'],
+            newPassword: $data['password'],
         );
     }
 }

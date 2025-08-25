@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Gate;
 
 /**
  * REST API Controller for Order management.
- * 
+ *
  * Handles order operations including creating orders from cart, viewing user orders,
  * and order details with authorization checks. Manages the complete order lifecycle
  * from cart conversion to order completion.
@@ -38,7 +38,7 @@ class OrderController extends BaseController
     public function index(): JsonResponse
     {
         $orders = $this->orderService->getUserOrders(auth()->user()->uuid);
-        
+
         return $this->ok(new OrderCollection($orders));
     }
 
@@ -52,7 +52,7 @@ class OrderController extends BaseController
     {
         try {
             $orderData = OrderCreateDTO::fromArray($request->validated());
-            
+
             $order = $this->orderService->createOrderFromCart(
                 auth()->id(),
                 $orderData
@@ -73,9 +73,8 @@ class OrderController extends BaseController
     public function show(Order $order): JsonResponse
     {
         Gate::authorize('view', $order);
+        $order = $this->orderService->getOrderWithRelations($order);
 
-        $order->load(['orderItems.product']);
-        
         return $this->ok(new OrderResource($order));
     }
 
@@ -88,9 +87,9 @@ class OrderController extends BaseController
     public function statusHistory(Order $order): JsonResponse
     {
         Gate::authorize('view', $order);
-        
+
         $history = $this->orderService->getOrderStatusHistory($order);
-        
+
         return $this->ok($history);
     }
 }

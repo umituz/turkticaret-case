@@ -3,24 +3,24 @@
 namespace App\DTOs\Cart;
 
 /**
- * Data Transfer Object for updating cart item quantities
+ * Data Transfer Object for cart item operations
  * 
- * Handles the transfer and validation of cart item data when updating quantities
- * of existing products in user shopping carts. This DTO ensures type safety
- * and provides a clean interface for cart modification operations.
+ * Unified DTO for both adding items to cart and updating cart item quantities.
+ * This DTO ensures type safety and provides a clean interface for all cart
+ * item operations including adding new products and updating existing quantities.
  * 
- * @property string $product_uuid UUID of the product to update in cart (required)
- * @property int $quantity New quantity for the product (required, positive integer)
+ * @property string $product_uuid UUID of the product (required)
+ * @property int $quantity Quantity of the product (required, positive integer)
  * 
  * @package App\DTOs\Cart
  */
-class UpdateCartItemDTO
+class CartItemDTO
 {
     /**
-     * Create a new UpdateCartItemDTO instance
+     * Create a new CartItemDTO instance
      * 
-     * @param string $product_uuid UUID of the product to update in cart
-     * @param int $quantity New quantity for the product (must be positive)
+     * @param string $product_uuid UUID of the product
+     * @param int $quantity Quantity of the product (must be positive)
      */
     public function __construct(
         public string $product_uuid,
@@ -30,11 +30,11 @@ class UpdateCartItemDTO
     /**
      * Create DTO from validated request data
      * 
-     * Factory method to create an UpdateCartItemDTO instance from validated request data.
+     * Factory method to create a CartItemDTO instance from validated request data.
      * Handles the transformation of array data into a typed DTO object.
      * 
      * @param array $data Validated request data containing product_uuid and quantity
-     * @return self New UpdateCartItemDTO instance
+     * @return self New CartItemDTO instance
      */
     public static function fromArray(array $data): self
     {
@@ -50,7 +50,7 @@ class UpdateCartItemDTO
      * Transforms the DTO properties to an array format suitable for
      * database operations and API responses.
      * 
-     * @return array Array representation with updated cart item data
+     * @return array Array representation with cart item data
      */
     public function toArray(): array
     {

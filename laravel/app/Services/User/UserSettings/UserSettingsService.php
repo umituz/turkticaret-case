@@ -49,7 +49,7 @@ class UserSettingsService
      */
     public function createDefaultSettings(User $user): UserSetting
     {
-        $existingSettings = UserSetting::where('user_uuid', $user->uuid)->first();
+        $existingSettings = $this->userSettingsRepository->findByUserUuid($user->uuid);
         if ($existingSettings) {
             return $existingSettings;
         }
@@ -57,6 +57,18 @@ class UserSettingsService
         $settings = $this->userSettingsRepository->createDefaultSettings($user->uuid);
         $user->load('userSettings');
         return $settings;
+    }
+
+    /**
+     * Create default settings with loaded relationships.
+     *
+     * @param User $user The user to create default settings for
+     * @return UserSetting The created settings with loaded relationships
+     */
+    public function createDefaultSettingsWithRelations(User $user): UserSetting
+    {
+        $settings = $this->createDefaultSettings($user);
+        return $settings->load('user:uuid,language_uuid,timezone');
     }
 
     /**
@@ -76,8 +88,8 @@ class UserSettingsService
             $settings = $this->createDefaultSettings($user);
         }
 
-        $settings->update($preferences->toArray());
-        return $settings->fresh();
+        $this->userSettingsRepository->updateByUserUuid($user->uuid, $preferences->toArray());
+        return $this->userSettingsRepository->findByUserUuid($user->uuid);
     }
 
     /**
@@ -112,5 +124,17 @@ class UserSettingsService
 
         $user->update(['password' => $passwordChange->newPassword]);
         return true;
+    }
+
+    /**
+     * Get user settings with loaded relationships.
+     *
+     * @param User $user The user to get settings for
+     * @return UserSetting The user settings with loaded relationships
+     */
+    public function getUserSettingsWithRelations(User $user): UserSetting
+    {
+        $settings = $this->getUserSettings($user);
+        return $settings->load('user:uuid,language_uuid,timezone');
     }
 }

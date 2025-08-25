@@ -2,16 +2,15 @@
 
 namespace App\Services\Cart;
 
-use App\DTOs\Cart\AddToCartDTO;
+use App\DTOs\Cart\CartItemDTO;
 use App\DTOs\Cart\CartData;
-use App\DTOs\Cart\UpdateCartItemDTO;
 use App\Exceptions\Product\InsufficientStockException;
 use App\Exceptions\Product\OutOfStockException;
 use App\Models\Cart\Cart;
 use App\Models\Product\Product;
 use App\Repositories\Cart\CartRepositoryInterface;
 use App\Repositories\Product\ProductRepositoryInterface;
-use DB;
+use Illuminate\Support\Facades\DB;
 use Exception;
 
 /**
@@ -50,21 +49,19 @@ class CartService
             $cart = $this->cartRepository->create(['user_uuid' => $userUuid]);
         }
 
-        return $cart->load(['cartItems.product', 'cartItems' => function($query) {
-            $query->with('product');
-        }]);
+        return $cart->load(['cartItems.product']);
     }
 
     /**
      * Add a product to the user's cart with stock validation.
      *
      * @param string $userUuid The UUID of the user adding to cart
-     * @param AddToCartDTO $data DTO containing product_uuid and quantity
-     * @return CartData The updated cart data
+     * @param CartItemDTO $data DTO containing product_uuid and quantity
+     * @return Cart The updated cart
      * @throws InsufficientStockException When requested quantity exceeds available stock
      * @throws OutOfStockException When the product is completely out of stock
      */
-    public function addToCart(string $userUuid, AddToCartDTO $data): CartData
+    public function addToCart(string $userUuid, CartItemDTO $data): Cart
     {
         return DB::transaction(function () use ($userUuid, $data) {
             $cart = $this->getOrCreateCart($userUuid);
@@ -92,7 +89,8 @@ class CartService
                 throw new InsufficientStockException($product->name, $cartItem->quantity, $product->stock_quantity);
             }
 
-            return CartData::fromModel($cart->fresh(['cartItems.product']));
+            // Get updated cart after upsert
+            return $this->getOrCreateCart($userUuid);
         });
     }
 
@@ -100,12 +98,12 @@ class CartService
      * Update quantity of a specific item in the user's cart.
      *
      * @param string $userUuid The UUID of the user updating cart item
-     * @param UpdateCartItemDTO $data DTO containing product_uuid and new quantity
-     * @return CartData The updated cart data
+     * @param CartItemDTO $data DTO containing product_uuid and new quantity
+     * @return Cart The updated cart
      * @throws InsufficientStockException When new quantity exceeds available stock
      * @throws OutOfStockException When the product is completely out of stock
      */
-    public function updateCartItem(string $userUuid, UpdateCartItemDTO $data): CartData
+    public function updateCartItem(string $userUuid, CartItemDTO $data): Cart
     {
         return DB::transaction(function () use ($userUuid, $data) {
             $cart = $this->getOrCreateCart($userUuid);
@@ -122,7 +120,8 @@ class CartService
                 );
             }
 
-            return CartData::fromModel($cart->fresh(['cartItems.product']));
+            // Get updated cart after update
+            return $this->getOrCreateCart($userUuid);
         });
     }
 
@@ -131,15 +130,17 @@ class CartService
      *
      * @param string $userUuid The UUID of the user removing from cart
      * @param string $productUuid The UUID of the product to remove
-     * @return CartData The updated cart data
+     * @return Cart The updated cart
      */
-    public function removeFromCart(string $userUuid, string $productUuid): CartData
+    public function removeFromCart(string $userUuid, string $productUuid): Cart
     {
-        $cart = $this->getOrCreateCart($userUuid);
-
-        $this->cartRepository->removeCartItem($cart->uuid, $productUuid);
-
-        return CartData::fromModel($cart->fresh(['cartItems.product']));
+        return DB::transaction(function () use ($userUuid, $productUuid) {
+            $cart = $this->getOrCreateCart($userUuid);
+            $this->cartRepository->removeCartItem($cart->uuid, $productUuid);
+            
+            // Get updated cart after removal
+            return $this->getOrCreateCart($userUuid);
+        });
     }
 
     /**
@@ -150,8 +151,10 @@ class CartService
      */
     public function clearCart(string $userUuid): void
     {
-        $cart = $this->getOrCreateCart($userUuid);
-        $this->cartRepository->clearCartItems($cart->uuid);
+        DB::transaction(function () use ($userUuid) {
+            $cart = $this->getOrCreateCart($userUuid);
+            $this->cartRepository->clearCartItems($cart->uuid);
+        });
     }
 
     /**

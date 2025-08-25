@@ -55,11 +55,6 @@ trait ActivityLoggable
 
             $activity->log($logDescription);
         } catch (\Exception $e) {
-            logger()->error('Activity logging failed', [
-                'model' => get_class($model),
-                'event' => $event,
-                'error' => $e->getMessage()
-            ]);
         }
     }
 

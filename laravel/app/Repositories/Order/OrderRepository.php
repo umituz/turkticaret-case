@@ -118,4 +118,21 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
             'cancelled' => $cancelledOrders,
         ];
     }
+
+    /**
+     * Update order status with additional metadata.
+     *
+     * @param string $orderUuid The order UUID to update
+     * @param string $status The new status
+     * @param array $additionalData Additional data to update (shipped_at, delivered_at, etc.)
+     * @return bool Whether the update was successful
+     */
+    public function updateOrderStatus(string $orderUuid, string $status, array $additionalData = []): bool
+    {
+        $updateData = array_merge(['status' => $status], $additionalData);
+        
+        return $this->model
+            ->where('uuid', $orderUuid)
+            ->update($updateData);
+    }
 }

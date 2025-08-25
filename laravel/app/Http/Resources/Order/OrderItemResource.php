@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Order;
 
+use App\Helpers\MoneyHelper;
 use App\Http\Resources\Base\BaseResource;
 use App\Http\Resources\Product\ProductResource;
 use Illuminate\Http\Request;
@@ -30,8 +31,8 @@ class OrderItemResource extends BaseResource
             'product_uuid' => $this->product_uuid,
             'product_name' => $this->product_name,
             'quantity' => $this->quantity,
-            'unit_price' => $this->unit_price,
-            'total_price' => $this->total_price,
+            'unit_price' => MoneyHelper::getAmountInfo($this->unit_price ?? 0),
+            'total_price' => MoneyHelper::getAmountInfo($this->total_price ?? 0),
             'product' => new ProductResource($this->whenLoaded('product')),
         ];
     }

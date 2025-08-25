@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Admin\Order;
 
 use App\Http\Controllers\BaseController;
+use App\Http\Requests\Admin\Order\AdminOrderListRequest;
+use App\Http\Requests\Admin\Order\AdminOrderStatusUpdateRequest;
 use App\Http\Resources\Order\OrderCollection;
 use App\Http\Resources\Order\OrderResource;
 use App\Models\Order\Order;
 use App\Services\Admin\Order\AdminOrderService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 /**
  * REST API Controller for Admin Order Management.
@@ -32,13 +33,12 @@ class AdminOrderController extends BaseController
     /**
      * Display a listing of all orders with optional filters.
      *
-     * @param Request $request The HTTP request containing optional filter parameters
+     * @param AdminOrderListRequest $request The validated request containing filter parameters
      * @return JsonResponse JSON response containing the order collection
      */
-    public function index(Request $request): JsonResponse
+    public function index(AdminOrderListRequest $request): JsonResponse
     {
-        $filters = $request->only(['status', 'user_uuid', 'order_number', 'date_from', 'date_to', 'per_page']);
-        $orders = $this->adminOrderService->getAllOrders($filters);
+        $orders = $this->adminOrderService->getAllOrders($request->filters());
         
         return $this->ok(new OrderCollection($orders));
     }
@@ -51,7 +51,7 @@ class AdminOrderController extends BaseController
      */
     public function show(Order $order): JsonResponse
     {
-        $order->load(['orderItems.product', 'user:uuid,name,email']);
+        $order = $this->adminOrderService->getOrderWithFullDetails($order);
         
         return $this->ok(new OrderResource($order));
     }
@@ -59,17 +59,13 @@ class AdminOrderController extends BaseController
     /**
      * Update the status of the specified order.
      *
-     * @param Request $request The HTTP request containing the new status
+     * @param AdminOrderStatusUpdateRequest $request The validated request containing the new status
      * @param Order $order The order model instance resolved by route model binding
      * @return JsonResponse JSON response indicating success or failure
      */
-    public function updateStatus(Request $request, Order $order): JsonResponse
+    public function updateStatus(AdminOrderStatusUpdateRequest $request, Order $order): JsonResponse
     {
-        $request->validate([
-            'status' => 'required|string|in:pending,processing,shipped,delivered,cancelled,refunded'
-        ]);
-
-        $success = $this->adminOrderService->updateOrderStatus($order, $request->status);
+        $success = $this->adminOrderService->updateOrderStatus($order, $request->validated()['status']);
         
         if ($success) {
             return $this->ok(['message' => 'Order status updated successfully']);

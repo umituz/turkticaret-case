@@ -48,4 +48,14 @@ interface OrderRepositoryInterface extends BaseRepositoryInterface
      * @return array<string, mixed> Statistical data about orders
      */
     public function getOrderStatistics(): array;
+
+    /**
+     * Update order status with additional metadata.
+     *
+     * @param string $orderUuid The order UUID to update
+     * @param string $status The new status
+     * @param array $additionalData Additional data to update (shipped_at, delivered_at, etc.)
+     * @return bool Whether the update was successful
+     */
+    public function updateOrderStatus(string $orderUuid, string $status, array $additionalData = []): bool;
 }

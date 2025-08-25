@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Cart;
 
+use App\Helpers\MoneyHelper;
 use App\Http\Resources\Base\BaseResource;
 use App\Http\Resources\Product\ProductResource;
 use Illuminate\Http\Request;
@@ -29,8 +30,8 @@ class CartItemResource extends BaseResource
             'uuid' => $this->uuid,
             'product_uuid' => $this->product_uuid,
             'quantity' => $this->quantity,
-            'unit_price' => $this->unit_price,
-            'total_price' => $this->total_price,
+            'unit_price' => MoneyHelper::getAmountInfo($this->unit_price ?? 0),
+            'total_price' => MoneyHelper::getAmountInfo($this->total_price ?? 0),
             'product' => new ProductResource($this->whenLoaded('product')),
             'created_at' => $this->created_at?->toIso8601String(),
             'updated_at' => $this->updated_at?->toIso8601String(),

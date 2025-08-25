@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * Order Model representing customer orders in the e-commerce system.
- * 
+ *
  * Handles order processing, status management, customer relationships,
  * order items tracking, shipping information, and financial calculations.
  * Implements money attributes for proper currency handling.
@@ -28,7 +28,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property \Carbon\Carbon $created_at Order creation timestamp
  * @property \Carbon\Carbon $updated_at Last update timestamp
  * @property \Carbon\Carbon|null $deleted_at Soft deletion timestamp
- * 
+ *
  * @package App\Models\Order
  */
 class Order extends BaseUuidModel
@@ -55,7 +55,7 @@ class Order extends BaseUuidModel
 
     /**
      * Get the user who placed this order.
-     * 
+     *
      * @return BelongsTo<User>
      */
     public function user(): BelongsTo
@@ -65,7 +65,7 @@ class Order extends BaseUuidModel
 
     /**
      * Get all items in this order.
-     * 
+     *
      * @return HasMany<OrderItem>
      */
     public function orderItems(): HasMany
@@ -75,7 +75,7 @@ class Order extends BaseUuidModel
 
     /**
      * Get the status history for this order (ordered by most recent first).
-     * 
+     *
      * @return HasMany<OrderStatusHistory>
      */
     public function statusHistories(): HasMany
@@ -84,18 +84,8 @@ class Order extends BaseUuidModel
     }
 
     /**
-     * Calculate the total number of items in this order.
-     * 
-     * @return int Total quantity of all items
-     */
-    public function getTotalItemsAttribute(): int
-    {
-        return $this->orderItems->sum('quantity');
-    }
-
-    /**
      * Define which attributes should be treated as money values.
-     * 
+     *
      * @return array<string> Array of money attribute names
      */
     protected function getMoneyAttributes(): array

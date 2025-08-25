@@ -38,8 +38,7 @@ class UserSettingsController extends BaseController
      */
     public function getUserSettings(): JsonResponse
     {
-        $settings = $this->userSettingsService->getUserSettings(auth()->user());
-        $settings->load('user:uuid,language_uuid,timezone');
+        $settings = $this->userSettingsService->getUserSettingsWithRelations(auth()->user());
 
         return $this->ok(new UserSettingsResource($settings), 'Settings retrieved successfully.');
     }
@@ -52,8 +51,7 @@ class UserSettingsController extends BaseController
     public function createDefaultSettings(): JsonResponse
     {
         $user = auth()->user();
-        $settings = $this->userSettingsService->createDefaultSettings($user);
-        $settings->load('user:uuid,language_uuid,timezone');
+        $settings = $this->userSettingsService->createDefaultSettingsWithRelations($user);
 
         return $this->ok(new UserSettingsResource($settings), 'Default settings created successfully.');
     }

@@ -30,4 +30,13 @@ interface UserSettingsRepositoryInterface extends BaseRepositoryInterface
      * @return mixed The created default settings instance
      */
     public function createDefaultSettings(string $userUuid);
+
+    /**
+     * Update user settings with given data.
+     *
+     * @param string $userUuid The unique identifier of the user
+     * @param array $data The data to update
+     * @return bool Whether the update was successful
+     */
+    public function updateByUserUuid(string $userUuid, array $data): bool;
 }

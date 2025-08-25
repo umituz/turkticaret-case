@@ -8,11 +8,10 @@ use App\Models\Order\Order;
 use App\Repositories\Order\OrderRepositoryInterface;
 use App\Enums\Order\OrderStatusEnum;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Facades\Log;
 
 /**
  * Admin Order Service for complex admin order management operations.
- * 
+ *
  * Handles admin-specific order operations including viewing all orders,
  * updating order statuses, order analytics, and status history management.
  * Provides comprehensive business logic for order administration.
@@ -26,9 +25,7 @@ class AdminOrderService
      *
      * @param OrderRepositoryInterface $orderRepository The order repository for data operations
      */
-    public function __construct(
-        protected OrderRepositoryInterface $orderRepository
-    ) {}
+    public function __construct(protected OrderRepositoryInterface $orderRepository) {}
 
     /**
      * Get all orders with optional filters for admin view.
@@ -51,40 +48,23 @@ class AdminOrderService
     public function updateOrderStatus(Order $order, string $newStatus): bool
     {
         try {
-            $oldStatus = $order->status;
-            
-            $order->status = $newStatus;
-            
-            // Set timestamps for specific statuses
+            $additionalData = [];
+
             switch ($newStatus) {
                 case OrderStatusEnum::SHIPPED->value:
-                    $order->shipped_at = now();
+                    $additionalData['shipped_at'] = now();
                     break;
                 case OrderStatusEnum::DELIVERED->value:
-                    $order->delivered_at = now();
+                    $additionalData['delivered_at'] = now();
                     break;
             }
-            
-            $success = $order->save();
-            
-            if ($success) {
-                Log::info('Order status updated by admin', [
-                    'order_uuid' => $order->uuid,
-                    'order_number' => $order->order_number,
-                    'old_status' => $oldStatus,
-                    'new_status' => $newStatus,
-                    'admin_user_uuid' => auth()->user()->uuid ?? 'unknown'
-                ]);
-            }
-            
-            return $success;
+
+            return $this->orderRepository->updateOrderStatus(
+                $order->uuid,
+                $newStatus,
+                $additionalData
+            );
         } catch (\Exception $e) {
-            Log::error('Failed to update order status', [
-                'order_uuid' => $order->uuid,
-                'new_status' => $newStatus,
-                'error' => $e->getMessage()
-            ]);
-            
             return false;
         }
     }
@@ -108,14 +88,14 @@ class AdminOrderService
     public function getOrderStatusHistory(Order $order): array
     {
         $history = [];
-        
+
         // Order placed
         $history[] = [
             'status' => 'pending',
             'date' => $order->created_at,
             'description' => 'Order placed'
         ];
-        
+
         // Order processing (if updated_at is different from created_at and status is not pending)
         if ($order->status->value !== 'pending' && $order->updated_at > $order->created_at) {
             $history[] = [
@@ -124,7 +104,7 @@ class AdminOrderService
                 'description' => 'Order confirmed and processing'
             ];
         }
-        
+
         // Order shipped
         if ($order->shipped_at) {
             $history[] = [
@@ -133,7 +113,7 @@ class AdminOrderService
                 'description' => 'Order shipped'
             ];
         }
-        
+
         // Order delivered
         if ($order->delivered_at) {
             $history[] = [
@@ -142,7 +122,7 @@ class AdminOrderService
                 'description' => 'Order delivered'
             ];
         }
-        
+
         // Current status (if different from the timeline above)
         $lastHistoryStatus = end($history)['status'] ?? 'pending';
         if ($order->status->value !== $lastHistoryStatus) {
@@ -152,7 +132,7 @@ class AdminOrderService
                 'description' => 'Order status updated to ' . ucfirst($order->status->value)
             ];
         }
-        
+
         return [
             'order_uuid' => $order->uuid,
             'current_status' => $order->status->value,
@@ -195,5 +175,16 @@ class AdminOrderService
     {
         $filters = array_merge($additionalFilters, ['order_number' => $searchTerm]);
         return $this->getAllOrders($filters);
+    }
+
+    /**
+     * Get order with full details including relationships.
+     *
+     * @param Order $order The order to load relationships for
+     * @return Order The order with loaded relationships
+     */
+    public function getOrderWithFullDetails(Order $order): Order
+    {
+        return $order->load(['orderItems.product', 'user:uuid,name,email']);
     }
 }

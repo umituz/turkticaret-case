@@ -39,7 +39,7 @@ class OrderConfirmedMail extends Mailable
     {
         return new Envelope(
             from: new Address(config('mail.from.address'), config('mail.from.name')),
-            replyTo: new Address(config('mail.from.address'), config('mail.from.name')),
+            replyTo: [new Address(config('mail.from.address'), config('mail.from.name'))],
             subject: 'Order Confirmed - #' . OrderHelper::getOrderNumber($this->order),
         );
     }

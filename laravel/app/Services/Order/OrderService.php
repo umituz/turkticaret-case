@@ -3,6 +3,7 @@
 namespace App\Services\Order;
 
 use App\DTOs\Order\OrderCreateDTO;
+use App\Exceptions\Product\OutOfStockException;
 use App\Jobs\Order\SendOrderConfirmedJob;
 use App\Models\Order\Order;
 use App\Models\Cart\Cart;
@@ -18,7 +19,7 @@ use Illuminate\Support\Facades\DB;
 
 /**
  * Order Service for complex order business logic operations.
- * 
+ *
  * Handles order creation from cart, stock validation, inventory management,
  * transaction processing, and order confirmation. Implements comprehensive
  * business rules for order processing including stock validation and cart clearing.
@@ -62,14 +63,14 @@ class OrderService
     public function getOrderStatusHistory(Order $order): array
     {
         $history = [];
-        
+
         // Order placed
         $history[] = [
             'status' => 'pending',
             'date' => $order->created_at,
             'description' => 'Order placed'
         ];
-        
+
         // Order processing (if updated_at is different from created_at and status is not pending)
         if ($order->status->value !== 'pending' && $order->updated_at > $order->created_at) {
             $history[] = [
@@ -78,7 +79,7 @@ class OrderService
                 'description' => 'Order confirmed and processing'
             ];
         }
-        
+
         // Order shipped
         if ($order->shipped_at) {
             $history[] = [
@@ -87,7 +88,7 @@ class OrderService
                 'description' => 'Order shipped'
             ];
         }
-        
+
         // Order delivered
         if ($order->delivered_at) {
             $history[] = [
@@ -96,7 +97,7 @@ class OrderService
                 'description' => 'Order delivered'
             ];
         }
-        
+
         // Current status (if different from the timeline above)
         $lastHistoryStatus = end($history)['status'] ?? 'pending';
         if ($order->status->value !== $lastHistoryStatus) {
@@ -106,7 +107,7 @@ class OrderService
                 'description' => 'Order status updated to ' . ucfirst($order->status->value)
             ];
         }
-        
+
         return [
             'order_uuid' => $order->uuid,
             'current_status' => $order->status->value,
@@ -166,7 +167,9 @@ class OrderService
      */
     private function createOrderFromCartData(string $userUuid, Cart $cart, OrderCreateDTO $orderData): Order
     {
-        $totalAmount = $cart->cartItems->sum('total_price');
+        // Ensure we're working with a collection
+        $cartItems = $cart->relationLoaded('cartItems') ? $cart->cartItems : collect([]);
+        $totalAmount = $cartItems->sum('total_price');
 
         return $this->orderRepository->create([
             'user_uuid' => $userUuid,
@@ -224,4 +227,24 @@ class OrderService
         }
     }
 
+    /**
+     * Get order with loaded relationships for display.
+     *
+     * @param Order $order The order to load relationships for
+     * @return Order The order with loaded relationships
+     */
+    public function getOrderWithRelations(Order $order): Order
+    {
+        return $order->load(['orderItems.product']);
+    }
+
+    /**
+     * Get order statistics and metrics for dashboard display.
+     *
+     * @return array Array containing order statistics and metrics
+     */
+    public function getOrderStatistics(): array
+    {
+        return $this->orderRepository->getOrderStatistics();
+    }
 }

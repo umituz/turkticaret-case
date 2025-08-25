@@ -48,27 +48,6 @@ class Cart extends BaseUuidModel
         return $this->hasMany(CartItem::class, 'cart_uuid', 'uuid');
     }
 
-    /**
-     * Calculate the total amount of all items in the cart.
-     * 
-     * @return int Total cart amount in cents
-     */
-    public function getTotalAmountAttribute(): int
-    {
-        return $this->cartItems->sum(function ($item) {
-            return $item->quantity * $item->unit_price;
-        });
-    }
-
-    /**
-     * Get the total number of items in the cart.
-     * 
-     * @return int Total quantity of all cart items
-     */
-    public function getItemCountAttribute(): int
-    {
-        return $this->cartItems->sum('quantity');
-    }
 
     /**
      * Check if the cart is empty (contains no items).

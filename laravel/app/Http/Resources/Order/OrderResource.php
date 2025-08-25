@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Order;
 
+use App\Helpers\MoneyHelper;
 use App\Http\Resources\Base\BaseResource;
 use Illuminate\Http\Request;
 
@@ -28,8 +29,8 @@ class OrderResource extends BaseResource
             'uuid' => $this->uuid,
             'order_number' => $this->order_number,
             'user_uuid' => $this->user_uuid,
-            'status' => $this->status,
-            'total_amount' => $this->total_amount,
+            'status' => $this->status?->value ?? 'pending',
+            'total_amount' => MoneyHelper::getAmountInfo($this->total_amount ?? 0),
             'shipping_address' => $this->shipping_address,
             'notes' => $this->notes,
             'shipped_at' => $this->shipped_at?->toIso8601String(),
