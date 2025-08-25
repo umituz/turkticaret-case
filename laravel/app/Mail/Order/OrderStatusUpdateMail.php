@@ -4,6 +4,7 @@ namespace App\Mail\Order;
 
 use App\Enums\Order\OrderStatusEnum;
 use App\Models\Order\Order;
+use App\Services\Order\OrderMailService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
@@ -25,8 +26,9 @@ class OrderStatusUpdateMail extends Mailable
 
     public function __construct(
         public Order $order,
-        public string $oldStatus,
-        public string $newStatus
+        public OrderStatusEnum $oldStatus,
+        public OrderStatusEnum $newStatus,
+        protected OrderMailService $orderMailService
     ) {}
 
     /**
@@ -34,7 +36,7 @@ class OrderStatusUpdateMail extends Mailable
      */
     public function envelope(): Envelope
     {
-        $statusMessage = $this->getStatusMessage($this->newStatus);
+        $statusMessage = $this->newStatus->getLabel();
 
         return new Envelope(
             from: config('mail.from.address'),
@@ -47,15 +49,17 @@ class OrderStatusUpdateMail extends Mailable
      */
     public function content(): Content
     {
+        $emailData = $this->orderMailService->prepareOrderStatusUpdateData($this->order, $this->newStatus);
+        
         return new Content(
             view: 'emails.order.order-status-update',
-            with: [
+            with: array_merge([
                 'order' => $this->order,
-                'oldStatus' => $this->oldStatus,
-                'newStatus' => $this->newStatus,
-                'statusMessage' => $this->getStatusMessage($this->newStatus),
+                'oldStatus' => $this->oldStatus->value,
+                'newStatus' => $this->newStatus->value,
+                'statusMessage' => $this->newStatus->getLabel(),
                 'statusDescription' => $this->getStatusDescription($this->newStatus),
-            ],
+            ], $emailData),
         );
     }
 
@@ -67,22 +71,15 @@ class OrderStatusUpdateMail extends Mailable
         return [];
     }
 
-    private function getStatusMessage(string $status): string
-    {
-        $statusEnum = OrderStatusEnum::tryFrom($status);
-
-        return $statusEnum ? $statusEnum->getLabel() : 'Status Updated';
-    }
-
-    private function getStatusDescription(string $status): string
+    private function getStatusDescription(OrderStatusEnum $status): string
     {
         return match ($status) {
-            OrderStatusEnum::CONFIRMED->value => 'Your order has been confirmed and is being prepared.',
-            OrderStatusEnum::PROCESSING->value => 'Your order is currently being processed and prepared for shipment.',
-            OrderStatusEnum::SHIPPED->value => 'Your order has been shipped and is on its way to you.',
-            OrderStatusEnum::DELIVERED->value => 'Your order has been successfully delivered.',
-            OrderStatusEnum::CANCELLED->value => 'Your order has been cancelled. If you have any questions, please contact our support team.',
-            OrderStatusEnum::REFUNDED->value => 'Your order has been refunded. The refund will be processed to your original payment method.',
+            OrderStatusEnum::CONFIRMED => 'Your order has been confirmed and is being prepared.',
+            OrderStatusEnum::PROCESSING => 'Your order is currently being processed and prepared for shipment.',
+            OrderStatusEnum::SHIPPED => 'Your order has been shipped and is on its way to you.',
+            OrderStatusEnum::DELIVERED => 'Your order has been successfully delivered.',
+            OrderStatusEnum::CANCELLED => 'Your order has been cancelled. If you have any questions, please contact our support team.',
+            OrderStatusEnum::REFUNDED => 'Your order has been refunded. The refund will be processed to your original payment method.',
             default => 'Your order status has been updated.',
         };
     }

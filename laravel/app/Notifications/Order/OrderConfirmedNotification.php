@@ -4,6 +4,7 @@ namespace App\Notifications\Order;
 
 use App\Mail\Order\OrderConfirmedMail;
 use App\Models\Order\Order;
+use App\Services\Order\OrderMailService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -11,7 +12,7 @@ use Illuminate\Notifications\Notification;
 
 /**
  * Order Confirmed Notification for notifying users when their order is confirmed.
- * 
+ *
  * Sends email notifications to customers when their order is successfully created and confirmed.
  * Uses Laravel's notification system for better organization and multi-channel support.
  *
@@ -38,6 +39,8 @@ class OrderConfirmedNotification extends Notification implements ShouldQueue
      */
     public function toMail(object $notifiable): Mailable
     {
-        return (new OrderConfirmedMail($this->order))->to($notifiable->email);
+        $orderMailService = app(OrderMailService::class);
+
+        return (new OrderConfirmedMail($this->order, $orderMailService))->to($notifiable->email);
     }
 }

@@ -2,8 +2,10 @@
 
 namespace App\Notifications\Order;
 
+use App\Enums\Order\OrderStatusEnum;
 use App\Mail\Order\OrderStatusUpdateMail;
 use App\Models\Order\Order;
+use App\Services\Order\OrderMailService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -42,6 +44,10 @@ class OrderStatusUpdatedNotification extends Notification implements ShouldQueue
      */
     public function toMail(object $notifiable): Mailable
     {
-        return (new OrderStatusUpdateMail($this->order, $this->oldStatus, $this->newStatus))->to($notifiable->email);
+        $orderMailService = app(OrderMailService::class);
+        $oldStatusEnum = OrderStatusEnum::from($this->oldStatus);
+        $newStatusEnum = OrderStatusEnum::from($this->newStatus);
+
+        return (new OrderStatusUpdateMail($this->order, $oldStatusEnum, $newStatusEnum, $orderMailService))->to($notifiable->email);
     }
 }

@@ -2,11 +2,12 @@
 
 namespace App\Helpers\Order;
 
+use App\Helpers\MoneyHelper;
 use App\Models\Order\Order;
 
 /**
  * Order Helper Class
- * 
+ *
  * Provides utility functions for order-related operations including
  * order number formatting, display helpers, and common order utilities.
  *
@@ -16,7 +17,7 @@ class OrderHelper
 {
     /**
      * Generate a readable order number from UUID.
-     * 
+     *
      * Takes the first 8 characters of the order UUID and converts
      * to uppercase for better readability and consistency.
      *
@@ -51,15 +52,16 @@ class OrderHelper
     }
 
     /**
-     * Format order total amount for display.
+     * Format order total amount for display using MoneyHelper standards.
      *
      * @param int $amount Amount in minor units (cents)
      * @param string $currency Currency symbol (default: '₺')
      * @return string Formatted amount (e.g., '₺99.99')
+     * @deprecated Use MoneyHelper::formatAmount() instead
      */
     public static function formatAmount(int $amount, string $currency = '₺'): string
     {
-        return $currency . number_format($amount / 100, 2);
+        return MoneyHelper::formatAmount($amount, $currency);
     }
 
     /**

@@ -2,16 +2,16 @@
 
 namespace App\DTOs\Cart;
 
+use App\Helpers\MoneyHelper;
 use App\Models\Cart\CartItem;
-use App\Models\Product\Product;
 
 /**
  * Data Transfer Object for cart item representation
- * 
+ *
  * Provides consistent structure for cart item data across the application,
  * including product details, pricing, and availability information for
  * individual items within a shopping cart.
- * 
+ *
  * @property string $uuid Unique identifier for the cart item
  * @property string $product_uuid UUID of the associated product
  * @property string $product_name Name of the product
@@ -22,14 +22,14 @@ use App\Models\Product\Product;
  * @property int $total_price Total price for this quantity in cents
  * @property int $available_stock Available stock quantity for the product
  * @property bool $is_available Whether the product is available for purchase
- * 
+ *
  * @package App\DTOs\Cart
  */
 class CartItemData
 {
     /**
      * Create a new CartItemData instance
-     * 
+     *
      * @param string $uuid Unique identifier for the cart item
      * @param string $product_uuid UUID of the associated product
      * @param string $product_name Name of the product
@@ -60,7 +60,7 @@ class CartItemData
     public static function fromModel(CartItem $cartItem): self
     {
         $product = $cartItem->product;
-        
+
         return new self(
             uuid: $cartItem->uuid,
             product_uuid: $cartItem->product_uuid,
@@ -77,7 +77,7 @@ class CartItemData
 
     /**
      * Create DTO collection from CartItem models
-     * 
+     *
      * @param \Illuminate\Database\Eloquent\Collection<CartItem> $cartItems
      * @return array<self>
      */
@@ -108,19 +108,19 @@ class CartItemData
     }
 
     /**
-     * Get formatted price (in actual currency, divided by 100)
+     * Get formatted price using MoneyHelper standards
      */
     public function getFormattedUnitPrice(): float
     {
-        return $this->unit_price / 100;
+        return MoneyHelper::convertFromMinorUnits($this->unit_price);
     }
 
     /**
-     * Get formatted total price (in actual currency, divided by 100)
+     * Get formatted total price using MoneyHelper standards
      */
     public function getFormattedTotalPrice(): float
     {
-        return $this->total_price / 100;
+        return MoneyHelper::convertFromMinorUnits($this->total_price);
     }
 
     /**

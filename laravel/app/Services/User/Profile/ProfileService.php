@@ -12,14 +12,14 @@ use App\Repositories\Order\OrderRepositoryInterface;
  * ProfileService handles user profile operations including profile retrieval,
  * updates, and statistics generation. This service provides comprehensive
  * profile management functionality for authenticated users.
- * 
+ *
  * @package App\Services\User\Profile
  */
 class ProfileService
 {
     /**
      * ProfileService constructor.
-     * 
+     *
      * @param UserRepositoryInterface $userRepository User repository for database operations
      * @param OrderRepositoryInterface $orderRepository Order repository for statistics calculation
      */
@@ -31,7 +31,7 @@ class ProfileService
     /**
      * Retrieve user profile information.
      * Returns the authenticated user model for profile display purposes.
-     * 
+     *
      * @param User $user The authenticated user model
      * @return User The user profile data
      */
@@ -44,7 +44,7 @@ class ProfileService
      * Update user profile information with validated data.
      * Processes profile update request through DTO validation and
      * updates the user record in the database.
-     * 
+     *
      * @param User $user The user to update
      * @param array $data Raw profile update data from request
      * @return User The updated user model with fresh data
@@ -62,7 +62,7 @@ class ProfileService
      * spending patterns, and account information for profile dashboard.
      * Calculates total orders, spending amounts, average order values,
      * and provides last order details.
-     * 
+     *
      * @param User $user The user to generate statistics for
      * @return ProfileStatResource Formatted user statistics resource
      */
@@ -70,11 +70,11 @@ class ProfileService
     {
         $ordersPaginated = $this->orderRepository->findByUserUuid($user->uuid);
         $orders = $ordersPaginated->items(); // Get the collection from pagination
-        
+
         $totalOrders = $ordersPaginated->total(); // Use total from pagination
-        $totalSpent = collect($orders)->sum('total_amount') / 100; // Convert from kuruş to lira
-        $averageOrderValue = $totalOrders > 0 ? $totalSpent / $totalOrders : 0;
-        
+        $totalSpent = collect($orders)->sum('total_amount');
+        $averageOrderValue = $totalOrders > 0 ? (int) ($totalSpent / $totalOrders) : 0;
+
         $lastOrder = collect($orders)->sortByDesc('created_at')->first();
 
         $stats = [
@@ -84,7 +84,7 @@ class ProfileService
             'member_since' => $user->created_at->toISOString(),
             'last_order' => $lastOrder ? [
                 'order_number' => $lastOrder->order_number,
-                'total' => $lastOrder->total,
+                'total' => $lastOrder->total_amount,
                 'status' => $lastOrder->status,
                 'created_at' => $lastOrder->created_at->toISOString(),
             ] : null,

@@ -1,4 +1,3 @@
-@php use App\Helpers\MoneyHelper; @endphp
 @extends('layouts.email.base')
 
 @section('title', 'Order Confirmation - ' . config('app.name'))
@@ -35,33 +34,27 @@
         'title' => '📦 Order Summary',
         'style' => 'highlight',
         'items' => [
-            ['label' => 'Order Number', 'value' => '#' . $orderNumber],
-            ['label' => 'Order Date', 'value' => $order->created_at->format('M d, Y \a\t h:i A')],
-            ['label' => 'Status', 'value' => $statusLabel],
-            ['label' => 'Estimated Delivery', 'value' => $order->created_at->addDays(3)->format('M d, Y')],
+            ['label' => 'Order Number', 'value' => '#' . $order_number],
+            ['label' => 'Order Date', 'value' => $order_date_formatted],
+            ['label' => 'Status', 'value' => $status_label],
+            ['label' => 'Estimated Delivery', 'value' => $estimated_delivery_formatted],
         ]
     ])
 
-    @if($order->orderItems && $order->orderItems->count() > 0)
+    @if($order_items_data && count($order_items_data) > 0)
         @php
-            $orderItemsData = [];
-            foreach($order->orderItems as $item) {
-                $itemAmountInfo = MoneyHelper::getAmountInfo($item->total_price);
-                $orderItemsData[] = [
-                    'label' => $item->product_name . ' (x' . $item->quantity . ')',
-                    'value' => $itemAmountInfo['formatted']
-                ];
-            }
-            // Add total at the end
-            $orderItemsData[] = [
-                'label' => '<strong>Total Amount</strong>',
-                'value' => '<strong>' . $totalAmount['formatted'] . '</strong>'
-            ];
+            // Add total amount at the end of items
+            $allItems = array_merge($order_items_data, [
+                [
+                    'label' => '<strong>Total Amount</strong>',
+                    'value' => '<strong>' . $total_amount_formatted . '</strong>'
+                ]
+            ]);
         @endphp
 
         @include('layouts.email.components.info-box', [
             'title' => '🛒 Items Ordered',
-            'items' => $orderItemsData
+            'items' => $allItems
         ])
     @endif
 

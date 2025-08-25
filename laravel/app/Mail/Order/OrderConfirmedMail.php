@@ -2,9 +2,8 @@
 
 namespace App\Mail\Order;
 
-use App\Helpers\MoneyHelper;
-use App\Helpers\Order\OrderHelper;
 use App\Models\Order\Order;
+use App\Services\Order\OrderMailService;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Address;
 use Illuminate\Mail\Mailables\Content;
@@ -25,8 +24,12 @@ class OrderConfirmedMail extends Mailable
      * Create a new mailable instance.
      *
      * @param Order $order The confirmed order to email about
+     * @param OrderMailService $orderMailService Service for preparing email data
      */
-    public function __construct(public Order $order) {}
+    public function __construct(
+        public Order $order,
+        protected OrderMailService $orderMailService
+    ) {}
 
     /**
      * Get the message envelope configuration.
@@ -38,10 +41,12 @@ class OrderConfirmedMail extends Mailable
      */
     public function envelope(): Envelope
     {
+        $emailData = $this->orderMailService->prepareOrderConfirmationData($this->order);
+        
         return new Envelope(
             from: new Address(config('mail.from.address'), config('mail.from.name')),
             replyTo: [new Address(config('mail.from.address'), config('mail.from.name'))],
-            subject: 'Order Confirmed - #' . OrderHelper::getOrderNumber($this->order),
+            subject: 'Order Confirmed - #' . $emailData['order_number'],
         );
     }
 
@@ -55,15 +60,11 @@ class OrderConfirmedMail extends Mailable
      */
     public function content(): Content
     {
+        $emailData = $this->orderMailService->prepareOrderConfirmationData($this->order);
+        
         return new Content(
             view: 'emails.order.order-confirmed',
-            with: [
-                'order' => $this->order,
-                'orderNumber' => OrderHelper::getOrderNumber($this->order),
-                'orderTitle' => OrderHelper::getOrderTitle($this->order),
-                'totalAmount' => MoneyHelper::getAmountInfo($this->order->total_amount),
-                'statusLabel' => OrderHelper::getStatusLabel($this->order),
-            ],
+            with: array_merge(['order' => $this->order], $emailData),
         );
     }
 

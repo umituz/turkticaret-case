@@ -25,33 +25,30 @@
     ])
     
     {{-- Order Details Info Box --}}
+    @php
+        $orderDetailsItems = [
+            ['label' => 'Order Number', 'value' => $order_number],
+            ['label' => 'Order Date', 'value' => $order_date_formatted],
+            ['label' => 'Total Amount', 'value' => $total_amount_formatted],
+        ];
+        
+        // Add status-specific dates
+        $orderDetailsItems = array_merge($orderDetailsItems, $status_dates);
+        
+        // Add shipping address
+        $orderDetailsItems[] = ['label' => 'Shipping Address', 'value' => $order->shipping_address];
+    @endphp
+    
     @include('layouts.email.components.info-box', [
         'title' => '📦 Order Details',
-        'items' => [
-            ['label' => 'Order Number', 'value' => $order->order_number],
-            ['label' => 'Order Date', 'value' => $order->created_at->format('M d, Y \a\t h:i A')],
-            ['label' => 'Total Amount', 'value' => \App\Helpers\MoneyHelper::getAmountInfo($order->total_amount)['formatted']],
-            ...(($order->shipped_at && $newStatus === 'shipped') ? [
-                ['label' => 'Shipped Date', 'value' => $order->shipped_at->format('M d, Y \a\t h:i A')]
-            ] : []),
-            ...(($order->delivered_at && $newStatus === 'delivered') ? [
-                ['label' => 'Delivered Date', 'value' => $order->delivered_at->format('M d, Y \a\t h:i A')]
-            ] : []),
-            ['label' => 'Shipping Address', 'value' => $order->shipping_address],
-        ]
+        'items' => $orderDetailsItems
     ])
     
     {{-- Order Items Info Box --}}
-    @if($order->orderItems && $order->orderItems->count() > 0)
+    @if($order_items_display && count($order_items_display) > 0)
         @include('layouts.email.components.info-box', [
             'title' => '📋 Order Items',
-            'items' => $order->orderItems->map(function($item) {
-                $unitPriceInfo = \App\Helpers\MoneyHelper::getAmountInfo($item->unit_price);
-                return [
-                    'label' => $item->product_name,
-                    'value' => $item->quantity . 'x ' . $unitPriceInfo['formatted']
-                ];
-            })->toArray()
+            'items' => $order_items_display
         ])
     @endif
     
