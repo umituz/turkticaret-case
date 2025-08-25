@@ -16,7 +16,7 @@ use Illuminate\Http\JsonResponse;
  * REST API Controller for Product management.
  * 
  * Handles CRUD operations and additional product-related functionality including
- * soft deletes and product statistics. All responses are formatted as standardized JSON API responses.
+ * soft deletes. All responses are formatted as standardized JSON API responses.
  *
  * @package App\Http\Controllers\Product
  */
@@ -113,16 +113,5 @@ class ProductController extends BaseController
         return $this->noContent();
     }
 
-    /**
-     * Get comprehensive product statistics and metrics.
-     *
-     * @return JsonResponse JSON response containing product statistics including counts, values, and stock information
-     */
-    public function statistics(): JsonResponse
-    {
-        $statistics = $this->productService->getStatistics();
-
-        return $this->ok($statistics);
-    }
 
 }

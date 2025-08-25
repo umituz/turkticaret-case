@@ -13,7 +13,7 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
  * Product Service for business logic operations.
  * 
  * Handles complex product operations including CRUD operations with media management,
- * stock validation, inventory statistics, and soft delete functionality. 
+ * stock validation and soft delete functionality. 
  * Implements business rules and data validation.
  *
  * @package App\Services\Product
@@ -139,43 +139,5 @@ class ProductService
         }
     }
 
-    /**
-     * Get comprehensive product statistics and inventory metrics.
-     *
-     * @return array Associative array containing product statistics including counts, values, and stock information
-     */
-    public function getStatistics(): array
-    {
-        $totalProducts = $this->productRepository->count();
-        $activeProducts = $this->productRepository->countBy('is_active', true);
-        $inactiveProducts = $totalProducts - $activeProducts;
-        $featuredProducts = $this->productRepository->countBy('is_featured', true);
-        $outOfStockProducts = $this->productRepository->countBy('stock_quantity', 0);
-        
-        // Low stock products (where stock_quantity > 0 AND stock_quantity <= low_stock_threshold)
-        $lowStockProducts = $this->productRepository->getQuery()
-            ->where('stock_quantity', '>', 0)
-            ->whereColumn('stock_quantity', '<=', 'low_stock_threshold')
-            ->whereNotNull('low_stock_threshold')
-            ->count();
-        
-        $totalValue = $this->productRepository->getQuery()
-            ->selectRaw('SUM(price * stock_quantity) as total')
-            ->value('total') ?? 0;
-
-        $averagePrice = $this->productRepository->getQuery()
-            ->avg('price') ?? 0;
-
-        return [
-            'total_products' => $totalProducts,
-            'active_products' => $activeProducts,
-            'inactive_products' => $inactiveProducts,
-            'featured_products' => $featuredProducts,
-            'out_of_stock_products' => $outOfStockProducts,
-            'low_stock_products' => $lowStockProducts,
-            'total_value' => $totalValue / 100, // Convert from cents to currency
-            'average_price' => $averagePrice / 100, // Convert from cents to currency
-        ];
-    }
 
 }

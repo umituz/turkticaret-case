@@ -328,48 +328,5 @@ class ProductServiceTest extends UnitTestCase
         $this->assertTrue(true); // Explicit assertion that we reached this point
     }
 
-    #[Test]
-    public function get_statistics_returns_comprehensive_product_statistics(): void
-    {
-        // Arrange
-        $mockQuery = Mockery::mock(Builder::class);
-        
-        $this->productRepository->shouldReceive('count')->once()->andReturn(100);
-        $this->productRepository->shouldReceive('countBy')->with('is_active', true)->once()->andReturn(85);
-        $this->productRepository->shouldReceive('countBy')->with('is_featured', true)->once()->andReturn(15);
-        $this->productRepository->shouldReceive('countBy')->with('stock_quantity', 0)->once()->andReturn(10);
-        
-        $this->productRepository->shouldReceive('getQuery')->times(3)->andReturn($mockQuery);
-        
-        // Mock low stock query
-        $mockQuery->shouldReceive('where')->with('stock_quantity', '>', 0)->once()->andReturnSelf();
-        $mockQuery->shouldReceive('whereColumn')->with('stock_quantity', '<=', 'low_stock_threshold')->once()->andReturnSelf();
-        $mockQuery->shouldReceive('whereNotNull')->with('low_stock_threshold')->once()->andReturnSelf();
-        $mockQuery->shouldReceive('count')->once()->andReturn(8);
-        
-        // Mock total value query
-        $mockQuery->shouldReceive('selectRaw')->with('SUM(price * stock_quantity) as total')->once()->andReturnSelf();
-        $mockQuery->shouldReceive('value')->with('total')->once()->andReturn(5000000); // 50,000.00 in cents
-        
-        // Mock average price query
-        $mockQuery->shouldReceive('avg')->with('price')->once()->andReturn(2500); // 25.00 in cents
-
-        // Act
-        $result = $this->service->getStatistics();
-
-        // Assert
-        $expectedStats = [
-            'total_products' => 100,
-            'active_products' => 85,
-            'inactive_products' => 15,
-            'featured_products' => 15,
-            'out_of_stock_products' => 10,
-            'low_stock_products' => 8,
-            'total_value' => 50000.00, // Converted from cents
-            'average_price' => 25.00, // Converted from cents
-        ];
-
-        $this->assertEquals($expectedStats, $result);
-    }
 
 }
