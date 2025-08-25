@@ -28,14 +28,14 @@ class AdminOrderService
     public function __construct(protected OrderRepositoryInterface $orderRepository) {}
 
     /**
-     * Get all orders with optional filters for admin view.
+     * Get all orders with pagination for admin view.
      *
-     * @param array $filters Optional filters for the query
+     * @param array $filters Optional filters for the query (currently not used)
      * @return LengthAwarePaginator Paginated collection of all orders
      */
     public function getAllOrders(array $filters = []): LengthAwarePaginator
     {
-        return $this->orderRepository->findAllWithFilters($filters);
+        return $this->orderRepository->findAllWithPagination();
     }
 
     /**

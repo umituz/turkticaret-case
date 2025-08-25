@@ -35,12 +35,11 @@ interface OrderRepositoryInterface extends BaseRepositoryInterface
     public function findByOrderNumber(string $orderNumber): ?Order;
     
     /**
-     * Find all orders with optional filtering and pagination.
+     * Find all orders with pagination.
      *
-     * @param array<string, mixed> $filters Optional filter parameters
-     * @return LengthAwarePaginator Paginated and filtered order collection
+     * @return LengthAwarePaginator Paginated order collection
      */
-    public function findAllWithFilters(array $filters = []): LengthAwarePaginator;
+    public function findAllWithPagination(): LengthAwarePaginator;
     
     /**
      * Get order statistics and metrics.

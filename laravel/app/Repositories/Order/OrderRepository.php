@@ -59,40 +59,16 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
     }
 
     /**
-     * Find all orders with optional filters and pagination.
+     * Find all orders with pagination.
      *
-     * @param array $filters Optional filters including status, user_uuid, order_number, date_from, date_to, per_page
      * @return LengthAwarePaginator Paginated orders with loaded relationships
      */
-    public function findAllWithFilters(array $filters = []): LengthAwarePaginator
+    public function findAllWithPagination(): LengthAwarePaginator
     {
-        $query = $this->model
+        return $this->model
             ->with(['user:uuid,name,email', 'orderItems.product'])
-            ->orderBy('created_at', 'desc');
-
-        if (!empty($filters['status'])) {
-            $query->where('status', $filters['status']);
-        }
-
-        if (!empty($filters['user_uuid'])) {
-            $query->where('user_uuid', $filters['user_uuid']);
-        }
-
-        if (!empty($filters['order_number'])) {
-            $query->where('order_number', 'LIKE', '%' . $filters['order_number'] . '%');
-        }
-
-        if (!empty($filters['date_from'])) {
-            $query->whereDate('created_at', '>=', $filters['date_from']);
-        }
-
-        if (!empty($filters['date_to'])) {
-            $query->whereDate('created_at', '<=', $filters['date_to']);
-        }
-
-        $perPage = !empty($filters['per_page']) ? (int) $filters['per_page'] : ApiEnums::DEFAULT_PAGINATION->value;
-
-        return $query->paginate($perPage);
+            ->orderBy('created_at', 'desc')
+            ->paginate(ApiEnums::DEFAULT_PAGINATION->value);
     }
 
     /**
