@@ -21,7 +21,7 @@ class AdminOrderListRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return auth()->check() && auth()->user()->user_type->value === 'admin';
+        return true;
     }
 
     /**
