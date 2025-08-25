@@ -36,7 +36,7 @@ class CountryCreateRequest extends FormRequest
             'code' => 'required|string|size:2|unique:countries,code',
             'name' => 'required|string|max:255',
             'locale' => 'required|string|max:10',
-            'currency_uuid' => 'nullable|string|exists:currencies,uuid',
+            'currency_uuid' => 'required|string|exists:currencies,uuid',
             'is_active' => 'nullable|boolean',
         ];
     }
@@ -54,6 +54,8 @@ class CountryCreateRequest extends FormRequest
             'code.unique' => 'This country code already exists.',
             'name.required' => 'Country name is required.',
             'name.max' => 'Country name must not exceed 255 characters.',
+            'locale.required' => 'Locale is required.',
+            'currency_uuid.required' => 'Currency is required.',
             'currency_uuid.exists' => 'The selected currency is invalid.',
             'is_active.boolean' => 'Is active must be a boolean value.',
         ];

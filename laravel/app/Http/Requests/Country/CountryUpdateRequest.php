@@ -39,7 +39,7 @@ class CountryUpdateRequest extends FormRequest
             'code' => ['sometimes', 'string', 'size:2', Rule::unique('countries', 'code')->ignore($country->uuid, 'uuid')],
             'name' => 'sometimes|string|max:255',
             'locale' => 'sometimes|string|max:10',
-            'currency_uuid' => 'sometimes|nullable|string|exists:currencies,uuid',
+            'currency_uuid' => 'sometimes|required|string|exists:currencies,uuid',
             'is_active' => 'sometimes|boolean',
         ];
     }
@@ -55,6 +55,8 @@ class CountryUpdateRequest extends FormRequest
             'code.size' => 'Country code must be exactly 2 characters.',
             'code.unique' => 'This country code already exists.',
             'name.max' => 'Country name must not exceed 255 characters.',
+            'locale.max' => 'Locale must not exceed 10 characters.',
+            'currency_uuid.required' => 'Currency is required.',
             'currency_uuid.exists' => 'The selected currency is invalid.',
             'is_active.boolean' => 'Is active must be a boolean value.',
         ];

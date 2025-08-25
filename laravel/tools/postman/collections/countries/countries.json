@@ -43,7 +43,7 @@
         "method": "POST",
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"code\": \"TR\",\n  \"name\": \"Turkey\",\n  \"currency_uuid\": \"{{currency_uuid}}\",\n  \"is_active\": true\n}",
+          "raw": "{\n  \"code\": \"NL\",\n  \"name\": \"Netherlands\",\n  \"locale\": \"en-NL\",\n  \"currency_uuid\": \"{{currency_uuid}}\",\n  \"is_active\": true\n}",
           "options": {"raw": {"language": "json"}}
         },
         "url": {
@@ -96,7 +96,7 @@
         "method": "PUT",
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"code\": \"TR\",\n  \"name\": \"Republic of Turkey\",\n  \"currency_uuid\": \"{{currency_uuid}}\",\n  \"is_active\": true\n}",
+          "raw": "{\n  \"code\": \"NL\",\n  \"name\": \"Kingdom of the Netherlands\",\n  \"locale\": \"en-NL\",\n  \"currency_uuid\": \"{{currency_uuid}}\",\n  \"is_active\": true\n}",
           "options": {"raw": {"language": "json"}}
         },
         "url": {
