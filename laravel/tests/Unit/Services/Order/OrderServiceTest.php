@@ -6,7 +6,6 @@ use App\DTOs\Order\OrderCreateDTO;
 use App\Enums\Order\OrderStatusEnum;
 use App\Exceptions\Order\EmptyCartException;
 use App\Exceptions\Product\InsufficientStockException;
-use App\Jobs\Order\SendOrderConfirmedJob;
 use App\Models\Cart\Cart;
 use App\Models\Cart\CartItem;
 use App\Models\Order\Order;
