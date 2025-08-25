@@ -86,7 +86,7 @@
         "method": "PUT",
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"theme\": \"dark\",\n  \"language\": \"en\",\n  \"timezone\": \"UTC\"\n}",
+          "raw": "{\n  \"language_uuid\": \"{{language_uuid}}\",\n  \"timezone\": \"UTC\"\n}",
           "options": {
             "raw": {
               "language": "json"

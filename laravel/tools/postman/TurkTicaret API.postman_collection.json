@@ -412,98 +412,6 @@
               }
             },
             {
-              "name": "List Addresses by Type",
-              "request": {
-                "method": "GET",
-                "url": {
-                  "raw": "{{base_url}}/addresses?type=shipping",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "addresses"
-                  ],
-                  "query": [
-                    {
-                      "key": "type",
-                      "value": "shipping",
-                      "description": "Filter by address type (shipping or billing)"
-                    }
-                  ]
-                },
-                "description": "Get addresses filtered by type (shipping or billing)",
-                "name": "List Addresses by Type",
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{token}}",
-                    "type": "text"
-                  }
-                ]
-              }
-            },
-            {
-              "name": "List Default Addresses Only",
-              "request": {
-                "method": "GET",
-                "url": {
-                  "raw": "{{base_url}}/addresses?is_default=true",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "addresses"
-                  ],
-                  "query": [
-                    {
-                      "key": "is_default",
-                      "value": "true",
-                      "description": "Filter to show only default addresses"
-                    }
-                  ]
-                },
-                "description": "Get only the default addresses for the user",
-                "name": "List Default Addresses Only",
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{token}}",
-                    "type": "text"
-                  }
-                ]
-              }
-            },
-            {
               "name": "Create Billing Address",
               "request": {
                 "method": "POST",
@@ -1027,7 +935,7 @@
                 "method": "PUT",
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"theme\": \"dark\",\n  \"language\": \"en\",\n  \"timezone\": \"UTC\"\n}",
+                  "raw": "{\n  \"language_uuid\": \"{{language_uuid}}\",\n  \"timezone\": \"UTC\"\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -1629,553 +1537,6 @@
               "status": "Unprocessable Entity",
               "code": 422,
               "body": "{\n    \"success\": false,\n    \"message\": \"Validation failed\",\n    \"data\": null,\n    \"errors\": [\n        \"The name field is required\",\n        \"The description field is required\"\n    ]\n}"
-            }
-          ]
-        },
-        {
-          "name": "Filters",
-          "description": "Category filtering and search operations",
-          "item": [
-            {
-              "name": "Filter by Status - Active",
-              "request": {
-                "method": "GET",
-                "url": {
-                  "raw": "{{base_url}}/categories?status=active&per_page={{per_page}}&page={{page}}",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "categories"
-                  ],
-                  "query": [
-                    {
-                      "key": "status",
-                      "value": "active",
-                      "description": "Filter active categories"
-                    },
-                    {
-                      "key": "per_page",
-                      "value": "{{per_page}}",
-                      "description": "Items per page"
-                    },
-                    {
-                      "key": "page",
-                      "value": "{{page}}",
-                      "description": "Page number"
-                    }
-                  ]
-                },
-                "description": "Get all active categories",
-                "name": "Filter by Status - Active",
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{token}}",
-                    "type": "text"
-                  }
-                ]
-              },
-              "response": [
-                {
-                  "name": "Success Response",
-                  "originalRequest": {
-                    "method": "POST",
-                    "body": {
-                      "mode": "raw",
-                      "raw": "{\n  \"name\": \"Electronics\",\n  \"description\": \"Electronic devices and gadgets\",\n  \"status\": \"active\"\n}"
-                    },
-                    "url": "{{base_url}}/categories"
-                  },
-                  "status": "Created",
-                  "code": 201,
-                  "body": "{\n    \"success\": true,\n    \"message\": \"Category created successfully\",\n    \"data\": {\n        \"uuid\": \"0198d5bf-c001-72d1-8c56-b4824c7f7650\",\n        \"name\": \"Electronics\",\n        \"description\": \"Electronic devices and gadgets\",\n        \"status\": \"active\",\n        \"products_count\": 0,\n        \"created_at\": \"2025-08-23T19:00:00.000000Z\",\n        \"updated_at\": \"2025-08-23T19:00:00.000000Z\",\n        \"deleted_at\": null\n    },\n    \"errors\": []\n}"
-                },
-                {
-                  "name": "Validation Error",
-                  "originalRequest": {
-                    "method": "POST",
-                    "body": {
-                      "mode": "raw",
-                      "raw": "{\n  \"name\": \"\",\n  \"description\": \"\"\n}"
-                    },
-                    "url": "{{base_url}}/categories"
-                  },
-                  "status": "Unprocessable Entity",
-                  "code": 422,
-                  "body": "{\n    \"success\": false,\n    \"message\": \"Validation failed\",\n    \"data\": null,\n    \"errors\": [\n        \"The name field is required\",\n        \"The description field is required\"\n    ]\n}"
-                }
-              ]
-            },
-            {
-              "name": "Filter by Status - Inactive",
-              "request": {
-                "method": "GET",
-                "url": {
-                  "raw": "{{base_url}}/categories?status=inactive&per_page={{per_page}}&page={{page}}",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "categories"
-                  ],
-                  "query": [
-                    {
-                      "key": "status",
-                      "value": "inactive",
-                      "description": "Filter inactive categories"
-                    },
-                    {
-                      "key": "per_page",
-                      "value": "{{per_page}}",
-                      "description": "Items per page"
-                    },
-                    {
-                      "key": "page",
-                      "value": "{{page}}",
-                      "description": "Page number"
-                    }
-                  ]
-                },
-                "description": "Get all inactive categories",
-                "name": "Filter by Status - Inactive",
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{token}}",
-                    "type": "text"
-                  }
-                ]
-              },
-              "response": [
-                {
-                  "name": "Success Response",
-                  "originalRequest": {
-                    "method": "POST",
-                    "body": {
-                      "mode": "raw",
-                      "raw": "{\n  \"name\": \"Electronics\",\n  \"description\": \"Electronic devices and gadgets\",\n  \"status\": \"active\"\n}"
-                    },
-                    "url": "{{base_url}}/categories"
-                  },
-                  "status": "Created",
-                  "code": 201,
-                  "body": "{\n    \"success\": true,\n    \"message\": \"Category created successfully\",\n    \"data\": {\n        \"uuid\": \"0198d5bf-c001-72d1-8c56-b4824c7f7650\",\n        \"name\": \"Electronics\",\n        \"description\": \"Electronic devices and gadgets\",\n        \"status\": \"active\",\n        \"products_count\": 0,\n        \"created_at\": \"2025-08-23T19:00:00.000000Z\",\n        \"updated_at\": \"2025-08-23T19:00:00.000000Z\",\n        \"deleted_at\": null\n    },\n    \"errors\": []\n}"
-                },
-                {
-                  "name": "Validation Error",
-                  "originalRequest": {
-                    "method": "POST",
-                    "body": {
-                      "mode": "raw",
-                      "raw": "{\n  \"name\": \"\",\n  \"description\": \"\"\n}"
-                    },
-                    "url": "{{base_url}}/categories"
-                  },
-                  "status": "Unprocessable Entity",
-                  "code": 422,
-                  "body": "{\n    \"success\": false,\n    \"message\": \"Validation failed\",\n    \"data\": null,\n    \"errors\": [\n        \"The name field is required\",\n        \"The description field is required\"\n    ]\n}"
-                }
-              ]
-            },
-            {
-              "name": "Search Categories",
-              "request": {
-                "method": "GET",
-                "url": {
-                  "raw": "{{base_url}}/categories?search={{search}}&per_page={{per_page}}&page={{page}}",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "categories"
-                  ],
-                  "query": [
-                    {
-                      "key": "search",
-                      "value": "{{search}}",
-                      "description": "Search in name and description"
-                    },
-                    {
-                      "key": "per_page",
-                      "value": "{{per_page}}",
-                      "description": "Items per page"
-                    },
-                    {
-                      "key": "page",
-                      "value": "{{page}}",
-                      "description": "Page number"
-                    }
-                  ]
-                },
-                "description": "Search categories by name or description",
-                "name": "Search Categories",
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{token}}",
-                    "type": "text"
-                  }
-                ]
-              },
-              "response": [
-                {
-                  "name": "Success Response",
-                  "originalRequest": {
-                    "method": "POST",
-                    "body": {
-                      "mode": "raw",
-                      "raw": "{\n  \"name\": \"Electronics\",\n  \"description\": \"Electronic devices and gadgets\",\n  \"status\": \"active\"\n}"
-                    },
-                    "url": "{{base_url}}/categories"
-                  },
-                  "status": "Created",
-                  "code": 201,
-                  "body": "{\n    \"success\": true,\n    \"message\": \"Category created successfully\",\n    \"data\": {\n        \"uuid\": \"0198d5bf-c001-72d1-8c56-b4824c7f7650\",\n        \"name\": \"Electronics\",\n        \"description\": \"Electronic devices and gadgets\",\n        \"status\": \"active\",\n        \"products_count\": 0,\n        \"created_at\": \"2025-08-23T19:00:00.000000Z\",\n        \"updated_at\": \"2025-08-23T19:00:00.000000Z\",\n        \"deleted_at\": null\n    },\n    \"errors\": []\n}"
-                },
-                {
-                  "name": "Validation Error",
-                  "originalRequest": {
-                    "method": "POST",
-                    "body": {
-                      "mode": "raw",
-                      "raw": "{\n  \"name\": \"\",\n  \"description\": \"\"\n}"
-                    },
-                    "url": "{{base_url}}/categories"
-                  },
-                  "status": "Unprocessable Entity",
-                  "code": 422,
-                  "body": "{\n    \"success\": false,\n    \"message\": \"Validation failed\",\n    \"data\": null,\n    \"errors\": [\n        \"The name field is required\",\n        \"The description field is required\"\n    ]\n}"
-                }
-              ]
-            },
-            {
-              "name": "Sort by Name ASC",
-              "request": {
-                "method": "GET",
-                "url": {
-                  "raw": "{{base_url}}/categories?sort_by=name&sort_direction=asc&per_page={{per_page}}&page={{page}}",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "categories"
-                  ],
-                  "query": [
-                    {
-                      "key": "sort_by",
-                      "value": "name",
-                      "description": "Sort by name field"
-                    },
-                    {
-                      "key": "sort_direction",
-                      "value": "asc",
-                      "description": "Sort direction ascending"
-                    },
-                    {
-                      "key": "per_page",
-                      "value": "{{per_page}}",
-                      "description": "Items per page"
-                    },
-                    {
-                      "key": "page",
-                      "value": "{{page}}",
-                      "description": "Page number"
-                    }
-                  ]
-                },
-                "description": "Get categories sorted by name (A-Z)",
-                "name": "Sort by Name ASC",
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{token}}",
-                    "type": "text"
-                  }
-                ]
-              },
-              "response": [
-                {
-                  "name": "Success Response",
-                  "originalRequest": {
-                    "method": "POST",
-                    "body": {
-                      "mode": "raw",
-                      "raw": "{\n  \"name\": \"Electronics\",\n  \"description\": \"Electronic devices and gadgets\",\n  \"status\": \"active\"\n}"
-                    },
-                    "url": "{{base_url}}/categories"
-                  },
-                  "status": "Created",
-                  "code": 201,
-                  "body": "{\n    \"success\": true,\n    \"message\": \"Category created successfully\",\n    \"data\": {\n        \"uuid\": \"0198d5bf-c001-72d1-8c56-b4824c7f7650\",\n        \"name\": \"Electronics\",\n        \"description\": \"Electronic devices and gadgets\",\n        \"status\": \"active\",\n        \"products_count\": 0,\n        \"created_at\": \"2025-08-23T19:00:00.000000Z\",\n        \"updated_at\": \"2025-08-23T19:00:00.000000Z\",\n        \"deleted_at\": null\n    },\n    \"errors\": []\n}"
-                },
-                {
-                  "name": "Validation Error",
-                  "originalRequest": {
-                    "method": "POST",
-                    "body": {
-                      "mode": "raw",
-                      "raw": "{\n  \"name\": \"\",\n  \"description\": \"\"\n}"
-                    },
-                    "url": "{{base_url}}/categories"
-                  },
-                  "status": "Unprocessable Entity",
-                  "code": 422,
-                  "body": "{\n    \"success\": false,\n    \"message\": \"Validation failed\",\n    \"data\": null,\n    \"errors\": [\n        \"The name field is required\",\n        \"The description field is required\"\n    ]\n}"
-                }
-              ]
-            },
-            {
-              "name": "Sort by Created Date DESC",
-              "request": {
-                "method": "GET",
-                "url": {
-                  "raw": "{{base_url}}/categories?sort_by=created_at&sort_direction=desc&per_page={{per_page}}&page={{page}}",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "categories"
-                  ],
-                  "query": [
-                    {
-                      "key": "sort_by",
-                      "value": "created_at",
-                      "description": "Sort by creation date"
-                    },
-                    {
-                      "key": "sort_direction",
-                      "value": "desc",
-                      "description": "Sort direction descending"
-                    },
-                    {
-                      "key": "per_page",
-                      "value": "{{per_page}}",
-                      "description": "Items per page"
-                    },
-                    {
-                      "key": "page",
-                      "value": "{{page}}",
-                      "description": "Page number"
-                    }
-                  ]
-                },
-                "description": "Get categories sorted by creation date (newest first)",
-                "name": "Sort by Created Date DESC",
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{token}}",
-                    "type": "text"
-                  }
-                ]
-              },
-              "response": [
-                {
-                  "name": "Success Response",
-                  "originalRequest": {
-                    "method": "POST",
-                    "body": {
-                      "mode": "raw",
-                      "raw": "{\n  \"name\": \"Electronics\",\n  \"description\": \"Electronic devices and gadgets\",\n  \"status\": \"active\"\n}"
-                    },
-                    "url": "{{base_url}}/categories"
-                  },
-                  "status": "Created",
-                  "code": 201,
-                  "body": "{\n    \"success\": true,\n    \"message\": \"Category created successfully\",\n    \"data\": {\n        \"uuid\": \"0198d5bf-c001-72d1-8c56-b4824c7f7650\",\n        \"name\": \"Electronics\",\n        \"description\": \"Electronic devices and gadgets\",\n        \"status\": \"active\",\n        \"products_count\": 0,\n        \"created_at\": \"2025-08-23T19:00:00.000000Z\",\n        \"updated_at\": \"2025-08-23T19:00:00.000000Z\",\n        \"deleted_at\": null\n    },\n    \"errors\": []\n}"
-                },
-                {
-                  "name": "Validation Error",
-                  "originalRequest": {
-                    "method": "POST",
-                    "body": {
-                      "mode": "raw",
-                      "raw": "{\n  \"name\": \"\",\n  \"description\": \"\"\n}"
-                    },
-                    "url": "{{base_url}}/categories"
-                  },
-                  "status": "Unprocessable Entity",
-                  "code": 422,
-                  "body": "{\n    \"success\": false,\n    \"message\": \"Validation failed\",\n    \"data\": null,\n    \"errors\": [\n        \"The name field is required\",\n        \"The description field is required\"\n    ]\n}"
-                }
-              ]
-            },
-            {
-              "name": "Combined Filters",
-              "request": {
-                "method": "GET",
-                "url": {
-                  "raw": "{{base_url}}/categories?status=active&search=electronics&sort_by=name&sort_direction=asc&per_page={{per_page}}&page={{page}}",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "categories"
-                  ],
-                  "query": [
-                    {
-                      "key": "status",
-                      "value": "active",
-                      "description": "Active categories only"
-                    },
-                    {
-                      "key": "search",
-                      "value": "{{search}}",
-                      "description": "Search term (centralized)"
-                    },
-                    {
-                      "key": "sort_by",
-                      "value": "name",
-                      "description": "Sort by name"
-                    },
-                    {
-                      "key": "sort_direction",
-                      "value": "asc",
-                      "description": "Ascending order"
-                    },
-                    {
-                      "key": "per_page",
-                      "value": "{{per_page}}",
-                      "description": "Items per page"
-                    },
-                    {
-                      "key": "page",
-                      "value": "{{page}}",
-                      "description": "Page number"
-                    }
-                  ]
-                },
-                "description": "Multiple filters combined: active, search, sorted",
-                "name": "Combined Filters",
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{token}}",
-                    "type": "text"
-                  }
-                ]
-              },
-              "response": [
-                {
-                  "name": "Success Response",
-                  "originalRequest": {
-                    "method": "POST",
-                    "body": {
-                      "mode": "raw",
-                      "raw": "{\n  \"name\": \"Electronics\",\n  \"description\": \"Electronic devices and gadgets\",\n  \"status\": \"active\"\n}"
-                    },
-                    "url": "{{base_url}}/categories"
-                  },
-                  "status": "Created",
-                  "code": 201,
-                  "body": "{\n    \"success\": true,\n    \"message\": \"Category created successfully\",\n    \"data\": {\n        \"uuid\": \"0198d5bf-c001-72d1-8c56-b4824c7f7650\",\n        \"name\": \"Electronics\",\n        \"description\": \"Electronic devices and gadgets\",\n        \"status\": \"active\",\n        \"products_count\": 0,\n        \"created_at\": \"2025-08-23T19:00:00.000000Z\",\n        \"updated_at\": \"2025-08-23T19:00:00.000000Z\",\n        \"deleted_at\": null\n    },\n    \"errors\": []\n}"
-                },
-                {
-                  "name": "Validation Error",
-                  "originalRequest": {
-                    "method": "POST",
-                    "body": {
-                      "mode": "raw",
-                      "raw": "{\n  \"name\": \"\",\n  \"description\": \"\"\n}"
-                    },
-                    "url": "{{base_url}}/categories"
-                  },
-                  "status": "Unprocessable Entity",
-                  "code": 422,
-                  "body": "{\n    \"success\": false,\n    \"message\": \"Validation failed\",\n    \"data\": null,\n    \"errors\": [\n        \"The name field is required\",\n        \"The description field is required\"\n    ]\n}"
-                }
-              ]
             }
           ]
         }
@@ -5427,450 +4788,6 @@
               "body": "{\n    \"success\": true,\n    \"message\": \"Countries retrieved successfully\",\n    \"data\": [\n        {\n            \"uuid\": \"0198d5bf-f001-72d1-8c56-b4824c7f7680\",\n            \"name\": \"Turkey\",\n            \"code\": \"TR\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        },\n        {\n            \"uuid\": \"0198d5bf-f002-72d1-8c56-b4824c7f7681\",\n            \"name\": \"United States\",\n            \"code\": \"US\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        }\n    ],\n    \"errors\": []\n}"
             }
           ]
-        },
-        {
-          "name": "Filters",
-          "description": "Country filtering and search operations",
-          "item": [
-            {
-              "name": "Filter by Active Only",
-              "request": {
-                "method": "GET",
-                "url": {
-                  "raw": "{{base_url}}/countries?active_only=true&per_page={{page}}{{per_page}}{{per_page}}&page={{page}}",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "countries"
-                  ],
-                  "query": [
-                    {
-                      "key": "active_only",
-                      "value": "true",
-                      "description": "Filter active countries only"
-                    },
-                    {
-                      "key": "per_page",
-                      "value": "{{per_page}}",
-                      "description": "Items per page"
-                    },
-                    {
-                      "key": "page",
-                      "value": "{{page}}",
-                      "description": "Page number"
-                    }
-                  ]
-                },
-                "description": "Get all active countries",
-                "name": "Filter by Active Only",
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{token}}",
-                    "type": "text"
-                  }
-                ]
-              },
-              "response": [
-                {
-                  "name": "Success Response",
-                  "originalRequest": {
-                    "method": "GET",
-                    "url": "{{base_url}}/countries"
-                  },
-                  "status": "OK",
-                  "code": 200,
-                  "body": "{\n    \"success\": true,\n    \"message\": \"Countries retrieved successfully\",\n    \"data\": [\n        {\n            \"uuid\": \"0198d5bf-f001-72d1-8c56-b4824c7f7680\",\n            \"name\": \"Turkey\",\n            \"code\": \"TR\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        },\n        {\n            \"uuid\": \"0198d5bf-f002-72d1-8c56-b4824c7f7681\",\n            \"name\": \"United States\",\n            \"code\": \"US\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        }\n    ],\n    \"errors\": []\n}"
-                }
-              ]
-            },
-            {
-              "name": "Search Countries",
-              "request": {
-                "method": "GET",
-                "url": {
-                  "raw": "{{base_url}}/countries?search={{search}}&per_page={{page}}{{per_page}}{{per_page}}&page={{page}}",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "countries"
-                  ],
-                  "query": [
-                    {
-                      "key": "search",
-                      "value": "{{search}}",
-                      "description": "Search in name and code"
-                    },
-                    {
-                      "key": "per_page",
-                      "value": "{{per_page}}",
-                      "description": "Items per page"
-                    },
-                    {
-                      "key": "page",
-                      "value": "{{page}}",
-                      "description": "Page number"
-                    }
-                  ]
-                },
-                "description": "Search countries by name or code",
-                "name": "Search Countries",
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{token}}",
-                    "type": "text"
-                  }
-                ]
-              },
-              "response": [
-                {
-                  "name": "Success Response",
-                  "originalRequest": {
-                    "method": "GET",
-                    "url": "{{base_url}}/countries"
-                  },
-                  "status": "OK",
-                  "code": 200,
-                  "body": "{\n    \"success\": true,\n    \"message\": \"Countries retrieved successfully\",\n    \"data\": [\n        {\n            \"uuid\": \"0198d5bf-f001-72d1-8c56-b4824c7f7680\",\n            \"name\": \"Turkey\",\n            \"code\": \"TR\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        },\n        {\n            \"uuid\": \"0198d5bf-f002-72d1-8c56-b4824c7f7681\",\n            \"name\": \"United States\",\n            \"code\": \"US\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        }\n    ],\n    \"errors\": []\n}"
-                }
-              ]
-            },
-            {
-              "name": "Sort by Name ASC",
-              "request": {
-                "method": "GET",
-                "url": {
-                  "raw": "{{base_url}}/countries?sort_by=name&sort_direction=asc&per_page={{page}}{{per_page}}{{per_page}}&page={{page}}",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "countries"
-                  ],
-                  "query": [
-                    {
-                      "key": "sort_by",
-                      "value": "name",
-                      "description": "Sort by name field"
-                    },
-                    {
-                      "key": "sort_direction",
-                      "value": "asc",
-                      "description": "Sort direction ascending"
-                    },
-                    {
-                      "key": "per_page",
-                      "value": "{{per_page}}",
-                      "description": "Items per page"
-                    },
-                    {
-                      "key": "page",
-                      "value": "{{page}}",
-                      "description": "Page number"
-                    }
-                  ]
-                },
-                "description": "Get countries sorted by name (A-Z)",
-                "name": "Sort by Name ASC",
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{token}}",
-                    "type": "text"
-                  }
-                ]
-              },
-              "response": [
-                {
-                  "name": "Success Response",
-                  "originalRequest": {
-                    "method": "GET",
-                    "url": "{{base_url}}/countries"
-                  },
-                  "status": "OK",
-                  "code": 200,
-                  "body": "{\n    \"success\": true,\n    \"message\": \"Countries retrieved successfully\",\n    \"data\": [\n        {\n            \"uuid\": \"0198d5bf-f001-72d1-8c56-b4824c7f7680\",\n            \"name\": \"Turkey\",\n            \"code\": \"TR\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        },\n        {\n            \"uuid\": \"0198d5bf-f002-72d1-8c56-b4824c7f7681\",\n            \"name\": \"United States\",\n            \"code\": \"US\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        }\n    ],\n    \"errors\": []\n}"
-                }
-              ]
-            },
-            {
-              "name": "Sort by Code ASC",
-              "request": {
-                "method": "GET",
-                "url": {
-                  "raw": "{{base_url}}/countries?sort_by=code&sort_direction=asc&per_page={{page}}{{per_page}}{{per_page}}&page={{page}}",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "countries"
-                  ],
-                  "query": [
-                    {
-                      "key": "sort_by",
-                      "value": "code",
-                      "description": "Sort by country code"
-                    },
-                    {
-                      "key": "sort_direction",
-                      "value": "asc",
-                      "description": "Sort direction ascending"
-                    },
-                    {
-                      "key": "per_page",
-                      "value": "{{per_page}}",
-                      "description": "Items per page"
-                    },
-                    {
-                      "key": "page",
-                      "value": "{{page}}",
-                      "description": "Page number"
-                    }
-                  ]
-                },
-                "description": "Get countries sorted by code (A-Z)",
-                "name": "Sort by Code ASC",
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{token}}",
-                    "type": "text"
-                  }
-                ]
-              },
-              "response": [
-                {
-                  "name": "Success Response",
-                  "originalRequest": {
-                    "method": "GET",
-                    "url": "{{base_url}}/countries"
-                  },
-                  "status": "OK",
-                  "code": 200,
-                  "body": "{\n    \"success\": true,\n    \"message\": \"Countries retrieved successfully\",\n    \"data\": [\n        {\n            \"uuid\": \"0198d5bf-f001-72d1-8c56-b4824c7f7680\",\n            \"name\": \"Turkey\",\n            \"code\": \"TR\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        },\n        {\n            \"uuid\": \"0198d5bf-f002-72d1-8c56-b4824c7f7681\",\n            \"name\": \"United States\",\n            \"code\": \"US\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        }\n    ],\n    \"errors\": []\n}"
-                }
-              ]
-            },
-            {
-              "name": "Sort by Created Date DESC",
-              "request": {
-                "method": "GET",
-                "url": {
-                  "raw": "{{base_url}}/countries?sort_by=created_at&sort_direction=desc&per_page={{page}}{{per_page}}{{per_page}}&page={{page}}",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "countries"
-                  ],
-                  "query": [
-                    {
-                      "key": "sort_by",
-                      "value": "created_at",
-                      "description": "Sort by creation date"
-                    },
-                    {
-                      "key": "sort_direction",
-                      "value": "desc",
-                      "description": "Sort direction descending"
-                    },
-                    {
-                      "key": "per_page",
-                      "value": "{{per_page}}",
-                      "description": "Items per page"
-                    },
-                    {
-                      "key": "page",
-                      "value": "{{page}}",
-                      "description": "Page number"
-                    }
-                  ]
-                },
-                "description": "Get countries sorted by creation date (newest first)",
-                "name": "Sort by Created Date DESC",
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{token}}",
-                    "type": "text"
-                  }
-                ]
-              },
-              "response": [
-                {
-                  "name": "Success Response",
-                  "originalRequest": {
-                    "method": "GET",
-                    "url": "{{base_url}}/countries"
-                  },
-                  "status": "OK",
-                  "code": 200,
-                  "body": "{\n    \"success\": true,\n    \"message\": \"Countries retrieved successfully\",\n    \"data\": [\n        {\n            \"uuid\": \"0198d5bf-f001-72d1-8c56-b4824c7f7680\",\n            \"name\": \"Turkey\",\n            \"code\": \"TR\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        },\n        {\n            \"uuid\": \"0198d5bf-f002-72d1-8c56-b4824c7f7681\",\n            \"name\": \"United States\",\n            \"code\": \"US\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        }\n    ],\n    \"errors\": []\n}"
-                }
-              ]
-            },
-            {
-              "name": "Combined Filters",
-              "request": {
-                "method": "GET",
-                "url": {
-                  "raw": "{{base_url}}/countries?active_only=true&search=turkey&sort_by=name&sort_direction=asc&per_page={{page}}{{per_page}}{{per_page}}&page={{page}}",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "countries"
-                  ],
-                  "query": [
-                    {
-                      "key": "active_only",
-                      "value": "true",
-                      "description": "Active countries only"
-                    },
-                    {
-                      "key": "search",
-                      "value": "turkey",
-                      "description": "Search for 'turkey'"
-                    },
-                    {
-                      "key": "sort_by",
-                      "value": "name",
-                      "description": "Sort by name"
-                    },
-                    {
-                      "key": "sort_direction",
-                      "value": "asc",
-                      "description": "Ascending order"
-                    },
-                    {
-                      "key": "per_page",
-                      "value": "{{per_page}}",
-                      "description": "Items per page"
-                    },
-                    {
-                      "key": "page",
-                      "value": "{{page}}",
-                      "description": "Page number"
-                    }
-                  ]
-                },
-                "description": "Multiple filters combined: active, search, sorted",
-                "name": "Combined Filters",
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{token}}",
-                    "type": "text"
-                  }
-                ]
-              },
-              "response": [
-                {
-                  "name": "Success Response",
-                  "originalRequest": {
-                    "method": "GET",
-                    "url": "{{base_url}}/countries"
-                  },
-                  "status": "OK",
-                  "code": 200,
-                  "body": "{\n    \"success\": true,\n    \"message\": \"Countries retrieved successfully\",\n    \"data\": [\n        {\n            \"uuid\": \"0198d5bf-f001-72d1-8c56-b4824c7f7680\",\n            \"name\": \"Turkey\",\n            \"code\": \"TR\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        },\n        {\n            \"uuid\": \"0198d5bf-f002-72d1-8c56-b4824c7f7681\",\n            \"name\": \"United States\",\n            \"code\": \"US\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        }\n    ],\n    \"errors\": []\n}"
-                }
-              ]
-            }
-          ]
         }
       ]
     },
@@ -6300,523 +5217,6 @@
               "status": "OK",
               "code": 200,
               "body": "{\n    \"success\": true,\n    \"message\": \"Currencies retrieved successfully\",\n    \"data\": [\n        {\n            \"uuid\": \"0198d5bf-g001-72d1-8c56-b4824c7f7690\",\n            \"name\": \"Turkish Lira\",\n            \"code\": \"TRY\",\n            \"symbol\": \"₺\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        },\n        {\n            \"uuid\": \"0198d5bf-g002-72d1-8c56-b4824c7f7691\",\n            \"name\": \"US Dollar\",\n            \"code\": \"USD\",\n            \"symbol\": \"$\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        }\n    ],\n    \"errors\": []\n}"
-            }
-          ]
-        },
-        {
-          "name": "Filters",
-          "description": "Currency filtering and search operations",
-          "item": [
-            {
-              "name": "Filter by Active Only",
-              "request": {
-                "method": "GET",
-                "url": {
-                  "raw": "{{base_url}}/currencies?active_only=true&per_page={{per_page}}&page={{page}}",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "currencies"
-                  ],
-                  "query": [
-                    {
-                      "key": "active_only",
-                      "value": "true",
-                      "description": "Filter active currencies only"
-                    },
-                    {
-                      "key": "per_page",
-                      "value": "{{per_page}}",
-                      "description": "Items per page"
-                    },
-                    {
-                      "key": "page",
-                      "value": "{{page}}",
-                      "description": "Page number"
-                    }
-                  ]
-                },
-                "description": "Get all active currencies",
-                "name": "Filter by Active Only",
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{token}}",
-                    "type": "text"
-                  }
-                ]
-              },
-              "response": [
-                {
-                  "name": "Success Response",
-                  "originalRequest": {
-                    "method": "GET",
-                    "url": "{{base_url}}/currencies"
-                  },
-                  "status": "OK",
-                  "code": 200,
-                  "body": "{\n    \"success\": true,\n    \"message\": \"Currencies retrieved successfully\",\n    \"data\": [\n        {\n            \"uuid\": \"0198d5bf-g001-72d1-8c56-b4824c7f7690\",\n            \"name\": \"Turkish Lira\",\n            \"code\": \"TRY\",\n            \"symbol\": \"₺\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        },\n        {\n            \"uuid\": \"0198d5bf-g002-72d1-8c56-b4824c7f7691\",\n            \"name\": \"US Dollar\",\n            \"code\": \"USD\",\n            \"symbol\": \"$\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        }\n    ],\n    \"errors\": []\n}"
-                }
-              ]
-            },
-            {
-              "name": "Search Currencies",
-              "request": {
-                "method": "GET",
-                "url": {
-                  "raw": "{{base_url}}/currencies?search={{search}}&per_page={{per_page}}&page={{page}}",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "currencies"
-                  ],
-                  "query": [
-                    {
-                      "key": "search",
-                      "value": "{{search}}",
-                      "description": "Search in name and code"
-                    },
-                    {
-                      "key": "per_page",
-                      "value": "{{per_page}}",
-                      "description": "Items per page"
-                    },
-                    {
-                      "key": "page",
-                      "value": "{{page}}",
-                      "description": "Page number"
-                    }
-                  ]
-                },
-                "description": "Search currencies by name or code",
-                "name": "Search Currencies",
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{token}}",
-                    "type": "text"
-                  }
-                ]
-              },
-              "response": [
-                {
-                  "name": "Success Response",
-                  "originalRequest": {
-                    "method": "GET",
-                    "url": "{{base_url}}/currencies"
-                  },
-                  "status": "OK",
-                  "code": 200,
-                  "body": "{\n    \"success\": true,\n    \"message\": \"Currencies retrieved successfully\",\n    \"data\": [\n        {\n            \"uuid\": \"0198d5bf-g001-72d1-8c56-b4824c7f7690\",\n            \"name\": \"Turkish Lira\",\n            \"code\": \"TRY\",\n            \"symbol\": \"₺\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        },\n        {\n            \"uuid\": \"0198d5bf-g002-72d1-8c56-b4824c7f7691\",\n            \"name\": \"US Dollar\",\n            \"code\": \"USD\",\n            \"symbol\": \"$\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        }\n    ],\n    \"errors\": []\n}"
-                }
-              ]
-            },
-            {
-              "name": "Sort by Name ASC",
-              "request": {
-                "method": "GET",
-                "url": {
-                  "raw": "{{base_url}}/currencies?sort_by=name&sort_direction=asc&per_page={{per_page}}&page={{page}}",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "currencies"
-                  ],
-                  "query": [
-                    {
-                      "key": "sort_by",
-                      "value": "name",
-                      "description": "Sort by name field"
-                    },
-                    {
-                      "key": "sort_direction",
-                      "value": "asc",
-                      "description": "Sort direction ascending"
-                    },
-                    {
-                      "key": "per_page",
-                      "value": "{{per_page}}",
-                      "description": "Items per page"
-                    },
-                    {
-                      "key": "page",
-                      "value": "{{page}}",
-                      "description": "Page number"
-                    }
-                  ]
-                },
-                "description": "Get currencies sorted by name (A-Z)",
-                "name": "Sort by Name ASC",
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{token}}",
-                    "type": "text"
-                  }
-                ]
-              },
-              "response": [
-                {
-                  "name": "Success Response",
-                  "originalRequest": {
-                    "method": "GET",
-                    "url": "{{base_url}}/currencies"
-                  },
-                  "status": "OK",
-                  "code": 200,
-                  "body": "{\n    \"success\": true,\n    \"message\": \"Currencies retrieved successfully\",\n    \"data\": [\n        {\n            \"uuid\": \"0198d5bf-g001-72d1-8c56-b4824c7f7690\",\n            \"name\": \"Turkish Lira\",\n            \"code\": \"TRY\",\n            \"symbol\": \"₺\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        },\n        {\n            \"uuid\": \"0198d5bf-g002-72d1-8c56-b4824c7f7691\",\n            \"name\": \"US Dollar\",\n            \"code\": \"USD\",\n            \"symbol\": \"$\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        }\n    ],\n    \"errors\": []\n}"
-                }
-              ]
-            },
-            {
-              "name": "Sort by Code ASC",
-              "request": {
-                "method": "GET",
-                "url": {
-                  "raw": "{{base_url}}/currencies?sort_by=code&sort_direction=asc&per_page={{per_page}}&page={{page}}",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "currencies"
-                  ],
-                  "query": [
-                    {
-                      "key": "sort_by",
-                      "value": "code",
-                      "description": "Sort by currency code"
-                    },
-                    {
-                      "key": "sort_direction",
-                      "value": "asc",
-                      "description": "Sort direction ascending"
-                    },
-                    {
-                      "key": "per_page",
-                      "value": "{{per_page}}",
-                      "description": "Items per page"
-                    },
-                    {
-                      "key": "page",
-                      "value": "{{page}}",
-                      "description": "Page number"
-                    }
-                  ]
-                },
-                "description": "Get currencies sorted by code (A-Z)",
-                "name": "Sort by Code ASC",
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{token}}",
-                    "type": "text"
-                  }
-                ]
-              },
-              "response": [
-                {
-                  "name": "Success Response",
-                  "originalRequest": {
-                    "method": "GET",
-                    "url": "{{base_url}}/currencies"
-                  },
-                  "status": "OK",
-                  "code": 200,
-                  "body": "{\n    \"success\": true,\n    \"message\": \"Currencies retrieved successfully\",\n    \"data\": [\n        {\n            \"uuid\": \"0198d5bf-g001-72d1-8c56-b4824c7f7690\",\n            \"name\": \"Turkish Lira\",\n            \"code\": \"TRY\",\n            \"symbol\": \"₺\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        },\n        {\n            \"uuid\": \"0198d5bf-g002-72d1-8c56-b4824c7f7691\",\n            \"name\": \"US Dollar\",\n            \"code\": \"USD\",\n            \"symbol\": \"$\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        }\n    ],\n    \"errors\": []\n}"
-                }
-              ]
-            },
-            {
-              "name": "Sort by Symbol ASC",
-              "request": {
-                "method": "GET",
-                "url": {
-                  "raw": "{{base_url}}/currencies?sort_by=symbol&sort_direction=asc&per_page={{per_page}}&page={{page}}",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "currencies"
-                  ],
-                  "query": [
-                    {
-                      "key": "sort_by",
-                      "value": "symbol",
-                      "description": "Sort by currency symbol"
-                    },
-                    {
-                      "key": "sort_direction",
-                      "value": "asc",
-                      "description": "Sort direction ascending"
-                    },
-                    {
-                      "key": "per_page",
-                      "value": "{{per_page}}",
-                      "description": "Items per page"
-                    },
-                    {
-                      "key": "page",
-                      "value": "{{page}}",
-                      "description": "Page number"
-                    }
-                  ]
-                },
-                "description": "Get currencies sorted by symbol",
-                "name": "Sort by Symbol ASC",
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{token}}",
-                    "type": "text"
-                  }
-                ]
-              },
-              "response": [
-                {
-                  "name": "Success Response",
-                  "originalRequest": {
-                    "method": "GET",
-                    "url": "{{base_url}}/currencies"
-                  },
-                  "status": "OK",
-                  "code": 200,
-                  "body": "{\n    \"success\": true,\n    \"message\": \"Currencies retrieved successfully\",\n    \"data\": [\n        {\n            \"uuid\": \"0198d5bf-g001-72d1-8c56-b4824c7f7690\",\n            \"name\": \"Turkish Lira\",\n            \"code\": \"TRY\",\n            \"symbol\": \"₺\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        },\n        {\n            \"uuid\": \"0198d5bf-g002-72d1-8c56-b4824c7f7691\",\n            \"name\": \"US Dollar\",\n            \"code\": \"USD\",\n            \"symbol\": \"$\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        }\n    ],\n    \"errors\": []\n}"
-                }
-              ]
-            },
-            {
-              "name": "Sort by Created Date DESC",
-              "request": {
-                "method": "GET",
-                "url": {
-                  "raw": "{{base_url}}/currencies?sort_by=created_at&sort_direction=desc&per_page={{per_page}}&page={{page}}",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "currencies"
-                  ],
-                  "query": [
-                    {
-                      "key": "sort_by",
-                      "value": "created_at",
-                      "description": "Sort by creation date"
-                    },
-                    {
-                      "key": "sort_direction",
-                      "value": "desc",
-                      "description": "Sort direction descending"
-                    },
-                    {
-                      "key": "per_page",
-                      "value": "{{per_page}}",
-                      "description": "Items per page"
-                    },
-                    {
-                      "key": "page",
-                      "value": "{{page}}",
-                      "description": "Page number"
-                    }
-                  ]
-                },
-                "description": "Get currencies sorted by creation date (newest first)",
-                "name": "Sort by Created Date DESC",
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{token}}",
-                    "type": "text"
-                  }
-                ]
-              },
-              "response": [
-                {
-                  "name": "Success Response",
-                  "originalRequest": {
-                    "method": "GET",
-                    "url": "{{base_url}}/currencies"
-                  },
-                  "status": "OK",
-                  "code": 200,
-                  "body": "{\n    \"success\": true,\n    \"message\": \"Currencies retrieved successfully\",\n    \"data\": [\n        {\n            \"uuid\": \"0198d5bf-g001-72d1-8c56-b4824c7f7690\",\n            \"name\": \"Turkish Lira\",\n            \"code\": \"TRY\",\n            \"symbol\": \"₺\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        },\n        {\n            \"uuid\": \"0198d5bf-g002-72d1-8c56-b4824c7f7691\",\n            \"name\": \"US Dollar\",\n            \"code\": \"USD\",\n            \"symbol\": \"$\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        }\n    ],\n    \"errors\": []\n}"
-                }
-              ]
-            },
-            {
-              "name": "Combined Filters",
-              "request": {
-                "method": "GET",
-                "url": {
-                  "raw": "{{base_url}}/currencies?active_only=true&search=dollar&sort_by=name&sort_direction=asc&per_page={{per_page}}&page={{page}}",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "currencies"
-                  ],
-                  "query": [
-                    {
-                      "key": "active_only",
-                      "value": "true",
-                      "description": "Active currencies only"
-                    },
-                    {
-                      "key": "search",
-                      "value": "dollar",
-                      "description": "Search for 'dollar'"
-                    },
-                    {
-                      "key": "sort_by",
-                      "value": "name",
-                      "description": "Sort by name"
-                    },
-                    {
-                      "key": "sort_direction",
-                      "value": "asc",
-                      "description": "Ascending order"
-                    },
-                    {
-                      "key": "per_page",
-                      "value": "{{per_page}}",
-                      "description": "Items per page"
-                    },
-                    {
-                      "key": "page",
-                      "value": "{{page}}",
-                      "description": "Page number"
-                    }
-                  ]
-                },
-                "description": "Multiple filters combined: active, search, sorted",
-                "name": "Combined Filters",
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{token}}",
-                    "type": "text"
-                  }
-                ]
-              },
-              "response": [
-                {
-                  "name": "Success Response",
-                  "originalRequest": {
-                    "method": "GET",
-                    "url": "{{base_url}}/currencies"
-                  },
-                  "status": "OK",
-                  "code": 200,
-                  "body": "{\n    \"success\": true,\n    \"message\": \"Currencies retrieved successfully\",\n    \"data\": [\n        {\n            \"uuid\": \"0198d5bf-g001-72d1-8c56-b4824c7f7690\",\n            \"name\": \"Turkish Lira\",\n            \"code\": \"TRY\",\n            \"symbol\": \"₺\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        },\n        {\n            \"uuid\": \"0198d5bf-g002-72d1-8c56-b4824c7f7691\",\n            \"name\": \"US Dollar\",\n            \"code\": \"USD\",\n            \"symbol\": \"$\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        }\n    ],\n    \"errors\": []\n}"
-                }
-              ]
             }
           ]
         }
@@ -7256,122 +5656,146 @@
               "body": "{\n    \"success\": true,\n    \"message\": \"Languages retrieved successfully\",\n    \"data\": [\n        {\n            \"uuid\": \"0198d5bf-h001-72d1-8c56-b4824c7f7700\",\n            \"name\": \"Turkish\",\n            \"code\": \"tr\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        },\n        {\n            \"uuid\": \"0198d5bf-h002-72d1-8c56-b4824c7f7701\",\n            \"name\": \"English\",\n            \"code\": \"en\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        }\n    ],\n    \"errors\": []\n}"
             }
           ]
-        },
+        }
+      ]
+    },
+    {
+      "name": "Shipping",
+      "description": "Shipping method management endpoints for order fulfillment and delivery options",
+      "item": [
         {
-          "name": "Filters",
-          "description": "Language filtering and search operations",
-          "item": [
+          "name": "Get Available Shipping Methods",
+          "event": [
             {
-              "name": "Filter by Active Only",
-              "request": {
-                "method": "GET",
-                "url": {
-                  "raw": "{{base_url}}/languages?active_only=true&per_page={{page}}{{per_page}}{{per_page}}&page={{page}}",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "languages"
-                  ],
-                  "query": [
-                    {
-                      "key": "active_only",
-                      "value": "true",
-                      "description": "Filter active languages only"
-                    },
-                    {
-                      "key": "per_page",
-                      "value": "{{per_page}}",
-                      "description": "Items per page"
-                    },
-                    {
-                      "key": "page",
-                      "value": "{{page}}",
-                      "description": "Page number"
-                    }
-                  ]
-                },
-                "description": "Get all active languages",
-                "name": "Filter by Active Only",
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{token}}",
-                    "type": "text"
-                  }
-                ]
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Response status code is 200', function () {",
+                  "    pm.expect(pm.response.code).to.equal(200);",
+                  "});",
+                  "",
+                  "pm.test('Response has required structure', function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.have.property('success', true);",
+                  "    pm.expect(responseJson).to.have.property('message');",
+                  "    pm.expect(responseJson).to.have.property('data');",
+                  "});",
+                  "",
+                  "pm.test('Shipping methods data is an array', function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson.data).to.be.an('array');",
+                  "});",
+                  "",
+                  "pm.test('Each shipping method has required properties', function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    if (responseJson.data.length > 0) {",
+                  "        const firstMethod = responseJson.data[0];",
+                  "        pm.expect(firstMethod).to.have.property('uuid');",
+                  "        pm.expect(firstMethod).to.have.property('name');",
+                  "        pm.expect(firstMethod).to.have.property('description');",
+                  "        pm.expect(firstMethod).to.have.property('price');",
+                  "        pm.expect(firstMethod).to.have.property('min_delivery_days');",
+                  "        pm.expect(firstMethod).to.have.property('max_delivery_days');",
+                  "        pm.expect(firstMethod).to.have.property('is_active');",
+                  "        pm.expect(firstMethod).to.have.property('delivery_time');",
+                  "    }",
+                  "});",
+                  "",
+                  "pm.test('Price is a valid number format', function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    if (responseJson.data.length > 0) {",
+                  "        const firstMethod = responseJson.data[0];",
+                  "        pm.expect(firstMethod.price).to.match(/^\\d+\\.\\d{2}$/);",
+                  "    }",
+                  "});",
+                  "",
+                  "pm.test('Delivery days are valid integers', function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    if (responseJson.data.length > 0) {",
+                  "        const firstMethod = responseJson.data[0];",
+                  "        pm.expect(firstMethod.min_delivery_days).to.be.a('number');",
+                  "        pm.expect(firstMethod.max_delivery_days).to.be.a('number');",
+                  "        pm.expect(firstMethod.min_delivery_days).to.be.at.least(1);",
+                  "        pm.expect(firstMethod.max_delivery_days).to.be.at.least(firstMethod.min_delivery_days);",
+                  "    }",
+                  "});",
+                  "",
+                  "pm.test('All methods are active', function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    responseJson.data.forEach(method => {",
+                  "        pm.expect(method.is_active).to.equal(true);",
+                  "    });",
+                  "});",
+                  "",
+                  "pm.test('Methods are sorted by sort_order and price', function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    if (responseJson.data.length > 1) {",
+                  "        for (let i = 1; i < responseJson.data.length; i++) {",
+                  "            const current = responseJson.data[i];",
+                  "            const previous = responseJson.data[i - 1];",
+                  "            ",
+                  "            if (current.sort_order === previous.sort_order) {",
+                  "                pm.expect(parseFloat(current.price)).to.be.at.least(parseFloat(previous.price));",
+                  "            } else {",
+                  "                pm.expect(current.sort_order).to.be.at.least(previous.sort_order);",
+                  "            }",
+                  "        }",
+                  "    }",
+                  "});",
+                  "",
+                  "pm.test('Response time is acceptable', function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});",
+                  "",
+                  "// Save first shipping method UUID for other requests",
+                  "pm.test('Save first shipping method UUID', function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    if (responseJson.data.length > 0) {",
+                  "        pm.collectionVariables.set('shipping_method_uuid', responseJson.data[0].uuid);",
+                  "    }",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
               },
-              "response": [
-                {
-                  "name": "Success Response",
-                  "originalRequest": {
-                    "method": "GET",
-                    "url": "{{base_url}}/languages"
-                  },
-                  "status": "OK",
-                  "code": 200,
-                  "body": "{\n    \"success\": true,\n    \"message\": \"Languages retrieved successfully\",\n    \"data\": [\n        {\n            \"uuid\": \"0198d5bf-h001-72d1-8c56-b4824c7f7700\",\n            \"name\": \"Turkish\",\n            \"code\": \"tr\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        },\n        {\n            \"uuid\": \"0198d5bf-h002-72d1-8c56-b4824c7f7701\",\n            \"name\": \"English\",\n            \"code\": \"en\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        }\n    ],\n    \"errors\": []\n}"
-                }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/shipping/methods",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "shipping",
+                "methods"
               ]
             },
+            "name": "Get Available Shipping Methods"
+          },
+          "response": [
             {
-              "name": "Filter by Direction - LTR",
-              "request": {
+              "name": "Successful Response - Active Shipping Methods",
+              "originalRequest": {
                 "method": "GET",
-                "url": {
-                  "raw": "{{base_url}}/languages?direction=ltr&per_page={{page}}{{per_page}}{{per_page}}&page={{page}}",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "languages"
-                  ],
-                  "query": [
-                    {
-                      "key": "direction",
-                      "value": "ltr",
-                      "description": "Filter left-to-right languages"
-                    },
-                    {
-                      "key": "per_page",
-                      "value": "{{per_page}}",
-                      "description": "Items per page"
-                    },
-                    {
-                      "key": "page",
-                      "value": "{{page}}",
-                      "description": "Page number"
-                    }
-                  ]
-                },
-                "description": "Get all left-to-right languages",
-                "name": "Filter by Direction - LTR",
                 "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json",
-                    "type": "text"
-                  },
                   {
                     "key": "Accept",
                     "value": "application/json",
@@ -7382,536 +5806,79 @@
                     "value": "Bearer {{token}}",
                     "type": "text"
                   }
-                ]
-              },
-              "response": [
-                {
-                  "name": "Success Response",
-                  "originalRequest": {
-                    "method": "GET",
-                    "url": "{{base_url}}/languages"
-                  },
-                  "status": "OK",
-                  "code": 200,
-                  "body": "{\n    \"success\": true,\n    \"message\": \"Languages retrieved successfully\",\n    \"data\": [\n        {\n            \"uuid\": \"0198d5bf-h001-72d1-8c56-b4824c7f7700\",\n            \"name\": \"Turkish\",\n            \"code\": \"tr\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        },\n        {\n            \"uuid\": \"0198d5bf-h002-72d1-8c56-b4824c7f7701\",\n            \"name\": \"English\",\n            \"code\": \"en\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        }\n    ],\n    \"errors\": []\n}"
+                ],
+                "url": {
+                  "raw": "{{base_url}}/shipping/methods",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "shipping",
+                    "methods"
+                  ]
                 }
-              ]
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache, private"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sat, 24 Aug 2025 11:45:00 GMT"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": true,\n    \"message\": \"Shipping methods retrieved successfully.\",\n    \"data\": [\n        {\n            \"uuid\": \"01912345-6789-7123-8901-234567890123\",\n            \"name\": \"Standard Shipping\",\n            \"description\": \"Standard delivery within business days\",\n            \"price\": \"9.99\",\n            \"min_delivery_days\": 3,\n            \"max_delivery_days\": 5,\n            \"is_active\": true,\n            \"sort_order\": 1,\n            \"delivery_time\": \"3-5 business days\",\n            \"created_at\": \"2025-08-24T11:41:55.000000Z\",\n            \"updated_at\": \"2025-08-24T11:41:55.000000Z\"\n        },\n        {\n            \"uuid\": \"01912345-6789-7123-8901-234567890124\",\n            \"name\": \"Express Shipping\",\n            \"description\": \"Fast delivery for urgent orders\",\n            \"price\": \"19.99\",\n            \"min_delivery_days\": 1,\n            \"max_delivery_days\": 2,\n            \"is_active\": true,\n            \"sort_order\": 2,\n            \"delivery_time\": \"1-2 business days\",\n            \"created_at\": \"2025-08-24T11:41:55.000000Z\",\n            \"updated_at\": \"2025-08-24T11:41:55.000000Z\"\n        },\n        {\n            \"uuid\": \"01912345-6789-7123-8901-234567890125\",\n            \"name\": \"Next Day Delivery\",\n            \"description\": \"Get your order tomorrow\",\n            \"price\": \"29.99\",\n            \"min_delivery_days\": 1,\n            \"max_delivery_days\": 1,\n            \"is_active\": true,\n            \"sort_order\": 3,\n            \"delivery_time\": \"1 business day\",\n            \"created_at\": \"2025-08-24T11:41:55.000000Z\",\n            \"updated_at\": \"2025-08-24T11:41:55.000000Z\"\n        },\n        {\n            \"uuid\": \"01912345-6789-7123-8901-234567890126\",\n            \"name\": \"Economy Shipping\",\n            \"description\": \"Budget-friendly shipping option\",\n            \"price\": \"4.99\",\n            \"min_delivery_days\": 7,\n            \"max_delivery_days\": 10,\n            \"is_active\": true,\n            \"sort_order\": 4,\n            \"delivery_time\": \"7-10 business days\",\n            \"created_at\": \"2025-08-24T11:41:55.000000Z\",\n            \"updated_at\": \"2025-08-24T11:41:55.000000Z\"\n        }\n    ],\n    \"errors\": []\n}"
             },
             {
-              "name": "Filter by Direction - RTL",
-              "request": {
+              "name": "Unauthorized Response - Missing Token",
+              "originalRequest": {
                 "method": "GET",
-                "url": {
-                  "raw": "{{base_url}}/languages?direction=rtl&per_page={{page}}{{per_page}}{{per_page}}&page={{page}}",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "languages"
-                  ],
-                  "query": [
-                    {
-                      "key": "direction",
-                      "value": "rtl",
-                      "description": "Filter right-to-left languages"
-                    },
-                    {
-                      "key": "per_page",
-                      "value": "{{per_page}}",
-                      "description": "Items per page"
-                    },
-                    {
-                      "key": "page",
-                      "value": "{{page}}",
-                      "description": "Page number"
-                    }
-                  ]
-                },
-                "description": "Get all right-to-left languages",
-                "name": "Filter by Direction - RTL",
                 "header": [
                   {
                     "key": "Accept",
                     "value": "application/json",
                     "type": "text"
-                  },
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{token}}",
-                    "type": "text"
                   }
-                ]
-              },
-              "response": [
-                {
-                  "name": "Success Response",
-                  "originalRequest": {
-                    "method": "GET",
-                    "url": "{{base_url}}/languages"
-                  },
-                  "status": "OK",
-                  "code": 200,
-                  "body": "{\n    \"success\": true,\n    \"message\": \"Languages retrieved successfully\",\n    \"data\": [\n        {\n            \"uuid\": \"0198d5bf-h001-72d1-8c56-b4824c7f7700\",\n            \"name\": \"Turkish\",\n            \"code\": \"tr\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        },\n        {\n            \"uuid\": \"0198d5bf-h002-72d1-8c56-b4824c7f7701\",\n            \"name\": \"English\",\n            \"code\": \"en\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        }\n    ],\n    \"errors\": []\n}"
-                }
-              ]
-            },
-            {
-              "name": "Search Languages",
-              "request": {
-                "method": "GET",
+                ],
                 "url": {
-                  "raw": "{{base_url}}/languages?search={{search}}&per_page={{page}}{{per_page}}{{per_page}}&page={{page}}",
+                  "raw": "{{base_url}}/shipping/methods",
                   "host": [
                     "{{base_url}}"
                   ],
                   "path": [
-                    "languages"
-                  ],
-                  "query": [
-                    {
-                      "key": "search",
-                      "value": "{{search}}",
-                      "description": "Search in name, native_name and code"
-                    },
-                    {
-                      "key": "per_page",
-                      "value": "{{per_page}}",
-                      "description": "Items per page"
-                    },
-                    {
-                      "key": "page",
-                      "value": "{{page}}",
-                      "description": "Page number"
-                    }
+                    "shipping",
+                    "methods"
                   ]
-                },
-                "description": "Search languages by name, native name or code",
-                "name": "Search Languages",
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{token}}",
-                    "type": "text"
-                  }
-                ]
-              },
-              "response": [
-                {
-                  "name": "Success Response",
-                  "originalRequest": {
-                    "method": "GET",
-                    "url": "{{base_url}}/languages"
-                  },
-                  "status": "OK",
-                  "code": 200,
-                  "body": "{\n    \"success\": true,\n    \"message\": \"Languages retrieved successfully\",\n    \"data\": [\n        {\n            \"uuid\": \"0198d5bf-h001-72d1-8c56-b4824c7f7700\",\n            \"name\": \"Turkish\",\n            \"code\": \"tr\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        },\n        {\n            \"uuid\": \"0198d5bf-h002-72d1-8c56-b4824c7f7701\",\n            \"name\": \"English\",\n            \"code\": \"en\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        }\n    ],\n    \"errors\": []\n}"
                 }
-              ]
-            },
-            {
-              "name": "Sort by Name ASC",
-              "request": {
-                "method": "GET",
-                "url": {
-                  "raw": "{{base_url}}/languages?sort_by=name&sort_direction=asc&per_page={{page}}{{per_page}}{{per_page}}&page={{page}}",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "languages"
-                  ],
-                  "query": [
-                    {
-                      "key": "sort_by",
-                      "value": "name",
-                      "description": "Sort by name field"
-                    },
-                    {
-                      "key": "sort_direction",
-                      "value": "asc",
-                      "description": "Sort direction ascending"
-                    },
-                    {
-                      "key": "per_page",
-                      "value": "{{per_page}}",
-                      "description": "Items per page"
-                    },
-                    {
-                      "key": "page",
-                      "value": "{{page}}",
-                      "description": "Page number"
-                    }
-                  ]
-                },
-                "description": "Get languages sorted by name (A-Z)",
-                "name": "Sort by Name ASC",
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{token}}",
-                    "type": "text"
-                  }
-                ]
               },
-              "response": [
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
                 {
-                  "name": "Success Response",
-                  "originalRequest": {
-                    "method": "GET",
-                    "url": "{{base_url}}/languages"
-                  },
-                  "status": "OK",
-                  "code": 200,
-                  "body": "{\n    \"success\": true,\n    \"message\": \"Languages retrieved successfully\",\n    \"data\": [\n        {\n            \"uuid\": \"0198d5bf-h001-72d1-8c56-b4824c7f7700\",\n            \"name\": \"Turkish\",\n            \"code\": \"tr\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        },\n        {\n            \"uuid\": \"0198d5bf-h002-72d1-8c56-b4824c7f7701\",\n            \"name\": \"English\",\n            \"code\": \"en\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        }\n    ],\n    \"errors\": []\n}"
-                }
-              ]
-            },
-            {
-              "name": "Sort by Code ASC",
-              "request": {
-                "method": "GET",
-                "url": {
-                  "raw": "{{base_url}}/languages?sort_by=code&sort_direction=asc&per_page={{page}}{{per_page}}{{per_page}}&page={{page}}",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "languages"
-                  ],
-                  "query": [
-                    {
-                      "key": "sort_by",
-                      "value": "code",
-                      "description": "Sort by language code"
-                    },
-                    {
-                      "key": "sort_direction",
-                      "value": "asc",
-                      "description": "Sort direction ascending"
-                    },
-                    {
-                      "key": "per_page",
-                      "value": "{{per_page}}",
-                      "description": "Items per page"
-                    },
-                    {
-                      "key": "page",
-                      "value": "{{page}}",
-                      "description": "Page number"
-                    }
-                  ]
+                  "key": "Content-Type",
+                  "value": "application/json"
                 },
-                "description": "Get languages sorted by code (A-Z)",
-                "name": "Sort by Code ASC",
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{token}}",
-                    "type": "text"
-                  }
-                ]
-              },
-              "response": [
                 {
-                  "name": "Success Response",
-                  "originalRequest": {
-                    "method": "GET",
-                    "url": "{{base_url}}/languages"
-                  },
-                  "status": "OK",
-                  "code": 200,
-                  "body": "{\n    \"success\": true,\n    \"message\": \"Languages retrieved successfully\",\n    \"data\": [\n        {\n            \"uuid\": \"0198d5bf-h001-72d1-8c56-b4824c7f7700\",\n            \"name\": \"Turkish\",\n            \"code\": \"tr\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        },\n        {\n            \"uuid\": \"0198d5bf-h002-72d1-8c56-b4824c7f7701\",\n            \"name\": \"English\",\n            \"code\": \"en\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        }\n    ],\n    \"errors\": []\n}"
-                }
-              ]
-            },
-            {
-              "name": "Sort by Native Name ASC",
-              "request": {
-                "method": "GET",
-                "url": {
-                  "raw": "{{base_url}}/languages?sort_by=native_name&sort_direction=asc&per_page={{page}}{{per_page}}{{per_page}}&page={{page}}",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "languages"
-                  ],
-                  "query": [
-                    {
-                      "key": "sort_by",
-                      "value": "native_name",
-                      "description": "Sort by native name"
-                    },
-                    {
-                      "key": "sort_direction",
-                      "value": "asc",
-                      "description": "Sort direction ascending"
-                    },
-                    {
-                      "key": "per_page",
-                      "value": "{{per_page}}",
-                      "description": "Items per page"
-                    },
-                    {
-                      "key": "page",
-                      "value": "{{page}}",
-                      "description": "Page number"
-                    }
-                  ]
+                  "key": "Cache-Control",
+                  "value": "no-cache, private"
                 },
-                "description": "Get languages sorted by native name",
-                "name": "Sort by Native Name ASC",
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{token}}",
-                    "type": "text"
-                  }
-                ]
-              },
-              "response": [
                 {
-                  "name": "Success Response",
-                  "originalRequest": {
-                    "method": "GET",
-                    "url": "{{base_url}}/languages"
-                  },
-                  "status": "OK",
-                  "code": 200,
-                  "body": "{\n    \"success\": true,\n    \"message\": \"Languages retrieved successfully\",\n    \"data\": [\n        {\n            \"uuid\": \"0198d5bf-h001-72d1-8c56-b4824c7f7700\",\n            \"name\": \"Turkish\",\n            \"code\": \"tr\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        },\n        {\n            \"uuid\": \"0198d5bf-h002-72d1-8c56-b4824c7f7701\",\n            \"name\": \"English\",\n            \"code\": \"en\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        }\n    ],\n    \"errors\": []\n}"
+                  "key": "Date",
+                  "value": "Sat, 24 Aug 2025 11:45:00 GMT"
                 }
-              ]
-            },
-            {
-              "name": "Sort by Created Date DESC",
-              "request": {
-                "method": "GET",
-                "url": {
-                  "raw": "{{base_url}}/languages?sort_by=created_at&sort_direction=desc&per_page={{page}}{{per_page}}{{per_page}}&page={{page}}",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "languages"
-                  ],
-                  "query": [
-                    {
-                      "key": "sort_by",
-                      "value": "created_at",
-                      "description": "Sort by creation date"
-                    },
-                    {
-                      "key": "sort_direction",
-                      "value": "desc",
-                      "description": "Sort direction descending"
-                    },
-                    {
-                      "key": "per_page",
-                      "value": "{{per_page}}",
-                      "description": "Items per page"
-                    },
-                    {
-                      "key": "page",
-                      "value": "{{page}}",
-                      "description": "Page number"
-                    }
-                  ]
-                },
-                "description": "Get languages sorted by creation date (newest first)",
-                "name": "Sort by Created Date DESC",
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{token}}",
-                    "type": "text"
-                  }
-                ]
-              },
-              "response": [
-                {
-                  "name": "Success Response",
-                  "originalRequest": {
-                    "method": "GET",
-                    "url": "{{base_url}}/languages"
-                  },
-                  "status": "OK",
-                  "code": 200,
-                  "body": "{\n    \"success\": true,\n    \"message\": \"Languages retrieved successfully\",\n    \"data\": [\n        {\n            \"uuid\": \"0198d5bf-h001-72d1-8c56-b4824c7f7700\",\n            \"name\": \"Turkish\",\n            \"code\": \"tr\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        },\n        {\n            \"uuid\": \"0198d5bf-h002-72d1-8c56-b4824c7f7701\",\n            \"name\": \"English\",\n            \"code\": \"en\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        }\n    ],\n    \"errors\": []\n}"
-                }
-              ]
-            },
-            {
-              "name": "Combined Filters",
-              "request": {
-                "method": "GET",
-                "url": {
-                  "raw": "{{base_url}}/languages?active_only=true&direction=ltr&search=english&sort_by=name&sort_direction=asc&per_page={{page}}{{per_page}}{{per_page}}&page={{page}}",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "languages"
-                  ],
-                  "query": [
-                    {
-                      "key": "active_only",
-                      "value": "true",
-                      "description": "Active languages only"
-                    },
-                    {
-                      "key": "direction",
-                      "value": "ltr",
-                      "description": "Left-to-right languages"
-                    },
-                    {
-                      "key": "search",
-                      "value": "english",
-                      "description": "Search for 'english'"
-                    },
-                    {
-                      "key": "sort_by",
-                      "value": "name",
-                      "description": "Sort by name"
-                    },
-                    {
-                      "key": "sort_direction",
-                      "value": "asc",
-                      "description": "Ascending order"
-                    },
-                    {
-                      "key": "per_page",
-                      "value": "{{per_page}}",
-                      "description": "Items per page"
-                    },
-                    {
-                      "key": "page",
-                      "value": "{{page}}",
-                      "description": "Page number"
-                    }
-                  ]
-                },
-                "description": "Multiple filters combined: active, LTR, search, sorted",
-                "name": "Combined Filters",
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "Authorization",
-                    "value": "Bearer {{token}}",
-                    "type": "text"
-                  }
-                ]
-              },
-              "response": [
-                {
-                  "name": "Success Response",
-                  "originalRequest": {
-                    "method": "GET",
-                    "url": "{{base_url}}/languages"
-                  },
-                  "status": "OK",
-                  "code": 200,
-                  "body": "{\n    \"success\": true,\n    \"message\": \"Languages retrieved successfully\",\n    \"data\": [\n        {\n            \"uuid\": \"0198d5bf-h001-72d1-8c56-b4824c7f7700\",\n            \"name\": \"Turkish\",\n            \"code\": \"tr\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        },\n        {\n            \"uuid\": \"0198d5bf-h002-72d1-8c56-b4824c7f7701\",\n            \"name\": \"English\",\n            \"code\": \"en\",\n            \"is_active\": true,\n            \"created_at\": \"2025-08-23T20:00:00.000000Z\",\n            \"updated_at\": \"2025-08-23T20:00:00.000000Z\"\n        }\n    ],\n    \"errors\": []\n}"
-                }
-              ]
+              ],
+              "cookie": [],
+              "body": "{\n    \"message\": \"Unauthenticated.\"\n}"
             }
           ]
         }
@@ -7966,7 +5933,7 @@
   "variable": [
     {
       "key": "base_url",
-      "value": "http://localhost:8080/api",
+      "value": "http://localhost:8080",
       "type": "string"
     },
     {
@@ -8021,6 +5988,11 @@
     },
     {
       "key": "address_uuid",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "shipping_method_uuid",
       "value": "",
       "type": "string"
     },

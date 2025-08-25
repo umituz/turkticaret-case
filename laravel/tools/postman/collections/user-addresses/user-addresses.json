@@ -42,44 +42,6 @@
       }
     },
     {
-      "name": "List Addresses by Type",
-      "request": {
-        "method": "GET",
-        "url": {
-          "raw": "{{base_url}}/addresses?type=shipping",
-          "host": ["{{base_url}}"],
-          "path": ["addresses"],
-          "query": [
-            {
-              "key": "type",
-              "value": "shipping",
-              "description": "Filter by address type (shipping or billing)"
-            }
-          ]
-        },
-        "description": "Get addresses filtered by type (shipping or billing)"
-      }
-    },
-    {
-      "name": "List Default Addresses Only",
-      "request": {
-        "method": "GET",
-        "url": {
-          "raw": "{{base_url}}/addresses?is_default=true",
-          "host": ["{{base_url}}"],
-          "path": ["addresses"],
-          "query": [
-            {
-              "key": "is_default",
-              "value": "true",
-              "description": "Filter to show only default addresses"
-            }
-          ]
-        },
-        "description": "Get only the default addresses for the user"
-      }
-    },
-    {
       "name": "Create Billing Address",
       "request": {
         "method": "POST",

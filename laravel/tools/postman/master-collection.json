@@ -39,9 +39,7 @@
             { "$ref": "collections/user-addresses/user-addresses.json#/item/5" },
             { "$ref": "collections/user-addresses/user-addresses.json#/item/6" },
             { "$ref": "collections/user-addresses/user-addresses.json#/item/7" },
-            { "$ref": "collections/user-addresses/user-addresses.json#/item/8" },
-            { "$ref": "collections/user-addresses/user-addresses.json#/item/9" },
-            { "$ref": "collections/user-addresses/user-addresses.json#/item/10" }
+            { "$ref": "collections/user-addresses/user-addresses.json#/item/8" }
           ]
         },
         {
@@ -67,8 +65,7 @@
         { "$ref": "collections/categories/categories.json#/item/3" },
         { "$ref": "collections/categories/categories.json#/item/4" },
         { "$ref": "collections/categories/categories.json#/item/5" },
-        { "$ref": "collections/categories/categories.json#/item/6" },
-        { "$ref": "collections/categories/categories.json#/item/7" }
+        { "$ref": "collections/categories/categories.json#/item/6" }
       ]
     },
     {
@@ -138,8 +135,7 @@
         { "$ref": "collections/countries/countries.json#/item/3" },
         { "$ref": "collections/countries/countries.json#/item/4" },
         { "$ref": "collections/countries/countries.json#/item/5" },
-        { "$ref": "collections/countries/countries.json#/item/6" },
-        { "$ref": "collections/countries/countries.json#/item/7" }
+        { "$ref": "collections/countries/countries.json#/item/6" }
       ]
     },
     {
@@ -152,8 +148,7 @@
         { "$ref": "collections/currencies/currencies.json#/item/3" },
         { "$ref": "collections/currencies/currencies.json#/item/4" },
         { "$ref": "collections/currencies/currencies.json#/item/5" },
-        { "$ref": "collections/currencies/currencies.json#/item/6" },
-        { "$ref": "collections/currencies/currencies.json#/item/7" }
+        { "$ref": "collections/currencies/currencies.json#/item/6" }
       ]
     },
     {
@@ -166,8 +161,7 @@
         { "$ref": "collections/languages/languages.json#/item/3" },
         { "$ref": "collections/languages/languages.json#/item/4" },
         { "$ref": "collections/languages/languages.json#/item/5" },
-        { "$ref": "collections/languages/languages.json#/item/6" },
-        { "$ref": "collections/languages/languages.json#/item/7" }
+        { "$ref": "collections/languages/languages.json#/item/6" }
       ]
     },
     {
