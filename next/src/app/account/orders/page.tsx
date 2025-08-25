@@ -28,6 +28,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Order } from '@/types/user';
 import { getOrders } from '@/services/orderService';
 import { transformOrderFiltersForAPI } from '@/lib/order-filter-utils';
+import { useLogoutGuard } from '@/hooks/useLogoutGuard';
 import {
   Package,
   Search,
@@ -48,6 +49,7 @@ function OrdersPageContent() {
   const router = useRouter();
   const { toast } = useToast();
   const toastRef = useRef(toast);
+  const { guardedExecution, shouldPreventExecution } = useLogoutGuard();
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -72,42 +74,50 @@ function OrdersPageContent() {
       return;
     }
     
-    try {
-      setLoading(true);
-      
-      const apiFilters = transformOrderFiltersForAPI({
-        search: searchTerm || undefined,
-        status: statusFilter,
-        dateFilter: dateFilter
-      });
-      
-      const result = await getOrders(apiFilters);
-      setOrders(result.orders);
-      
-      
-      const totalSpent = result.orders.reduce((sum, order) => sum + order.total.raw, 0);
-      const now = new Date();
-      const monthlyCount = result.orders.filter(order => {
-        const orderDate = new Date(order.createdAt);
-        return orderDate.getMonth() === now.getMonth() && 
-               orderDate.getFullYear() === now.getFullYear();
-      }).length;
-      
-      setOrderStats({ totalSpent, monthlyCount });
-    } catch (error) {
-      console.error('Failed to load orders:', error);
-      toastRef.current({
-        title: 'Error!',
-        description: 'Failed to load orders. Please try again.',
-        variant: 'destructive',
-      });
-      setOrders([]);
-    } finally {
-      setLoading(false);
-    }
-  }, [user, searchTerm, statusFilter, dateFilter, router]);
+    await guardedExecution(
+      async () => {
+        setLoading(true);
+        
+        const apiFilters = transformOrderFiltersForAPI({
+          search: searchTerm || undefined,
+          status: statusFilter,
+          dateFilter: dateFilter
+        });
+        
+        const result = await getOrders(apiFilters);
+        setOrders(result.orders);
+        
+        const totalSpent = result.orders.reduce((sum, order) => sum + order.total.raw, 0);
+        const now = new Date();
+        const monthlyCount = result.orders.filter(order => {
+          const orderDate = new Date(order.createdAt);
+          return orderDate.getMonth() === now.getMonth() && 
+                 orderDate.getFullYear() === now.getFullYear();
+        }).length;
+        
+        setOrderStats({ totalSpent, monthlyCount });
+      },
+      {
+        onError: (error) => {
+          console.error('Failed to load orders:', error);
+          toastRef.current({
+            title: 'Error!',
+            description: 'Failed to load orders. Please try again.',
+            variant: 'destructive',
+          });
+          setOrders([]);
+        }
+      }
+    );
+    
+    setLoading(false);
+  }, [user, searchTerm, statusFilter, dateFilter, router, guardedExecution]);
 
   useEffect(() => {
+    if (shouldPreventExecution()) {
+      return;
+    }
+    
     if (!isLoading && !user) {
       router.push('/auth/login');
       return;
@@ -121,7 +131,7 @@ function OrdersPageContent() {
     if (user) {
       loadOrders();
     }
-  }, [user, isLoading, router, loadOrders]);
+  }, [user, isLoading, router, loadOrders, shouldPreventExecution]);
 
   const getStatusIcon = (status: string) => {
     switch (status) {

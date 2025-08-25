@@ -47,18 +47,7 @@ export function Header({ onSearchChange }: HeaderProps) {
   };
 
   const handleLogout = async () => {
-    try {
-      
-      window.sessionStorage.setItem('turkticaret_logging_out', 'true');
-      
-      router.push('/');
-      
-      await logout();
-    } catch (error) {
-      console.error('Logout failed:', error);
-    } finally {
-      window.sessionStorage.removeItem('turkticaret_logging_out');
-    }
+    await logout('/');
   };
 
 

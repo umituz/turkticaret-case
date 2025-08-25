@@ -12,6 +12,7 @@ import { formatDate } from '@/utils/common';
 import { getOrderStatusIcon, getOrderStatusColor, getOrderStatusDotColor, getPaymentStatusColor } from '@/lib/order-utils';
 import { Order } from '@/types/user';
 import { orderService, OrderStatusHistory } from '@/services/orderService';
+import { useLogoutGuard } from '@/hooks/useLogoutGuard';
 import {
   ArrowLeft,
   Package,
@@ -32,6 +33,7 @@ function OrderDetailPageContent() {
   const params = useParams() as { uuid: string };
   const { toast } = useToast();
   const toastRef = useRef(toast);
+  const { guardedExecution, shouldPreventExecution } = useLogoutGuard();
   const [order, setOrder] = useState<Order | null>(null);
   const [orderHistory, setOrderHistory] = useState<OrderStatusHistory | null>(null);
   const [loading, setLoading] = useState(true);
@@ -54,44 +56,54 @@ function OrderDetailPageContent() {
       return;
     }
     
-    try {
-      setLoading(true);
-      
-      
-      const foundOrder = await orderService.getOrder(params.uuid as string);
-      
-      setOrder(foundOrder);
-    } catch (error) {
-      console.error('Failed to load order:', error);
-      toastRef.current({
-        title: 'Error!',
-        description: 'Failed to load order details.',
-        variant: 'destructive',
-      });
-      router.push('/account/orders');
-    } finally {
-      setLoading(false);
-    }
-  }, [user, params.uuid, router]);
+    await guardedExecution(
+      async () => {
+        setLoading(true);
+        const foundOrder = await orderService.getOrder(params.uuid as string);
+        setOrder(foundOrder);
+      },
+      {
+        onError: (error) => {
+          console.error('Failed to load order:', error);
+          toastRef.current({
+            title: 'Error!',
+            description: 'Failed to load order details.',
+            variant: 'destructive',
+          });
+          router.push('/account/orders');
+        }
+      }
+    );
+    
+    setLoading(false);
+  }, [user, params.uuid, router, guardedExecution]);
 
   const loadOrderHistory = useCallback(async () => {
     if (!user || !params.uuid) {
       return;
     }
     
-    try {
-      setHistoryLoading(true);
-      const history = await orderService.getOrderStatusHistory(params.uuid as string);
-      setOrderHistory(history);
-    } catch (error) {
-      console.error('Failed to load order history:', error);
-      
-    } finally {
-      setHistoryLoading(false);
-    }
-  }, [user, params.uuid]);
+    await guardedExecution(
+      async () => {
+        setHistoryLoading(true);
+        const history = await orderService.getOrderStatusHistory(params.uuid as string);
+        setOrderHistory(history);
+      },
+      {
+        onError: (error) => {
+          console.error('Failed to load order history:', error);
+        }
+      }
+    );
+    
+    setHistoryLoading(false);
+  }, [user, params.uuid, guardedExecution]);
 
   useEffect(() => {
+    if (shouldPreventExecution()) {
+      return;
+    }
+    
     if (!isLoading && !user) {
       router.push('/auth/login');
       return;
@@ -106,7 +118,7 @@ function OrderDetailPageContent() {
       loadOrder();
       loadOrderHistory();
     }
-  }, [user, isLoading, params.uuid, router, loadOrder, loadOrderHistory]);
+  }, [user, isLoading, params.uuid, router, loadOrder, loadOrderHistory, shouldPreventExecution]);
 
 
 

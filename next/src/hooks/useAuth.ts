@@ -4,9 +4,13 @@ import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { loginUser, logoutUser, checkAuth, refreshProfile, clearError, updateUser as updateUserAction, LoginCredentials } from '@/store/slices/authSlice';
 import { useEffect, useRef } from 'react';
 import { User } from '@/types/user';
+import { useRouter } from 'next/navigation';
+import { STORAGE_KEYS } from '@/lib/constants';
+import { setLogoutState } from '@/lib/logout-utils';
 
 export function useAuth() {
   const dispatch = useAppDispatch();
+  const router = useRouter();
   const { user, isLoading, isAuthenticated, error } = useAppSelector((state) => state.auth);
   const hasCheckedAuth = useRef(false);
 
@@ -42,9 +46,27 @@ export function useAuth() {
     throw new Error(result.payload as string);
   };
 
-  const logout = async () => {
-    hasCheckedAuth.current = false; 
-    await dispatch(logoutUser());
+  const logout = async (redirectPath: string = '/') => {
+    try {
+      // Set logout state using centralized manager
+      setLogoutState(true);
+      
+      // Navigate first to prevent API calls on protected pages
+      router.push(redirectPath);
+      
+      // Reset auth check flag
+      hasCheckedAuth.current = false;
+      
+      // Perform logout
+      await dispatch(logoutUser());
+    } catch (error) {
+      console.error('Logout failed:', error);
+    } finally {
+      // Clean up logout state after a delay
+      setTimeout(() => {
+        setLogoutState(false);
+      }, 1500);
+    }
   };
 
   const updateUserProfile = (updatedUser: User) => {

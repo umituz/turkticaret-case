@@ -65,8 +65,7 @@ export const ProfileSidebar = ({ className }: ProfileSidebarProps) => {
   }, []);
 
   const handleLogout = async () => {
-    await logout();
-    router.push('/');
+    await logout('/');
   };
 
   if (!mounted) {

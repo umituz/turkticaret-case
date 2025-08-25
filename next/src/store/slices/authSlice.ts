@@ -116,11 +116,8 @@ export const refreshProfile = createAsyncThunk(
 export const logoutUser = createAsyncThunk(
   'auth/logout',
   async () => {
-    
+    // Clear all auth-related storage
     if (typeof window !== 'undefined') {
-      
-      window.sessionStorage.setItem('turkticaret_logging_out', 'true');
-      
       SecureStorage.removeItem(STORAGE_KEYS.AUTH_STATUS);
       SecureStorage.removeItem(STORAGE_KEYS.AUTH_TOKEN);
       SecureStorage.removeItem(STORAGE_KEYS.USER_DATA);
@@ -130,14 +127,7 @@ export const logoutUser = createAsyncThunk(
     try {
       await authService.logout();
     } catch {
-      
-    }
-    
-    
-    if (typeof window !== 'undefined') {
-      setTimeout(() => {
-        window.sessionStorage.removeItem('turkticaret_logging_out');
-      }, 1000);
+      // Ignore errors during logout
     }
     
     return true;

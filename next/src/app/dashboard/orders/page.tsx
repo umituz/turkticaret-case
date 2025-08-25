@@ -5,15 +5,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -26,19 +18,17 @@ import { useToast } from '@/hooks/use-toast';
 
 import { Order } from '@/types/user';
 import { getAllOrders, updateOrderStatus } from '@/services/adminOrderService';
-import { transformOrderFiltersForAPI } from '@/lib/order-filter-utils';
+import { useLogoutGuard } from '@/hooks/useLogoutGuard';
 import {
   Package,
-  Search,
   MoreHorizontal,
   Eye,
-  DollarSign,
   Truck,
   CheckCircle,
   Clock,
   XCircle,
   AlertCircle,
-  Filter
+  TrendingUp
 } from 'lucide-react';
 
 function AdminOrdersPageContent() {
@@ -47,11 +37,9 @@ function AdminOrdersPageContent() {
   const router = useRouter();
   const { toast } = useToast();
   const toastRef = useRef(toast);
+  const { guardedExecution, shouldPreventExecution } = useLogoutGuard();
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState<string>('all');
-  const [dateFilter, setDateFilter] = useState<string>('all');
   const [orderStats, setOrderStats] = useState({ totalOrders: 0, totalRevenue: 0 });
   const [mounted, setMounted] = useState(false);
   const [updatingStatus, setUpdatingStatus] = useState<string | null>(null);
@@ -69,38 +57,40 @@ function AdminOrdersPageContent() {
   const loadOrders = useCallback(async () => {
     if (!user) return;
     
-    try {
-      setLoading(true);
-      
-      const apiFilters = transformOrderFiltersForAPI({
-        search: searchTerm || undefined,
-        status: statusFilter,
-        dateFilter: dateFilter
-      });
-      
-      const result = await getAllOrders(apiFilters);
-      setOrders(result.orders);
-      
-      
-      const totalRevenue = result.orders.reduce((sum, order) => sum + order.total.raw, 0);
-      setOrderStats({ 
-        totalOrders: result.orders.length, 
-        totalRevenue 
-      });
-    } catch (error) {
-      console.error('Failed to load orders:', error);
-      toastRef.current({
-        title: 'Error!',
-        description: 'Failed to load orders. Please try again.',
-        variant: 'destructive',
-      });
-      setOrders([]);
-    } finally {
-      setLoading(false);
-    }
-  }, [user, searchTerm, statusFilter, dateFilter]);
+    await guardedExecution(
+      async () => {
+        setLoading(true);
+        
+        const result = await getAllOrders({});
+        setOrders(result.orders);
+        
+        const totalRevenue = result.orders.reduce((sum, order) => sum + order.total.raw, 0);
+        setOrderStats({ 
+          totalOrders: result.orders.length, 
+          totalRevenue 
+        });
+      },
+      {
+        onError: (error) => {
+          console.error('Failed to load orders:', error);
+          toastRef.current({
+            title: 'Error!',
+            description: 'Failed to load orders. Please try again.',
+            variant: 'destructive',
+          });
+          setOrders([]);
+        }
+      }
+    );
+    
+    setLoading(false);
+  }, [user, guardedExecution]);
 
   useEffect(() => {
+    if (shouldPreventExecution()) {
+      return;
+    }
+    
     if (!isLoading && !user) {
       router.push('/auth/login');
       return;
@@ -114,7 +104,7 @@ function AdminOrdersPageContent() {
     if (user) {
       loadOrders();
     }
-  }, [user, isLoading, router, loadOrders]);
+  }, [user, isLoading, router, loadOrders, shouldPreventExecution]);
 
   const handleStatusUpdate = async (orderUuid: string, newStatus: string) => {
     try {
@@ -228,7 +218,7 @@ function AdminOrdersPageContent() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
-            <DollarSign className="h-4 w-4 text-muted-foreground" />
+            <TrendingUp className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
@@ -239,12 +229,12 @@ function AdminOrdersPageContent() {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Filters Active</CardTitle>
-            <Filter className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium">Status</CardTitle>
+            <CheckCircle className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {[statusFilter !== 'all', dateFilter !== 'all', searchTerm !== ''].filter(Boolean).length}
+              Active
             </div>
           </CardContent>
         </Card>
@@ -259,45 +249,6 @@ function AdminOrdersPageContent() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="flex flex-col sm:flex-row gap-4 mb-6">
-            <div className="flex-1 relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
-              <Input
-                placeholder="Search orders or customers..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10"
-              />
-            </div>
-            
-            <Select value={statusFilter} onValueChange={setStatusFilter}>
-              <SelectTrigger className="w-full sm:w-48">
-                <SelectValue placeholder="Filter by status" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Status</SelectItem>
-                <SelectItem value="pending">Pending</SelectItem>
-                <SelectItem value="processing">Processing</SelectItem>
-                <SelectItem value="shipped">Shipped</SelectItem>
-                <SelectItem value="delivered">Delivered</SelectItem>
-                <SelectItem value="cancelled">Cancelled</SelectItem>
-                <SelectItem value="refunded">Refunded</SelectItem>
-              </SelectContent>
-            </Select>
-
-            <Select value={dateFilter} onValueChange={setDateFilter}>
-              <SelectTrigger className="w-full sm:w-48">
-                <SelectValue placeholder="Filter by date" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Time</SelectItem>
-                <SelectItem value="week">Last Week</SelectItem>
-                <SelectItem value="month">Last Month</SelectItem>
-                <SelectItem value="quarter">Last 3 Months</SelectItem>
-                <SelectItem value="year">Last Year</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
 
           {}
           {loading ? (

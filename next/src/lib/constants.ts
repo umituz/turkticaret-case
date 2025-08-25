@@ -5,6 +5,7 @@ export const STORAGE_KEYS = {
   USER_DATA: 'turkticaret_user',
   CART_DATA: 'turkticaret_cart',
   CSRF_TOKEN: 'csrf_token',
+  LOGGING_OUT: 'turkticaret_logging_out',
 } as const;
 
 

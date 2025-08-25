@@ -31,12 +31,7 @@ export const AdminHeader = ({ onMobileMenuToggle }: AdminHeaderProps) => {
   const router = useRouter();
 
   const handleLogout = async () => {
-    try {
-      await logout();
-    } catch (error) {
-      console.error('Logout failed:', error);
-    }
-    router.push('/');
+    await logout('/');
   };
 
 
