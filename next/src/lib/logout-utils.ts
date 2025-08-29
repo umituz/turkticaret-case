@@ -68,15 +68,17 @@ export class LogoutManager {
   /**
    * Check if an API error should be ignored due to logout
    */
-  public shouldIgnoreError(error: any): boolean {
+  public shouldIgnoreError(error: unknown): boolean {
     if (this.isLoggingOutState()) {
       return true;
     }
 
     // Check if error is authentication related
-    const isAuthError = error?.message?.includes('Authentication') ||
-                       error?.message?.includes('401') ||
-                       error?.status === 401;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const errorObj = error as any;
+    const isAuthError = errorObj?.message?.includes('Authentication') ||
+                       errorObj?.message?.includes('401') ||
+                       errorObj?.status === 401;
 
     return isAuthError && this.isLoggingOutState();
   }
@@ -116,6 +118,6 @@ export const shouldPreventExecution = (): boolean => {
 /**
  * Utility function to check if error should be ignored
  */
-export const shouldIgnoreLogoutError = (error: any): boolean => {
+export const shouldIgnoreLogoutError = (error: unknown): boolean => {
   return logoutManager.shouldIgnoreError(error);
 };

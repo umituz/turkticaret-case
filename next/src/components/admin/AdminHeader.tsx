@@ -1,6 +1,5 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -28,7 +27,6 @@ interface AdminHeaderProps {
 
 export const AdminHeader = ({ onMobileMenuToggle }: AdminHeaderProps) => {
   const { user, logout } = useAuth();
-  const router = useRouter();
 
   const handleLogout = async () => {
     await logout('/');

@@ -1,6 +1,7 @@
 'use client';
 
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { useAuth } from '@/hooks/useAuth';
 import { 
   addItem, 
   removeItem, 
@@ -22,7 +23,7 @@ import { useEffect } from 'react';
 export function useCart() {
   const dispatch = useAppDispatch();
   const { items, total, itemCount, isOpen, isLoading, error } = useAppSelector((state) => state.cart);
-  const { isAuthenticated, isLoading: authLoading } = useAppSelector((state) => state.auth);
+  const { isAuthenticated, isLoading: authLoading } = useAuth();
 
   
   useEffect(() => {

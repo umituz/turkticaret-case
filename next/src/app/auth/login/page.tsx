@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -19,7 +18,6 @@ interface LoginFormData extends Record<string, unknown> {
 }
 
 export default function LoginPage() {
-  const router = useRouter();
   const { login, isLoginPending } = useAuth();
   const [showPassword, setShowPassword] = useState(true);
 
@@ -37,14 +35,8 @@ export default function LoginPage() {
     },
     onSubmit: async (values) => {
       try {
-        const result = await login(values);
-        
-        
-        if (result?.user?.role === 'admin') {
-          router.push('/dashboard');
-        } else {
-          router.push('/');
-        }
+        await login(values);
+        // Redirect is handled by the login function
       } catch (error) {
         console.error('Login failed:', error);
         throw new Error('Invalid email or password');

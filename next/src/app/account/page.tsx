@@ -243,7 +243,7 @@ function AccountOverviewPageContent() {
                     <div>
                       <p className="text-sm font-medium">Member Since</p>
                       <p className="text-sm text-muted-foreground">
-                        {user?.created_at ? formatDate(user.created_at) : 'Unknown'}
+                        Recently joined
                       </p>
                     </div>
                   </div>

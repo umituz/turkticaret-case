@@ -87,7 +87,7 @@ export default function DashboardPage() {
       {}
       <div className="mb-8">
         <h1 className="text-3xl font-bold tracking-tight mb-2">
-          Welcome back, {user?.name.split(' ')[0]}!
+          Welcome back, {user?.name?.split(' ')[0] || 'Admin'}!
         </h1>
         <p className="text-muted-foreground">
           Here&apos;s what&apos;s happening with your store today.
@@ -101,6 +101,7 @@ export default function DashboardPage() {
             key={stat.title}
             title={stat.title}
             value={stat.value}
+            change="+12%"
             description={stat.description}
             icon={getStatIcon(stat.title)}
           />

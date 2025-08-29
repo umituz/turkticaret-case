@@ -29,7 +29,7 @@ export const useLogoutGuard = () => {
   /**
    * Check if an error should be ignored due to logout
    */
-  const shouldIgnoreError = useCallback((error: any) => {
+  const shouldIgnoreError = useCallback((error: unknown) => {
     return logoutManager.shouldIgnoreError(error);
   }, []);
 
@@ -40,7 +40,7 @@ export const useLogoutGuard = () => {
     fn: () => Promise<T>,
     options: {
       onPreventExecution?: () => void;
-      onError?: (error: any) => void;
+      onError?: (error: unknown) => void;
       shouldThrowOnPrevent?: boolean;
     } = {}
   ): Promise<T | null> => {
@@ -74,13 +74,12 @@ export const useLogoutGuard = () => {
   }, [shouldPreventExecution, shouldIgnoreError]);
 
   /**
-   * Wrapper for useEffect callbacks that should be prevented during logout
+   * Create a guarded effect function (to be used inside useEffect manually)
    */
-  const guardedEffect = useCallback((
-    effectFn: () => void | Promise<void>,
-    deps?: React.DependencyList
+  const createGuardedEffect = useCallback((
+    effectFn: () => void | Promise<void>
   ) => {
-    return useEffect(() => {
+    return () => {
       if (shouldPreventExecution()) {
         return;
       }
@@ -89,13 +88,13 @@ export const useLogoutGuard = () => {
       
       // If it's a promise, catch any errors
       if (result && typeof result.then === 'function') {
-        result.catch((error) => {
+        result.catch((error: unknown) => {
           if (!shouldIgnoreError(error)) {
             console.error('Guarded effect error:', error);
           }
         });
       }
-    }, deps);
+    };
   }, [shouldPreventExecution, shouldIgnoreError]);
 
   return {
@@ -103,6 +102,6 @@ export const useLogoutGuard = () => {
     shouldPreventExecution,
     shouldIgnoreError,
     guardedExecution,
-    guardedEffect,
+    createGuardedEffect,
   };
 };

@@ -1,5 +1,5 @@
-import { SecureStorage } from '@/lib/security';
-import { STORAGE_KEYS, ROUTES, COOKIE_KEYS } from '@/lib/constants';
+import { ROUTES } from '@/lib/constants';
+import { getSession } from 'next-auth/react';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -36,15 +36,27 @@ class ApiClient {
   private async request<T>(endpoint: string, options: ApiRequestOptions = {}): Promise<T> {
     const { params, ...fetchOptions } = options;
     const url = this.buildUrl(endpoint, params);
-    const token = typeof window !== 'undefined' ? SecureStorage.getItem(STORAGE_KEYS.AUTH_TOKEN) : null;
+    
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      ...fetchOptions.headers as Record<string, string>,
+    };
+    
+    // Get session token for authentication
+    let session = null;
+    
+    if (typeof window !== 'undefined') {
+      session = await getSession();
+    }
+    
+    // Add Authorization header if token is available
+    if (session?.user?.accessToken) {
+      headers['Authorization'] = `Bearer ${session.user.accessToken}`;
+    }
     
     const defaultOptions: RequestInit = {
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        ...(token && { 'Authorization': `Bearer ${token}` }),
-        ...fetchOptions.headers,
-      },
+      headers,
       credentials: 'include',
     };
 
@@ -66,34 +78,14 @@ class ApiClient {
           
         }
 
-        
         if (response.status === 401 && typeof window !== 'undefined') {
-          
           const isLogoutRequest = url.includes('/logout');
           if (isLogoutRequest) {
-            
             return {} as T;
           }
           
-          const token = SecureStorage.getItem(STORAGE_KEYS.AUTH_TOKEN);
-          if (token) {
-            
-            SecureStorage.removeItem(STORAGE_KEYS.AUTH_STATUS);
-            SecureStorage.removeItem(STORAGE_KEYS.AUTH_TOKEN);
-            SecureStorage.removeItem(STORAGE_KEYS.USER_DATA);
-            
-            document.cookie = `${COOKIE_KEYS.AUTH_STATUS}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
-            
-            
-            const isLoggingOut = window.sessionStorage.getItem('turkticaret_logging_out');
-            if (!isLoggingOut) {
-              
-              window.location.replace(ROUTES.AUTH.LOGIN);
-            }
-            throw new Error('Authentication expired');
-          }
-          
-          throw new Error('Authentication required');
+          window.location.replace(ROUTES.AUTH.LOGIN);
+          throw new Error('Authentication expired');
         }
         
         

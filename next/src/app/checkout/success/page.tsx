@@ -198,6 +198,9 @@ function CheckoutSuccessContent() {
   );
 }
 
+// Force dynamic rendering for this page since it uses search params
+export const dynamic = 'force-dynamic';
+
 export default function CheckoutSuccessPage() {
   return (
     <Suspense

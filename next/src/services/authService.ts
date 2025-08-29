@@ -1,8 +1,7 @@
 import { apiClient } from '@/lib/api';
 import { User } from '@/types/user';
 import { BaseService } from './BaseService';
-import { SecureStorage } from '@/lib/security';
-import { STORAGE_KEYS, API_ENDPOINTS } from '@/lib/constants';
+import { API_ENDPOINTS } from '@/lib/constants';
 import { logError } from '@/lib/errorHandler';
 
 export interface LoginRequest {
@@ -89,41 +88,6 @@ class AuthService extends BaseService<User, User, never> {
       await apiClient.post(API_ENDPOINTS.AUTH.LOGOUT);
     } catch (error) {
       logError(error, 'LOGOUT');
-    } finally {
-      if (typeof window !== 'undefined') {
-        SecureStorage.removeItem(STORAGE_KEYS.USER_DATA);
-        SecureStorage.removeItem(STORAGE_KEYS.AUTH_TOKEN);
-        SecureStorage.removeItem(STORAGE_KEYS.AUTH_STATUS);
-      }
-    }
-  }
-
-  isAuthenticated(): boolean {
-    if (typeof window === 'undefined') return false;
-    
-    const user = SecureStorage.getItem(STORAGE_KEYS.USER_DATA);
-    return !!user;
-  }
-
-  getCurrentUser(): User | null {
-    if (typeof window === 'undefined') return null;
-    
-    try {
-      const user = SecureStorage.getItem(STORAGE_KEYS.USER_DATA);
-      if (!user) return null;
-      
-      const parsedUser = JSON.parse(user);
-      return parsedUser;
-    } catch (error) {
-      logError(error, 'PARSE_USER_DATA');
-      SecureStorage.removeItem(STORAGE_KEYS.USER_DATA);
-      return null;
-    }
-  }
-
-  saveUser(user: User): void {
-    if (typeof window !== 'undefined') {
-      SecureStorage.setItem(STORAGE_KEYS.USER_DATA, JSON.stringify(user));
     }
   }
 }

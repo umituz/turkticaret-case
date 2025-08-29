@@ -1,109 +1,89 @@
 'use client';
 
-import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { loginUser, logoutUser, checkAuth, refreshProfile, clearError, updateUser as updateUserAction, LoginCredentials } from '@/store/slices/authSlice';
-import { useEffect, useRef } from 'react';
-import { User } from '@/types/user';
-import { useRouter } from 'next/navigation';
-import { STORAGE_KEYS } from '@/lib/constants';
-import { setLogoutState } from '@/lib/logout-utils';
+import { useSession, signIn, signOut } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+
+interface LoginCredentials {
+  email: string;
+  password: string;
+}
 
 export function useAuth() {
-  const dispatch = useAppDispatch();
+  const { data: session, status, update } = useSession();
   const router = useRouter();
-  const { user, isLoading, isAuthenticated, error } = useAppSelector((state) => state.auth);
-  const hasCheckedAuth = useRef(false);
-
-  
-  useEffect(() => {
-    if (typeof window !== 'undefined' && !isAuthenticated && !user && !hasCheckedAuth.current && !isLoading) {
-      
-      const authCookie = document.cookie.includes('turkticaret_auth=true');
-      if (!authCookie) {
-        return; 
-      }
-      hasCheckedAuth.current = true;
-      dispatch(checkAuth());
-    }
-  }, [dispatch, isAuthenticated, user, isLoading]);
-
-  
-  useEffect(() => {
-    if (!isAuthenticated) return;
-
-    const interval = setInterval(() => {
-      dispatch(refreshProfile());
-    }, 10 * 60 * 1000); 
-
-    return () => clearInterval(interval);
-  }, [dispatch, isAuthenticated]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const login = async (credentials: LoginCredentials) => {
-    const result = await dispatch(loginUser(credentials));
-    if (loginUser.fulfilled.match(result)) {
-      return result.payload;
-    }
-    throw new Error(result.payload as string);
-  };
-
-  const logout = async (redirectPath: string = '/') => {
     try {
-      // Set logout state using centralized manager
-      setLogoutState(true);
+      setIsLoading(true);
+      const result = await signIn("credentials", {
+        email: credentials.email,
+        password: credentials.password,
+        redirect: false,
+      });
+
+      if (result?.error) {
+        throw new Error(result.error);
+      }
+
+      // Single session refresh after login
+      const updatedSession = await update();
+      const userRole = updatedSession?.user?.role;
       
-      // Navigate first to prevent API calls on protected pages
-      router.push(redirectPath);
-      
-      // Reset auth check flag
-      hasCheckedAuth.current = false;
-      
-      // Perform logout
-      await dispatch(logoutUser());
+      if (userRole === "admin") {
+        router.push("/dashboard");
+      } else {
+        router.push("/"); // Non-admin users go to homepage
+      }
+
+      return result;
     } catch (error) {
-      console.error('Logout failed:', error);
+      throw error;
     } finally {
-      // Clean up logout state after a delay
-      setTimeout(() => {
-        setLogoutState(false);
-      }, 1500);
+      setIsLoading(false);
     }
   };
 
-  const updateUserProfile = (updatedUser: User) => {
-    dispatch(updateUserAction(updatedUser));
+  const logout = async (redirectTo: string = "/") => {
+    try {
+      setIsLoading(true);
+      await signOut({ 
+        redirect: false 
+      });
+      router.push(redirectTo);
+    } catch (error) {
+      console.error("Logout failed:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const refetchUser = () => {
-    dispatch(checkAuth());
-  };
-
-  const refetchProfile = () => {
-    dispatch(refreshProfile());
-  };
-
-  const clearAuthError = () => {
-    dispatch(clearError());
+  const refreshSession = async () => {
+    await update();
   };
 
   return {
+    // Session data
+    user: session?.user || null,
+    isAuthenticated: status === "authenticated",
+    isLoading: status === "loading" || isLoading,
+    error: null,
     
-    user,
-    isAuthenticated,
-    isLoading,
-    error,
-    
-    
+    // Actions
     login,
     logout,
-    updateUser: updateUserProfile,
-    refetchUser,
-    refetchProfile,
-    clearAuthError,
+    updateUser: refreshSession,
+    refetchUser: refreshSession,
+    refetchProfile: refreshSession,
+    clearAuthError: () => {},
     
-    
+    // Computed properties
+    isAdmin: session?.user?.role === "admin",
+    isUser: session?.user?.role === "user",
     isLoginPending: isLoading,
     isLogoutPending: isLoading,
-    loginError: error,
-    authError: error,
+    loginError: null,
+    authError: null,
   };
 }

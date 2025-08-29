@@ -6,8 +6,9 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
-import { useAppSelector, useAppDispatch } from '@/store/hooks';
+import { useAppDispatch } from '@/store/hooks';
 import { addToCartAPI } from '@/store/slices/cartSlice';
+import { useAuth } from '@/hooks/useAuth';
 import { Product } from '@/types/product';
 
 interface ProductCardProps {
@@ -19,7 +20,7 @@ interface ProductCardProps {
 export const ProductCard = ({ product, viewMode = 'grid', priority = false }: ProductCardProps) => {
   const { toast } = useToast();
   const dispatch = useAppDispatch();
-  const { isAuthenticated } = useAppSelector((state) => state.auth);
+  const { isAuthenticated } = useAuth();
   const router = useRouter();
   const toastRef = useRef(toast);
   

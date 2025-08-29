@@ -99,7 +99,7 @@ export const ProductForm = ({ product, mode }: ProductFormProps) => {
         taxable: product.taxable
       });
     }
-  }, [product, mode]);
+  }, [product, mode, categories]);
 
   const loadCategories = async () => {
     try {

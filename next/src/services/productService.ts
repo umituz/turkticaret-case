@@ -31,17 +31,19 @@ class ProductService extends BaseService<Product, ApiProduct, ProductFilters> {
     };
   }
 
-  protected mapToApi(product: Partial<Product> | any): Partial<ApiProduct> {
+  protected mapToApi(product: Partial<Product> | Record<string, unknown>): Partial<ApiProduct> {
     return {
-      name: product.name,
-      slug: product.slug,
-      description: product.description,
-      price: product.price?.raw || 0,
-      sku: product.sku,
-      stock_quantity: product.quantity,
-      category_uuid: product.categoryUuid,
-      is_active: product.isActive,
-      is_featured: product.isFeatured
+      name: product.name as string | undefined,
+      slug: product.slug as string | undefined,
+      description: product.description as string | undefined,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      price: (product.price as any)?.raw || 0,
+      sku: product.sku as string | undefined,
+      stock_quantity: product.quantity as number | undefined,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      category_uuid: (product as any).categoryUuid as string | undefined,
+      is_active: product.isActive as boolean | undefined,
+      is_featured: product.isFeatured as boolean | undefined
     };
   }
 

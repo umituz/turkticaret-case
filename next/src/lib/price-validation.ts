@@ -6,10 +6,15 @@ export interface PriceRange {
 export interface PriceValidationResult {
   isValid: boolean;
   errorMessage?: string;
+  minPrice?: number;
+  maxPrice?: number;
 }
 
 export const validatePriceRange = (priceRange: PriceRange): PriceValidationResult => {
-  if (priceRange.min && priceRange.max && parseFloat(priceRange.min) > parseFloat(priceRange.max)) {
+  const minPrice = priceRange.min ? parseFloat(priceRange.min) : undefined;
+  const maxPrice = priceRange.max ? parseFloat(priceRange.max) : undefined;
+
+  if (minPrice !== undefined && maxPrice !== undefined && minPrice > maxPrice) {
     return {
       isValid: false,
       errorMessage: 'Min price cannot be greater than max'
@@ -17,7 +22,9 @@ export const validatePriceRange = (priceRange: PriceRange): PriceValidationResul
   }
 
   return {
-    isValid: true
+    isValid: true,
+    minPrice,
+    maxPrice
   };
 };
 

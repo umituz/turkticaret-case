@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
-import StoreProvider from "@/providers/StoreProvider";
+import { ClientWrapper } from "@/components/providers/ClientWrapper";
 import { BRAND } from "@/constants/branding";
 import "./globals.css";
 
@@ -21,6 +21,9 @@ export const metadata: Metadata = {
   keywords: "e-commerce, online shopping, electronics, clothing, books, home living",
 };
 
+// Force dynamic rendering for the entire app due to authentication
+export const dynamic = 'force-dynamic';
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -31,10 +34,10 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <StoreProvider>
+        <ClientWrapper>
           {children}
           <Toaster />
-        </StoreProvider>
+        </ClientWrapper>
       </body>
     </html>
   );

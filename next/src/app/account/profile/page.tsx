@@ -75,17 +75,13 @@ export default function EditProfilePage() {
 
     try {
       setSaving(true);
-      const updatedUserData = await authService.updateProfile({
+      await authService.updateProfile({
         name: formData.name,
         email: formData.email
       });
       
-      
-      const updatedUser = {
-        ...user!,
-        ...updatedUserData
-      };
-      updateUser(updatedUser);
+      // Refresh session to get updated user data
+      updateUser();
       
       toast({
         title: 'Success!',
@@ -157,7 +153,7 @@ export default function EditProfilePage() {
                     </div>
                     <div>
                       <p className="text-sm font-medium">{user?.name}</p>
-                      <p className="text-sm text-muted-foreground">Member since {user?.created_at ? new Date(user.created_at).toLocaleDateString() : 'Unknown'}</p>
+                      <p className="text-sm text-muted-foreground">Recently joined</p>
                     </div>
                   </div>
 
@@ -195,7 +191,7 @@ export default function EditProfilePage() {
                     <div className="grid gap-3 text-sm">
                       <div className="flex justify-between">
                         <span className="text-muted-foreground">Member Since:</span>
-                        <span>{user?.created_at ? new Date(user.created_at).toLocaleDateString() : 'Unknown'}</span>
+                        <span>Recently joined</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-muted-foreground">Account Type:</span>

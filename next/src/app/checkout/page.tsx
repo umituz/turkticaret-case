@@ -170,9 +170,9 @@ export default function CheckoutPage() {
           
           setFormData(prev => ({
             ...prev,
-            email: user.email,
-            firstName: user.name.split(' ')[0] || '',
-            lastName: user.name.split(' ')[1] || ''
+            email: user.email || '',
+            firstName: user.name?.split(' ')[0] || '',
+            lastName: user.name?.split(' ')[1] || ''
           }));
         } finally {
           setLoadingData(false);
@@ -204,8 +204,8 @@ export default function CheckoutPage() {
       setUseNewAddress(true);
       setFormData(prev => ({
         ...prev,
-        firstName: user?.name.split(' ')[0] || '',
-        lastName: user?.name.split(' ')[1] || '',
+        firstName: user?.name?.split(' ')[0] || '',
+        lastName: user?.name?.split(' ')[1] || '',
         address1: '',
         address2: '',
         city: '',
