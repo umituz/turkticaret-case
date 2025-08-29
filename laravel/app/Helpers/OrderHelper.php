@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Helpers\Order;
+namespace App\Helpers;
 
-use App\Helpers\MoneyHelper;
+use App\Enums\Order\OrderEnum;
 use App\Models\Order\Order;
 
 /**
@@ -26,7 +26,7 @@ class OrderHelper
      */
     public static function formatOrderNumber(string $uuid): string
     {
-        return strtoupper(substr($uuid, 0, 8));
+        return strtoupper(substr($uuid, 0, OrderEnum::getOrderNumberUuidLength()));
     }
 
     /**
