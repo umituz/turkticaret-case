@@ -101,18 +101,29 @@ create_network() {
 # Create network before starting services
 create_network
 
-# Build base image first
-print_status "Building base image first..."
-if docker build -t turkticaret-base:latest -f docker/base.Dockerfile .; then
-    print_success "Base image built successfully"
-else
-    print_error "Failed to build base image"
-    exit 1
-fi
+# Check if base image exists before building
+check_base_image() {
+    if docker image inspect turkticaret-base:latest >/dev/null 2>&1; then
+        print_status "Base image already exists, skipping build"
+        return 0
+    else
+        print_status "Building base image..."
+        if docker build -t turkticaret-base:latest -f docker/base.Dockerfile .; then
+            print_success "Base image built successfully"
+            return 0
+        else
+            print_error "Failed to build base image"
+            exit 1
+        fi
+    fi
+}
 
-# Build and start services
-print_status "Building and starting Docker containers..."
-docker compose up -d --build
+# Check and build base image only if needed
+check_base_image
+
+# Build and start services (without forcing rebuild)
+print_status "Starting Docker containers..."
+docker compose up -d
 
 # Check if services are running
 print_status "Checking service status..."
@@ -127,8 +138,46 @@ else
     exit 1
 fi
 
-if docker ps | grep -q turkticaret_postgres; then
+if docker ps | grep -q postgres; then
     print_success "PostgreSQL is running!"
+    
+    # Fix database host in .env file if needed
+    if docker exec turkticaret_laravel grep -q "DB_HOST=turkticaret_postgres" /var/www/html/turkticaret-api/.env 2>/dev/null; then
+        print_status "Fixing database host in .env file..."
+        docker exec turkticaret_laravel sed -i 's/DB_HOST=turkticaret_postgres/DB_HOST=postgres/g' /var/www/html/turkticaret-api/.env
+        docker exec turkticaret_laravel sed -i 's/REDIS_HOST=turkticaret_redis/REDIS_HOST=redis/g' /var/www/html/turkticaret-api/.env
+        docker exec turkticaret_laravel sed -i 's/MAIL_HOST=turkticaret_mailhog/MAIL_HOST=mailhog/g' /var/www/html/turkticaret-api/.env
+        print_success "Database host fixed in .env file"
+    fi
+    
+    # Wait additional time for PostgreSQL to be fully ready
+    print_status "Waiting for PostgreSQL to be fully ready..."
+    sleep 10
+    
+    # Install composer dependencies first
+    print_status "Installing Composer dependencies..."
+    if docker exec turkticaret_laravel composer install; then
+        print_success "Composer dependencies installed successfully!"
+    else
+        print_error "Failed to install composer dependencies"
+        exit 1
+    fi
+    
+    # Clear Laravel caches
+    print_status "Clearing Laravel caches..."
+    docker exec turkticaret_laravel php artisan config:clear
+    docker exec turkticaret_laravel php artisan cache:clear
+    
+    # Test database connection first
+    print_status "Testing database connection..."
+    if docker exec turkticaret_laravel php artisan tinker --execute="DB::connection()->getPdo(); echo 'Database connected successfully!';" >/dev/null 2>&1; then
+        print_success "Database connection test passed!"
+    else
+        print_error "Database connection test failed!"
+        print_status "Checking network connectivity..."
+        docker exec turkticaret_laravel ping -c 2 postgres
+        exit 1
+    fi
     
     # Run migrations and seeders
     print_status "Running Laravel migrations and seeders..."
@@ -144,24 +193,32 @@ else
     exit 1
 fi
 
-if docker ps | grep -q turkticaret_redis; then
+if docker ps | grep -q redis; then
     print_success "Redis is running!"
 else
     print_error "Redis failed to start"
     docker compose logs redis
 fi
 
-if docker ps | grep -q turkticaret_mailhog; then
+if docker ps | grep -q mailhog; then
     print_success "MailHog is running!"
     print_status "MailHog Web UI available at: http://localhost:8025"
 else
     print_warning "MailHog may not be running properly"
 fi
 
+if docker ps | grep -q turkticaret_next; then
+    print_success "Next.js Frontend is running!"
+    print_status "Frontend available at: http://localhost:3000"
+else
+    print_warning "Next.js Frontend may not be running properly"
+fi
+
 print_success "All services started successfully!"
 print_status ""
 print_status "🚀 Development environment is ready!"
 print_status "📡 API: http://localhost:8080"
+print_status "🖥️  Frontend: http://localhost:3000"
 print_status "📧 MailHog: http://localhost:8025"
 print_status "🗄️  PostgreSQL: localhost:5433"
 print_status ""
