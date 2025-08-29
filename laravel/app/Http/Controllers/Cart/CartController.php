@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Cart;
 use App\DTOs\Cart\CartItemDTO;
 use App\Exceptions\Product\InsufficientStockException;
 use App\Exceptions\Product\OutOfStockException;
+use App\Helpers\AuthHelper;
 use App\Http\Controllers\BaseController;
 use App\Http\Requests\Cart\CartAddRequest;
 use App\Http\Requests\Cart\CartRemoveRequest;
@@ -37,7 +38,7 @@ class CartController extends BaseController
      */
     public function index(): JsonResponse
     {
-        $cart = $this->cartService->getOrCreateCart(auth()->user()->uuid);
+        $cart = $this->cartService->getOrCreateCart(AuthHelper::getUserUuid());
 
         return $this->ok(new CartResource($cart));
     }
@@ -53,7 +54,7 @@ class CartController extends BaseController
     public function add(CartAddRequest $request): JsonResponse
     {
         $cartItemData = CartItemDTO::fromArray($request->validated());
-        $cart = $this->cartService->addToCart(auth()->user()->uuid, $cartItemData);
+        $cart = $this->cartService->addToCart(AuthHelper::getUserUuid(), $cartItemData);
 
         return $this->ok(new CartResource($cart));
     }
@@ -69,10 +70,7 @@ class CartController extends BaseController
     public function update(CartUpdateRequest $request): JsonResponse
     {
         $cartItemData = CartItemDTO::fromArray($request->validated());
-        $cart = $this->cartService->updateCartItem(
-            auth()->user()->uuid,
-            $cartItemData
-        );
+        $cart = $this->cartService->updateCartItem(AuthHelper::getUserUuid(), $cartItemData);
 
         return $this->ok(new CartResource($cart));
     }
@@ -86,7 +84,7 @@ class CartController extends BaseController
     public function remove(CartRemoveRequest $request): JsonResponse
     {
         $validated = $request->validated();
-        $cart = $this->cartService->removeFromCart(auth()->user()->uuid, $validated['product_uuid']);
+        $cart = $this->cartService->removeFromCart(AuthHelper::getUserUuid(), $validated['product_uuid']);
 
         return $this->ok(new CartResource($cart));
     }
@@ -98,7 +96,7 @@ class CartController extends BaseController
      */
     public function clear(): JsonResponse
     {
-        $this->cartService->clearCart(auth()->user()->uuid);
+        $this->cartService->clearCart(AuthHelper::getUserUuid());
 
         return $this->noContent();
     }

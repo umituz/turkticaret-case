@@ -2,9 +2,11 @@
 
 namespace App\Services\Order;
 
+use App\Enums\Order\OrderEnum;
 use App\Enums\Order\OrderStatusEnum;
+use App\Helpers\DateHelper;
 use App\Helpers\MoneyHelper;
-use App\Helpers\Order\OrderHelper;
+use App\Helpers\OrderHelper;
 use App\Models\Order\Order;
 
 /**
@@ -31,8 +33,8 @@ class OrderMailService
             'order_title' => OrderHelper::getOrderTitle($order),
             'status_label' => OrderHelper::getStatusLabel($order),
             'total_amount_formatted' => MoneyHelper::getAmountInfo($order->total_amount)['formatted'],
-            'order_date_formatted' => $order->created_at->format('M d, Y \a\t h:i A'),
-            'estimated_delivery_formatted' => $order->created_at->addDays(3)->format('M d, Y'),
+            'order_date_formatted' => DateHelper::formatDateTime($order->created_at),
+            'estimated_delivery_formatted' => DateHelper::formatDate($order->created_at->addDays(OrderEnum::getEstimatedDeliveryDays())),
             'order_items_data' => $this->prepareOrderItemsData($order),
         ];
     }
@@ -50,7 +52,7 @@ class OrderMailService
         return [
             'order_number' => $order->order_number,
             'total_amount_formatted' => MoneyHelper::getAmountInfo($order->total_amount)['formatted'],
-            'order_date_formatted' => $order->created_at->format('M d, Y \a\t h:i A'),
+            'order_date_formatted' => DateHelper::formatDateTime($order->created_at),
             'order_items_display' => $this->prepareOrderItemsForStatusUpdate($order),
             'status_dates' => $this->prepareStatusDates($order, $newStatus),
             'oldStatus' => $this->prepareStatusForTemplate($oldStatus),
@@ -116,14 +118,14 @@ class OrderMailService
         if ($order->shipped_at && $newStatus === OrderStatusEnum::SHIPPED) {
             $statusDates[] = [
                 'label' => 'Shipped Date',
-                'value' => $order->shipped_at->format('M d, Y \a\t h:i A'),
+                'value' => DateHelper::formatDateTime($order->shipped_at),
             ];
         }
 
         if ($order->delivered_at && $newStatus === OrderStatusEnum::DELIVERED) {
             $statusDates[] = [
                 'label' => 'Delivered Date',
-                'value' => $order->delivered_at->format('M d, Y \a\t h:i A'),
+                'value' => DateHelper::formatDateTime($order->delivered_at),
             ];
         }
 

@@ -2,6 +2,7 @@
 
 namespace App\Observers\Order;
 
+use App\Enums\Order\OrderEnum;
 use App\Models\Order\Order;
 use App\Observers\Base\BaseObserver;
 use App\Services\Order\OrderNotificationService;
@@ -20,7 +21,7 @@ class OrderObserver extends BaseObserver
         parent::creating($model);
 
         if ($model instanceof Order && empty($model->order_number)) {
-            $model->order_number = 'ORD-' . date('Ymd') . '-' . substr(Str::uuid(), 0, 8);
+            $model->order_number = 'ORD-' . date('Ymd') . '-' . substr(Str::uuid(), 0, OrderEnum::getOrderNumberUuidLength());
         }
     }
 

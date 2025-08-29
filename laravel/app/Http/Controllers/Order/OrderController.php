@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Order;
 use App\DTOs\Order\OrderCreateDTO;
 use App\Exceptions\Order\EmptyCartException;
 use App\Exceptions\Product\InsufficientStockException;
+use App\Helpers\AuthHelper;
 use App\Http\Controllers\BaseController;
 use App\Http\Requests\Order\OrderCreateRequest;
 use App\Http\Resources\Order\OrderCollection;
@@ -39,7 +40,7 @@ class OrderController extends BaseController
      */
     public function index(): JsonResponse
     {
-        $orders = $this->orderService->getUserOrders(auth()->user()->uuid);
+        $orders = $this->orderService->getUserOrders(AuthHelper::getUserUuid());
 
         return $this->ok(new OrderCollection($orders));
     }
@@ -55,7 +56,7 @@ class OrderController extends BaseController
     public function store(OrderCreateRequest $request): JsonResponse
     {
         $orderData = OrderCreateDTO::fromArray($request->validated());
-        $order = $this->orderService->createOrderFromCart(auth()->id(), $orderData);
+        $order = $this->orderService->createOrderFromCart(AuthHelper::getUserUuid(), $orderData);
 
         return $this->created(new OrderResource($order));
     }

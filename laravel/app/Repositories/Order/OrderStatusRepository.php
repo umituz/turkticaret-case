@@ -3,6 +3,7 @@
 namespace App\Repositories\Order;
 
 use App\Enums\Order\OrderStatusEnum;
+use App\Helpers\AuthHelper;
 use App\Models\Order\Order;
 use App\Models\Order\OrderStatusHistory;
 
@@ -39,7 +40,7 @@ class OrderStatusRepository implements OrderStatusRepositoryInterface
                 'order_uuid' => $order->uuid,
                 'old_status' => $oldStatus?->value,
                 'new_status' => $newStatus->value,
-                'changed_by_uuid' => auth()->id(),
+                'changed_by_uuid' => AuthHelper::getUserUuid(),
                 'notes' => 'Status updated via admin panel',
             ]);
         }
