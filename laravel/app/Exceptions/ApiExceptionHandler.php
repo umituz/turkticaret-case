@@ -5,6 +5,7 @@ namespace App\Exceptions;
 use App\Exceptions\Product\InsufficientStockException;
 use App\Exceptions\Product\OutOfStockException;
 use App\Exceptions\Order\EmptyCartException;
+use App\Exceptions\Order\MinimumOrderAmountException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
@@ -72,7 +73,12 @@ class ApiExceptionHandler
                     message: 'User does not have the right roles.',
                     statusCode: 403
                 ),
-                $e instanceof OutOfStockException, $e instanceof InsufficientStockException, $e instanceof EmptyCartException => response()->error(
+                $e instanceof OutOfStockException, $e instanceof InsufficientStockException, $e instanceof EmptyCartException, $e instanceof MinimumOrderAmountException => response()->error(
+                    errors: [],
+                    message: $e->getMessage(),
+                    statusCode: 422
+                ),
+                $e instanceof \InvalidArgumentException => response()->error(
                     errors: [],
                     message: $e->getMessage(),
                     statusCode: 422

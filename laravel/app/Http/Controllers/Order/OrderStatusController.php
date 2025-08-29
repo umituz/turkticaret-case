@@ -41,17 +41,10 @@ class OrderStatusController extends BaseController
     {
         Gate::authorize('updateStatus', $order);
 
-        try {
-            $newStatus = OrderStatusEnum::from($request->status);
-            
-            $updatedOrder = $this->orderStatusService->updateStatus($order, $newStatus);
+        $newStatus = OrderStatusEnum::from($request->status);
+        $updatedOrder = $this->orderStatusService->updateStatus($order, $newStatus);
 
-            return $this->ok(new OrderResource($updatedOrder));
-        } catch (\InvalidArgumentException $e) {
-            return $this->error([$e->getMessage()], 'Failed to update order status', 422);
-        } catch (\Exception $e) {
-            return $this->error([$e->getMessage()], 'Failed to update order status');
-        }
+        return $this->ok(new OrderResource($updatedOrder));
     }
 
 

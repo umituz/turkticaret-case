@@ -3,6 +3,7 @@
 namespace App\Services\Order;
 
 use App\DTOs\Order\OrderCreateDTO;
+use App\Enums\Order\OrderEnum;
 use App\Exceptions\Product\OutOfStockException;
 use App\Notifications\Order\OrderConfirmedNotification;
 use App\Models\Order\Order;
@@ -12,6 +13,7 @@ use App\Repositories\Product\ProductRepositoryInterface;
 use App\Services\Cart\CartService;
 use App\Services\Product\ProductService;
 use App\Exceptions\Order\EmptyCartException;
+use App\Exceptions\Order\MinimumOrderAmountException;
 use App\Exceptions\Product\InsufficientStockException;
 use App\Enums\Order\OrderStatusEnum;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -74,12 +76,14 @@ class OrderService
      * @param OrderCreateDTO $orderData The order data transfer object containing order details
      * @return Order The created order with loaded relationships
      * @throws EmptyCartException When the user's cart is empty
+     * @throws MinimumOrderAmountException When cart total is below minimum order amount
      * @throws InsufficientStockException When requested quantities exceed available stock
      */
     public function createOrderFromCart(string $userUuid, OrderCreateDTO $orderData): Order
     {
         return DB::transaction(function () use ($userUuid, $orderData) {
             $cart = $this->validateCartForOrder($userUuid);
+            $this->validateMinimumOrderAmount($cart);
             $this->validateCartStockAvailability($cart);
             $order = $this->createOrderFromCartData($userUuid, $cart, $orderData);
             $this->transferCartItemsToOrderAndReduceStock($order, $cart);
@@ -110,6 +114,24 @@ class OrderService
     }
 
     /**
+     * Validate that the cart total meets the minimum order amount requirement.
+     *
+     * @param Cart $cart The cart to validate minimum amount for
+     * @return void
+     * @throws MinimumOrderAmountException When cart total is below minimum order amount
+     */
+    private function validateMinimumOrderAmount(Cart $cart): void
+    {
+        $cartItems = $cart->relationLoaded('cartItems') ? $cart->cartItems : collect([]);
+        $totalAmount = $cartItems->sum('total_price');
+        $minimumAmount = OrderEnum::getMinimumOrderAmountCents();
+
+        if ($totalAmount < $minimumAmount) {
+            throw new MinimumOrderAmountException($totalAmount, $minimumAmount);
+        }
+    }
+
+    /**
      * Create the order record from cart data and order information.
      *
      * @param string $userUuid The UUID of the user creating the order
@@ -119,7 +141,6 @@ class OrderService
      */
     private function createOrderFromCartData(string $userUuid, Cart $cart, OrderCreateDTO $orderData): Order
     {
-        // Ensure we're working with a collection
         $cartItems = $cart->relationLoaded('cartItems') ? $cart->cartItems : collect([]);
         $totalAmount = $cartItems->sum('total_price');
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Order;
 
 use App\DTOs\Order\OrderCreateDTO;
 use App\Exceptions\Order\EmptyCartException;
+use App\Exceptions\Order\MinimumOrderAmountException;
 use App\Exceptions\Product\InsufficientStockException;
 use App\Helpers\AuthHelper;
 use App\Http\Controllers\BaseController;
@@ -51,6 +52,7 @@ class OrderController extends BaseController
      * @param OrderCreateRequest $request The validated request containing order creation data
      * @return JsonResponse JSON response containing the created order resource with 201 status, or error response if creation fails
      * @throws EmptyCartException
+     * @throws MinimumOrderAmountException
      * @throws InsufficientStockException
      */
     public function store(OrderCreateRequest $request): JsonResponse
