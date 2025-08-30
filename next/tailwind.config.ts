@@ -9,18 +9,18 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // TurkTicaret Brand Colors - Using CSS variables
-        turkticaret: {
-          50: 'var(--turkticaret-50)',
-          100: 'var(--turkticaret-100)',
-          200: 'var(--turkticaret-200)',
-          300: 'var(--turkticaret-300)',
-          400: 'var(--turkticaret-400)',
-          500: 'var(--turkticaret-500)',  // Main brand color
-          600: 'var(--turkticaret-600)',
-          700: 'var(--turkticaret-700)',
-          800: 'var(--turkticaret-800)',
-          900: 'var(--turkticaret-900)',
+        // Ecommerce Brand Colors - Using CSS variables
+        ecommerce: {
+          50: 'var(--ecommerce-50)',
+          100: 'var(--ecommerce-100)',
+          200: 'var(--ecommerce-200)',
+          300: 'var(--ecommerce-300)',
+          400: 'var(--ecommerce-400)',
+          500: 'var(--ecommerce-500)',  // Main brand color
+          600: 'var(--ecommerce-600)',
+          700: 'var(--ecommerce-700)',
+          800: 'var(--ecommerce-800)',
+          900: 'var(--ecommerce-900)',
         },
         // Keep existing shadcn/ui colors
         border: "hsl(var(--border))",

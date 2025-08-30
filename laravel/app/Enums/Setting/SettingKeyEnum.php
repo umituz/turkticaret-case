@@ -189,7 +189,7 @@ enum SettingKeyEnum: string
             self::DEFAULT_COUNTRY => 'TR',
             self::DEFAULT_TIMEZONE => 'Europe/Istanbul',
             self::MAINTENANCE_MODE => false,
-            self::APP_NAME => 'TurkTicaret',
+            self::APP_NAME => 'Ecommerce',
             self::APP_URL => 'http://localhost:8080',
             self::ITEMS_PER_PAGE => 20,
             self::THEME => 'default',

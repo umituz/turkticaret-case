@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>@yield('title', 'TurkTicaret')</title>
+    <title>@yield('title', 'Ecommerce')</title>
     <style>
         body {
             margin: 0;
@@ -149,7 +149,7 @@
 <body>
     <div class="email-container">
         <div class="header">
-            <div class="logo">TurkTicaret</div>
+            <div class="logo">Ecommerce</div>
             <div class="tagline">Your Trusted E-Commerce Platform</div>
         </div>
         
@@ -158,9 +158,9 @@
         </div>
         
         <div class="footer">
-            <div class="footer-brand">TurkTicaret</div>
+            <div class="footer-brand">Ecommerce</div>
             <div class="copyright">
-                <p>&copy; {{ date('Y') }} TurkTicaret. All rights reserved.</p>
+                <p>&copy; {{ date('Y') }} Ecommerce. All rights reserved.</p>
             </div>
         </div>
     </div>

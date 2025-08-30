@@ -80,7 +80,7 @@ export function HeroSection() {
               
               <p className="text-lg md:text-xl text-gray-600 leading-relaxed max-w-lg">
                 Premium brands, reliable shopping experience and same-day delivery. 
-                <span className="font-semibold" style={{ color: '#e55a2b' }}>Experience the TurkTicaret difference.</span>
+                <span className="font-semibold" style={{ color: '#2563eb' }}>Experience the Ecommerce difference.</span>
               </p>
             </div>
 

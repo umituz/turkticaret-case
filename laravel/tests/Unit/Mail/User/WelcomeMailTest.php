@@ -20,7 +20,7 @@ class WelcomeMailTest extends TestCase
         $user = User::factory()->create(['name' => 'John Doe']);
         $mailable = new WelcomeMail($user);
 
-        $mailable->assertHasSubject('Welcome to TurkTicaret - Your E-Commerce Journey Begins!');
+        $mailable->assertHasSubject('Welcome to Ecommerce - Your E-Commerce Journey Begins!');
     }
 
     #[Test]

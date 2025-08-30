@@ -205,7 +205,7 @@ function AccountOverviewPageContent() {
                 </div>
                 <div>
                   <h3 className="text-xl font-semibold">{user.name}</h3>
-                  <p className="text-muted-foreground">Welcome to TurkTicaret</p>
+                  <p className="text-muted-foreground">Welcome to Ecommerce</p>
                 </div>
               </div>
 

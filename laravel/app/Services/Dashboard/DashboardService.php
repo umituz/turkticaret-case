@@ -94,7 +94,7 @@ class DashboardService
             $activities->push([
                 'uuid' => 'user_' . $user->uuid,
                 'type' => 'user',
-                'message' => $user->name . ' joined TurkTicaret',
+                'message' => $user->name . ' joined Ecommerce',
                 'timestamp' => $user->created_at->diffForHumans(),
                 'user' => $user->name,
                 'status' => 'info'

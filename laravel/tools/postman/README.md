@@ -1,15 +1,15 @@
-# TurkTicaret API Postman Collection
+# Ecommerce API Postman Collection
 
-This directory contains Postman collections and environments for testing the TurkTicaret API.
+This directory contains Postman collections and environments for testing the Ecommerce API.
 
 ## Overview
 
-The TurkTicaret API provides a comprehensive set of endpoints for managing categories, users, authentication, and system health. This collection is organized to provide easy testing and integration capabilities.
+The Ecommerce API provides a comprehensive set of endpoints for managing categories, users, authentication, and system health. This collection is organized to provide easy testing and integration capabilities.
 
 ## Collection Structure
 
 ### Main Collection
-- **File**: `TurkTicaret API.postman_collection.json`
+- **File**: `Ecommerce API.postman_collection.json`
 - **Description**: Complete API collection with all endpoints
 - **Features**: Authentication, CRUD operations, filtering, pagination
 

@@ -201,7 +201,7 @@ final class SettingKeyEnumTest extends UnitTestCase
             [SettingKeyEnum::DEFAULT_LANGUAGE, 'tr'],
             [SettingKeyEnum::DEFAULT_COUNTRY, 'TR'],
             [SettingKeyEnum::DEFAULT_TIMEZONE, 'Europe/Istanbul'],
-            [SettingKeyEnum::APP_NAME, 'TurkTicaret'],
+            [SettingKeyEnum::APP_NAME, 'Ecommerce'],
             [SettingKeyEnum::APP_URL, 'http://localhost:8080'],
             [SettingKeyEnum::THEME, 'default'],
             [SettingKeyEnum::LOGO_URL, '/images/logo.png'],

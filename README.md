@@ -1,8 +1,8 @@
-# TurkTicaret Case - Full-Stack E-Commerce Platform
+# Ecommerce - Full-Stack E-Commerce Platform
 
 ## 📋 Project Overview
 
-TurkTicaret Case is a comprehensive full-stack e-commerce platform featuring a Laravel 12.x API backend and a modern Next.js 15 frontend. The project includes complete product catalog, cart management, order processing system, user authentication, and a responsive web interface. The platform follows modern development patterns with Docker containerization and comprehensive testing coverage.
+Ecommerce is a comprehensive full-stack e-commerce platform featuring a Laravel 12.x API backend and a modern Next.js 15 frontend. The project includes complete product catalog, cart management, order processing system, user authentication, and a responsive web interface. The platform follows modern development patterns with Docker containerization and comprehensive testing coverage.
 
 ## 🚀 Quick Start
 
@@ -16,7 +16,7 @@ TurkTicaret Case is a comprehensive full-stack e-commerce platform featuring a L
 1. **Clone the repository**
 ```bash
 git clone <repository-url>
-cd turkticaret-case
+cd ecommerce
 ```
 
 2. **Start Docker environment**
@@ -27,7 +27,7 @@ cd turkticaret-case
 3. **Set up the application**
 ```bash
 # Enter Laravel container
-docker exec -it turkticaret_laravel bash
+docker exec -it laravel bash
 
 # Run migrations and seed data
 php artisan migrate:fresh --seed
@@ -35,7 +35,7 @@ php artisan migrate:fresh --seed
 
 4. **Generate API token for testing**
 ```bash
-docker exec -it turkticaret_laravel php artisan api:token admin@test.com --name=api-testing
+docker exec -it laravel php artisan api:token admin@test.com --name=api-testing
 ```
 
 ## 🏗️ Architecture
@@ -113,11 +113,11 @@ Base URL: `http://localhost:8080`
 ## 🐳 Docker Environment
 
 ### Container Services
-- **turkticaret_laravel** - Laravel API backend (Port: 8080)
-- **turkticaret_next** - Next.js frontend (Port: 3000)
-- **turkticaret_postgres** - PostgreSQL database (Port: 5433)
-- **turkticaret_redis** - Redis cache
-- **turkticaret_mailhog** - Email testing (Port: 8025)
+- **laravel** - Laravel API backend (Port: 8080)
+- **next** - Next.js frontend (Port: 3000)
+- **postgres** - PostgreSQL database (Port: 5433)
+- **redis** - Redis cache
+- **mailhog** - Email testing (Port: 8025)
 
 ### Development Commands
 ```bash
@@ -128,19 +128,19 @@ Base URL: `http://localhost:8080`
 ./stop.sh
 
 # Start specific services
-docker-compose up turkticaret-laravel -d
-docker-compose up turkticaret-next -d
+docker-compose up laravel -d
+docker-compose up next -d
 
 # Access containers
-docker exec -it turkticaret_laravel bash    # Laravel backend
-docker exec -it turkticaret_next sh         # Next.js frontend
+docker exec -it laravel bash    # Laravel backend
+docker exec -it next sh         # Next.js frontend
 
 # Database access
-docker exec -it turkticaret_postgres psql -U postgres -d turkticaret_case
+docker exec -it postgres psql -U postgres -d ecommerce
 
 # View logs
-docker logs turkticaret_laravel             # Backend logs
-docker logs turkticaret_next               # Frontend logs
+docker logs laravel             # Backend logs
+docker logs next               # Frontend logs
 ```
 
 ## 🧪 Testing
@@ -150,16 +150,16 @@ The project maintains 100% test coverage with comprehensive unit and feature tes
 ### Run Tests
 ```bash
 # All tests with coverage
-docker exec -it turkticaret_laravel php artisan test --coverage --min=100
+docker exec -it laravel php artisan test --coverage --min=100
 
 # Unit tests only
-docker exec -it turkticaret_laravel php artisan test tests/Unit
+docker exec -it laravel php artisan test tests/Unit
 
 # Feature tests only
-docker exec -it turkticaret_laravel php artisan test tests/Feature
+docker exec -it laravel php artisan test tests/Feature
 
 # Specific test file
-docker exec -it turkticaret_laravel php artisan test tests/Unit/Models/Product/ProductTest.php
+docker exec -it laravel php artisan test tests/Unit/Models/Product/ProductTest.php
 ```
 
 ### Test Structure
@@ -205,7 +205,7 @@ docker exec -it turkticaret_laravel php artisan test tests/Unit/Models/Product/P
 The project includes a comprehensive Postman collection:
 ```bash
 # Located at: laravel/tools/postman/
-- TurkTicaret API.postman_collection.json
+- Ecommerce API.postman_collection.json
 - environments/local.json
 ```
 
@@ -218,7 +218,7 @@ Authorization: Bearer {your-api-token}
 ### Frontend Development
 ```bash
 # Access Next.js container for development
-docker exec -it turkticaret_next sh
+docker exec -it next sh
 
 # Install new dependencies
 npm install <package-name>
@@ -250,6 +250,6 @@ npm run build
 
 ## 📝 License
 
-This project is developed as a case study for TurkTicaret technical assessment.
+This project is developed as a full-stack e-commerce platform.
 
 ---

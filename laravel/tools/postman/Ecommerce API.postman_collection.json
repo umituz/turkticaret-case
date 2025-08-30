@@ -1,8 +1,8 @@
 {
   "info": {
-    "_postman_id": "turkticaret-api-collection",
-    "name": "TurkTicaret API Collection",
-    "description": "TurkTicaret API Collection for interacting with the TurkTicaret backend services",
+    "_postman_id": "ecommerce-api-collection",
+    "name": "Ecommerce API Collection",
+    "description": "Ecommerce API Collection for interacting with the Ecommerce backend services",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [

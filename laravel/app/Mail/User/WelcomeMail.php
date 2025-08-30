@@ -13,7 +13,7 @@ use Illuminate\Mail\Mailables\Envelope;
  * 
  * This mailable handles the composition and sending of welcome emails
  * to users after successful registration. It provides a friendly
- * introduction to the TurkTicaret platform.
+ * introduction to the Ecommerce platform.
  *
  * @package App\Mail\User
  */
@@ -40,7 +40,7 @@ class WelcomeMail extends Mailable
     {
         return new Envelope(
             from: new Address(config('mail.from.address'), config('mail.from.name')),
-            subject: 'Welcome to TurkTicaret - Your E-Commerce Journey Begins!',
+            subject: 'Welcome to Ecommerce - Your E-Commerce Journey Begins!',
         );
     }
 

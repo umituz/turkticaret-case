@@ -149,7 +149,7 @@ export const AdminSidebar = ({ className }: AdminSidebarProps) => {
       <div className="p-4 border-t border-border">
         {!collapsed && (
           <div className="text-xs text-muted-foreground text-center">
-            <p>TurkTicaret Admin v1.0</p>
+            <p>Ecommerce Admin v1.0</p>
             <p className="mt-1">© 2024 All rights reserved</p>
           </div>
         )}

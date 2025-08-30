@@ -1,5 +1,5 @@
 #!/bin/bash
-# stop.sh - TurkTicaret Docker Environment Stop Script
+# stop.sh - Ecommerce Docker Environment Stop Script
 
 set -e
 
@@ -27,21 +27,21 @@ print_error() {
     echo -e "${RED}[ERROR]${NC} $1"
 }
 
-print_status "Stopping Turkticaret development environment..."
+print_status "Stopping Ecommerce development environment..."
 
 # Stop and remove containers
 print_status "Stopping Docker containers..."
 docker compose down
 
 # Check if containers are stopped
-if ! docker ps | grep -q "turkticaret_"; then
-    print_success "All Turkticaret containers have been stopped!"
+if ! docker ps | grep -q "ecommerce"; then
+    print_success "All Ecommerce containers have been stopped!"
 else
     print_warning "Some containers might still be running"
-    docker ps | grep "turkticaret_"
+    docker ps | grep "ecommerce"
 fi
 
-print_success "Turkticaret development environment stopped successfully!"
+print_success "Ecommerce development environment stopped successfully!"
 print_status ""
 print_status "To start again: ./start.sh"
 print_status "To remove volumes: docker compose down -v"

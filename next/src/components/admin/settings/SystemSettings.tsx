@@ -29,7 +29,7 @@ export function SystemSettings({ settings, systemStatus, onUpdate }: SystemSetti
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     maintenance_mode: (settings?.maintenance_mode?.value as boolean) || false,
-    app_name: (settings?.app_name?.value as string) || 'TurkTicaret',
+    app_name: (settings?.app_name?.value as string) || 'Ecommerce',
     app_url: (settings?.app_url?.value as string) || 'http://localhost:3000',
     registration_enabled: (settings?.registration_enabled?.value as boolean) || true,
   });
@@ -39,7 +39,7 @@ export function SystemSettings({ settings, systemStatus, onUpdate }: SystemSetti
     if (settings) {
       setFormData({
         maintenance_mode: (settings.maintenance_mode?.value as boolean) || false,
-        app_name: (settings.app_name?.value as string) || 'TurkTicaret',
+        app_name: (settings.app_name?.value as string) || 'Ecommerce',
         app_url: (settings.app_url?.value as string) || 'http://localhost:3000',
         registration_enabled: (settings.registration_enabled?.value as boolean) || true,
       });

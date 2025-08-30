@@ -13,7 +13,7 @@ class SettingsControllerTest extends BaseFeatureTest
     {
         $adminUser = $this->createAdminUser();
         
-        Setting::factory()->create(['is_active' => true, 'key' => 'site_name', 'value' => 'TurkTicaret']);
+        Setting::factory()->create(['is_active' => true, 'key' => 'site_name', 'value' => 'Ecommerce']);
         Setting::factory()->create(['is_active' => true, 'key' => 'maintenance_mode', 'value' => 'false']);
         Setting::factory()->create(['is_active' => false, 'key' => 'inactive_setting', 'value' => 'test']);
 

@@ -119,8 +119,8 @@ export default function RegisterPage() {
 
         {}
         <div className="text-center">
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-red-600 to-red-700 bg-clip-text text-transparent mb-2">
-            TurkTicaret
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent mb-2">
+            Ecommerce
           </h1>
           <p className="text-muted-foreground">Create a new account</p>
         </div>

@@ -8,7 +8,7 @@ export const AdminFooter = () => {
     <footer className="border-t border-border bg-background">
       <div className="flex items-center justify-between py-4 px-6 text-sm text-muted-foreground">
         <div className="flex items-center space-x-4">
-          <p>© 2024 TurkTicaret Admin Panel. All rights reserved.</p>
+          <p>© 2024 Ecommerce Admin Panel. All rights reserved.</p>
         </div>
         
         <div className="flex items-center space-x-4">

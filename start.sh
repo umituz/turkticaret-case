@@ -1,5 +1,5 @@
 #!/bin/bash
-# start.sh - TurkTicaret Docker Environment
+# start.sh - Ecommerce Docker Environment
 
 set -e
 
@@ -77,11 +77,11 @@ if [ -z "$HOST_UID" ]; then
     print_warning "HOST_UID not set, using default 501"
 fi
 
-print_status "Starting Turkticaret development environment..."
+print_status "Starting Ecommerce development environment..."
 
 # Function to check and create Docker network
 create_network() {
-    local network_name="turkticaret_network"
+    local network_name="ecommerce_network"
     
     print_status "Checking Docker network: $network_name"
     
@@ -103,12 +103,12 @@ create_network
 
 # Check if base image exists before building
 check_base_image() {
-    if docker image inspect turkticaret-base:latest >/dev/null 2>&1; then
+    if docker image inspect ecommerce-base:latest >/dev/null 2>&1; then
         print_status "Base image already exists, skipping build"
         return 0
     else
         print_status "Building base image..."
-        if docker build -t turkticaret-base:latest -f docker/base.Dockerfile .; then
+        if docker build -t ecommerce-base:latest -f docker/base.Dockerfile .; then
             print_success "Base image built successfully"
             return 0
         else
@@ -129,12 +129,12 @@ docker compose up -d
 print_status "Checking service status..."
 sleep 5
 
-if docker ps | grep -q turkticaret_laravel; then
-    print_success "Turkticaret API is running!"
+if docker ps | grep -q laravel; then
+    print_success "Ecommerce API is running!"
     print_status "API available at: http://localhost:8080"
 else
-    print_error "Turkticaret API failed to start"
-    docker compose logs turkticaret-api
+    print_error "Ecommerce API failed to start"
+    docker compose logs api
     exit 1
 fi
 
@@ -142,11 +142,11 @@ if docker ps | grep -q postgres; then
     print_success "PostgreSQL is running!"
     
     # Fix database host in .env file if needed
-    if docker exec turkticaret_laravel grep -q "DB_HOST=turkticaret_postgres" /var/www/html/turkticaret-api/.env 2>/dev/null; then
+    if docker exec laravel grep -q "DB_HOST=postgres" /var/www/html/api/.env 2>/dev/null; then
         print_status "Fixing database host in .env file..."
-        docker exec turkticaret_laravel sed -i 's/DB_HOST=turkticaret_postgres/DB_HOST=postgres/g' /var/www/html/turkticaret-api/.env
-        docker exec turkticaret_laravel sed -i 's/REDIS_HOST=turkticaret_redis/REDIS_HOST=redis/g' /var/www/html/turkticaret-api/.env
-        docker exec turkticaret_laravel sed -i 's/MAIL_HOST=turkticaret_mailhog/MAIL_HOST=mailhog/g' /var/www/html/turkticaret-api/.env
+        docker exec laravel sed -i 's/DB_HOST=postgres/DB_HOST=postgres/g' /var/www/html/api/.env
+        docker exec laravel sed -i 's/REDIS_HOST=redis/REDIS_HOST=redis/g' /var/www/html/api/.env
+        docker exec laravel sed -i 's/MAIL_HOST=mailhog/MAIL_HOST=mailhog/g' /var/www/html/api/.env
         print_success "Database host fixed in .env file"
     fi
     
@@ -156,7 +156,7 @@ if docker ps | grep -q postgres; then
     
     # Install composer dependencies first
     print_status "Installing Composer dependencies..."
-    if docker exec turkticaret_laravel composer install; then
+    if docker exec laravel composer install; then
         print_success "Composer dependencies installed successfully!"
     else
         print_error "Failed to install composer dependencies"
@@ -165,23 +165,23 @@ if docker ps | grep -q postgres; then
     
     # Clear Laravel caches
     print_status "Clearing Laravel caches..."
-    docker exec turkticaret_laravel php artisan config:clear
-    docker exec turkticaret_laravel php artisan cache:clear
+    docker exec laravel php artisan config:clear
+    docker exec laravel php artisan cache:clear
     
     # Test database connection first
     print_status "Testing database connection..."
-    if docker exec turkticaret_laravel php artisan tinker --execute="DB::connection()->getPdo(); echo 'Database connected successfully!';" >/dev/null 2>&1; then
+    if docker exec laravel php artisan tinker --execute="DB::connection()->getPdo(); echo 'Database connected successfully!';" >/dev/null 2>&1; then
         print_success "Database connection test passed!"
     else
         print_error "Database connection test failed!"
         print_status "Checking network connectivity..."
-        docker exec turkticaret_laravel ping -c 2 postgres
+        docker exec laravel ping -c 2 postgres
         exit 1
     fi
     
     # Run migrations and seeders
     print_status "Running Laravel migrations and seeders..."
-    if docker exec turkticaret_laravel php artisan migrate:fresh --seed; then
+    if docker exec laravel php artisan migrate:fresh --seed; then
         print_success "Database migrations and seeders completed successfully!"
     else
         print_error "Failed to run migrations and seeders"
@@ -207,7 +207,7 @@ else
     print_warning "MailHog may not be running properly"
 fi
 
-if docker ps | grep -q turkticaret_next; then
+if docker ps | grep -q next; then
     print_success "Next.js Frontend is running!"
     print_status "Frontend available at: http://localhost:3000"
 else

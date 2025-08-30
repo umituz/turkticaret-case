@@ -47,17 +47,17 @@
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
   
-  /* TurkTicaret Brand Colors */
-  --turkticaret-50: #fef7f0;
-  --turkticaret-100: #feede1;
-  --turkticaret-200: #fdd7be;
-  --turkticaret-300: #fbb890;
-  --turkticaret-400: #f89060;
-  --turkticaret-500: #f5703a;
-  --turkticaret-600: #e55a2b;
-  --turkticaret-700: #c04426;
-  --turkticaret-800: #9b3826;
-  --turkticaret-900: #7c3023;
+  /* Ecommerce Brand Colors */
+  --ecommerce-50: #eff6ff;
+  --ecommerce-100: #dbeafe;
+  --ecommerce-200: #bfdbfe;
+  --ecommerce-300: #93bbfc;
+  --ecommerce-400: #60a5fa;
+  --ecommerce-500: #3b82f6;
+  --ecommerce-600: #2563eb;
+  --ecommerce-700: #1d4ed8;
+  --ecommerce-800: #1e40af;
+  --ecommerce-900: #1e3a8a;
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);

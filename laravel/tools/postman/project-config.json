@@ -1,7 +1,7 @@
 {
-  "name": "TurkTicaret API Collection",
-  "output_file": "TurkTicaret API.postman_collection.json",
-  "description": "TurkTicaret API Collection for interacting with the TurkTicaret backend services",
+  "name": "Ecommerce API Collection",
+  "output_file": "Ecommerce API.postman_collection.json",
+  "description": "Ecommerce API Collection for interacting with the Ecommerce backend services",
   "base_url": "http://localhost:8080/api",
   "token_var": "token",
   "collections_dir": "collections",
